@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: jira-gateway
+    jira:
+      urlProjects: https://${JIRA_HOST}/rest/api/2/project
+      urlBoards: https://${JIRA_HOST}/rest/agile/1.0/board?maxResults=%s&startAt=%s&type=scrum
+      urlSprints: https://${JIRA_HOST}/rest/agile/1.0/board/
+      urlIssues: https://${JIRA_HOST}/rest/api/2/search?jql=
+      urlAllIssues: https://${JIRA_HOST}/rest/api/2/search?maxResults=%s&startAt=%s&jql=issuetype=Story
+      credentials: ${JIRA_TOKEN}
+  datasource:
+    url: jdbc:mysql://${DB_HOST}/cockpitdb?useSSL=false
+    platform: mysql
+    username: root
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: false
+        use_sql_comments: true
+        format_sql: true
+        use-new-id-generator-mappings: false
+server:
+  port: 9112
