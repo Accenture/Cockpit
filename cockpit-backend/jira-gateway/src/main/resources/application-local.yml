@@ -7,9 +7,9 @@ spring:
       urlSprints: https://${JIRA_HOST}/rest/agile/1.0/board/
       urlIssues: https://${JIRA_HOST}/rest/api/2/search?jql=
       urlAllIssues: https://${JIRA_HOST}/rest/api/2/search?maxResults=%s&startAt=%s&jql=issuetype=Story
-      credentials: ${JIRA_TOKEN}
+      credentials: ${jiraToken}
   datasource:
-    url: jdbc:mysql://${DB_HOST}/cockpitdb?useSSL=false
+    url: jdbc:mysql://${DB_HOST}:3306/cockpitdb?useSSL=false
     platform: mysql
     username: root
     password: password
