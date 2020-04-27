@@ -1,14 +1,8 @@
 import React from 'react';
-import Header from './components/header/Header';
-import './App.scss';
+import Routes from './routes';
 
 function App() {
-  return (
-    <div className="App">
-      <Header />
-      <div className="dashboard">Cockpit MVP Dashboard</div>
-    </div>
-  );
+  return <Routes />;
 }
 
 export default App;
