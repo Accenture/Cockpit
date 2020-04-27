@@ -1,0 +1,44 @@
+version: "3"
+services:
+  mysql:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: cockpitdb
+      DB_HOST: "mysql"
+    ports:
+      - "3308:3306"
+    networks:
+      - spring-boot-mysql-network
+  jira-gateway:
+    build: ./jira-gateway
+    ports:
+      - "8082:8082"
+    environment:
+      JIRA_HOST: "cockpit-test.atlassian.net"
+      jiraToken: "k.abdullazoda@accenture.com:Oy37iTjDjFLJ71o9aTpO981D"
+      JIRA_TOKEN: "k.abdullazoda@accenture.com:Oy37iTjDjFLJ71o9aTpO981D"
+      DB_HOST: "mysql"
+    depends_on:
+      - mysql
+    links:
+      - mysql
+    networks:
+      - spring-boot-mysql-network
+  mvp-infos:
+    build: ./mvp-infos
+    ports:
+      - "8080:8080"
+    depends_on:
+      - "jira-gateway"
+    links:
+      - "jira-gateway"
+    networks:
+      - spring-boot-mysql-network
+    environment:
+      DB_HOST: "mysql"
+
+networks:
+  spring-boot-mysql-network:
+    driver: bridge
