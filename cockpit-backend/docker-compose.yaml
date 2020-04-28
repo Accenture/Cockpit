@@ -17,7 +17,6 @@ services:
       - "8082:8082"
     environment:
       JIRA_HOST: "cockpit-test.atlassian.net"
-      jiraToken: "YOUR TOKEN"
       JIRA_TOKEN: "YOUR TOKEN"
       DB_HOST: "mysql"
     depends_on:
