@@ -11,5 +11,6 @@ COPY pom.xml target/lib* /opt/lib/
 # we could do with a better way to know the name - or to always create an app.jar or something
 COPY target/*.jar /opt/app.jar
 WORKDIR /opt
+CMD "mvn -f ../cockpit-core clean install"
 CMD "mvn clean package"
 CMD ["java", "-Dspring.profiles.active=local", "-XX:+UnlockExperimentalVMOptions", "-XX:+UseCGroupMemoryLimitForHeap", "-jar", "app.jar"]
