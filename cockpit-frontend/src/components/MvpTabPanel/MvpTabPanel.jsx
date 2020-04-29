@@ -1,9 +1,10 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import { useSelector } from 'react-redux';
 import { selectMvpState } from '../MvpMenu/mvpMenuSlice';
+// styles
+import useStyles from './styles';
 
 function TabPanel(props) {
   const { children, value, index } = props;
@@ -18,13 +19,6 @@ function TabPanel(props) {
     </div>
   );
 }
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.paper,
-  },
-}));
 
 export default function MvpTabs() {
   const classes = useStyles();
