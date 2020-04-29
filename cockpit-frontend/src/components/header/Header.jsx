@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import logo from '../../common/media/logo.svg';
+import MvpMenu from '../MvpMenu/MvpMenu';
 import './Header.scss';
 
 export class Header extends Component {
@@ -16,6 +17,7 @@ export class Header extends Component {
         <div className="logo-container">
           <img className="logo" src={logo} alt="Cockpit Logo" />
         </div>
+        <MvpMenu />
       </div>
     );
   }
