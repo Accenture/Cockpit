@@ -1,7 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
+import mvnMenuReducer from '../components/MvpMenu/mvpMenuSlice';
 
 export default configureStore({
   reducer: {
-    // TO DO
+    mvpMenu: mvnMenuReducer,
   },
 });
