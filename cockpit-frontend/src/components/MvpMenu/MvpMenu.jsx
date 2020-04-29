@@ -6,7 +6,9 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
+import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
+import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined';
 
 import {
   selectCandidates,
@@ -15,10 +17,16 @@ import {
   selectMvpState,
 } from './mvpMenuSlice';
 
-export default function MenuListComposition() {
+const useStyles = makeStyles((theme) => ({
+  margin: {
+    margin: theme.spacing(2),
+  },
+}));
+
+export default function MvpMenu() {
   const selectedMvpState = useSelector(selectMvpState);
   const dispatch = useDispatch();
-
+  const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
   const handleToggle = () => {
@@ -48,9 +56,13 @@ export default function MenuListComposition() {
         ref={anchorRef}
         aria-controls={open ? 'menu-list-grow' : undefined}
         aria-haspopup="true"
+        variant="contained"
+        color="primary"
         onClick={handleToggle}
+        className={classes.margin}
       >
         {selectedMvpState}
+        <ExpandMoreOutlinedIcon />
       </Button>
       <Popper
         open={open}
