@@ -4,7 +4,7 @@ import MvpTabs from '../MvpTabPanel/MvpTabPanel';
 
 function HomePage() {
   return (
-    <div className="mvp-overview-container">
+    <div>
       <Header />
       <MvpTabs />
     </div>

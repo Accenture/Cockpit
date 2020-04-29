@@ -1,26 +1,28 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import logo from '../../common/media/logo.svg';
+import React from 'react';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
 import MvpMenu from '../MvpMenu/MvpMenu';
-import './Header.scss';
+// styles
+import useStyles from './styles';
 
-export class Header extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {};
-  }
-
-  render() {
-    return (
-      <div className="header-container">
-        <div className="logo-container">
-          <img className="logo" src={logo} alt="Cockpit Logo" />
-        </div>
-        <MvpMenu />
-      </div>
-    );
-  }
+export default function Header() {
+  const classes = useStyles();
+  return (
+    <div className={classes.root}>
+      <AppBar position="static" className={classes.appBar}>
+        <Toolbar color>
+          <IconButton
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="menu"
+          >
+            Cockpit
+          </IconButton>
+          <MvpMenu />
+        </Toolbar>
+      </AppBar>
+    </div>
+  );
 }
-
-export default connect()(Header);

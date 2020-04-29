@@ -6,22 +6,16 @@ import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import MenuItem from '@material-ui/core/MenuItem';
 import MenuList from '@material-ui/core/MenuList';
-import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import ExpandMoreOutlinedIcon from '@material-ui/icons/ExpandMoreOutlined';
-
 import {
   selectCandidates,
   selectInProgress,
   selectTransferred,
   selectMvpState,
 } from './mvpMenuSlice';
-
-const useStyles = makeStyles((theme) => ({
-  margin: {
-    margin: theme.spacing(2),
-  },
-}));
+// styles
+import useStyles from './styles';
 
 export default function MvpMenu() {
   const selectedMvpState = useSelector(selectMvpState);
