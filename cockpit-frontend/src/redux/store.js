@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import mvnMenuReducer from '../components/MvpMenu/mvpMenuSlice';
-import ormReducer from './ormReducer';
+import ormReducer from './ormSlice';
 
 export default configureStore(
   {

@@ -1,18 +1,17 @@
-import React, { Component } from 'react';
-// import MvpService from '../../services/service';
+import React from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchMvps } from '../../models/Mvp';
+import { fetchAllMvps } from '../../redux/ormSlice';
 
-export default class TestAxios extends Component {
-  componentDidMount() {
-    const dispatch = useDispatch();
-    /* get all MVPs */
-    try {
-      dispatch(fetchMvps());
-    } catch (e) {
-      console.log(`😱 Axios request failed: ${e}`);
-    }
-    /* get light MVPs 
+export default function TestAxios() {
+  const dispatch = useDispatch();
+  /* get all MVPs */
+  try {
+    console.log('start fetch');
+    dispatch(fetchAllMvps());
+  } catch (e) {
+    console.log(`😱 Axios request failed: ${e}`);
+  }
+  /* get light MVPs 
     try {
       await MvpService.getLightMvp().then((response) => {
         console.log(`get light MVPs : \n ${JSON.stringify(response)} `);
@@ -42,9 +41,6 @@ export default class TestAxios extends Component {
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
     } */
-  }
 
-  render() {
-    return <div />;
-  }
+  return <div>Hello</div>;
 }
