@@ -1,6 +1,9 @@
-import { Model, attr, ORM } from 'redux-orm';
+import { Model, attr } from 'redux-orm';
+import { createSlice } from '@reduxjs/toolkit';
 
 export class TeamMember extends Model {
+  static modelName = 'TeamMember';
+
   static get fields() {
     return {
       idMember: attr(),
@@ -11,8 +14,20 @@ export class TeamMember extends Model {
       idRole: attr(),
     };
   }
-}
-TeamMember.modelName = 'TeamMember';
 
-export const orm = new ORM();
-orm.register(TeamMember);
+  static slice = createSlice({
+    name: 'TeamMemberSlice',
+    initialState: undefined,
+    reducers: {
+      saveTeamMembers(TeamMember, action) {
+        TeamMember.create(action.payload);
+      },
+    },
+  });
+
+  toString() {
+    return `TeamMember: ${this.name}`;
+  }
+}
+export default TeamMember;
+export const { saveTeamMembers } = TeamMember.slice.actions;

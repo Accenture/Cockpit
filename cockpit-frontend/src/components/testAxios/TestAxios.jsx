@@ -1,18 +1,14 @@
 import React, { Component } from 'react';
 // import MvpService from '../../services/service';
-import { fetchMvps } from '../../actions/action';
+import { useDispatch } from 'react-redux';
+import { fetchMvps } from '../../models/Mvp';
 
 export default class TestAxios extends Component {
-  // eslint-disable-next-line no-useless-constructor
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
+    const dispatch = useDispatch();
     /* get all MVPs */
     try {
-      // eslint-disable-next-line react/destructuring-assignment
-      fetchMvps();
+      dispatch(fetchMvps());
     } catch (e) {
       console.log(`😱 Axios request failed: ${e}`);
     }
