@@ -1,6 +1,9 @@
-import { Model, attr, ORM } from 'redux-orm';
+import { Model, attr } from 'redux-orm';
+import { createSlice } from '@reduxjs/toolkit';
 
 export class Sprint extends Model {
+  static modelName = 'Sprint';
+
   static get fields() {
     return {
       id: attr(),
@@ -14,7 +17,7 @@ export class Sprint extends Model {
     };
   }
 
-  static reducer(action, sprint) {
+  /* static reducer(action, sprint) {
     switch (action.type) {
       case 'SAVE_all_sprint': {
         action.payload.map((item) => sprint.create(item));
@@ -23,9 +26,20 @@ export class Sprint extends Model {
       default:
         break;
     }
+  } */
+  static slice = createSlice({
+    name: 'SprintSlice',
+    initialState: undefined,
+    reducers: {
+      saveSprints(Sprint, action) {
+        Sprint.create(action.payload);
+      },
+    },
+  });
+
+  toString() {
+    return `Sprint: ${this.name}`;
   }
 }
-Sprint.modelName = 'Sprint';
-
-export const orm = new ORM();
-orm.register(Sprint);
+export default Sprint;
+export const { saveSprints } = Sprint.slice.actions;

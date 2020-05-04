@@ -1,6 +1,10 @@
-import { Model, attr, ORM, fk, many } from 'redux-orm';
+import { Model, attr, fk, many } from 'redux-orm';
+import { createSlice } from '@reduxjs/toolkit';
+import MvpService from '../services/service';
 
 export class Mvp extends Model {
+  static modelName = 'Mvp';
+
   static get fields() {
     return {
       id: attr(),
@@ -32,7 +36,7 @@ export class Mvp extends Model {
     };
   }
 
-  static reducer(action, mvp) {
+  /* static reducer(action, mvp) {
     switch (action.type) {
       case 'SAVE_MVPS': {
         action.payload.map((item) => mvp.create(item));
@@ -41,9 +45,24 @@ export class Mvp extends Model {
       default:
         break;
     }
+  } */
+
+  static slice = createSlice({
+    name: 'MvpSlice',
+    initialState: undefined,
+    reducers: {
+      async fetchMvps(Mvp, action) {
+        const response = await MvpService.getAll();
+        const data = await response.data;
+        action.payload = data;
+        Mvp.create(action.payload);
+      },
+    },
+  });
+
+  toString() {
+    return `Mvp: ${this.name}`;
   }
 }
-Mvp.modelName = 'Mvp';
-
-export const orm = new ORM();
-orm.register(Mvp);
+export default Mvp;
+export const { fetchMvps } = Mvp.slice.actions;
