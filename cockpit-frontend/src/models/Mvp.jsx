@@ -1,6 +1,4 @@
 import { Model, attr, fk, many } from 'redux-orm';
-import { createSlice } from '@reduxjs/toolkit';
-import MvpService from '../services/service';
 
 export class Mvp extends Model {
   toString() {
@@ -38,32 +36,4 @@ Mvp.fields = {
   technologies: many('Technology'),
 };
 
-/* static reducer(action, mvp) {
-    switch (action.type) {
-      case 'SAVE_MVPS': {
-        action.payload.map((item) => mvp.create(item));
-        break;
-      }
-      default:
-        break;
-    }
-  } */
-
-/*
-  static slice = createSlice({
-    name: 'MvpSlice',
-    initialState: undefined,
-    reducers: {
-      async fetchMvps(Mvp, action) {
-        console.log('I am here');
-        const response = await MvpService.getAll();
-        const data = await response.data;
-        action.payload = data;
-        console.log('data: ', action.payload);
-        Mvp.create(action.payload);
-      },
-    },
-  });
-  */
 export default Mvp;
-// export const { fetchMvps } = Mvp.slice.actions;
