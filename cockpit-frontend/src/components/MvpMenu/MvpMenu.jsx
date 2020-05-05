@@ -80,6 +80,7 @@ export default function MvpMenu() {
                       dispatch(selectCandidates());
                       setOpen(false);
                     }}
+                    disabled
                   >
                     Candidates
                   </MenuItem>
