@@ -27,12 +27,7 @@ Mvp.fields = {
   technicalDebt: attr(),
   sharedMVPId: attr(),
   iterationNumber: attr(),
-  teamId: fk({
-    to: 'Team',
-    as: 'team',
-    relatedName: 'mvps',
-  }),
-  sprints: many('Sprint'),
+  teamId: fk('Team', 'mvps'),
   technologies: many('Technology'),
 };
 

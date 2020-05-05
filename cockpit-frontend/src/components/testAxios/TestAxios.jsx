@@ -1,16 +1,18 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllMvps } from '../../redux/ormSlice';
+import { mvpSelector } from '../../redux/selector';
 
 export default function TestAxios() {
   const dispatch = useDispatch();
+
   /* get all MVPs */
-  try {
-    console.log('start fetch');
-    dispatch(fetchAllMvps());
-  } catch (e) {
-    console.log(`😱 Axios request failed: ${e}`);
-  }
+
+  const mvps = useSelector((state) => mvpSelector(state));
+  console.log(mvps);
+  const mvp = useSelector((state) => mvpSelector(state, 'COC'));
+  console.log(mvp);
+
   /* get light MVPs 
     try {
       await MvpService.getLightMvp().then((response) => {
@@ -42,5 +44,16 @@ export default function TestAxios() {
       console.log(`😱 Axios request failed: ${e}`);
     } */
 
-  return <div>Hello</div>;
+  return (
+    <div>
+      <button
+        onClick={() => {
+          dispatch(fetchAllMvps());
+        }}
+      >
+        {' '}
+        display mvps in console{' '}
+      </button>{' '}
+    </div>
+  );
 }

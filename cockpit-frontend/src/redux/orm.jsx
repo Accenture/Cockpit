@@ -9,10 +9,6 @@ const orm = new ORM({
   stateSelector: (state) => state.orm,
 });
 
-orm.register(Mvp);
-orm.register(Sprint);
-orm.register(Team);
-orm.register(Technology);
-orm.register(TeamMmeber);
+orm.register(Mvp, Sprint, Team, Technology, TeamMmeber);
 
 export default orm;

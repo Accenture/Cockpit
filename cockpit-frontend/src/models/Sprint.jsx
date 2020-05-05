@@ -1,4 +1,4 @@
-import { Model, attr } from 'redux-orm';
+import { Model, attr, fk } from 'redux-orm';
 import { createSlice } from '@reduxjs/toolkit';
 
 export class Sprint extends Model {
@@ -14,6 +14,7 @@ export class Sprint extends Model {
       teamMotivation: attr(),
       confidentTarget: attr(),
       technicalDebtKPI: attr(),
+      mvp: fk('Mvp', 'sprints'),
     };
   }
 
