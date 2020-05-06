@@ -16,14 +16,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function MvpCard() {
+export default function MvpCard(props) {
   const classes = useStyles();
-
+  const { mvpInfo } = props;
   return (
     <Grid container spacing={3}>
       <Grid item xs={3}>
         <Card className={classes.cardRoot}>
-          <CardMedia className="cardMedia" image={logo} title="Paella dish" />
+          <CardMedia
+            className="cardMedia"
+            image={mvpInfo.mvpAvatarUrl ? mvpInfo.mvpAvatarUrl : logo}
+            title="Paella dish"
+          />
           <CardContent>
             <Typography
               className="title"
@@ -31,11 +35,15 @@ export default function MvpCard() {
               component="h2"
               gutterBottom
             >
-              Project Name
+              {mvpInfo.name ? mvpInfo.name : 'Unnamed Project'}
             </Typography>
             <Grid container spacing={3}>
               <Grid item xs={6}>
-                <Typography gutterBottom>1</Typography>
+                <Typography gutterBottom>
+                  {mvpInfo.iterationNumber
+                    ? mvpInfo.iterationNumber
+                    : 'Unknown'}
+                </Typography>
                 <Typography
                   className="title"
                   color="textSecondary"
@@ -45,7 +53,9 @@ export default function MvpCard() {
                 </Typography>
               </Grid>
               <Grid item xs={6}>
-                <Typography gutterBottom>4</Typography>
+                <Typography gutterBottom>
+                  {mvpInfo.currentSprint ? mvpInfo.currentSprint : 'Unknown'}
+                </Typography>
                 <Typography
                   className="title"
                   color="textSecondary"
