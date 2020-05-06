@@ -22,9 +22,10 @@ const ormSlice = createSlice({
   extraReducers: {
     // Put async reducers here
     [fetchAllMvps.fulfilled]: withSession((session, action) => {
-      // Add user to the state array
+      // Add mvp to the state array
       action.payload.forEach((mvp) => {
-        session.Mvp.create(mvp);
+        if (session.Mvp.withId(mvp.id) == null) session.Mvp.create(mvp);
+        else session.Mvp.withId(mvp.id).update(mvp);
       });
     }),
   },
