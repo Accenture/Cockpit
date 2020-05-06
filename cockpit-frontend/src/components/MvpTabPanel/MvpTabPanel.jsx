@@ -22,13 +22,13 @@ export default function MvpTabs() {
   return (
     <div className={classes.root}>
       <TabPanel value={selectedMvpState} index="Candidates">
-        MVP candidates list
+        <MvpCardList mvpState="candidates" />
       </TabPanel>
       <TabPanel value={selectedMvpState} index="In Progress">
-        <MvpCardList />
+        <MvpCardList mvpState="inprogress" />
       </TabPanel>
       <TabPanel value={selectedMvpState} index="Transferred">
-        MVP transffered
+        <MvpCardList mvpState="transferred" />
       </TabPanel>
     </div>
   );

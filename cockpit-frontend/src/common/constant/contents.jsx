@@ -1,1 +1,1 @@
-export const MvpState = ['Candidates', 'In Progress', 'Transferred'];
+// TO be filled
