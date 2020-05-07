@@ -35,7 +35,7 @@ export default function MvpCard(props) {
               component="h2"
               gutterBottom
             >
-              {mvpInfo.name ? mvpInfo.name : 'Unnamed Project'}
+              {mvpInfo.name ? mvpInfo.name : 'Unnamed Mvp'}
             </Typography>
             <Grid container spacing={3}>
               <Grid item xs={6}>
