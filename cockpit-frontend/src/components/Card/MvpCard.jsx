@@ -59,7 +59,7 @@ export default function MvpCard(props) {
             </Grid>
             <Grid container spacing={3}>
               <Grid item xs={4}>
-                <Typography gutterBottom>Mood</Typography>
+                <Typography gutterBottom className={classes.greyTitles}>Mood</Typography>
                 <div>
                   <LinearProgress
                     className={classes.progress}
@@ -75,7 +75,7 @@ export default function MvpCard(props) {
                 </div>
               </Grid>
               <Grid item xs={4}>
-                <Typography gutterBottom>Confidence</Typography>
+                <Typography gutterBottom className={classes.greyTitles}>Confidence</Typography>
                 <div>
                   <LinearProgress
                     className={classes.progress}
@@ -91,7 +91,7 @@ export default function MvpCard(props) {
                 </div>
               </Grid>
               <Grid item xs={4}>
-                <Typography gutterBottom>Motivation</Typography>
+                <Typography gutterBottom className={classes.greyTitles}>Motivation</Typography>
                 <div>
                   <LinearProgress
                     className={classes.progress}

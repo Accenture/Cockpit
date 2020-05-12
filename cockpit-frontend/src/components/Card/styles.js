@@ -12,6 +12,7 @@ export default makeStyles((theme) => ({
         transform: 'scale(0.8)',
     },
     title: {
+        fontSize: 14,
         fontWeight: 'bold',
     },
     pos: {
@@ -36,4 +37,7 @@ export default makeStyles((theme) => ({
         fontWight: 'bold',
         color: 'white',
     },
+    greyTitles: {
+        color: "grey"
+    }
 }));
