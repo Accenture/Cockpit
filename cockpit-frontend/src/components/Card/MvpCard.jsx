@@ -4,112 +4,55 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import LinearProgress from '@material-ui/core/LinearProgress';
+import { useLocation } from 'react-router-dom';
 import logo from '../../common/media/total-logo.jpg';
 import useStyles from './styles';
+import Obeya from '../Obeya/Obeya';
 
 export default function MvpCard(props) {
   const classes = useStyles();
   const { mvpInfo } = props;
+  const isHomePage = useLocation().pathname === '/';
+
   return (
-    <Grid container spacing={1}>
-      <Grid item xs={2}>
-        <Card className={classes.cardRoot}>
-          <CardMedia
-            className={classes.cardMedia}
-            image={mvpInfo.mvpAvatarUrl ? mvpInfo.mvpAvatarUrl : logo}
-            title={mvpInfo.name ? mvpInfo.name : 'Unnamed MVP'}
-          />
-          <CardContent>
+    <Card className={isHomePage ? classes.dashboardCard : classes.mvpInfoCard}>
+      <CardMedia
+        className={classes.cardMedia}
+        image={mvpInfo.mvpAvatarUrl ? mvpInfo.mvpAvatarUrl : logo}
+        title={mvpInfo.name ? mvpInfo.name : 'Unnamed MVP'}
+      />
+      <CardContent>
+        <Typography className={classes.title} gutterBottom>
+          {mvpInfo.name ? mvpInfo.name : 'Unnamed Mvp'}
+        </Typography>
+        <Grid container spacing={3}>
+          <Grid item xs={6}>
+            <Typography gutterBottom>
+              {mvpInfo.iterationNumber ? mvpInfo.iterationNumber : 'Unknown'}
+            </Typography>
             <Typography
-              className={classes.title}
-              variant="h5"
-              component="h2"
+              className={classes.subTitle}
+              color="textSecondary"
               gutterBottom
             >
-              {mvpInfo.name ? mvpInfo.name : 'Unnamed Mvp'}
+              Cycle
             </Typography>
-            <Grid container spacing={3}>
-              <Grid item xs={6}>
-                <Typography gutterBottom>
-                  {mvpInfo.iterationNumber
-                    ? mvpInfo.iterationNumber
-                    : 'Unknown'}
-                </Typography>
-                <Typography
-                  className={classes.title}
-                  color="textSecondary"
-                  gutterBottom
-                >
-                  Cycle
-                </Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography gutterBottom>
-                  {mvpInfo.currentSprint ? mvpInfo.currentSprint : 'Unknown'}
-                </Typography>
-                <Typography
-                  className={classes.title}
-                  color="textSecondary"
-                  gutterBottom
-                >
-                  Current Sprint
-                </Typography>
-              </Grid>
-            </Grid>
-            <Grid container spacing={3}>
-              <Grid item xs={4}>
-                <Typography gutterBottom className={classes.greyTitles}>Mood</Typography>
-                <div>
-                  <LinearProgress
-                    className={classes.progress}
-                    variant="determinate"
-                    value={0}
-                  />
-                  <span
-                    className={classes.progressBarTxt}
-                    style={{ left: '5%' }}
-                  >
-                    0
-                  </span>
-                </div>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography gutterBottom className={classes.greyTitles}>Confidence</Typography>
-                <div>
-                  <LinearProgress
-                    className={classes.progress}
-                    variant="determinate"
-                    value={0}
-                  />
-                  <span
-                    className={classes.progressBarTxt}
-                    style={{ left: '5%' }}
-                  >
-                    0
-                  </span>
-                </div>
-              </Grid>
-              <Grid item xs={4}>
-                <Typography gutterBottom className={classes.greyTitles}>Motivation</Typography>
-                <div>
-                  <LinearProgress
-                    className={classes.progress}
-                    variant="determinate"
-                    value={0}
-                  />
-                  <span
-                    className={classes.progressBarTxt}
-                    style={{ left: '5%' }}
-                  >
-                    0
-                  </span>
-                </div>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-      </Grid>
-    </Grid>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography gutterBottom>
+              {mvpInfo.currentSprint ? mvpInfo.currentSprint : 'Unknown'}
+            </Typography>
+            <Typography
+              className={classes.subTitle}
+              color="textSecondary"
+              gutterBottom
+            >
+              Current Sprint
+            </Typography>
+          </Grid>
+        </Grid>
+        {isHomePage && <Obeya />}
+      </CardContent>
+    </Card>
   );
 }

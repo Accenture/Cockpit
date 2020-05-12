@@ -2,12 +2,15 @@ import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
+import { useLocation } from 'react-router-dom';
 import MvpMenu from '../MvpMenu/MvpMenu';
+
 // styles
 import useStyles from './styles';
 
 export default function Header() {
   const classes = useStyles();
+  const isHomePage = useLocation().pathname === '/';
   return (
     <div className={classes.root}>
       <AppBar position="static" className={classes.appBar}>
@@ -20,7 +23,7 @@ export default function Header() {
           >
             Cockpit
           </IconButton>
-          <MvpMenu />
+          {isHomePage && <MvpMenu />}
         </Toolbar>
       </AppBar>
     </div>
