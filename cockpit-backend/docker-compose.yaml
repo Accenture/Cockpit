@@ -14,7 +14,7 @@ services:
   jira-gateway:
     build: ./jira-gateway
     ports:
-      - "8082:8082"
+      - "9112:9112"
     environment:
       JIRA_HOST: "cockpit-test.atlassian.net"
       JIRA_TOKEN: "YOUR TOKEN"
@@ -28,7 +28,7 @@ services:
   mvp-infos:
     build: ./mvp-infos
     ports:
-      - "8080:8080"
+      - "8085:8085"
     depends_on:
       - "jira-gateway"
     links:
