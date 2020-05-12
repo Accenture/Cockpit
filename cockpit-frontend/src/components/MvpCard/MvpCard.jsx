@@ -5,7 +5,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import { useLocation } from 'react-router-dom';
-import logo from '../../common/media/total-logo.jpg';
+import logo from '../../common/media/logo-total.webp';
 import useStyles from './styles';
 import Obeya from '../Obeya/Obeya';
 
@@ -13,7 +13,6 @@ export default function MvpCard(props) {
   const classes = useStyles();
   const { mvpInfo } = props;
   const isHomePage = useLocation().pathname === '/';
-
   return (
     <Card className={isHomePage ? classes.dashboardCard : classes.mvpInfoCard}>
       <CardMedia
