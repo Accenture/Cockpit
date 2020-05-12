@@ -17,7 +17,7 @@ services:
       - "9112:9112"
     environment:
       JIRA_HOST: "cockpit-test.atlassian.net"
-      JIRA_TOKEN: "k.abdullazoda@accenture.com:WLWMWYx0E8dCg3iYw5RF669B"
+      JIRA_TOKEN: "YOUR TOKEN"
       DB_HOST: "mysql"
     depends_on:
       - mysql
