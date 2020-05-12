@@ -64,13 +64,13 @@ export default function MvpCard(props) {
                   <LinearProgress
                     className={classes.progress}
                     variant="determinate"
-                    value={75}
+                    value={0}
                   />
                   <span
                     className={classes.progressBarTxt}
-                    style={{ left: '60%' }}
+                    style={{ left: '5%' }}
                   >
-                    3
+                    0
                   </span>
                 </div>
               </Grid>
@@ -80,13 +80,13 @@ export default function MvpCard(props) {
                   <LinearProgress
                     className={classes.progress}
                     variant="determinate"
-                    value={25}
+                    value={0}
                   />
                   <span
                     className={classes.progressBarTxt}
-                    style={{ left: '10%' }}
+                    style={{ left: '5%' }}
                   >
-                    1
+                    0
                   </span>
                 </div>
               </Grid>
@@ -96,13 +96,13 @@ export default function MvpCard(props) {
                   <LinearProgress
                     className={classes.progress}
                     variant="determinate"
-                    value={50}
+                    value={0}
                   />
                   <span
                     className={classes.progressBarTxt}
-                    style={{ left: '35%' }}
+                    style={{ left: '5%' }}
                   >
-                    2
+                    0
                   </span>
                 </div>
               </Grid>
