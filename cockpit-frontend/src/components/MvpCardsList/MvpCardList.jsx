@@ -4,7 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import { Link } from 'react-router-dom';
 import { fetchAllMvps } from '../../redux/ormSlice';
 import { mvpSelector } from '../../redux/selector';
-import MvpCard from '../Card/MvpCard';
+import MvpCard from '../MvpCard/MvpCard';
 // styles
 import useStyles from './styles';
 

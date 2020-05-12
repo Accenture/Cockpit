@@ -11,12 +11,12 @@ export default function TecnologyCard() {
   return (
     <Card className={classes.technologyCard}>
       <CardContent>
-        <Grid container>
+        <Grid container alignItems="center">
           <Grid item xs={6}>
-            <Typography variant="h5">Technology</Typography>
+            <Typography variant="h6">Technology</Typography>
           </Grid>
           <Grid item xs={6}>
-            <Typography variant="h7">Techonologies not defined</Typography>
+            <Typography variant="subtitle2">Not defined</Typography>
           </Grid>
         </Grid>
       </CardContent>

@@ -7,4 +7,10 @@ export default makeStyles(() => ({
   leftColumnContainer: {
     paddingRight: '1% ',
   },
+  rightColumnContainer: {
+    paddingLeft: '1% ',
+  },
+  tabButton: {
+    backgroundColor: '#4a95cd',
+  },
 }));

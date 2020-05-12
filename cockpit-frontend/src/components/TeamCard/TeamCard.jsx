@@ -11,12 +11,12 @@ export default function TeamCard() {
   return (
     <Card className={classes.teamCard}>
       <CardContent>
-        <Grid container>
+        <Grid container alignItems="center">
           <Grid item xs={6}>
-            <Typography variant="h5">Team</Typography>
+            <Typography variant="h6">Team</Typography>
           </Grid>
           <Grid item xs={6}>
-            <Typography variant="h7">Team not defined</Typography>
+            <Typography variant="subtitle2">Not defined</Typography>
           </Grid>
         </Grid>
       </CardContent>

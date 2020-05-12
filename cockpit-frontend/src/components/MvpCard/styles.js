@@ -9,6 +9,15 @@ export default makeStyles((theme) => ({
     margin: 'auto',
     backgroundColor: '#F5F5F9',
   },
+  mvpStatusCard: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: '10px',
+    height: '80%',
+    backgroundColor: '#bdbdbd',
+    fontSize: 16,
+  },
   bullet: {
     display: 'inline - block',
     margin: '0 2 px',
@@ -18,6 +27,9 @@ export default makeStyles((theme) => ({
     fontSize: 20,
   },
   subTitle: {
+    fontSize: 14,
+  },
+  pitch: {
     fontSize: 14,
   },
   pos: {

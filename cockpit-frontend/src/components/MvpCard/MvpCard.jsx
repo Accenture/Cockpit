@@ -22,9 +22,25 @@ export default function MvpCard(props) {
         title={mvpInfo.name ? mvpInfo.name : 'Unnamed MVP'}
       />
       <CardContent>
-        <Typography className={classes.title} gutterBottom>
-          {mvpInfo.name ? mvpInfo.name : 'Unnamed Mvp'}
-        </Typography>
+        <Grid container spacing={1}>
+          <Grid item xs={7}>
+            <Typography className={classes.title} gutterBottom>
+              {mvpInfo.name ? mvpInfo.name : 'Unnamed Mvp'}
+            </Typography>
+          </Grid>
+          {!isHomePage && (
+            <Grid item xs={5} className={classes.mvpStatusCard}>
+              <Typography className={classes.subTitle}>
+                {mvpInfo.status
+                  ? mvpInfo.status.toUpperCase()
+                  : 'Unknown status'}
+              </Typography>
+            </Grid>
+          )}
+        </Grid>
+        {!isHomePage && mvpInfo.pitch && (
+          <Typography className={classes.pitch}>{mvpInfo.pitch}</Typography>
+        )}
         <Grid container spacing={3}>
           <Grid item xs={6}>
             <Typography gutterBottom>
