@@ -14,10 +14,10 @@ services:
   jira-gateway:
     build: ./jira-gateway
     ports:
-      - "8082:8082"
+      - "9112:9112"
     environment:
       JIRA_HOST: "cockpit-test.atlassian.net"
-      JIRA_TOKEN: "YOUR TOKEN"
+      JIRA_TOKEN: "k.abdullazoda@accenture.com:WLWMWYx0E8dCg3iYw5RF669B"
       DB_HOST: "mysql"
     depends_on:
       - mysql
@@ -28,7 +28,7 @@ services:
   mvp-infos:
     build: ./mvp-infos
     ports:
-      - "8080:8080"
+      - "8085:8085"
     depends_on:
       - "jira-gateway"
     links:

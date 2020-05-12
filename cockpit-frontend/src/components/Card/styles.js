@@ -1,20 +1,19 @@
 import { makeStyles } from '@material-ui/core/styles';
-import { Container } from '@material-ui/core';
 
 export default makeStyles((theme) => ({
     cardRoot: {
-        margin: "auto",
+        margin: 'auto',
         minWidth: 325,
         padding: theme.spacing(2),
     },
     bullet: {
-        display: "inline - block",
+        display: 'inline - block',
         margin: '0 2 px',
-        transform: "scale(0.8)",
+        transform: 'scale(0.8)',
     },
     title: {
         fontSize: 14,
-        fontWeight: "bold",
+        fontWeight: 'bold',
     },
     pos: {
         marginBottom: 12,
@@ -22,21 +21,20 @@ export default makeStyles((theme) => ({
     cardMedia: {
         height: '15vh',
         paddingTop: '56.25%', // 16:9
-        backgroundSize: "contain",
+        backgroundSize: 'contain',
     },
     progress: {
         height: '15px!important',
         borderRadius: '20px',
-        "& div": {
+        '& div': {
             borderRadius: '20px',
         },
     },
     progressBarTxt: {
-        position: "relative",
+        position: 'relative',
         top: '-18px',
         fontSize: '0.8em',
-        fontWight: "bold",
-        color: "white",
+        fontWight: 'bold',
+        color: 'white',
     },
-
 }));

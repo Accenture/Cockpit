@@ -18,7 +18,7 @@ export default function MvpCard(props) {
           <CardMedia
             className={classes.cardMedia}
             image={mvpInfo.mvpAvatarUrl ? mvpInfo.mvpAvatarUrl : logo}
-            title={mvpInfo.name ? mvpInfo.name : "Unnamed MVP"}
+            title={mvpInfo.name ? mvpInfo.name : 'Unnamed MVP'}
           />
           <CardContent>
             <Typography
@@ -66,7 +66,10 @@ export default function MvpCard(props) {
                     variant="determinate"
                     value={75}
                   />
-                  <span className={classes.progressBarTxt} style={{ left: '60%' }}>
+                  <span
+                    className={classes.progressBarTxt}
+                    style={{ left: '60%' }}
+                  >
                     3
                   </span>
                 </div>
@@ -79,7 +82,10 @@ export default function MvpCard(props) {
                     variant="determinate"
                     value={25}
                   />
-                  <span className={classes.progressBarTxt} style={{ left: '10%' }}>
+                  <span
+                    className={classes.progressBarTxt}
+                    style={{ left: '10%' }}
+                  >
                     1
                   </span>
                 </div>
@@ -92,7 +98,10 @@ export default function MvpCard(props) {
                     variant="determinate"
                     value={50}
                   />
-                  <span className={classes.progressBarTxt} style={{ left: '35%' }}>
+                  <span
+                    className={classes.progressBarTxt}
+                    style={{ left: '35%' }}
+                  >
                     2
                   </span>
                 </div>
