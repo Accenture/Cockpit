@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
+import { Link } from 'react-router-dom';
 import { fetchAllMvps } from '../../redux/ormSlice';
 import { mvpSelector } from '../../redux/selector';
-import MvpCard from '../Card/MvpCard';
+import MvpCard from '../MvpCard/MvpCard';
 // styles
 import useStyles from './styles';
 
@@ -25,7 +26,12 @@ export default function MvpCardList(props) {
         <Grid container spacing={5} className={classes.gridList}>
           {mvpList.map((mvp) => (
             <Grid item key={mvp.id}>
-              <MvpCard mvpInfo={mvp} />
+              <Link
+                to={`/mvp-info/${mvp.id}`}
+                className={classes.cardRouterLink}
+              >
+                <MvpCard mvpInfo={mvp} />
+              </Link>
             </Grid>
           ))}
         </Grid>

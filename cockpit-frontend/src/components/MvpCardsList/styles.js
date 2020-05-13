@@ -7,4 +7,7 @@ export default makeStyles(() => ({
     justifyContent: 'space-evenly',
     direction: 'row',
   },
+  cardRouterLink: {
+    textDecoration: 'none',
+  },
 }));
