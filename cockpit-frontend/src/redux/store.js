@@ -10,7 +10,7 @@ import mvnMenuReducer from '../components/MvpMenu/mvpMenuSlice';
 import ormReducer from './ormSlice';
 
 const persistConfig = {
-  key: 'root',
+  key: 'reduxStates',
   storage,
 };
 
