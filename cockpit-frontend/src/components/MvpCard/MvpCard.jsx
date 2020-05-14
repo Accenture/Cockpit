@@ -38,7 +38,11 @@ export default function MvpCard(props) {
           )}
         </Grid>
         {!isHomePage && mvpInfo.pitch && (
-          <Typography className={classes.pitch}>{mvpInfo.pitch}</Typography>
+          <Grid container spacing={1}>
+            <Grid item xs={12}>
+              <Typography className={classes.pitch}>{mvpInfo.pitch}</Typography>
+            </Grid>
+          </Grid>
         )}
         <Grid container spacing={3}>
           <Grid item xs={6}>
@@ -66,6 +70,22 @@ export default function MvpCard(props) {
             </Typography>
           </Grid>
         </Grid>
+        {!isHomePage && (
+          <Grid container spacing={3}>
+            <Grid item xs={6}>
+              <Typography gutterBottom>
+                {mvpInfo.entity ? mvpInfo.entity : 'Unknown'}
+              </Typography>
+              <Typography
+                className={classes.subTitle}
+                color="textSecondary"
+                gutterBottom
+              >
+                Entity
+              </Typography>
+            </Grid>
+          </Grid>
+        )}
         {isHomePage && <Obeya />}
       </CardContent>
     </Card>
