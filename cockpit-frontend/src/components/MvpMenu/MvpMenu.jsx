@@ -45,15 +45,14 @@ export default function MvpMenu() {
   }, [open]);
 
   return (
-    <div>
+    <>
       <Button
         ref={anchorRef}
         aria-controls={open ? 'menu-list-grow' : undefined}
         aria-haspopup="true"
-        variant="contained"
-        color="primary"
+        variant="outlined"
         onClick={handleToggle}
-        className={classes.margin}
+        className={classes.mvpStateMenu}
       >
         {selectedMvpState}
         <ExpandMoreOutlinedIcon />
@@ -106,6 +105,6 @@ export default function MvpMenu() {
           </Grow>
         )}
       </Popper>
-    </div>
+    </>
   );
 }
