@@ -210,6 +210,7 @@ export default function ScrumMasterForm() {
                 labelId="entityID"
                 id="entity"
                 label="Entity"
+                value={selectedEntity || ''}
                 onChange={(e) => {
                   dispatch(setEntity(e.target.value));
                   dispatch(setFormIsValid());
