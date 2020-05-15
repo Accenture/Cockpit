@@ -67,7 +67,7 @@ public class MvpController {
         }
     }
 
-    @ApiOperation(value = "Update Mvp fields or create new mvp if not existing")
+    @ApiOperation(value = "Update Mvp fields")
     @PutMapping(value = "/{id}")
     public ResponseEntity<?> updateMvpDetails(@PathVariable("id") String id, @RequestBody Mvp newMvp) {
         log.info("updating mvp[id: " + id + "]");
@@ -78,18 +78,26 @@ public class MvpController {
             log.debug("mvp not found");
         }
         Mvp modifiedMvp;
-        if (mvpFound == null) {
-            Mvp nonExistingMvp = new Mvp();
-            nonExistingMvp.setId(newMvp.getId());
-            mvpService.initializeANewMvp(nonExistingMvp);
-            modifiedMvp = mvpService.updateMvpInfo(nonExistingMvp, newMvp);
-        } else {
-            modifiedMvp = mvpService.updateMvpInfo(mvpFound, newMvp);
-        }
-
+        modifiedMvp = mvpService.updateMvpInfo(mvpFound, newMvp);
         mvpService.updateMvp(modifiedMvp);
         log.info("mvp updated");
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(modifiedMvp);
+    }
+
+    @ApiOperation(value = "Create new mvp if not existing")
+    @PostMapping(value = "/createMvp")
+    public ResponseEntity<?> createMvp(@RequestBody Mvp newMvp) {
+        if(newMvp.getId() == null){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(newMvp.getId());
+        }
+        try {
+        Mvp modifiedMvp= mvpService.updateMvp(newMvp);
+        log.info("mvp created");
+        return ResponseEntity.ok(modifiedMvp);
+        } catch (Exception e) {
+            log.error("Cannot create mvp");
+            return ResponseEntity.status(500).build();
+        }
     }
 
     @ApiOperation(value = "Delete Mvp")

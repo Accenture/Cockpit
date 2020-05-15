@@ -110,6 +110,12 @@ public class MvpService {
         if (newMvp.getStatus() != null) {
             foundMvp.setStatus(newMvp.getStatus());
         }
+        if(newMvp.getCurrentSprint() != null) {
+            foundMvp.setCurrentSprint(newMvp.getCurrentSprint());
+        }
+        if(newMvp.getJiraProjectId() != null) {
+            foundMvp.setJiraProjectId(newMvp.getJiraProjectId());
+        }
         if (newMvp.getEntity() != null) {
             foundMvp.setEntity(newMvp.getEntity());
         }
