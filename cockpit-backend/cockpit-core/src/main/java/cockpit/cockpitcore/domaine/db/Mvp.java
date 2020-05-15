@@ -57,7 +57,6 @@ public class Mvp {
 
     @Column(name = "JIRAPROJECTID")
     @ColumnDefault("0")
-    @JsonIgnore
     private Integer jiraProjectId;
 
     @Column(name = "JIRABOARDID")

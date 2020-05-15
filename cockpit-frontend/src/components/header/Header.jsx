@@ -4,13 +4,17 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import { useHistory, useLocation } from 'react-router-dom';
 
+import Button from '@material-ui/core/Button';
+import { useDispatch } from 'react-redux';
 import MvpMenu from '../MvpMenu/MvpMenu';
-
+import { showScrumMasterForm } from './HeaderSlice';
 // styles
 import useStyles from './styles';
 
 export default function Header() {
   const classes = useStyles();
+  const dispatch = useDispatch();
+
   const history = useHistory();
   const returnToHomePage = () => {
     const path = '/';
@@ -31,6 +35,17 @@ export default function Header() {
             Cockpit
           </IconButton>
           {isHomePage && <MvpMenu />}
+          <MvpMenu />
+          <Button
+            variant="outlined"
+            color="primary"
+            className={classes.addButton}
+            onClick={() => {
+              dispatch(showScrumMasterForm());
+            }}
+          >
+            + New MVP
+          </Button>
         </Toolbar>
       </AppBar>
     </div>

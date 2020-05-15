@@ -8,33 +8,10 @@ function getAll() {
     return e;
   }
 }
-function getLightMvp() {
+
+function createMvp(mvp) {
   try {
-    return API.get('/light/all');
-  } catch (e) {
-    console.log(`get all light MVPS API call Error: ${e}`);
-    return e;
-  }
-}
-function getOne(id) {
-  try {
-    return API.get(`/${id}`);
-  } catch (e) {
-    console.log(`get all MVP by ID API call Error: ${e}`);
-    return e;
-  }
-}
-function removeOne(id) {
-  try {
-    return API.put(`/removeMvp/${id}`);
-  } catch (e) {
-    console.log(`remove MVP API call Error: ${e}`);
-    return e;
-  }
-}
-function updateOne(id, mvp) {
-  try {
-    return API.put(`/${id}`, mvp);
+    return API.post(`/createMvp`, mvp);
   } catch (e) {
     console.log(`remove MVP API call Error: ${e}`);
     return e;
@@ -42,10 +19,7 @@ function updateOne(id, mvp) {
 }
 const MvpService = {
   getAll,
-  getLightMvp,
-  getOne,
-  removeOne,
-  updateOne,
+  createMvp,
 };
 
 export default MvpService;
