@@ -9,7 +9,7 @@ import storage from 'redux-persist/lib/storage'; // defaults to localStorage for
 import mvnMenuReducer from '../components/MvpMenu/mvpMenuSlice';
 import ormReducer from './ormSlice';
 import headerReducer from '../components/Header/HeaderSlice';
-import smFormReducer from '../components/ScrumMasterForm/ScrumMasterFormSlice'
+import smFormReducer from '../components/ScrumMasterForm/ScrumMasterFormSlice';
 
 const persistConfig = {
   key: 'reduxStates',
@@ -18,6 +18,8 @@ const persistConfig = {
 
 const reducers = combineReducers({
   mvpMenu: mvnMenuReducer,
+  header: headerReducer,
+  ScrumMasterForm: smFormReducer,
   orm: ormReducer,
 });
 
