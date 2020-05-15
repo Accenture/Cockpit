@@ -35,7 +35,6 @@ export default function Header() {
             Cockpit
           </IconButton>
           {isHomePage && <MvpMenu />}
-          <MvpMenu />
           <Button
             variant="outlined"
             color="primary"
