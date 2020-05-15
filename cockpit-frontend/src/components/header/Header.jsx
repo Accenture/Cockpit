@@ -3,7 +3,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import { useHistory, useLocation } from 'react-router-dom';
-
 import Button from '@material-ui/core/Button';
 import { useDispatch } from 'react-redux';
 import MvpMenu from '../MvpMenu/MvpMenu';
@@ -27,7 +26,7 @@ export default function Header() {
         <Toolbar>
           <IconButton
             edge="start"
-            className={classes.menuButton}
+            className={classes.logoButton}
             color="inherit"
             aria-label="menu"
             onClick={returnToHomePage}
@@ -35,16 +34,19 @@ export default function Header() {
             Cockpit
           </IconButton>
           {isHomePage && <MvpMenu />}
-          <Button
-            variant="outlined"
-            color="primary"
-            className={classes.addButton}
-            onClick={() => {
-              dispatch(showScrumMasterForm());
-            }}
-          >
-            + New MVP
-          </Button>
+          <div className={classes.growArea} />
+          {isHomePage && (
+            <Button
+              variant="outlined"
+              color="primary"
+              className={classes.addButton}
+              onClick={() => {
+                dispatch(showScrumMasterForm());
+              }}
+            >
+              + New MVP
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
     </div>
