@@ -99,6 +99,7 @@ export default function ScrumMasterForm() {
     await MvpService.createMvp(mvp);
     dispatch(close());
     dispatch(fetchAllMvps());
+    dispatch(setAlltoNull());
   }
 
   const body = (
