@@ -32,13 +32,12 @@ import useStyles from './styles';
 import MvpService from '../../services/service';
 import { fetchAllMvps } from '../../redux/ormSlice';
 
+let url = '';
+
 export default function ScrumMasterForm() {
   const classes = useStyles();
-
-  let url = '';
   let btnClass = [classes.bubbleBox, 'bubble'];
   btnClass = btnClass.join(' ');
-
   const [isOpened, setIsOpened] = useState(false);
   const imageUrl = useSelector(imageUrlState);
   const mvpName = useSelector(mvpState);
@@ -59,7 +58,6 @@ export default function ScrumMasterForm() {
     if (url !== '') {
       dispatch(setImageUrl(url));
       dispatch(setFormIsValid());
-      url = '';
       closeDialog();
     }
   }
@@ -241,6 +239,7 @@ export default function ScrumMasterForm() {
               name="cycleID"
               label="Cycle"
               type="number"
+              inputProps={{ min: '0', step: '1' }}
               autoComplete="cycleID"
               size="small"
             />
