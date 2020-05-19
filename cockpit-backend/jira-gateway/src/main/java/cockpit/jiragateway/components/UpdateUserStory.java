@@ -40,7 +40,7 @@ public class UpdateUserStory {
         this.sprintService = sprintService;
     }
 
-    @Scheduled(initialDelay = 9 * ONE_MINUTE, fixedDelay = ONE_HOUR)
+    @Scheduled(initialDelay = 9 * ONE_SECOND, fixedDelay = ONE_HOUR)
     public void updateUserStoryInDBFromJira() {
         LOGGER.info("UserStory - Start updateUserStoryInDBFromJira Thread : " + Thread.currentThread().getName());
         List<Sprint> sprintList;
@@ -59,7 +59,7 @@ public class UpdateUserStory {
         LOGGER.info("UserStory - End   updateUserStoryInDBFromJira Thread : " + Thread.currentThread().getName());
     }
 
-    @Scheduled(initialDelay = 28 * ONE_MINUTE, fixedDelay = ONE_HOUR)
+    @Scheduled(initialDelay = 28 * ONE_SECOND, fixedDelay = ONE_HOUR)
     public void cleaningUselessUSFromDB() {
         LOGGER.info("UserStory - Start cleaning useless user stories - Thread : " + Thread.currentThread().getName());
         try{
