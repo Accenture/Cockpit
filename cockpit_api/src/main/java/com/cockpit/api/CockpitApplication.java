@@ -1,4 +1,4 @@
-package com.cockpit.cockpit;
+package com.cockpit.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
