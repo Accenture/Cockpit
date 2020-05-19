@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
@@ -42,7 +43,7 @@ public class UpdateSprint {
         this.mvpService = mvpService;
     }
 
-    @Scheduled(initialDelay = 6 * ONE_MINUTE, fixedDelay = ONE_HOUR)
+    @Scheduled(initialDelay = 6 * ONE_SECOND, fixedDelay = ONE_HOUR)
     public void updateSprintsFromJira() {
         LOGGER.info("SPRINT - Start updateSprintsFromJira Thread : " + Thread.currentThread().getName());
         List<Mvp> mvpList;
@@ -65,4 +66,14 @@ public class UpdateSprint {
         }
         LOGGER.info("SPRINT - End   updateSprintsFromJira Thread : " + Thread.currentThread().getName());
     }
+
+    @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = ONE_DAY)
+    @Transactional
+    public void updateTotalNbOfUserStory() throws JiraException {
+        LOGGER.info("SPRINT - Start updateTotalNbOfUserStory Thread : " + Thread.currentThread().getName());
+        List<Mvp> mvpList;
+        mvpList = mvpService.getActiveProjects();
+        sprintService.setTotalNbOfUserStories(mvpList);
+    }
+
 }

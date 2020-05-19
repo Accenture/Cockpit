@@ -2,8 +2,10 @@ package cockpit.jiragateway.services;
 
 import cockpit.cockpitcore.domaine.db.Mvp;
 import cockpit.cockpitcore.domaine.db.Sprint;
+import cockpit.cockpitcore.domaine.db.UserStory;
 import cockpit.cockpitcore.domaine.jira.SprintHeaders;
 import cockpit.cockpitcore.domaine.jira.SprintJira;
+import cockpit.cockpitcore.repository.UserStoryRepository;
 import cockpit.jiragateway.exceptions.JiraException;
 import cockpit.jiragateway.configurations.UrlConfiguration;
 import cockpit.cockpitcore.repository.SprintRepository;
@@ -12,7 +14,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,14 +26,17 @@ public class SprintService {
 
     private UrlConfiguration urlConfiguration;
     private SprintRepository sprintRepository;
+    private UserStoryRepository userStoryRepository;
 
     @Autowired
     public SprintService(
             UrlConfiguration urlConfiguration,
-            SprintRepository sprintRepository
+            SprintRepository sprintRepository,
+            UserStoryRepository userStoryRepository
     ){
         this.urlConfiguration = urlConfiguration;
         this.sprintRepository = sprintRepository;
+        this.userStoryRepository = userStoryRepository;
     }
 
     private  List<Sprint> sprintsToRemove  = new ArrayList<>();
@@ -124,6 +128,20 @@ public class SprintService {
 
     public List<Sprint> getSprintsToRemove() {
         return sprintsToRemove;
+    }
+
+    public void setTotalNbOfUserStories(List<Mvp> mvpList) {
+        for (Mvp mvp : Optional.ofNullable(mvpList).orElse(Collections.emptyList())) {
+            if (mvp.getJiraBoardId() != 0) {
+                ArrayList<Sprint> sprintList = new ArrayList<>(mvp.getSprints());
+                for (Sprint sprint : sprintList) {
+                        List<UserStory> userStoriesList = userStoryRepository.findMyUserStories(mvp, sprint.getSprintNumber());
+                        sprint.setTotalNbUs(userStoriesList.size());
+                        sprintRepository.save(sprint);
+                }
+            }
+            LOGGER.info("SPRINT - All total user story numbers with id : " + mvp.getId() + " has been reordered");
+        }
     }
 
 }
