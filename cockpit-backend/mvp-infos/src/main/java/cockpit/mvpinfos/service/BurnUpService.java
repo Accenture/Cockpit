@@ -3,9 +3,9 @@ package cockpit.mvpinfos.service;
 import cockpit.cockpitcore.domaine.db.Mvp;
 import cockpit.cockpitcore.domaine.db.Sprint;
 import cockpit.cockpitcore.domaine.dto.ChartData;
+import cockpit.cockpitcore.repository.SprintRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -18,6 +18,9 @@ public class BurnUpService {
 
     @Autowired
     private SprintService sprintService;
+
+    @Autowired
+    private SprintRepository sprintRepository;
 
     public List<ChartData> getChartData(Mvp mvp) {
         List<ChartData> chartDataList = new ArrayList<>();
@@ -46,7 +49,6 @@ public class BurnUpService {
             }
 
             //Calcul code
-
             chartData.setSprintId(sprintNumber);
             chartData.setTotalSprints(mvp.getNbSprint());
             actualSprintStories = getTotalNumberOfStoriesForAnMVPAndASprintNumber(sprintNumber, mvp);
@@ -57,12 +59,10 @@ public class BurnUpService {
             }
             totalUSNumber = totalUSNumber + actualSprintStories;
             chartData.setExpectedUsClosed(totalUSNumber);
-
-            chartData.setTotalStories(userStoryService.getTotalStoriesNumberOfAnMvp(mvp));
-
-            double coeff = totalUSNumber / (mvp.getNbSprint() - 1);
-            double expected = (sprintNumber * coeff);
-
+            Sprint currentSprint = sprintRepository.findByMvpAndSprintNumber(mvp, sprintNumber);
+            if (currentSprint!=null && currentSprint.getTotalNbUs()!=null) {
+                chartData.setTotalStories(currentSprint.getTotalNbUs());
+            }
             chartDataList.add(chartData);
         }
         return chartDataList;
