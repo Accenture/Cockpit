@@ -2,26 +2,23 @@ package cockpit.mvpinfos.service;
 
 import cockpit.cockpitcore.domaine.db.Mvp;
 import cockpit.cockpitcore.domaine.db.Sprint;
-import cockpit.cockpitcore.domaine.db.UserStoriesHistory;
+
 import cockpit.cockpitcore.domaine.db.UserStory;
-import cockpit.cockpitcore.repository.UserStoriesHistoryRepository;
+import cockpit.cockpitcore.repository.SprintRepository;
+
 import cockpit.cockpitcore.repository.UserStoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
 public class UserStoryService {
 
     private UserStoryRepository userStoryRepository;
-    private UserStoriesHistoryRepository userStoriesHistoryRepository;
     @Autowired
-    public UserStoryService(UserStoryRepository userStoryRepository, UserStoriesHistoryRepository userStoriesHistoryRepository) {
+    public UserStoryService(UserStoryRepository userStoryRepository, SprintRepository sprintRepository) {
         this.userStoryRepository = userStoryRepository;
-        this.userStoriesHistoryRepository = userStoriesHistoryRepository;
     }
 
     public List<UserStory> getUserStoriesByMvpBySprintNumber(Mvp mvp, int sprintNumber) {
@@ -55,16 +52,4 @@ public class UserStoryService {
         return totalStories;
     }
 
-    public int getTotalStoriesNumberOfAnMvp(Mvp mvp) {
-        int totalNumber = 0;
-        if (mvp != null) {
-            List<UserStory> userStoriesList = userStoryRepository.findAllByMvp(mvp);
-
-            if(userStoriesList != null && !userStoriesList.isEmpty())
-            {
-                totalNumber = userStoriesList.size();
-            }
-        }
-        return totalNumber;
-    }
 }

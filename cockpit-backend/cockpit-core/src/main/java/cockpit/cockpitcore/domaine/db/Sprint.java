@@ -84,8 +84,7 @@ public class Sprint {
     @Column(name = "TechnicalDebtKPI")
     private double technicalDebtKPI;
 
-    @ColumnDefault(("0"))
     @Column(name = "totalNbUS")
-    private int totalNbUs;
+    private Integer totalNbUs;
 
 }

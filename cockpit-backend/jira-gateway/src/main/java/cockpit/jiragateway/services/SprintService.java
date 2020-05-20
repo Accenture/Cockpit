@@ -134,10 +134,14 @@ public class SprintService {
         for (Mvp mvp : Optional.ofNullable(mvpList).orElse(Collections.emptyList())) {
             if (mvp.getJiraBoardId() != 0) {
                 ArrayList<Sprint> sprintList = new ArrayList<>(mvp.getSprints());
-                for (Sprint sprint : sprintList) {
-                        List<UserStory> userStoriesList = userStoryRepository.findMyUserStories(mvp, sprint.getSprintNumber());
-                        sprint.setTotalNbUs(userStoriesList.size());
-                        sprintRepository.save(sprint);
+                if (!sprintList.isEmpty()) {
+                    Sprint currentSprint = sprintList.stream().filter(sprint ->  sprint.getSprintNumber()==mvp.getCurrentSprint()).findFirst().orElse(null);
+                    if (currentSprint!=null) {
+                        List<UserStory> userStoriesList = userStoryRepository.findAllByMvp(mvp);
+                        currentSprint.setTotalNbUs(userStoriesList.size());
+                        sprintRepository.save(currentSprint);
+                    }
+
                 }
             }
             LOGGER.info("SPRINT - All total user story numbers with id : " + mvp.getId() + " has been reordered");
