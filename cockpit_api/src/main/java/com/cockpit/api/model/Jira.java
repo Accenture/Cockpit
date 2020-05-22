@@ -1,9 +1,17 @@
-package com.cockpit.api;
+package com.cockpit.api.model;
 
 import javax.persistence.*;
 
 @Entity
-public class Jira extends EntityWithUUID{
+public class Jira{
+    @Id
+    @GeneratedValue(generator = "question_generator")
+    @SequenceGenerator(
+            name = "question_generator",
+            sequenceName = "question_sequence",
+            initialValue = 1000
+    )
+    private Long id;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String jiraProjectKey;
     private int currentSprint;
