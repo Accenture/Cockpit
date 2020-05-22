@@ -1,11 +1,19 @@
-package com.cockpit.api;
+package com.cockpit.api.model;
 
 import java.util.Set;
 
 import javax.persistence.*;
 
 @Entity
-public class Technology extends EntityWithUUID{
+public class Technology{
+    @Id
+    @GeneratedValue(generator = "question_generator")
+    @SequenceGenerator(
+            name = "question_generator",
+            sequenceName = "question_sequence",
+            initialValue = 1000
+    )
+    private Long id;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String name;
     private String url;

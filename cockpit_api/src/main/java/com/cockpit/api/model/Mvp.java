@@ -1,16 +1,30 @@
-package com.cockpit.api;
+package com.cockpit.api.model;
+
 
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
-public class Mvp extends EntityWithUUID{
+public class Mvp {
+    @Id
+    @GeneratedValue(generator = "question_generator")
+    @SequenceGenerator(
+            name = "question_generator",
+            sequenceName = "question_sequence",
+            initialValue = 1000
+    )
+    private Long id;
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull(message="Name is mandatory")
     private String name;
+    @NotNull(message="Entity is mandatory")
     private String entity;
     private String urlMvpAvatar;
+    @NotNull(message="Cycle is mandatory")
     private int cycle;
+    @NotNull(message="MVP Description is mandatory")
     private String mvpDescription;
     private String status;
     @ManyToMany
@@ -18,6 +32,11 @@ public class Mvp extends EntityWithUUID{
     @OneToOne
     @JoinColumn(name="id_jira")
     private Jira jira;
+
+
+    public Mvp() {
+    }
+
 
     public void setName(String name) {
         this.name = name;
