@@ -1,5 +1,6 @@
 import React from 'react';
 import Box from '@material-ui/core/Box';
+import BurnUpChart from '../BurnUpChart/BurnUpChart';
 // styles
 import useStyles from './styles';
 
@@ -20,6 +21,7 @@ export default function OverviewSprintTabs(props) {
     <div className={classes.root}>
       <TabPanel value={selectedTab} index="overview">
         Mvp overview charts
+        <BurnUpChart />
       </TabPanel>
       <TabPanel value={selectedTab} index="sprint">
         Mvp sprint infos
