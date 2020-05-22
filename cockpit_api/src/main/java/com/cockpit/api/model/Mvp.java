@@ -1,7 +1,5 @@
 package com.cockpit.api.model;
 
-
-
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Set;
