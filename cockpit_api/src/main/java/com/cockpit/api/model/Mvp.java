@@ -7,14 +7,13 @@ import java.util.Set;
 @Entity
 public class Mvp {
     @Id
-    @GeneratedValue(generator = "question_generator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @SequenceGenerator(
-            name = "question_generator",
-            sequenceName = "question_sequence",
+            name = "mvp",
+            sequenceName = "mvp_sequence",
             initialValue = 1000
     )
     private Long id;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @NotNull(message="Name is mandatory")
     private String name;
     @NotNull(message="Entity is mandatory")
@@ -28,7 +27,7 @@ public class Mvp {
     @ManyToMany
     Set<Technology> technologies;
     @OneToOne
-    @JoinColumn(name="id_jira")
+    @JoinColumn(name="jira_id")
     private Jira jira;
 
 

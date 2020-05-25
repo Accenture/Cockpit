@@ -13,4 +13,4 @@ services:
     environment:
       - POSTGRES_PASSWORD=password
       - POSTGRES_USER=postgres
-      - POSTGRES_DB=cockpit
+      - POSTGRES_DB=cockpitdb

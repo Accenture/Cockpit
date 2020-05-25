@@ -6,14 +6,13 @@ import java.util.Set;
 @Entity
 public class TeamMember{
     @Id
-    @GeneratedValue(generator = "question_generator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @SequenceGenerator(
-            name = "question_generator",
-            sequenceName = "question_sequence",
+            name = "team",
+            sequenceName = "team_sequence",
             initialValue = 1000
     )
     private Long id;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String firstName;
     private String lastName;
     private String email;
