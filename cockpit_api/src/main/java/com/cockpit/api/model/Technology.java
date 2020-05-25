@@ -7,14 +7,13 @@ import javax.persistence.*;
 @Entity
 public class Technology{
     @Id
-    @GeneratedValue(generator = "question_generator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @SequenceGenerator(
-            name = "question_generator",
-            sequenceName = "question_sequence",
+            name = "technology",
+            sequenceName = "technology_sequence",
             initialValue = 1000
     )
     private Long id;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String name;
     private String url;
     @ManyToMany

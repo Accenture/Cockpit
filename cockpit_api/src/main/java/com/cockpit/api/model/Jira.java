@@ -5,14 +5,13 @@ import javax.persistence.*;
 @Entity
 public class Jira{
     @Id
-    @GeneratedValue(generator = "question_generator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @SequenceGenerator(
-            name = "question_generator",
-            sequenceName = "question_sequence",
+            name = "jira",
+            sequenceName = "jira_sequence",
             initialValue = 1000
     )
     private Long id;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String jiraProjectKey;
     private int currentSprint;
     private int jiraProjectId;
