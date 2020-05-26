@@ -1,5 +1,6 @@
-package com.cockpit.api.model;
+package com.cockpit.api.model.dao;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.util.Set;
 
@@ -7,17 +8,17 @@ import java.util.Set;
 public class TeamMember{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @SequenceGenerator(
-            name = "team",
-            sequenceName = "team_sequence",
-            initialValue = 1000
-    )
     private Long id;
+
     private String firstName;
+
     private String lastName;
+
     private String email;
+
     @ManyToMany
-    Set<Team> teams;
+    @JsonIgnore
+    private Set<Team> teams;
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
