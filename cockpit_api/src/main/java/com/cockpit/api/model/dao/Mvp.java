@@ -1,4 +1,4 @@
-package com.cockpit.api.model;
+package com.cockpit.api.model.dao;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -8,32 +8,38 @@ import java.util.Set;
 public class Mvp {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @SequenceGenerator(
-            name = "mvp",
-            sequenceName = "mvp_sequence",
-            initialValue = 1000
-    )
     private Long id;
+
     @NotNull(message="Name is mandatory")
     private String name;
+
     @NotNull(message="Entity is mandatory")
     private String entity;
+
+    @NotNull(message="Avatar url is mandatory")
     private String urlMvpAvatar;
+
     @NotNull(message="Cycle is mandatory")
     private int cycle;
+
     @NotNull(message="MVP Description is mandatory")
     private String mvpDescription;
+
     private String status;
-    @ManyToMany
-    Set<Technology> technologies;
-    @OneToOne
-    @JoinColumn(name="jira_id")
+
+    @ManyToOne(cascade=CascadeType.ALL)
+    private Team team;
+
+    @ManyToMany(cascade=CascadeType.ALL)
+    private Set<Technology> technologies;
+
+    @OneToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name = "jira_id" )
     private Jira jira;
 
-
     public Mvp() {
+        // Empty constructor
     }
-
 
     public void setName(String name) {
         this.name = name;
@@ -58,6 +64,8 @@ public class Mvp {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public void setTeam(Team team) { this.team = team; }
 
     public void setTechnologies(Set<Technology> technologies) {
         this.technologies = technologies;
@@ -89,6 +97,10 @@ public class Mvp {
 
     public String getStatus() {
         return status;
+    }
+
+    public Team getTeam() {
+        return team;
     }
 
     public Set<Technology> getTechnologies() {

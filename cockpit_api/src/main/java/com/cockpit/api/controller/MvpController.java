@@ -1,15 +1,15 @@
 package com.cockpit.api.controller;
 
-
-import com.cockpit.api.model.Mvp;
+import com.cockpit.api.model.dao.Mvp;
+import com.cockpit.api.model.dto.MvpDTO;
 import com.cockpit.api.repository.MvpRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
-
 
 @RestController
 public class MvpController {
@@ -21,54 +21,69 @@ public class MvpController {
         this.mvpRepository = mvpRepository;
     }
 
-    // CREATE
+    // CREATE new MVP
     @PostMapping(
             value = "/api/v1/mvp/create"
     )
-    public @ResponseBody ResponseEntity<Mvp> createMvp(@RequestBody Mvp mvp) {
+    public ResponseEntity<Mvp> createMvp(@RequestBody MvpDTO mvpDTO) {
         Mvp newMvp = new Mvp();
-        newMvp.setName(mvp.getName());
-        newMvp.setCycle(mvp.getCycle());
-        newMvp.setEntity(mvp.getEntity());
-        newMvp.setMvpDescription(mvp.getMvpDescription());
-        newMvp.setStatus(mvp.getStatus());
-        newMvp.setUrlMvpAvatar(mvp.getUrlMvpAvatar());
+        newMvp.setName(mvpDTO.getName());
+        newMvp.setCycle(mvpDTO.getCycle());
+        newMvp.setEntity(mvpDTO.getEntity());
+        newMvp.setMvpDescription(mvpDTO.getMvpDescription());
+        newMvp.setStatus(mvpDTO.getStatus());
+        newMvp.setUrlMvpAvatar(mvpDTO.getUrlMvpAvatar());
+        newMvp.setJira(mvpDTO.getJira());
+        newMvp.setTeam(mvpDTO.getTeam());
+        newMvp.setTechnologies(mvpDTO.getTechnologies());
         mvpRepository.save(newMvp);
         return ResponseEntity.ok(newMvp);
     }
 
-    // READ
+    // GET MVP BY ID
     @GetMapping(
             value = "/api/v1/mvp/{id}"
     )
-    public @ResponseBody ResponseEntity<Optional<Mvp>> getMvp(@PathVariable Long id) {
+    public ResponseEntity<Optional<Mvp>> getMvp(@PathVariable Long id) {
         Optional<Mvp> mvpRes = mvpRepository.findById(id);
         return ResponseEntity.ok(mvpRes);
+    }
+
+    // GET ALL MVP
+    @GetMapping(
+            value = "/api/v1/mvp/all"
+    )
+    public ResponseEntity<List<Mvp>> findAllMvps() {
+        List<Mvp> mvpList = mvpRepository.findAllByOrderByName();
+        return ResponseEntity.ok(mvpList);
     }
 
     // UPDATE
     @PutMapping(
             value = "/api/v1/mvp/update/{id}"
     )
-    public @ResponseBody ResponseEntity<Mvp> updateMvp(@RequestBody Mvp mvp, @PathVariable Long id) {
+    public ResponseEntity<Mvp> updateMvp(@RequestBody MvpDTO mvpDTO, @PathVariable Long id) {
         Optional<Mvp> mvpRes = mvpRepository.findById(id);
         return mvpRes.map(mvpUpdate->{
-                mvpUpdate.setName(mvp.getName());
-                mvpUpdate.setCycle(mvp.getCycle());
-                mvpUpdate.setEntity(mvp.getEntity());
-                mvpUpdate.setMvpDescription(mvp.getMvpDescription());
-                mvpUpdate.setStatus(mvp.getStatus());
-                mvpUpdate.setUrlMvpAvatar(mvp.getUrlMvpAvatar());
-                mvpRepository.save(mvpUpdate);
+            mvpUpdate.setName(mvpDTO.getName());
+            mvpUpdate.setCycle(mvpDTO.getCycle());
+            mvpUpdate.setEntity(mvpDTO.getEntity());
+            mvpUpdate.setMvpDescription(mvpDTO.getMvpDescription());
+            mvpUpdate.setStatus(mvpDTO.getStatus());
+            mvpUpdate.setUrlMvpAvatar(mvpDTO.getUrlMvpAvatar());
+            mvpUpdate.setJira(mvpDTO.getJira());
+            mvpUpdate.setTeam(mvpDTO.getTeam());
+            mvpUpdate.setTechnologies(mvpDTO.getTechnologies());
+            mvpRepository.save(mvpUpdate);
                 return ResponseEntity.ok(mvpUpdate);
-            }).orElseThrow(() -> new ResourceNotFoundException("Mvp Not found"));
+        }).orElseThrow(() -> new ResourceNotFoundException("Mvp Not found"));
     }
 
     // DELETE
     @DeleteMapping(
             value = "/api/v1/mvp/delete/{id}"
     )
-    public @ResponseBody ResponseEntity<?> deleteMvp(@PathVariable Long id) {
+    public ResponseEntity<?> deleteMvp(@PathVariable Long id) {
         return mvpRepository.findById(id)
                 .map(mvpDelete ->{
                     mvpRepository.delete(mvpDelete);

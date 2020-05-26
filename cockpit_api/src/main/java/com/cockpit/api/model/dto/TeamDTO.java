@@ -1,21 +1,17 @@
-package com.cockpit.api.model;
+package com.cockpit.api.model.dto;
 
-import javax.persistence.*;
+import com.cockpit.api.model.dao.Mvp;
+import com.cockpit.api.model.dao.TeamMember;
 import java.util.Set;
 
-@Entity
-public class Team{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @SequenceGenerator(
-            name = "team",
-            sequenceName = "team_sequence",
-            initialValue = 1000
-    )
+public class TeamDTO{
     private Long id;
+
     private String name;
-    @ManyToMany
-    Set<TeamMember> teamMembers;
+
+    private Set<TeamMember> teamMembers;
+
+    private Set<Mvp> mvps;
 
     public void setName(String name) {
         this.name = name;
@@ -25,6 +21,8 @@ public class Team{
         this.teamMembers = teamMembers;
     }
 
+    public void setMvps(Set<Mvp> mvps) { this.mvps = mvps; }
+
     public String getName() {
         return name;
     }
@@ -32,4 +30,6 @@ public class Team{
     public Set<TeamMember> getTeamMembers() {
         return teamMembers;
     }
+
+    public Set<Mvp> getMvps() { return mvps; }
 }

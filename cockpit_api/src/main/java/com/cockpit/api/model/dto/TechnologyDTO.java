@@ -1,22 +1,15 @@
-package com.cockpit.api.model;
+package com.cockpit.api.model.dto;
 
+import com.cockpit.api.model.dao.Mvp;
 import java.util.Set;
 
-import javax.persistence.*;
-
-@Entity
-public class Technology{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @SequenceGenerator(
-            name = "technology",
-            sequenceName = "technology_sequence",
-            initialValue = 1000
-    )
+public class TechnologyDTO {
     private Long id;
+
     private String name;
+
     private String url;
-    @ManyToMany
+
     Set<Mvp> mvps;
 
     public void setName(String name) {

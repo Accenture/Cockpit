@@ -1,23 +1,27 @@
-package com.cockpit.api.model;
+package com.cockpit.api.model.dao;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Jira{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @SequenceGenerator(
-            name = "jira",
-            sequenceName = "jira_sequence",
-            initialValue = 1000
-    )
     private Long id;
+
     private String jiraProjectKey;
+
     private int currentSprint;
+
     private int jiraProjectId;
-    private String mvpStartDate;
-    private String mvpEndDate;
+
+    private Date mvpStartDate;
+
+    private Date mvpEndDate;
+
     @OneToOne(mappedBy = "jira")
+    @JsonIgnore
     private Mvp mvp;
 
     public String getJiraProjectKey() {
@@ -32,11 +36,11 @@ public class Jira{
         return jiraProjectId;
     }
 
-    public String getMvpStartDate() {
+    public Date getMvpStartDate() {
         return mvpStartDate;
     }
 
-    public String getMvpEndDate() {
+    public Date getMvpEndDate() {
         return mvpEndDate;
     }
 
@@ -56,11 +60,11 @@ public class Jira{
         this.jiraProjectId = jiraProjectId;
     }
 
-    public void setMvpStartDate(String mvpStartDate) {
+    public void setMvpStartDate(Date mvpStartDate) {
         this.mvpStartDate = mvpStartDate;
     }
 
-    public void setMvpEndDate(String mvpEndDate) {
+    public void setMvpEndDate(Date mvpEndDate) {
         this.mvpEndDate = mvpEndDate;
     }
 
