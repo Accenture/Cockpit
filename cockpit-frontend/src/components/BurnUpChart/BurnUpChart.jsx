@@ -1,7 +1,21 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
+import { useParams } from 'react-router-dom';
+import MvpService from '../../services/service';
 
 export default function BurnUpChart() {
+  const [chartData, setChartData] = useState([]);
+  const { id } = useParams();
+  async function getData(mvpId) {
+    const result = await MvpService.getBurnUpChartData(mvpId);
+    console.log(JSON.stringify(result));
+    setChartData(result.data);
+  }
+
+  useEffect(() => {
+    getData(id);
+  }, []);
+
   const data = (canvas) => {
     const ctx = canvas.getContext('2d');
     const gradient = ctx.createLinearGradient(0, 0, 0, 600);
@@ -10,11 +24,11 @@ export default function BurnUpChart() {
     gradient.addColorStop(1, 'rgba(18,64,155,0)');
 
     return {
-      labels: ['1', '2', '3', '4', '5', '6', '7'],
+      labels: ['0', '1', '2', '3', '4', '5', '6', '7'],
       datasets: [
         {
           label: 'User Stories Closed',
-          backgroundColor: gradient, // Put the gradient here as a fill color
+          backgroundColor: gradient,
           borderColor: 'rgba(18,64,155, 0.6)',
           borderWidth: 2,
           pointColor: '#fff',
@@ -22,7 +36,7 @@ export default function BurnUpChart() {
           pointHighlightFill: '#fff',
           pointHighlightStroke: '#ff6c23',
           lineTension: 0,
-          data: [1, 1, 7, 12, 18, 25],
+          data: chartData.map((sprint) => sprint.usClosed),
         },
         {
           label: 'expected',
@@ -33,14 +47,14 @@ export default function BurnUpChart() {
           pointRadius: 0,
           borderDash: [8, 4],
           borderWidth: 2,
-          data: [1, 3, 10, 16, 20, 25, 28, 30],
+          data: chartData.map((sprint) => sprint.expectedUsClosed),
         },
         {
           label: 'Total number of stories ',
           fill: false,
           borderColor: 'rgba(18,64,155, 0.6)',
           lineTension: 0.1,
-          data: [3, 6, 14, 20, 25, 30, 33, 35],
+          data: chartData.map((sprint) => sprint.totalStories),
         },
         {
           label: 'Forecast',
@@ -48,13 +62,21 @@ export default function BurnUpChart() {
           borderColor: 'rgba(18,64,155, 0.6)',
           borderDash: [4, 2],
           lineTension: 0,
-          data: [1, 3, 5, 12, 14, 20, 24, 28],
+          data: chartData.map((sprint) => sprint.projectionUsClosed),
         },
       ],
     };
   };
 
   const options = {
+    title: {
+      display: true,
+      text: 'Burn Up Chart',
+      fontSize: '18',
+    },
+    legend: {
+      position: 'bottom',
+    },
     responsive: true,
     datasetStrokeWidth: 3,
     pointDotStrokeWidth: 4,
@@ -63,7 +85,7 @@ export default function BurnUpChart() {
 
   return (
     <div className="line-chart">
-      <Line data={data} options={options} />
+      <Line data={data} options={options} redraw />
     </div>
   );
 }

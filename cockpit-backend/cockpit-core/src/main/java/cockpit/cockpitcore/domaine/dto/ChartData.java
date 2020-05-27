@@ -15,7 +15,7 @@ public class ChartData {
 
     private Long usClosed;
 
-    private double projectionUsClosed;
+    private Double projectionUsClosed;
 
     public Integer totalStories;
 
