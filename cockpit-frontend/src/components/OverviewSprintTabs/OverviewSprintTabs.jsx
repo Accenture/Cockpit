@@ -20,7 +20,6 @@ export default function OverviewSprintTabs(props) {
   return (
     <div className={classes.root}>
       <TabPanel value={selectedTab} index="overview">
-        Mvp overview charts
         <BurnUpChart />
       </TabPanel>
       <TabPanel value={selectedTab} index="sprint">

@@ -31,8 +31,8 @@ public class BurnUpController {
     private BurnUpService burnUpService;
 
     @ApiOperation(value = "Get all data for chart generation")
-    @RequestMapping(value = "/{mvp}", method = GET, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public List<ChartData> getChartDataForSprints(@PathVariable("mvp") Mvp mvp) {
-        return burnUpService.getChartData(mvp);
+    @RequestMapping(value = "/{jiraProjectKey}", method = GET, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<ChartData> getChartDataForSprints(@PathVariable("jiraProjectKey") String jiraProjectKey) {
+        return burnUpService.getChartData(jiraProjectKey);
     }
 }
