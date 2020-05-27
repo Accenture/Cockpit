@@ -69,11 +69,11 @@ public class TechnologyController {
     @DeleteMapping(
             value = "/api/v1/technology/delete/{id}"
     )
-    public ResponseEntity<?> deleteTechnology(@PathVariable Long id) {
+    public ResponseEntity<String> deleteTechnology(@PathVariable Long id) {
         return technologyRepository.findById(id)
                 .map(technologyToDelete ->{
                     technologyRepository.delete(technologyToDelete);
-                    return ResponseEntity.ok().build();
+                    return ResponseEntity.ok("One technology has been deleted");
                 }).orElseThrow(()-> new ResourceNotFoundException("Technology not found"));
     }
 }

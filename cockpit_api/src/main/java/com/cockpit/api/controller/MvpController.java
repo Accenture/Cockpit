@@ -83,11 +83,11 @@ public class MvpController {
     @DeleteMapping(
             value = "/api/v1/mvp/delete/{id}"
     )
-    public ResponseEntity<?> deleteMvp(@PathVariable Long id) {
+    public ResponseEntity<String> deleteMvp(@PathVariable Long id) {
         return mvpRepository.findById(id)
                 .map(mvpDelete ->{
                     mvpRepository.delete(mvpDelete);
-                    return ResponseEntity.ok().build();
+                    return ResponseEntity.ok("One Mvp has been deleted");
                 }).orElseThrow(()-> new ResourceNotFoundException("Mvp not found"));
     }
 }
