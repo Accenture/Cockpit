@@ -4,9 +4,11 @@ spring:
     username: postgres
     password: password
   jpa:
+    show-sql: false
     hibernate:
       ddl-auto: update
   flyway:
+    locations: classpath:db/migration
     baseline-on-migrate: true
 server:
   port: 8085

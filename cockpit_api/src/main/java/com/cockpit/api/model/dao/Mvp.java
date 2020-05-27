@@ -27,6 +27,12 @@ public class Mvp {
 
     private String status;
 
+    @OneToMany(cascade=CascadeType.ALL)
+    private Set<Sprint> sprints;
+
+    @OneToMany(cascade=CascadeType.ALL)
+    private Set<UserStory> userStories;
+
     @ManyToOne(cascade=CascadeType.ALL)
     private Team team;
 
@@ -75,6 +81,10 @@ public class Mvp {
         this.jira = jira;
     }
 
+    public void setSprints(Set<Sprint> sprints) { this.sprints = sprints; }
+
+    public void setUserStories(Set<UserStory> userStories) { this.userStories = userStories; }
+
     public String getName() {
         return name;
     }
@@ -110,4 +120,8 @@ public class Mvp {
     public Jira getJira() {
         return jira;
     }
+
+    public Set<Sprint> getSprints() { return sprints; }
+
+    public Set<UserStory> getUserStories() { return userStories; }
 }
