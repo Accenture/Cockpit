@@ -4,7 +4,6 @@ import com.cockpit.api.model.dao.Team;
 import java.util.Set;
 
 public class TeamMemberDTO {
-    private Long id;
 
     private String firstName;
 

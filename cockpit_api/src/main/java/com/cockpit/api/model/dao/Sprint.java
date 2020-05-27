@@ -22,7 +22,7 @@ public class Sprint {
 
     private Integer teamConfidence;
 
-    private int total_nb_us;
+    private int totalNbUs;
 
     private int sprintNumber;
 
@@ -81,12 +81,12 @@ public class Sprint {
         this.teamConfidence = teamConfidence;
     }
 
-    public int getTotal_nb_us() {
-        return total_nb_us;
+    public int getTotalNbUs() {
+        return totalNbUs;
     }
 
-    public void setTotal_nb_us(int total_nb_us) {
-        this.total_nb_us = total_nb_us;
+    public void setTotalNbUs(int totalNbUs) {
+        this.totalNbUs = totalNbUs;
     }
 
     public int getSprintNumber() {

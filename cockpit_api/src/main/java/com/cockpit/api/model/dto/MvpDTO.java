@@ -6,7 +6,6 @@ import com.cockpit.api.model.dao.Technology;
 import java.util.Set;
 
 public class MvpDTO {
-    private Long id;
 
     private String name;
 
