@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/cockpitdb
+    username: postgres
+    password: password
+  jpa:
+    hibernate:
+      ddl-auto: update
+  flyway:
+    baseline-on-migrate: true
+server:
+  port: 8085
