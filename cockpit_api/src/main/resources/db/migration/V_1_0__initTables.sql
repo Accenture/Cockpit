@@ -102,17 +102,17 @@ CREATE TABLE public.Team_TeamMembers(
 -- Table: Sprint
 ------------------------------------------------------------
 CREATE TABLE Sprint(
-       id                  SERIAL NOT NULL ,
-       jira_sprint_id      INT  NOT NULL ,
-       sprint_start_date   DATE  NOT NULL ,
-       sprint_end_date     DATE  NOT NULL ,
-       team_motivation     INT  NOT NULL ,
-       team_mood           INT  NOT NULL ,
-       team_confidence     INT  NOT NULL ,
-       total_nb_us         INTEGER  NOT NULL ,
-       sprint_number       INT  NOT NULL ,
-       id_Mvp              INT  NOT NULL  ,
-       CONSTRAINT Sprint_PK PRIMARY KEY (id)
+	id                  SERIAL NOT NULL ,
+	jira_sprint_id      INT  NOT NULL ,
+	sprint_start_date   DATE  NOT NULL ,
+	sprint_end_date     DATE  NOT NULL ,
+	team_motivation     INT  NOT NULL ,
+	team_mood           INT  NOT NULL ,
+	team_confidence     INT  NOT NULL ,
+	total_nb_us         INTEGER  NOT NULL ,
+	sprint_number       INT  NOT NULL ,
+	id_Mvp              INT  NOT NULL  ,
+	CONSTRAINT Sprint_PK PRIMARY KEY (id)
 
     ,CONSTRAINT Sprint_Mvp_FK FOREIGN KEY (id_Mvp) REFERENCES Mvp(id)
 )WITHOUT OIDS;
@@ -122,20 +122,20 @@ CREATE TABLE Sprint(
 -- Table: UserStory
 ------------------------------------------------------------
 CREATE TABLE UserStory(
-      id              SERIAL NOT NULL ,
-      creation_date   DATE  NOT NULL ,
-      start_date      DATE  NOT NULL ,
-      done_date       DATE  NOT NULL ,
-      story_point     INT  NOT NULL ,
-      description     VARCHAR (255) NOT NULL ,
-      issue_key       VARCHAR (20) NOT NULL ,
-      jira_issue_id   INT  NOT NULL ,
-      priority        VARCHAR (20) NOT NULL ,
-      status          VARCHAR (20) NOT NULL ,
-      summary         VARCHAR (255) NOT NULL ,
-      id_Sprint       INT   ,
-      id_Mvp          INT  NOT NULL  ,
-      CONSTRAINT UserStory_PK PRIMARY KEY (id)
+    id              SERIAL NOT NULL ,
+    creation_date   DATE  NOT NULL ,
+    start_date      DATE  NOT NULL ,
+    done_date       DATE  NOT NULL ,
+    story_point     INT  NOT NULL ,
+    description     VARCHAR (255) NOT NULL ,
+    issue_key       VARCHAR (20) NOT NULL ,
+    jira_issue_id   INT  NOT NULL ,
+    priority        VARCHAR (20) NOT NULL ,
+    status          VARCHAR (20) NOT NULL ,
+    summary         VARCHAR (255) NOT NULL ,
+    id_Sprint       INT   ,
+    id_Mvp          INT  NOT NULL  ,
+    CONSTRAINT UserStory_PK PRIMARY KEY (id)
 
     ,CONSTRAINT UserStory_Sprint_FK FOREIGN KEY (id_Sprint) REFERENCES Sprint(id)
     ,CONSTRAINT UserStory_Mvp0_FK FOREIGN KEY (id_Mvp) REFERENCES Mvp(id)
