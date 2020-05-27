@@ -8,15 +8,15 @@ export default function BurnUpChart() {
   const { id } = useParams();
   async function getData(mvpId) {
     const result = await MvpService.getBurnUpChartData(mvpId);
-    console.log(JSON.stringify(result));
     setChartData(result.data);
   }
 
   useEffect(() => {
     getData(id);
-  }, []);
+  }, [id]);
 
   const data = (canvas) => {
+    // style for filled chart
     const ctx = canvas.getContext('2d');
     const gradient = ctx.createLinearGradient(0, 0, 0, 600);
     gradient.addColorStop(0, 'rgba(18,64,155,0.5)');
@@ -76,6 +76,18 @@ export default function BurnUpChart() {
     },
     legend: {
       position: 'bottom',
+      labels: {
+        filter(item) {
+          const lastData = chartData.find((sprint) => sprint.sprintId === 7);
+          if (
+            lastData != null &&
+            item.text.includes('Forecast') &&
+            lastData.usClosed != null
+          )
+            return false;
+          return true;
+        },
+      },
     },
     responsive: true,
     datasetStrokeWidth: 3,
