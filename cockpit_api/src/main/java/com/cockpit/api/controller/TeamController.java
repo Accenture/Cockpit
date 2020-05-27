@@ -2,7 +2,6 @@ package com.cockpit.api.controller;
 
 import com.cockpit.api.model.dao.Team;
 import com.cockpit.api.model.dto.TeamDTO;
-import com.cockpit.api.repository.TeamMemberRepository;
 import com.cockpit.api.repository.TeamRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -13,15 +12,12 @@ import java.util.Optional;
 @RestController
 public class TeamController {
     private final TeamRepository teamRepository;
-    private final TeamMemberRepository teamMemberRepository;
 
     @Autowired
     public TeamController(
-            TeamRepository teamRepository,
-            TeamMemberRepository teamMemberRepository
+            TeamRepository teamRepository
     ) {
         this.teamRepository = teamRepository;
-        this.teamMemberRepository = teamMemberRepository;
     }
 
     // CREATE a new Team
