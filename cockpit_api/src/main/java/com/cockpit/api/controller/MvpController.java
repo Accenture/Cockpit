@@ -1,12 +1,11 @@
 package com.cockpit.api.controller;
 
+import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dto.MvpDTO;
-import com.cockpit.api.repository.MvpRepository;
 import com.cockpit.api.service.MvpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +16,10 @@ public class MvpController {
 
     Logger log = LoggerFactory.getLogger(MvpController.class);
 
-    private final MvpRepository mvpRepository;
     private final MvpService mvpService;
 
     @Autowired
-    public MvpController(MvpRepository mvpRepository, MvpService mvpService) {
-        this.mvpRepository = mvpRepository;
+    public MvpController(MvpService mvpService) {
         this.mvpService = mvpService;
     }
 
@@ -30,7 +27,7 @@ public class MvpController {
     @PostMapping(
             value = "/api/v1/mvp/create"
     )
-    public ResponseEntity createMvp(@RequestBody MvpDTO mvpDTO) {
+    public ResponseEntity<MvpDTO> createMvp(@RequestBody MvpDTO mvpDTO) {
         MvpDTO newMvp = mvpService.createNewMvp(mvpDTO);
         return ResponseEntity.ok().body(newMvp);
     }
@@ -43,8 +40,7 @@ public class MvpController {
         try {
             MvpDTO mvpDTO = mvpService.findMvpById(id);
             return ResponseEntity.ok().body(mvpDTO);
-        } catch (Exception e) {
-            log.error("Mvp with id: {} is not found", id);
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
@@ -62,7 +58,7 @@ public class MvpController {
     @PutMapping(
             value = "/api/v1/mvp/update"
     )
-    public ResponseEntity updateMvp(@RequestBody MvpDTO mvpDTO) {
+    public ResponseEntity<MvpDTO> updateMvp(@RequestBody MvpDTO mvpDTO) {
         MvpDTO mvpUpdated = mvpService.updateMvp(mvpDTO);
         return  ResponseEntity.ok().body(mvpUpdated);
     }
@@ -75,7 +71,7 @@ public class MvpController {
         try {
             mvpService.deleteMvp(id);
             return ResponseEntity.ok("One Mvp has been deleted");
-        } catch (Exception e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
