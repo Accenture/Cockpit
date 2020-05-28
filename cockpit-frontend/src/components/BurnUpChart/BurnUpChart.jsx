@@ -2,6 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { useParams } from 'react-router-dom';
 import MvpService from '../../services/service';
+import {
+  white,
+  darkBlue,
+  lightBlueShadow,
+  MediumBlueShadow,
+  DarkBlueShadow,
+} from '../../common/scss/colorVarialble.scss';
 
 export default function BurnUpChart() {
   const [chartData, setChartData] = useState([]);
@@ -19,9 +26,9 @@ export default function BurnUpChart() {
     // style for filled chart
     const ctx = canvas.getContext('2d');
     const gradient = ctx.createLinearGradient(0, 0, 0, 600);
-    gradient.addColorStop(0, 'rgba(18,64,155,0.5)');
-    gradient.addColorStop(0.5, 'rgba(18,64,155,0.08)');
-    gradient.addColorStop(1, 'rgba(18,64,155,0)');
+    gradient.addColorStop(0, lightBlueShadow);
+    gradient.addColorStop(0.5, MediumBlueShadow);
+    gradient.addColorStop(1, DarkBlueShadow);
 
     return {
       labels: chartData.map((sprint) => sprint.sprintId + 1),
@@ -29,19 +36,17 @@ export default function BurnUpChart() {
         {
           label: 'User Stories Closed',
           backgroundColor: gradient,
-          borderColor: 'rgba(18,64,155, 0.6)',
+          borderColor: darkBlue,
           borderWidth: 2,
-          pointColor: '#fff',
-          pointStrokeColor: '#ff6c23',
-          pointHighlightFill: '#fff',
-          pointHighlightStroke: '#ff6c23',
+          pointColor: white,
+          pointHighlightFill: white,
           lineTension: 0,
           data: chartData.map((sprint) => sprint.usClosed),
         },
         {
           label: 'expected',
           fill: false,
-          borderColor: 'rgba(18,64,155, 0.6)',
+          borderColor: darkBlue,
           lineTension: 0.2,
           spanGaps: true,
           pointRadius: 0,
@@ -52,14 +57,14 @@ export default function BurnUpChart() {
         {
           label: 'Total number of stories ',
           fill: false,
-          borderColor: 'rgba(18,64,155, 0.6)',
+          borderColor: darkBlue,
           lineTension: 0.1,
           data: chartData.map((sprint) => sprint.totalStories),
         },
         {
           label: 'Forecast',
           fill: false,
-          borderColor: 'rgba(18,64,155, 0.6)',
+          borderColor: darkBlue,
           borderDash: [4, 2],
           lineTension: 0,
           data: chartData.map((sprint) => sprint.projectionUsClosed),
