@@ -6,8 +6,8 @@ import {
   white,
   darkBlue,
   lightBlueShadow,
-  MediumBlueShadow,
-  DarkBlueShadow,
+  mediumBlueShadow,
+  darkBlueShadow,
 } from '../../common/scss/colorVarialble.scss';
 
 export default function BurnUpChart() {
@@ -27,8 +27,8 @@ export default function BurnUpChart() {
     const ctx = canvas.getContext('2d');
     const gradient = ctx.createLinearGradient(0, 0, 0, 600);
     gradient.addColorStop(0, lightBlueShadow);
-    gradient.addColorStop(0.5, MediumBlueShadow);
-    gradient.addColorStop(1, DarkBlueShadow);
+    gradient.addColorStop(0.5, mediumBlueShadow);
+    gradient.addColorStop(1, darkBlueShadow);
 
     return {
       labels: chartData.map((sprint) => sprint.sprintId + 1),
