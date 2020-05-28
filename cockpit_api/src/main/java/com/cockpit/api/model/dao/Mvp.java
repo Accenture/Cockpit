@@ -6,10 +6,12 @@ import java.util.Set;
 
 @Entity
 public class Mvp {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique=true)
     @NotNull(message="Name is mandatory")
     private String name;
 
@@ -124,4 +126,9 @@ public class Mvp {
     public Set<Sprint> getSprints() { return sprints; }
 
     public Set<UserStory> getUserStories() { return userStories; }
+
+    public Long getId() { return id; }
+
+    public void setId(Long id) { this.id = id; }
+
 }

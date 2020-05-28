@@ -7,6 +7,8 @@ import java.util.Set;
 
 public class MvpDTO {
 
+    private Long id;
+
     private String name;
 
     private String entity;
@@ -28,6 +30,9 @@ public class MvpDTO {
     public MvpDTO() {
         // Empty constructor
     }
+
+
+    public void setId(Long id) { this.id = id; }
 
     public void setName(String name) {
         this.name = name;
@@ -63,6 +68,8 @@ public class MvpDTO {
     public void setJira(Jira jira) {
         this.jira = jira;
     }
+
+    public Long getId() { return id; }
 
     public String getName() {
         return name;

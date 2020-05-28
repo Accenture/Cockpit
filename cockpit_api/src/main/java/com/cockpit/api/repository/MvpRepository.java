@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface MvpRepository extends CrudRepository<Mvp, Long> {
     List<Mvp> findAllByOrderByName();
+    Mvp findByName(String name);
 }
