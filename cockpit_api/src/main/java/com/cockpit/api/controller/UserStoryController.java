@@ -23,7 +23,7 @@ public class UserStoryController {
 
     // CREATE a new User Story
     @PostMapping(
-            value = "/api/v1/userStory/create"
+            value = "/api/v1/user-story/create"
     )
     public ResponseEntity<UserStory> createUserStory(@RequestBody UserStoryDTO userStoryDTO) {
         UserStory newUserStory = new UserStory();
@@ -43,7 +43,7 @@ public class UserStoryController {
 
     // GET User Story BY ID
     @GetMapping(
-            value = "/api/v1/userStory/{id}"
+            value = "/api/v1/user-story/{id}"
     )
     public ResponseEntity<Optional<UserStory>> getUserStoryById(@PathVariable Long id) {
         Optional<UserStory> userStoryRes = userStoryRepository.findById(id);
@@ -52,7 +52,7 @@ public class UserStoryController {
 
     // UPDATE a User Story
     @PutMapping(
-            value = "/api/v1/userStory/update/{id}"
+            value = "/api/v1/user-story/update/{id}"
     )
     public ResponseEntity<UserStory> updateUserStory(@RequestBody UserStoryDTO userStoryDTO, @PathVariable Long id) {
         Optional<UserStory> userStoryRes = userStoryRepository.findById(id);
@@ -74,7 +74,7 @@ public class UserStoryController {
 
     // DELETE a User Story
     @DeleteMapping(
-            value = "/api/v1/userStory/delete/{id}"
+            value = "/api/v1/user-story/delete/{id}"
     )
     public ResponseEntity<String> deleteUserStory(@PathVariable Long id) {
         return userStoryRepository.findById(id)
