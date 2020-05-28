@@ -24,7 +24,7 @@ export default function BurnUpChart() {
     gradient.addColorStop(1, 'rgba(18,64,155,0)');
 
     return {
-      labels: ['0', '1', '2', '3', '4', '5', '6', '7'],
+      labels: chartData.map((sprint) => sprint.sprintId + 1),
       datasets: [
         {
           label: 'User Stories Closed',
@@ -96,7 +96,7 @@ export default function BurnUpChart() {
   };
 
   return (
-    <div className="line-chart">
+    <div className="burnup-chart">
       <Line data={data} options={options} redraw />
     </div>
   );
