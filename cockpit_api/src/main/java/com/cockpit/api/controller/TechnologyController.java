@@ -1,35 +1,29 @@
 package com.cockpit.api.controller;
 
-import com.cockpit.api.model.dao.Technology;
+import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dto.TechnologyDTO;
-import com.cockpit.api.repository.TechnologyRepository;
+import com.cockpit.api.service.TechnologyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class TechnologyController {
-    private final TechnologyRepository technologyRepository;
+    private final TechnologyService technologyService;
 
     @Autowired
-    public TechnologyController(TechnologyRepository technologyRepository) {
-        this.technologyRepository = technologyRepository;
+    public TechnologyController(TechnologyService technologyService) {
+        this.technologyService = technologyService;
     }
 
     // CREATE a new Technology
     @PostMapping(
             value = "/api/v1/technology/create"
     )
-    public ResponseEntity<Technology> createTechnology(@RequestBody TechnologyDTO technologyDTO) {
-        Technology newTechnology = new Technology();
-        newTechnology.setName(technologyDTO.getName());
-
-        newTechnology.setUrl(technologyDTO.getUrl());
-        technologyRepository.save(newTechnology);
+    public ResponseEntity<TechnologyDTO> createTechnology(@RequestBody TechnologyDTO technologyDTO) {
+        TechnologyDTO newTechnology = technologyService.createNewTechnology(technologyDTO);
         return ResponseEntity.ok(newTechnology);
     }
 
@@ -37,17 +31,21 @@ public class TechnologyController {
     @GetMapping(
             value = "/api/v1/technology/{id}"
     )
-    public ResponseEntity<Optional<Technology>> getTechnology(@PathVariable Long id) {
-        Optional<Technology> technologyRes = technologyRepository.findById(id);
-        return ResponseEntity.ok(technologyRes);
+    public ResponseEntity getTechnology(@PathVariable Long id) {
+        try {
+            TechnologyDTO technologyFound = technologyService.findTechnologyById(id);
+            return ResponseEntity.ok().body(technologyFound);
+        } catch (com.cockpit.api.exception.ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     // GET ALL Technologies
     @GetMapping(
             value = "/api/v1/technology/all"
     )
-    public ResponseEntity<List<Technology>> findAllTechnologies() {
-        List<Technology> technologyList = technologyRepository.findAllByOrderByName();
+    public ResponseEntity<List<TechnologyDTO>> findAllTechnologies() {
+        List<TechnologyDTO> technologyList = technologyService.findAllTechnology();
         return ResponseEntity.ok(technologyList);
     }
 
@@ -55,14 +53,13 @@ public class TechnologyController {
     @PutMapping(
             value = "/api/v1/technology/update/{id}"
     )
-    public ResponseEntity<Technology> updateTechnology(@RequestBody TechnologyDTO technologyDTO, @PathVariable Long id) {
-        Optional<Technology> technologyRes = technologyRepository.findById(id);
-        return technologyRes.map(technologyToUpdate->{
-            technologyToUpdate.setName(technologyDTO.getName());
-            technologyToUpdate.setUrl(technologyDTO.getUrl());
-            technologyRepository.save(technologyToUpdate);
-            return ResponseEntity.ok(technologyToUpdate);
-        }).orElseThrow(() -> new ResourceNotFoundException("Technology Not found"));
+    public ResponseEntity updateTechnology(@RequestBody TechnologyDTO technologyDTO, @PathVariable Long id) {
+        try {
+            TechnologyDTO technologyUpdated = technologyService.updateTechnology(technologyDTO, id);
+            return ResponseEntity.ok().body(technologyUpdated);
+        } catch (com.cockpit.api.exception.ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     // DELETE
@@ -70,10 +67,11 @@ public class TechnologyController {
             value = "/api/v1/technology/delete/{id}"
     )
     public ResponseEntity<String> deleteTechnology(@PathVariable Long id) {
-        return technologyRepository.findById(id)
-                .map(technologyToDelete ->{
-                    technologyRepository.delete(technologyToDelete);
-                    return ResponseEntity.ok("One technology has been deleted");
-                }).orElseThrow(()-> new ResourceNotFoundException("Technology not found"));
+        try {
+            technologyService.deleteTechnology(id);
+            return ResponseEntity.ok("One Technology has been deleted");
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 }

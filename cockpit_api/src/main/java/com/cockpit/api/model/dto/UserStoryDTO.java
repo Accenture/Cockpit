@@ -5,6 +5,9 @@ import com.cockpit.api.model.dao.Sprint;
 import java.util.Date;
 
 public class UserStoryDTO {
+
+    private Long id;
+
     private Date creationDate;
 
     private Date startDate;
@@ -28,6 +31,14 @@ public class UserStoryDTO {
     private Sprint sprint;
 
     private Mvp mvp;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Date getCreationDate() {
         return creationDate;

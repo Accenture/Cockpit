@@ -1,35 +1,30 @@
 package com.cockpit.api.controller;
 
-import com.cockpit.api.model.dao.Team;
+import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dto.TeamDTO;
-import com.cockpit.api.repository.TeamRepository;
+import com.cockpit.api.service.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Optional;
 
 @RestController
 public class TeamController {
-    private final TeamRepository teamRepository;
+    private final TeamService teamService;
 
     @Autowired
     public TeamController(
-            TeamRepository teamRepository
+            TeamService teamService
     ) {
-        this.teamRepository = teamRepository;
+        this.teamService = teamService;
     }
 
     // CREATE a new Team
     @PostMapping(
             value = "/api/v1/team/create"
     )
-    public ResponseEntity<Team> createTeam(@RequestBody TeamDTO teamDTO) {
-        Team newTeam = new Team();
-        newTeam.setName(teamDTO.getName());
-
-        newTeam.setTeamMembers(teamDTO.getTeamMembers());
-        teamRepository.save(newTeam);
+    public ResponseEntity<TeamDTO> createTeam(@RequestBody TeamDTO teamDTO) {
+        TeamDTO newTeam = teamService.createNewTeam(teamDTO);
         return ResponseEntity.ok(newTeam);
     }
 
@@ -37,23 +32,26 @@ public class TeamController {
     @GetMapping(
             value = "/api/v1/team/{id}"
     )
-    public ResponseEntity<Optional<Team>> getTeamById(@PathVariable Long id) {
-        Optional<Team> teamRes = teamRepository.findById(id);
-        return ResponseEntity.ok(teamRes);
+    public ResponseEntity getTeamById(@PathVariable Long id) {
+        try {
+            TeamDTO teamFound = teamService.findTeamById(id);
+            return ResponseEntity.ok().body(teamFound);
+        } catch (com.cockpit.api.exception.ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     // UPDATE a Team
     @PutMapping(
             value = "/api/v1/team/update/{id}"
     )
-    public ResponseEntity<Team> updateTeam(@RequestBody TeamDTO teamDTO, @PathVariable Long id) {
-        Optional<Team> teamRes = teamRepository.findById(id);
-        return teamRes.map(teamToUpdate -> {
-            teamToUpdate.setName(teamDTO.getName());
-            teamToUpdate.setTeamMembers(teamDTO.getTeamMembers());
-            teamRepository.save(teamToUpdate);
-            return ResponseEntity.ok(teamToUpdate);
-        }).orElseThrow(() -> new ResourceNotFoundException("Team Not found"));
+    public ResponseEntity updateTeam(@RequestBody TeamDTO teamDTO, @PathVariable Long id) {
+        try {
+            TeamDTO teamUpdated = teamService.updateTeam(teamDTO, id);
+            return ResponseEntity.ok().body(teamUpdated);
+        } catch (com.cockpit.api.exception.ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     // DELETE a Team
@@ -61,10 +59,11 @@ public class TeamController {
             value = "/api/v1/team/delete/{id}"
     )
     public ResponseEntity<String> deleteTeam(@PathVariable Long id) {
-        return teamRepository.findById(id)
-                .map(teamToDelete ->{
-                    teamRepository.delete(teamToDelete);
-                    return ResponseEntity.ok("One team has been deleted");
-                }).orElseThrow(()-> new ResourceNotFoundException("Team not found"));
+        try {
+            teamService.deleteTeam(id);
+            return ResponseEntity.ok("One Team has been deleted");
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 }

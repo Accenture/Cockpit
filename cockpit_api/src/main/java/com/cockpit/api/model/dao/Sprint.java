@@ -33,6 +33,14 @@ public class Sprint {
     @OneToMany(cascade=CascadeType.ALL)
     private Set<UserStory> userStories;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public int getJiraSprintId() {
         return jiraSprintId;
     }

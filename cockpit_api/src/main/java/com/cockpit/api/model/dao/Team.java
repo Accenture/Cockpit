@@ -19,12 +19,20 @@ public class Team{
     @JsonIgnore
     private Set<Mvp> mvps;
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
 
     public void setTeamMembers(Set<TeamMember> teamMembers) {
         this.teamMembers = teamMembers;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public void setMvps(Set<Mvp> mvps) { this.mvps = mvps; }

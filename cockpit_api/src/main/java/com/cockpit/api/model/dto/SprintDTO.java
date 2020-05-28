@@ -7,6 +7,9 @@ import java.util.Date;
 import java.util.Set;
 
 public class SprintDTO {
+
+    private Long id;
+
     private int jiraSprintId;
 
     private Date sprintStartDate;
@@ -26,6 +29,14 @@ public class SprintDTO {
     private Mvp mvp;
 
     private Set<UserStory> userStories;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public int getJiraSprintId() {
         return jiraSprintId;

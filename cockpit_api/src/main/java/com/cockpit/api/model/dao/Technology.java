@@ -18,6 +18,10 @@ public class Technology{
     @JsonIgnore
     Set<Mvp> mvps;
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -28,6 +32,10 @@ public class Technology{
 
     public void setMvps(Set<Mvp> mvps) {
         this.mvps = mvps;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {

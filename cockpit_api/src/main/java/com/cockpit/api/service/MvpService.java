@@ -1,5 +1,6 @@
 package com.cockpit.api.service;
 
+import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dao.Mvp;
 import com.cockpit.api.model.dto.MvpDTO;
 import com.cockpit.api.repository.MvpRepository;
@@ -29,10 +30,10 @@ public class MvpService {
         return modelMapper.map(mvpCreated, MvpDTO.class);
     }
 
-    public MvpDTO findMvpById(Long id) throws Exception{
+    public MvpDTO findMvpById(Long id) throws ResourceNotFoundException{
         Optional<Mvp> mvpRes = mvpRepository.findById(id);
         if (!mvpRes.isPresent()) {
-            throw new Exception("Mvp not found");
+            throw new ResourceNotFoundException("Mvp not found");
         }
         return modelMapper.map(mvpRes.get(), MvpDTO.class);
     }
@@ -49,10 +50,10 @@ public class MvpService {
         return modelMapper.map(mvpCreated, MvpDTO.class);
     }
 
-    public void deleteMvp(Long id) throws Exception{
+    public void deleteMvp(Long id) throws ResourceNotFoundException {
         Optional<Mvp> mvpToDelete = mvpRepository.findById(id);
         if (!mvpToDelete.isPresent()) {
-            throw new Exception("Mvp not found");
+            throw new ResourceNotFoundException("Mvp not found");
         }
         mvpRepository.delete(mvpToDelete.get());
     }
