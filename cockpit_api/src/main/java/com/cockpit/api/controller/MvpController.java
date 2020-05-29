@@ -58,9 +58,13 @@ public class MvpController {
     @PutMapping(
             value = "/api/v1/mvp/update"
     )
-    public ResponseEntity<MvpDTO> updateMvp(@RequestBody MvpDTO mvpDTO) {
-        MvpDTO mvpUpdated = mvpService.updateMvp(mvpDTO);
-        return  ResponseEntity.ok().body(mvpUpdated);
+    public ResponseEntity updateMvp(@RequestBody MvpDTO mvpDTO) {
+        try {
+            MvpDTO mvpUpdated = mvpService.updateMvp(mvpDTO);
+            return  ResponseEntity.ok().body(mvpUpdated);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     // DELETE
