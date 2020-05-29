@@ -11,5 +11,10 @@ spring:
   flyway:
     locations: classpath:db/migration
     baseline-on-migrate: true
+springdoc:
+  api-docs:
+    path: /cockpit-api-doc
+  swagger-ui:
+    path: /swagger-ui/cockpit-api-doc
 server:
   port: 8085
