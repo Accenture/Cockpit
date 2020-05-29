@@ -43,9 +43,11 @@ public class MvpService {
         return mvpList.stream().map(mvp -> modelMapper.map(mvp, MvpDTO.class)).collect(Collectors.toList());
     }
 
-    public MvpDTO updateMvp(MvpDTO mvpDTO){
-        Mvp mvpToUpdate = mvpRepository.findByName(mvpDTO.getName());
-        mvpDTO.setId(mvpToUpdate.getId());
+    public MvpDTO updateMvp(MvpDTO mvpDTO) throws ResourceNotFoundException {
+        Optional<Mvp> mvpToUpdate = mvpRepository.findById(mvpDTO.getId());
+        if (!mvpToUpdate.isPresent()) {
+            throw new ResourceNotFoundException("Mvp not found");
+        }
         Mvp mvpCreated = mvpRepository.save(modelMapper.map(mvpDTO, Mvp.class));
         return modelMapper.map(mvpCreated, MvpDTO.class);
     }

@@ -11,7 +11,7 @@ public class Mvp {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique=true)
+    @Column(unique = true)
     @NotNull(message="Name is mandatory")
     private String name;
 
