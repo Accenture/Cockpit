@@ -5,7 +5,6 @@ import TextField from '@material-ui/core/TextField';
 import FormLabel from '@material-ui/core/FormLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import CancelIcon from '@material-ui/icons/Cancel';
@@ -166,7 +165,7 @@ export default function ScrumMasterForm() {
               variant="outlined"
               id="mvpName"
               name="mvpName"
-              label="MVP Name"
+              placeholder="MVP Name"
               autoComplete="mvpName"
               size="small"
             />
@@ -187,7 +186,7 @@ export default function ScrumMasterForm() {
               variant="outlined"
               id="jiraID"
               name="jiraID"
-              label="Jira Key"
+              placeholder="Jira Key"
               autoComplete="jiraID"
               size="small"
             />
@@ -196,7 +195,6 @@ export default function ScrumMasterForm() {
             <FormLabel className={classes.formLabel}>
               Choose an entity
             </FormLabel>
-
             <FormControl
               required
               size="small"
@@ -204,17 +202,17 @@ export default function ScrumMasterForm() {
               variant="outlined"
               className={classes.textField}
             >
-              <InputLabel id="entityID">Entity</InputLabel>
               <Select
-                labelId="entityID"
-                id="entity"
-                label="Entity"
+                displayEmpty
                 value={selectedEntity || ''}
                 onChange={(e) => {
                   dispatch(setEntity(e.target.value));
                   dispatch(setFormIsValid());
                 }}
               >
+                <MenuItem value="" disabled>
+                  Entity
+                </MenuItem>
                 <MenuItem value="EP">EP</MenuItem>
                 <MenuItem value="RC">RC</MenuItem>
                 <MenuItem value="MS">MS</MenuItem>
@@ -237,9 +235,9 @@ export default function ScrumMasterForm() {
               variant="outlined"
               id="cycleID"
               name="cycleID"
-              label="Cycle"
+              placeholder="Cycle"
               type="number"
-              inputProps={{ min: '0', step: '1' }}
+              inputProps={{ min: '1', step: '1' }}
               autoComplete="cycleID"
               size="small"
             />
