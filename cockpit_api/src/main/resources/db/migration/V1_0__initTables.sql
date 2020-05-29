@@ -5,7 +5,7 @@
 ------------------------------------------------------------
 -- Table: Jira
 ------------------------------------------------------------
-CREATE TABLE public.Jira(
+CREATE TABLE Jira(
 	id                 SERIAL NOT NULL ,
 	jira_project_key   VARCHAR (4) NOT NULL ,
 	current_sprint     INT  NOT NULL ,
@@ -19,7 +19,7 @@ CREATE TABLE public.Jira(
 ------------------------------------------------------------
 -- Table: Mvp
 ------------------------------------------------------------
-CREATE TABLE public.Mvp(
+CREATE TABLE Mvp(
 	id                SERIAL NOT NULL ,
 	name              VARCHAR (50) NOT NULL ,
 	entity            VARCHAR (50) NOT NULL ,
@@ -30,7 +30,7 @@ CREATE TABLE public.Mvp(
 	jira_id           INT  NOT NULL  ,
 	CONSTRAINT Mvp_PK PRIMARY KEY (id)
 
-	,CONSTRAINT Mvp_Jira_FK FOREIGN KEY (jira_id) REFERENCES public.Jira(id)
+	,CONSTRAINT Mvp_Jira_FK FOREIGN KEY (jira_id) REFERENCES Jira(id)
 	,CONSTRAINT Mvp_Jira_AK UNIQUE (jira_id)
 )WITHOUT OIDS;
 
@@ -38,7 +38,7 @@ CREATE TABLE public.Mvp(
 ------------------------------------------------------------
 -- Table: TeamMember
 ------------------------------------------------------------
-CREATE TABLE public.TeamMember(
+CREATE TABLE TeamMember(
 	id           SERIAL NOT NULL ,
 	first_name   VARCHAR (50) NOT NULL ,
 	last_name    VARCHAR (50) NOT NULL ,
@@ -50,20 +50,20 @@ CREATE TABLE public.TeamMember(
 ------------------------------------------------------------
 -- Table: Team
 ------------------------------------------------------------
-CREATE TABLE public.Team(
+CREATE TABLE Team(
 	id       SERIAL NOT NULL ,
 	name     VARCHAR (4) NOT NULL ,
 	mvp_id   INT    ,
 	CONSTRAINT Team_PK PRIMARY KEY (id)
 
-	,CONSTRAINT Team_Mvp_FK FOREIGN KEY (mvp_id) REFERENCES public.Mvp(id)
+	,CONSTRAINT Team_Mvp_FK FOREIGN KEY (mvp_id) REFERENCES Mvp(id)
 )WITHOUT OIDS;
 
 
 ------------------------------------------------------------
 -- Table: Technology
 ------------------------------------------------------------
-CREATE TABLE public.Technology(
+CREATE TABLE Technology(
 	id     SERIAL NOT NULL ,
 	name   VARCHAR (50) NOT NULL ,
 	url    VARCHAR (5) NOT NULL  ,
@@ -74,28 +74,27 @@ CREATE TABLE public.Technology(
 ------------------------------------------------------------
 -- Table: Mvp_Technologies
 ------------------------------------------------------------
-CREATE TABLE public.Mvp_Technologies(
+CREATE TABLE Mvp_Technologies(
 	id              INT  NOT NULL ,
 	technology_id   INT  NOT NULL ,
 	mvp_id          INT  NOT NULL ,
-	technology_id   INT  NOT NULL  ,
 	CONSTRAINT utiliser_PK PRIMARY KEY (id,technology_id)
 
-	,CONSTRAINT utiliser_Mvp_FK FOREIGN KEY (id) REFERENCES public.Mvp(id)
-	,CONSTRAINT utiliser_Technology0_FK FOREIGN KEY (technology_id) REFERENCES public.Technology(id)
+	,CONSTRAINT utiliser_Mvp_FK FOREIGN KEY (id) REFERENCES Mvp(id)
+	,CONSTRAINT utiliser_Technology0_FK FOREIGN KEY (technology_id) REFERENCES Technology(id)
 )WITHOUT OIDS;
 
 
 ------------------------------------------------------------
 -- Table: Team_TeamMembers
 ------------------------------------------------------------
-CREATE TABLE public.Team_TeamMembers(
+CREATE TABLE Team_TeamMembers(
 	id              INT  NOT NULL ,
 	team_member_id   INT  NOT NULL  ,
 	CONSTRAINT appartenir_PK PRIMARY KEY (id,team_member_id)
 
-	,CONSTRAINT appartenir_Team_FK FOREIGN KEY (id) REFERENCES public.Team(id)
-	,CONSTRAINT appartenir_TeamMember0_FK FOREIGN KEY (team_member_id) REFERENCES public.TeamMember(id)
+	,CONSTRAINT appartenir_Team_FK FOREIGN KEY (id) REFERENCES Team(id)
+	,CONSTRAINT appartenir_TeamMember0_FK FOREIGN KEY (team_member_id) REFERENCES TeamMember(id)
 )WITHOUT OIDS;
 
 ------------------------------------------------------------
@@ -121,7 +120,7 @@ CREATE TABLE Sprint(
 ------------------------------------------------------------
 -- Table: UserStory
 ------------------------------------------------------------
-CREATE TABLE UserStory(
+CREATE TABLE User_Story(
     id              SERIAL NOT NULL ,
     creation_date   DATE  NOT NULL ,
     start_date      DATE  NOT NULL ,
