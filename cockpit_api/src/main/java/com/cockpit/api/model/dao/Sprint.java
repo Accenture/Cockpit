@@ -89,19 +89,13 @@ public class Sprint {
         this.teamConfidence = teamConfidence;
     }
 
-<<<<<<< HEAD
+
     public Integer getTotalNbUs() {
         return totalNbUs;
     }
 
+  
     public void setTotalNbUs(Integer totalNbUs) {
-=======
-    public int getTotalNbUs() {
-        return totalNbUs;
-    }
-
-    public void setTotalNbUs(int totalNbUs) {
->>>>>>> CP-73-createNewBackend
         this.totalNbUs = totalNbUs;
     }
 

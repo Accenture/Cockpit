@@ -22,7 +22,7 @@ public class SprintDTO {
 
     private Integer teamConfidence;
 
-    private int totalNbUs;
+    private Integer totalNbUs;
 
     private int sprintNumber;
 
@@ -86,11 +86,11 @@ public class SprintDTO {
         this.teamConfidence = teamConfidence;
     }
 
-    public int getTotalNbUs() {
+    public Integer getTotalNbUs() {
         return totalNbUs;
     }
 
-    public void setTotalNbUs(int totalNbUs) {
+    public void setTotalNbUs(Integer totalNbUs) {
         this.totalNbUs = totalNbUs;
     }
 

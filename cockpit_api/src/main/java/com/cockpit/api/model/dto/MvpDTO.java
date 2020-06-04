@@ -116,7 +116,6 @@ public class MvpDTO {
     public Jira getJira() {
         return jira;
     }
-<<<<<<< HEAD
 
 
 	public Set<Sprint> getSprints() {
@@ -137,7 +136,5 @@ public class MvpDTO {
 	public void setUserStories(Set<UserStory> userStories) {
 		this.userStories = userStories;
 	}
-    
-=======
->>>>>>> CP-73-createNewBackend
+   
 }
