@@ -1,6 +1,5 @@
 package com.cockpit.api.repository;
 
-<<<<<<< HEAD
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -18,10 +17,5 @@ public interface UserStoryRepository extends CrudRepository<UserStory, Long> {
 	   @Query("SELECT us FROM UserStory us, Sprint sp WHERE us.sprint = sp.id AND sp.mvp = (:mvp) AND sp.sprintNumber" +
 	            " = (:sprintNumber)")
 	    List<UserStory> findMyUserStories(@Param("mvp") Mvp mvp, @Param("sprintNumber") int SprintNumber);
-=======
-import com.cockpit.api.model.dao.UserStory;
-import org.springframework.data.repository.CrudRepository;
 
-public interface UserStoryRepository extends CrudRepository<UserStory, Long> {
->>>>>>> CP-73-createNewBackend
 }

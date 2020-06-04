@@ -22,11 +22,7 @@ public class Sprint {
 
     private Integer teamConfidence;
 
-<<<<<<< HEAD
     private Integer totalNbUs;
-=======
-    private int totalNbUs;
->>>>>>> CP-73-createNewBackend
 
     private int sprintNumber;
 
