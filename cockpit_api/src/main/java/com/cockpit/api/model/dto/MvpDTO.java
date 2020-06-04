@@ -1,11 +1,16 @@
 package com.cockpit.api.model.dto;
 
 import com.cockpit.api.model.dao.Jira;
+<<<<<<< HEAD
 import com.cockpit.api.model.dao.Sprint;
 import com.cockpit.api.model.dao.Team;
 import com.cockpit.api.model.dao.Technology;
 import com.cockpit.api.model.dao.UserStory;
 
+=======
+import com.cockpit.api.model.dao.Team;
+import com.cockpit.api.model.dao.Technology;
+>>>>>>> CP-73-createNewBackend
 import java.util.Set;
 
 public class MvpDTO {
@@ -29,10 +34,13 @@ public class MvpDTO {
     private Set<Technology> technologies;
 
     private Jira jira;
+<<<<<<< HEAD
     
     private Set<Sprint> sprints;
     
     private Set<UserStory> userStories;
+=======
+>>>>>>> CP-73-createNewBackend
 
     public MvpDTO() {
         // Empty constructor
@@ -113,6 +121,7 @@ public class MvpDTO {
     public Jira getJira() {
         return jira;
     }
+<<<<<<< HEAD
 
 
 	public Set<Sprint> getSprints() {
@@ -134,4 +143,6 @@ public class MvpDTO {
 		this.userStories = userStories;
 	}
     
+=======
+>>>>>>> CP-73-createNewBackend
 }

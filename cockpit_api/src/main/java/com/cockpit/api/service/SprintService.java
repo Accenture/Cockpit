@@ -4,6 +4,7 @@ import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dao.Sprint;
 import com.cockpit.api.model.dto.SprintDTO;
 import com.cockpit.api.repository.SprintRepository;
+<<<<<<< HEAD
 
 import com.cockpit.api.model.dao.Mvp;
 
@@ -12,6 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+=======
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+>>>>>>> CP-73-createNewBackend
 import java.util.Optional;
 
 @Service
@@ -55,6 +61,7 @@ public class SprintService {
         }
         sprintRepository.delete(sprintToDelete.get());
     }
+<<<<<<< HEAD
     public int findSprintNumberForADate(Mvp mvp, Date date) {
         Sprint sprint = sprintRepository.findTopBySprintStartDateLessThanEqualAndMvpEqualsOrderBySprintNumberDesc(date, mvp);
         int sprintId = 0;
@@ -69,4 +76,6 @@ public class SprintService {
     	return sprintRepository.findByMvpAndSprintNumber(mvp, sprintNumber);
     }
 
+=======
+>>>>>>> CP-73-createNewBackend
 }
