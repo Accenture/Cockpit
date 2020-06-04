@@ -1,7 +1,17 @@
 package com.cockpit.api.repository;
 
+import com.cockpit.api.model.dao.Mvp;
 import com.cockpit.api.model.dao.Sprint;
-import org.springframework.data.repository.CrudRepository;
 
+import java.util.Date;
+
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
 public interface SprintRepository extends CrudRepository<Sprint, Long> {
+
+	Sprint findTopBySprintStartDateLessThanEqualAndMvpEqualsOrderBySprintNumberDesc(Date date, Mvp mvp);
+    Sprint findByMvpAndSprintNumber(Mvp mvp, int sprintNumber);
+
 }

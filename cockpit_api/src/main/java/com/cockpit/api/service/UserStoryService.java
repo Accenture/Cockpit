@@ -4,11 +4,16 @@ import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dao.UserStory;
 import com.cockpit.api.model.dto.UserStoryDTO;
 import com.cockpit.api.repository.UserStoryRepository;
+
+import com.cockpit.api.model.dao.Sprint;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import com.cockpit.api.model.dao.Mvp;
 
 @Service
 public class UserStoryService {
@@ -50,5 +55,21 @@ public class UserStoryService {
             throw new ResourceNotFoundException("The User Story to be deleted does not exist in database");
         }
         userStoryRepository.delete(userStoryToDelete.get());
+    }
+    public Integer findSumOfUsClosedForSprint(Mvp mvp, int sprintNumber) {
+
+        return userStoryRepository.countNumberOfClosedUsPerSprint(mvp, sprintNumber);
+    }
+    public int getMaxNumberOfStoriesForADateOfAnMvp(Sprint sprint, Mvp mvp) {
+        int totalStories = 0;
+        if (mvp != null && sprint != null) {
+            List<UserStory> userStoriesList = userStoryRepository.findMyUserStories(mvp, sprint.getSprintNumber());
+
+            if(userStoriesList != null && !userStoriesList.isEmpty())
+            {
+                totalStories = userStoriesList.size();
+            }
+        }
+        return totalStories;
     }
 }

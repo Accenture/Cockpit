@@ -1,8 +1,11 @@
 package com.cockpit.api.model.dto;
 
 import com.cockpit.api.model.dao.Jira;
+import com.cockpit.api.model.dao.Sprint;
 import com.cockpit.api.model.dao.Team;
 import com.cockpit.api.model.dao.Technology;
+import com.cockpit.api.model.dao.UserStory;
+
 import java.util.Set;
 
 public class MvpDTO {
@@ -26,6 +29,10 @@ public class MvpDTO {
     private Set<Technology> technologies;
 
     private Jira jira;
+    
+    private Set<Sprint> sprints;
+    
+    private Set<UserStory> userStories;
 
     public MvpDTO() {
         // Empty constructor
@@ -106,4 +113,25 @@ public class MvpDTO {
     public Jira getJira() {
         return jira;
     }
+
+
+	public Set<Sprint> getSprints() {
+		return sprints;
+	}
+
+
+	public void setSprints(Set<Sprint> sprints) {
+		this.sprints = sprints;
+	}
+
+
+	public Set<UserStory> getUserStories() {
+		return userStories;
+	}
+
+
+	public void setUserStories(Set<UserStory> userStories) {
+		this.userStories = userStories;
+	}
+    
 }
