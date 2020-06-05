@@ -130,15 +130,15 @@ CREATE TABLE public.mvp_technologies(
 
 
 ------------------------------------------------------------
--- Table: team_teammembers
+-- Table: team_team_members
 ------------------------------------------------------------
-CREATE TABLE public.team_teammembers(
-                                        id              INT  NOT NULL ,
-                                        id_TeamMember   INT  NOT NULL  ,
-                                        CONSTRAINT team_teammembers_PK PRIMARY KEY (id,id_TeamMember)
+CREATE TABLE public.team_team_members(
+                                         id              INT  NOT NULL ,
+                                         id_TeamMember   INT  NOT NULL  ,
+                                         CONSTRAINT team_team_members_PK PRIMARY KEY (id,id_TeamMember)
 
-    ,CONSTRAINT team_teammembers_Team_FK FOREIGN KEY (id) REFERENCES public.Team(id)
-    ,CONSTRAINT team_teammembers_TeamMember0_FK FOREIGN KEY (id_TeamMember) REFERENCES public.TeamMember(id)
+    ,CONSTRAINT team_team_members_Team_FK FOREIGN KEY (id) REFERENCES public.Team(id)
+    ,CONSTRAINT team_team_members_TeamMember0_FK FOREIGN KEY (id_TeamMember) REFERENCES public.TeamMember(id)
 )WITHOUT OIDS;
 
 
