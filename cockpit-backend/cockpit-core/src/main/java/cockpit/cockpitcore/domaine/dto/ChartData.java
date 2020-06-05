@@ -21,7 +21,7 @@ public class ChartData {
 
     public int totalSprints;
 
-    public int expectedUsClosed;
+    public Integer expectedUsClosed;
 
     public int optimisticProjection;
 
