@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
+@Table(name = "mvp")
 public class Mvp {
     @Id
     @GeneratedValue(generator = "question_generator")

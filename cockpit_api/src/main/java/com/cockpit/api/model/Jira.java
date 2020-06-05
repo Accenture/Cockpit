@@ -3,6 +3,7 @@ package com.cockpit.api.model;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "jira")
 public class Jira{
     @Id
     @GeneratedValue(generator = "question_generator")

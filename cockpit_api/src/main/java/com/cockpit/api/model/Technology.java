@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "technology")
 public class Technology{
     @Id
     @GeneratedValue(generator = "question_generator")
