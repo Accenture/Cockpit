@@ -1,15 +1,12 @@
-package com.cockpit.api.model.dao;
+package com.cockpit.api.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.persistence.*;
+import com.cockpit.api.model.dao.Mvp;
+import com.cockpit.api.model.dao.Sprint;
+import com.cockpit.api.model.dao.UserStory;
 import java.util.Date;
 import java.util.Set;
 
-@Entity
-@Table(name = "jira")
-public class Jira{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class JiraDTO {
     private Long id;
 
     private String jiraProjectKey;
@@ -22,14 +19,10 @@ public class Jira{
 
     private Date mvpEndDate;
 
-    @OneToMany(cascade=CascadeType.ALL)
     private Set<Sprint> sprint;
 
-    @OneToMany(cascade=CascadeType.ALL)
     private Set<UserStory> userStories;
 
-    @OneToOne(mappedBy = "jira")
-    @JsonIgnore
     private Mvp mvp;
 
     public String getJiraProjectKey() {

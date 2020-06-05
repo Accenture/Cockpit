@@ -3,139 +3,124 @@
 ------------------------------------------------------------
 
 ------------------------------------------------------------
--- Table: Jira
+-- Table: jira
 ------------------------------------------------------------
-CREATE TABLE Jira(
-	id                 SERIAL NOT NULL ,
-	jira_project_key   VARCHAR (4) NOT NULL ,
-	current_sprint     INT  NOT NULL ,
-	jira_project_id    INT  NOT NULL ,
-	mvp_start_date     DATE  NOT NULL ,
-	mvp_end_date       DATE  NOT NULL  ,
-	CONSTRAINT Jira_PK PRIMARY KEY (id)
-)WITHOUT OIDS;
-
-
-------------------------------------------------------------
--- Table: Mvp
-------------------------------------------------------------
-CREATE TABLE Mvp(
-	id                SERIAL NOT NULL ,
-	name              VARCHAR (50) NOT NULL ,
-	entity            VARCHAR (50) NOT NULL ,
-	url_mvp_avatar    VARCHAR (50) NOT NULL ,
-	cycle             INT  NOT NULL ,
-	mvp_description   VARCHAR (255) NOT NULL ,
-	status            VARCHAR (50) NOT NULL ,
-	jira_id           INT  NOT NULL  ,
-	CONSTRAINT Mvp_PK PRIMARY KEY (id)
-
-	,CONSTRAINT Mvp_Jira_FK FOREIGN KEY (jira_id) REFERENCES Jira(id)
-	,CONSTRAINT Mvp_Jira_AK UNIQUE (jira_id)
-)WITHOUT OIDS;
-
-
-------------------------------------------------------------
--- Table: TeamMember
-------------------------------------------------------------
-CREATE TABLE TeamMember(
-	id           SERIAL NOT NULL ,
-	first_name   VARCHAR (50) NOT NULL ,
-	last_name    VARCHAR (50) NOT NULL ,
-	email        VARCHAR (50) NOT NULL  ,
-	CONSTRAINT TeamMember_PK PRIMARY KEY (id)
-)WITHOUT OIDS;
-
-
-------------------------------------------------------------
--- Table: Team
-------------------------------------------------------------
-CREATE TABLE Team(
-	id       SERIAL NOT NULL ,
-	name     VARCHAR (4) NOT NULL ,
-	mvp_id   INT    ,
-	CONSTRAINT Team_PK PRIMARY KEY (id)
-
-	,CONSTRAINT Team_Mvp_FK FOREIGN KEY (mvp_id) REFERENCES Mvp(id)
-)WITHOUT OIDS;
-
-
-------------------------------------------------------------
--- Table: Technology
-------------------------------------------------------------
-CREATE TABLE Technology(
-	id     SERIAL NOT NULL ,
-	name   VARCHAR (50) NOT NULL ,
-	url    VARCHAR (5) NOT NULL  ,
-	CONSTRAINT Technology_PK PRIMARY KEY (id)
-)WITHOUT OIDS;
-
-
-------------------------------------------------------------
--- Table: Mvp_Technologies
-------------------------------------------------------------
-CREATE TABLE Mvp_Technologies(
-	id              INT  NOT NULL ,
-	technology_id   INT  NOT NULL ,
-	mvp_id          INT  NOT NULL ,
-	CONSTRAINT utiliser_PK PRIMARY KEY (id,technology_id)
-
-	,CONSTRAINT utiliser_Mvp_FK FOREIGN KEY (id) REFERENCES Mvp(id)
-	,CONSTRAINT utiliser_Technology0_FK FOREIGN KEY (technology_id) REFERENCES Technology(id)
-)WITHOUT OIDS;
-
-
-------------------------------------------------------------
--- Table: Team_TeamMembers
-------------------------------------------------------------
-CREATE TABLE Team_TeamMembers(
-	id              INT  NOT NULL ,
-	team_member_id   INT  NOT NULL  ,
-	CONSTRAINT appartenir_PK PRIMARY KEY (id,team_member_id)
-
-	,CONSTRAINT appartenir_Team_FK FOREIGN KEY (id) REFERENCES Team(id)
-	,CONSTRAINT appartenir_TeamMember0_FK FOREIGN KEY (team_member_id) REFERENCES TeamMember(id)
+CREATE TABLE public.jira(
+    id                 SERIAL NOT NULL ,
+    jira_project_key   VARCHAR (4) NOT NULL ,
+    current_sprint     INT  NOT NULL ,
+    jira_project_id    INT  NOT NULL ,
+    mvp_start_date     DATE  NOT NULL ,
+    mvp_end_date       DATE  NOT NULL  ,
+    CONSTRAINT jira_PK PRIMARY KEY (id)
 )WITHOUT OIDS;
 
 ------------------------------------------------------------
--- Table: Sprint
+-- Table: mvp
 ------------------------------------------------------------
-CREATE TABLE Sprint(
-	id                  SERIAL NOT NULL ,
-	jira_sprint_id      INT  NOT NULL ,
-	sprint_start_date   DATE  NOT NULL ,
-	sprint_end_date     DATE  NOT NULL ,
-	team_motivation     INT  NOT NULL ,
-	team_mood           INT  NOT NULL ,
-	team_confidence     INT  NOT NULL ,
-	total_nb_us         INTEGER  NOT NULL ,
-	sprint_number       INT  NOT NULL ,
-	id_Mvp              INT  NOT NULL  ,
-	CONSTRAINT Sprint_PK PRIMARY KEY (id)
-
-    ,CONSTRAINT Sprint_Mvp_FK FOREIGN KEY (id_Mvp) REFERENCES Mvp(id)
+CREATE TABLE public.mvp(
+    id                SERIAL NOT NULL ,
+    name              VARCHAR (50) NOT NULL ,
+    entity            VARCHAR (50) NOT NULL ,
+    url_mvp_avatar    VARCHAR (50) NOT NULL ,
+    cycle             INT  NOT NULL ,
+    mvp_description   VARCHAR (255) NOT NULL ,
+    status            VARCHAR (50) NOT NULL ,
+    id_jira           INT  NOT NULL  ,
+    CONSTRAINT mvp_PK PRIMARY KEY (id)
+    ,CONSTRAINT mvp_jira_FK FOREIGN KEY (id_jira) REFERENCES public.jira(id)
+    ,CONSTRAINT mvp_jira_AK UNIQUE (id_jira)
 )WITHOUT OIDS;
 
+------------------------------------------------------------
+-- Table: team_member
+------------------------------------------------------------
+CREATE TABLE public.team_member(
+    id           SERIAL NOT NULL ,
+    first_name   VARCHAR (50) NOT NULL ,
+    last_name    VARCHAR (50) NOT NULL ,
+    email        VARCHAR (50) NOT NULL  ,
+    CONSTRAINT team_member_PK PRIMARY KEY (id)
+)WITHOUT OIDS;
 
 ------------------------------------------------------------
--- Table: UserStory
+-- Table: team
 ------------------------------------------------------------
-CREATE TABLE User_Story(
+CREATE TABLE public.team(
+    id       SERIAL NOT NULL ,
+    name     VARCHAR (4) NOT NULL ,
+    id_mvp   INT    ,
+    CONSTRAINT team_PK PRIMARY KEY (id)
+    ,CONSTRAINT team_mvp_FK FOREIGN KEY (id_mvp) REFERENCES public.mvp(id)
+)WITHOUT OIDS;
+
+------------------------------------------------------------
+-- Table: technology
+------------------------------------------------------------
+CREATE TABLE public.technology(
+    id     SERIAL NOT NULL ,
+    name   VARCHAR (50) NOT NULL ,
+    url    VARCHAR (5) NOT NULL  ,
+    CONSTRAINT technology_PK PRIMARY KEY (id)
+)WITHOUT OIDS;
+
+------------------------------------------------------------
+-- Table: sprint
+------------------------------------------------------------
+CREATE TABLE public.sprint(
+    id                  SERIAL NOT NULL ,
+    sprint_start_date   DATE  NOT NULL ,
+    sprint_end_date     DATE  NOT NULL ,
+    team_motivation     INT  NOT NULL ,
+    team_mood           INT  NOT NULL ,
+    team_confidence     INT  NOT NULL ,
+    total_nb_us         INTEGER  NOT NULL ,
+    sprint_number       INT  NOT NULL ,
+    id_jira             INT  NOT NULL  ,
+    CONSTRAINT sprint_PK PRIMARY KEY (id)
+    ,CONSTRAINT sprint_jira_FK FOREIGN KEY (id_jira) REFERENCES public.jira(id)
+)WITHOUT OIDS;
+
+------------------------------------------------------------
+-- Table: user_story
+------------------------------------------------------------
+CREATE TABLE public.user_story(
     id              SERIAL NOT NULL ,
     creation_date   DATE  NOT NULL ,
-    start_date      DATE  NOT NULL ,
-    done_date       DATE  NOT NULL ,
+    end_date        DATE  NOT NULL ,
     story_point     INT  NOT NULL ,
     description     VARCHAR (255) NOT NULL ,
     issue_key       VARCHAR (20) NOT NULL ,
     jira_issue_id   INT  NOT NULL ,
     priority        VARCHAR (20) NOT NULL ,
+    start_date      DATE  NOT NULL ,
     status          VARCHAR (20) NOT NULL ,
     summary         VARCHAR (255) NOT NULL ,
-    id_Sprint       INT   ,
-    id_Mvp          INT  NOT NULL  ,
-    CONSTRAINT UserStory_PK PRIMARY KEY (id)
+    id_sprint       INT   ,
+    id_jira         INT  NOT NULL  ,
+    CONSTRAINT user_story_PK PRIMARY KEY (id)
+    ,CONSTRAINT user_story_sprint_FK FOREIGN KEY (id_sprint) REFERENCES public.sprint(id)
+    ,CONSTRAINT user_story_jira0_FK FOREIGN KEY (id_jira) REFERENCES public.jira(id)
+)WITHOUT OIDS;
 
-    ,CONSTRAINT UserStory_Sprint_FK FOREIGN KEY (id_Sprint) REFERENCES Sprint(id)
-    ,CONSTRAINT UserStory_Mvp0_FK FOREIGN KEY (id_Mvp) REFERENCES Mvp(id)
+------------------------------------------------------------
+-- Table: mvp_technologies
+------------------------------------------------------------
+CREATE TABLE public.mvp_technologies(
+    id              INT  NOT NULL ,
+    id_technology   INT  NOT NULL  ,
+    CONSTRAINT mvp_technologies_PK PRIMARY KEY (id,id_technology)
+    ,CONSTRAINT mvp_technologies_mvp_FK FOREIGN KEY (id) REFERENCES public.mvp(id)
+    ,CONSTRAINT mvp_technologies_technology0_FK FOREIGN KEY (id_technology) REFERENCES public.technology(id)
+)WITHOUT OIDS;
+
+------------------------------------------------------------
+-- Table: team_team_members
+------------------------------------------------------------
+CREATE TABLE public.team_team_members(
+    id               INT  NOT NULL ,
+    id_team_member   INT  NOT NULL  ,
+    CONSTRAINT team_team_members_PK PRIMARY KEY (id,id_team_member)
+    ,CONSTRAINT team_team_members_team_FK FOREIGN KEY (id) REFERENCES public.team(id)
+    ,CONSTRAINT team_team_members_team_member0_FK FOREIGN KEY (id_team_member) REFERENCES public.team_member(id)
 )WITHOUT OIDS;

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
+@Table(name = "sprint")
 public class Sprint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +28,7 @@ public class Sprint {
     private int sprintNumber;
 
     @ManyToOne
-    private Mvp mvp;
-
+    private Jira jira;
 
     @OneToMany(cascade=CascadeType.ALL)
     private Set<UserStory> userStories;
@@ -107,12 +107,12 @@ public class Sprint {
         this.sprintNumber = sprintNumber;
     }
 
-    public Mvp getMvp() {
-        return mvp;
+    public Jira getJira() {
+        return jira;
     }
 
-    public void setMvp(Mvp mvp) {
-        this.mvp = mvp;
+    public void setJira(Jira jira) {
+        this.jira = jira;
     }
 
     public Set<UserStory> getUserStories() {

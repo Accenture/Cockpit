@@ -1,6 +1,7 @@
 package com.cockpit.api.service;
 
 import com.cockpit.api.exception.ResourceNotFoundException;
+import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.UserStory;
 import com.cockpit.api.model.dto.UserStoryDTO;
 import com.cockpit.api.repository.UserStoryRepository;
@@ -13,8 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import com.cockpit.api.model.dao.Mvp;
-
 
 @Service
 public class UserStoryService {
@@ -58,14 +57,14 @@ public class UserStoryService {
         userStoryRepository.delete(userStoryToDelete.get());
     }
 
-    public Integer findSumOfUsClosedForSprint(Mvp mvp, int sprintNumber) {
+    public Integer findSumOfUsClosedForSprint(Jira jira, int sprintNumber) {
 
-        return userStoryRepository.countNumberOfClosedUsPerSprint(mvp, sprintNumber);
+        return userStoryRepository.countNumberOfClosedUsPerSprint(jira, sprintNumber);
     }
-    public int getMaxNumberOfStoriesForADateOfAnMvp(Sprint sprint, Mvp mvp) {
+    public int getMaxNumberOfStoriesForADateOfAnMvp(Sprint sprint, Jira jira) {
         int totalStories = 0;
-        if (mvp != null && sprint != null) {
-            List<UserStory> userStoriesList = userStoryRepository.findMyUserStories(mvp, sprint.getSprintNumber());
+        if (jira != null && sprint != null) {
+            List<UserStory> userStoriesList = userStoryRepository.findMyUserStories(jira, sprint.getSprintNumber());
 
             if(userStoriesList != null && !userStoriesList.isEmpty())
             {

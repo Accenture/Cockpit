@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
+@Table(name = "mvp")
 public class Mvp {
 
     @Id
@@ -29,12 +30,6 @@ public class Mvp {
 
     private String status;
 
-    @OneToMany(cascade=CascadeType.ALL)
-    private Set<Sprint> sprints;
-
-    @OneToMany(cascade=CascadeType.ALL)
-    private Set<UserStory> userStories;
-
     @ManyToOne(cascade=CascadeType.ALL)
     private Team team;
 
@@ -42,7 +37,7 @@ public class Mvp {
     private Set<Technology> technologies;
 
     @OneToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name = "jira_id" )
+    @JoinColumn(name = "id_jira" )
     private Jira jira;
 
     public Mvp() {
@@ -83,10 +78,6 @@ public class Mvp {
         this.jira = jira;
     }
 
-    public void setSprints(Set<Sprint> sprints) { this.sprints = sprints; }
-
-    public void setUserStories(Set<UserStory> userStories) { this.userStories = userStories; }
-
     public String getName() {
         return name;
     }
@@ -122,10 +113,6 @@ public class Mvp {
     public Jira getJira() {
         return jira;
     }
-
-    public Set<Sprint> getSprints() { return sprints; }
-
-    public Set<UserStory> getUserStories() { return userStories; }
 
     public Long getId() { return id; }
 
