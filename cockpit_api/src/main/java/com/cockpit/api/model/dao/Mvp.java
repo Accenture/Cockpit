@@ -34,7 +34,7 @@ public class Mvp {
     private Team team;
 
     @ManyToMany(cascade=CascadeType.ALL)
-    @JoinTable(name = "mvp_technologies",
+    @JoinTable(name = "mvps_technologies",
             joinColumns = @JoinColumn(name = "id_mvp"),
             inverseJoinColumns = @JoinColumn(name = "id_technology")
     )

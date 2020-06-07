@@ -22,10 +22,10 @@ public class Jira{
 
     private Date mvpEndDate;
 
-    @OneToMany(cascade=CascadeType.ALL)
-    private Set<Sprint> sprint;
+    @OneToMany(mappedBy = "jira", cascade=CascadeType.ALL)
+    private Set<Sprint> sprints;
 
-    @OneToMany(cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "jira", cascade=CascadeType.ALL)
     private Set<UserStory> userStories;
 
     @OneToOne
@@ -80,11 +80,11 @@ public class Jira{
         this.mvp = mvp;
     }
 
-    public Set<Sprint> getSprint() {
-        return sprint;
+    public Set<Sprint> getSprints() {
+        return sprints;
     }
 
-    public void setSprint(Set<Sprint> sprint) { this.sprint = sprint; }
+    public void setSprints(Set<Sprint> sprint) { this.sprints = sprint; }
 
     public Set<UserStory> getUserStories() {
         return userStories;

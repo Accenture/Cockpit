@@ -48,7 +48,7 @@ CREATE TABLE public.jira(
     jira_project_id    INT  NOT NULL ,
     mvp_start_date     DATE  NOT NULL ,
     mvp_end_date       DATE  NOT NULL ,
-    id_mvp             INT  NOT NULL  ,
+    id_mvp             INT  ,
     CONSTRAINT jira_PK PRIMARY KEY (id),
     CONSTRAINT jira_mvp_FK FOREIGN KEY (id_mvp) REFERENCES public.mvp(id),
     CONSTRAINT jira_mvp_AK UNIQUE (id_mvp)
@@ -76,7 +76,7 @@ CREATE TABLE public.sprint(
     team_confidence     INT  NOT NULL ,
     total_nb_us         INTEGER  NOT NULL ,
     sprint_number       INT  NOT NULL ,
-    id_jira             INT  NOT NULL  ,
+    id_jira             INT  ,
     CONSTRAINT sprint_PK PRIMARY KEY (id),
     CONSTRAINT sprint_jira_FK FOREIGN KEY (id_jira) REFERENCES public.jira(id)
 )WITHOUT OIDS;
@@ -87,7 +87,7 @@ CREATE TABLE public.sprint(
 CREATE TABLE public.user_story(
     id              SERIAL NOT NULL ,
     creation_date   DATE  NOT NULL ,
-    end_date        DATE  NOT NULL ,
+    done_date        DATE  NOT NULL ,
     story_point     INT  NOT NULL ,
     description     VARCHAR (255) NOT NULL ,
     issue_key       VARCHAR (50) NOT NULL ,
@@ -97,7 +97,7 @@ CREATE TABLE public.user_story(
     status          VARCHAR (50) NOT NULL ,
     summary         VARCHAR (255) NOT NULL ,
     id_sprint       INT   ,
-    id_jira         INT  NOT NULL  ,
+    id_jira         INT   ,
     CONSTRAINT user_story_PK PRIMARY KEY (id),
     CONSTRAINT user_story_sprint_FK FOREIGN KEY (id_sprint) REFERENCES public.sprint(id),
     CONSTRAINT user_story_jira0_FK FOREIGN KEY (id_jira) REFERENCES public.jira(id)
@@ -106,7 +106,7 @@ CREATE TABLE public.user_story(
 ------------------------------------------------------------
 -- Table: mvp_technologies
 ------------------------------------------------------------
-CREATE TABLE public.mvp_technologies(
+CREATE TABLE public.mvps_technologies(
     id_mvp              INT  NOT NULL ,
     id_technology   INT  NOT NULL  ,
     CONSTRAINT mvp_technologies_PK PRIMARY KEY (id_mvp,id_technology),
