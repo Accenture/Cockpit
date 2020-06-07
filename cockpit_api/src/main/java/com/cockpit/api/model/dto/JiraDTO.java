@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Set;
 
 public class JiraDTO {
+
     private Long id;
 
     private String jiraProjectKey;
@@ -72,12 +73,12 @@ public class JiraDTO {
     public void setMvp(Mvp mvp) {
         this.mvp = mvp;
     }
+
     public Set<Sprint> getSprint() {
         return sprint;
     }
-    public void setSprint(Set<Sprint> sprint) {
-        this.sprint = sprint;
-    }
+
+    public void setSprint(Set<Sprint> sprint) { this.sprint = sprint; }
 
     public Set<UserStory> getUserStories() {
         return userStories;

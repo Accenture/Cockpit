@@ -17,7 +17,7 @@ public class TeamMember{
 
     private String email;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "teamMembers")
     @JsonIgnore
     private Set<Team> teams;
 

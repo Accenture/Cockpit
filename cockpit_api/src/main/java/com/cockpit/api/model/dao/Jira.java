@@ -28,7 +28,7 @@ public class Jira{
     @OneToMany(cascade=CascadeType.ALL)
     private Set<UserStory> userStories;
 
-    @OneToOne(mappedBy = "jira")
+    @OneToOne
     @JsonIgnore
     private Mvp mvp;
 
@@ -79,12 +79,12 @@ public class Jira{
     public void setMvp(Mvp mvp) {
         this.mvp = mvp;
     }
+
     public Set<Sprint> getSprint() {
         return sprint;
     }
-    public void setSprint(Set<Sprint> sprint) {
-        this.sprint = sprint;
-    }
+
+    public void setSprint(Set<Sprint> sprint) { this.sprint = sprint; }
 
     public Set<UserStory> getUserStories() {
         return userStories;

@@ -34,10 +34,13 @@ public class Mvp {
     private Team team;
 
     @ManyToMany(cascade=CascadeType.ALL)
+    @JoinTable(name = "mvp_technologies",
+            joinColumns = @JoinColumn(name = "id_mvp"),
+            inverseJoinColumns = @JoinColumn(name = "id_technology")
+    )
     private Set<Technology> technologies;
 
-    @OneToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name = "id_jira" )
+    @OneToOne(mappedBy = "mvp", cascade=CascadeType.ALL)
     private Jira jira;
 
     public Mvp() {

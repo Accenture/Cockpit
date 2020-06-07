@@ -14,9 +14,13 @@ public class Team{
     private String name;
 
     @ManyToMany(cascade=CascadeType.ALL)
+    @JoinTable(name = "team_team_members",
+            joinColumns = @JoinColumn(name = "id_team"),
+            inverseJoinColumns = @JoinColumn(name = "id_team_member")
+    )
     private Set<TeamMember> teamMembers;
 
-    @OneToMany
+    @OneToMany (mappedBy = "team")
     @JsonIgnore
     private Set<Mvp> mvps;
 

@@ -15,7 +15,7 @@ public class Technology{
 
     private String url;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "technologies")
     @JsonIgnore
     Set<Mvp> mvps;
 
