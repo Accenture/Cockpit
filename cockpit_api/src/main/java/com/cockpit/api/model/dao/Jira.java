@@ -29,6 +29,7 @@ public class Jira{
     private Set<UserStory> userStories;
 
     @OneToOne
+    @JoinColumn(name="id_mvp", nullable=false)
     @JsonIgnore
     private Mvp mvp;
 

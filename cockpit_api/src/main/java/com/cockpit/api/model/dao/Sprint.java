@@ -28,9 +28,10 @@ public class Sprint {
     private int sprintNumber;
 
     @ManyToOne
+    @JoinColumn(name="id_jira", nullable=false)
     private Jira jira;
 
-    @OneToMany(cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "sprint",cascade=CascadeType.ALL)
     private Set<UserStory> userStories;
 
     public Long getId() {

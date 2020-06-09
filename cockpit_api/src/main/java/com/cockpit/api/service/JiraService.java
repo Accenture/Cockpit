@@ -2,6 +2,7 @@ package com.cockpit.api.service;
 
 import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dao.Jira;
+import com.cockpit.api.model.dao.Mvp;
 import com.cockpit.api.model.dto.JiraDTO;
 import com.cockpit.api.repository.JiraRepository;
 import org.modelmapper.ModelMapper;
@@ -48,5 +49,9 @@ public class JiraService {
             throw new ResourceNotFoundException("Jira not found");
         }
         jiraRepository.delete(jiraToDelete.get());
+    }
+    Jira findByMvp(Mvp mvp)
+    {
+    	return jiraRepository.findByMvp(mvp);
     }
 }
