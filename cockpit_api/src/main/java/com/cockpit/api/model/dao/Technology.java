@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "technology")
 public class Technology{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,7 +15,7 @@ public class Technology{
 
     private String url;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "technologies")
     @JsonIgnore
     Set<Mvp> mvps;
 

@@ -1,15 +1,13 @@
-package com.cockpit.api.model.dao;
+package com.cockpit.api.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import javax.persistence.*;
+import com.cockpit.api.model.dao.Mvp;
+import com.cockpit.api.model.dao.Sprint;
+import com.cockpit.api.model.dao.UserStory;
 import java.util.Date;
 import java.util.Set;
 
-@Entity
-@Table(name = "jira")
-public class Jira{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class JiraDTO {
+
     private Long id;
 
     private String jiraProjectKey;
@@ -22,17 +20,19 @@ public class Jira{
 
     private Date mvpEndDate;
 
-    @OneToMany(mappedBy = "jira", cascade=CascadeType.ALL)
-    private Set<Sprint> sprints;
+    private Set<Sprint> sprint;
 
-    @OneToMany(mappedBy = "jira", cascade=CascadeType.ALL)
     private Set<UserStory> userStories;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="id_mvp", nullable=false)
-    @JsonIgnore
     private Mvp mvp;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
     public String getJiraProjectKey() {
         return jiraProjectKey;
     }
@@ -81,11 +81,11 @@ public class Jira{
         this.mvp = mvp;
     }
 
-    public Set<Sprint> getSprints() {
-        return sprints;
+    public Set<Sprint> getSprint() {
+        return sprint;
     }
 
-    public void setSprints(Set<Sprint> sprint) { this.sprints = sprint; }
+    public void setSprint(Set<Sprint> sprint) { this.sprint = sprint; }
 
     public Set<UserStory> getUserStories() {
         return userStories;

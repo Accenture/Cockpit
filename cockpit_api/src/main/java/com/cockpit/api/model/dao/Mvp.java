@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 import java.util.Set;
 
 @Entity
+@Table(name = "mvp")
 public class Mvp {
 
     @Id
@@ -29,20 +30,18 @@ public class Mvp {
 
     private String status;
 
-    @OneToMany(cascade=CascadeType.ALL)
-    private Set<Sprint> sprints;
-
-    @OneToMany(cascade=CascadeType.ALL)
-    private Set<UserStory> userStories;
-
     @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="id_team", nullable=false)
     private Team team;
 
     @ManyToMany(cascade=CascadeType.ALL)
+    @JoinTable(name = "mvps_technologies",
+            joinColumns = @JoinColumn(name = "id_mvp"),
+            inverseJoinColumns = @JoinColumn(name = "id_technology")
+    )
     private Set<Technology> technologies;
 
-    @OneToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name = "jira_id" )
+    @OneToOne(mappedBy = "mvp", cascade=CascadeType.ALL)
     private Jira jira;
 
     public Mvp() {
@@ -83,10 +82,6 @@ public class Mvp {
         this.jira = jira;
     }
 
-    public void setSprints(Set<Sprint> sprints) { this.sprints = sprints; }
-
-    public void setUserStories(Set<UserStory> userStories) { this.userStories = userStories; }
-
     public String getName() {
         return name;
     }
@@ -122,10 +117,6 @@ public class Mvp {
     public Jira getJira() {
         return jira;
     }
-
-    public Set<Sprint> getSprints() { return sprints; }
-
-    public Set<UserStory> getUserStories() { return userStories; }
 
     public Long getId() { return id; }
 

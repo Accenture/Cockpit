@@ -5,6 +5,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@Table(name = "team")
 public class Team{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,9 +14,13 @@ public class Team{
     private String name;
 
     @ManyToMany(cascade=CascadeType.ALL)
+    @JoinTable(name = "team_team_members",
+            joinColumns = @JoinColumn(name = "id_team"),
+            inverseJoinColumns = @JoinColumn(name = "id_team_member")
+    )
     private Set<TeamMember> teamMembers;
 
-    @OneToMany
+    @OneToMany (mappedBy = "team")
     @JsonIgnore
     private Set<Mvp> mvps;
 

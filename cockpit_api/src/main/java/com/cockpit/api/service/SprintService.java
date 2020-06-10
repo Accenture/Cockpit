@@ -1,23 +1,16 @@
 package com.cockpit.api.service;
 
 import com.cockpit.api.exception.ResourceNotFoundException;
+import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Sprint;
 import com.cockpit.api.model.dto.SprintDTO;
 import com.cockpit.api.repository.SprintRepository;
-<<<<<<< HEAD
-
-import com.cockpit.api.model.dao.Mvp;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-=======
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
->>>>>>> CP-73-createNewBackend
+
 import java.util.Optional;
 
 @Service
@@ -61,9 +54,9 @@ public class SprintService {
         }
         sprintRepository.delete(sprintToDelete.get());
     }
-<<<<<<< HEAD
-    public int findSprintNumberForADate(Mvp mvp, Date date) {
-        Sprint sprint = sprintRepository.findTopBySprintStartDateLessThanEqualAndMvpEqualsOrderBySprintNumberDesc(date, mvp);
+
+    public int findSprintNumberForADate(Jira jira, Date date) {
+        Sprint sprint = sprintRepository.findTopBySprintStartDateLessThanEqualAndJiraEqualsOrderBySprintNumberDesc(date, jira);
         int sprintId = 0;
         if (sprint != null) {
             sprintId = sprint.getSprintNumber();
@@ -71,11 +64,9 @@ public class SprintService {
         }
         return sprintId;
     }
-    Sprint findByMvpAndSprintNumber(Mvp mvp, int sprintNumber)
+    Sprint findByMvpAndSprintNumber(Jira jira, int sprintNumber)
     {
-    	return sprintRepository.findByMvpAndSprintNumber(mvp, sprintNumber);
+    	return sprintRepository.findByJiraAndSprintNumber(jira, sprintNumber);
     }
 
-=======
->>>>>>> CP-73-createNewBackend
 }

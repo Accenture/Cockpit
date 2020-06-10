@@ -1,6 +1,6 @@
 package com.cockpit.api.model.dto;
 
-import com.cockpit.api.model.dao.Mvp;
+import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Sprint;
 import java.util.Date;
 
@@ -30,7 +30,7 @@ public class UserStoryDTO {
 
     private Sprint sprint;
 
-    private Mvp mvp;
+    private Jira jira;
 
     public Long getId() {
         return id;
@@ -128,11 +128,11 @@ public class UserStoryDTO {
         this.sprint = sprint;
     }
 
-    public Mvp getMvp() {
-        return mvp;
+    public Jira getJira() {
+        return jira;
     }
 
-    public void setMvp(Mvp mvp) {
-        this.mvp = mvp;
+    public void setJira(Jira jira) {
+        this.jira = jira;
     }
 }

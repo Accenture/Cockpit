@@ -1,16 +1,8 @@
 package com.cockpit.api.model.dto;
 
 import com.cockpit.api.model.dao.Jira;
-<<<<<<< HEAD
-import com.cockpit.api.model.dao.Sprint;
 import com.cockpit.api.model.dao.Team;
 import com.cockpit.api.model.dao.Technology;
-import com.cockpit.api.model.dao.UserStory;
-
-=======
-import com.cockpit.api.model.dao.Team;
-import com.cockpit.api.model.dao.Technology;
->>>>>>> CP-73-createNewBackend
 import java.util.Set;
 
 public class MvpDTO {
@@ -34,20 +26,6 @@ public class MvpDTO {
     private Set<Technology> technologies;
 
     private Jira jira;
-<<<<<<< HEAD
-    
-    private Set<Sprint> sprints;
-    
-    private Set<UserStory> userStories;
-=======
->>>>>>> CP-73-createNewBackend
-
-    public MvpDTO() {
-        // Empty constructor
-    }
-
-
-    public void setId(Long id) { this.id = id; }
 
     public void setName(String name) {
         this.name = name;
@@ -75,7 +53,6 @@ public class MvpDTO {
 
     public void setTeam(Team team) { this.team = team; }
 
-
     public void setTechnologies(Set<Technology> technologies) {
         this.technologies = technologies;
     }
@@ -83,8 +60,6 @@ public class MvpDTO {
     public void setJira(Jira jira) {
         this.jira = jira;
     }
-
-    public Long getId() { return id; }
 
     public String getName() {
         return name;
@@ -121,28 +96,8 @@ public class MvpDTO {
     public Jira getJira() {
         return jira;
     }
-<<<<<<< HEAD
 
+    public Long getId() { return id; }
 
-	public Set<Sprint> getSprints() {
-		return sprints;
-	}
-
-
-	public void setSprints(Set<Sprint> sprints) {
-		this.sprints = sprints;
-	}
-
-
-	public Set<UserStory> getUserStories() {
-		return userStories;
-	}
-
-
-	public void setUserStories(Set<UserStory> userStories) {
-		this.userStories = userStories;
-	}
-    
-=======
->>>>>>> CP-73-createNewBackend
+    public void setId(Long id) { this.id = id; }
 }

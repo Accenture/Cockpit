@@ -1,8 +1,7 @@
 package com.cockpit.api.model.dto;
 
-import com.cockpit.api.model.dao.Mvp;
+import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.UserStory;
-
 import java.util.Date;
 import java.util.Set;
 
@@ -22,11 +21,11 @@ public class SprintDTO {
 
     private Integer teamConfidence;
 
-    private int totalNbUs;
+    private Integer totalNbUs;
 
     private int sprintNumber;
 
-    private Mvp mvp;
+    private Jira jira;
 
     private Set<UserStory> userStories;
 
@@ -86,11 +85,13 @@ public class SprintDTO {
         this.teamConfidence = teamConfidence;
     }
 
-    public int getTotalNbUs() {
+
+    public Integer getTotalNbUs() {
         return totalNbUs;
     }
 
-    public void setTotalNbUs(int totalNbUs) {
+
+    public void setTotalNbUs(Integer totalNbUs) {
         this.totalNbUs = totalNbUs;
     }
 
@@ -102,12 +103,12 @@ public class SprintDTO {
         this.sprintNumber = sprintNumber;
     }
 
-    public Mvp getMvp() {
-        return mvp;
+    public Jira getJira() {
+        return jira;
     }
 
-    public void setMvp(Mvp mvp) {
-        this.mvp = mvp;
+    public void setJira(Jira jira) {
+        this.jira = jira;
     }
 
     public Set<UserStory> getUserStories() {
@@ -117,4 +118,5 @@ public class SprintDTO {
     public void setUserStories(Set<UserStory> userStories) {
         this.userStories = userStories;
     }
+
 }

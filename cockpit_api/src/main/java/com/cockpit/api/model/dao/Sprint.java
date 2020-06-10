@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
+@Table(name = "sprint")
 public class Sprint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,19 +23,15 @@ public class Sprint {
 
     private Integer teamConfidence;
 
-<<<<<<< HEAD
     private Integer totalNbUs;
-=======
-    private int totalNbUs;
->>>>>>> CP-73-createNewBackend
 
     private int sprintNumber;
 
-    @ManyToOne
-    private Mvp mvp;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="id_jira", nullable=false)
+    private Jira jira;
 
-
-    @OneToMany(cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "sprint",cascade=CascadeType.ALL)
     private Set<UserStory> userStories;
 
     public Long getId() {
@@ -93,19 +90,13 @@ public class Sprint {
         this.teamConfidence = teamConfidence;
     }
 
-<<<<<<< HEAD
+
     public Integer getTotalNbUs() {
         return totalNbUs;
     }
 
+  
     public void setTotalNbUs(Integer totalNbUs) {
-=======
-    public int getTotalNbUs() {
-        return totalNbUs;
-    }
-
-    public void setTotalNbUs(int totalNbUs) {
->>>>>>> CP-73-createNewBackend
         this.totalNbUs = totalNbUs;
     }
 
@@ -117,12 +108,12 @@ public class Sprint {
         this.sprintNumber = sprintNumber;
     }
 
-    public Mvp getMvp() {
-        return mvp;
+    public Jira getJira() {
+        return jira;
     }
 
-    public void setMvp(Mvp mvp) {
-        this.mvp = mvp;
+    public void setJira(Jira jira) {
+        this.jira = jira;
     }
 
     public Set<UserStory> getUserStories() {

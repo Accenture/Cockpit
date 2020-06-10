@@ -5,6 +5,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@Table(name = "team_member")
 public class TeamMember{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +17,7 @@ public class TeamMember{
 
     private String email;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "teamMembers")
     @JsonIgnore
     private Set<Team> teams;
 

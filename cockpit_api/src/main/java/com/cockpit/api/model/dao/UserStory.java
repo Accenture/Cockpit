@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table(name = "user_story")
 public class UserStory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,11 +30,13 @@ public class UserStory {
 
     private String summary;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="id_sprint", nullable=false)
     private Sprint sprint;
 
-    @ManyToOne
-    private Mvp mvp;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="id_jira", nullable=false)
+    private Jira jira;
 
     public Long getId() {
         return id;
@@ -131,12 +134,12 @@ public class UserStory {
         this.sprint = sprint;
     }
 
-    public Mvp getMvp() {
-        return mvp;
+    public Jira getJira() {
+        return jira;
     }
 
-    public void setMvp(Mvp mvp) {
-        this.mvp = mvp;
+    public void setJira(Jira jira) {
+        this.jira = jira;
     }
 
 }
