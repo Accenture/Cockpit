@@ -31,7 +31,7 @@ public class Mvp {
     private String status;
 
     @ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name="id_team", nullable=false)
+    @JoinColumn(name = "id_team", nullable = false)
     private Team team;
 
     @ManyToMany(cascade=CascadeType.ALL)

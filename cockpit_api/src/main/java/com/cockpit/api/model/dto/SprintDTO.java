@@ -15,6 +15,8 @@ public class SprintDTO {
 
     private Date sprintEndDate;
 
+    private Date sprintCompleteDate;
+
     private Integer teamMotivation;
 
     private Integer teamMood;
@@ -59,6 +61,14 @@ public class SprintDTO {
 
     public void setSprintEndDate(Date sprintEndDate) {
         this.sprintEndDate = sprintEndDate;
+    }
+
+    public Date getSprintCompleteDate() {
+        return sprintCompleteDate;
+    }
+
+    public void setSprintCompleteDate(Date sprintCompleteDate) {
+        this.sprintCompleteDate = sprintCompleteDate;
     }
 
     public Integer getTeamMotivation() {

@@ -14,9 +14,9 @@ public class Jira{
 
     private String jiraProjectKey;
 
-    private int currentSprint;
+    private Integer currentSprint;
 
-    private int jiraProjectId;
+    private Integer jiraProjectId;
 
     private Date mvpStartDate;
 
@@ -37,11 +37,11 @@ public class Jira{
         return jiraProjectKey;
     }
 
-    public int getCurrentSprint() {
+    public Integer getCurrentSprint() {
         return currentSprint;
     }
 
-    public int getJiraProjectId() {
+    public Integer getJiraProjectId() {
         return jiraProjectId;
     }
 
@@ -61,11 +61,11 @@ public class Jira{
         this.jiraProjectKey = jiraProjectKey;
     }
 
-    public void setCurrentSprint(int currentSprint) {
+    public void setCurrentSprint(Integer currentSprint) {
         this.currentSprint = currentSprint;
     }
 
-    public void setJiraProjectId(int jiraProjectId) {
+    public void setJiraProjectId(Integer jiraProjectId) {
         this.jiraProjectId = jiraProjectId;
     }
 
