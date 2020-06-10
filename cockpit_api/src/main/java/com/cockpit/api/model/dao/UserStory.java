@@ -30,11 +30,11 @@ public class UserStory {
 
     private String summary;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="id_sprint", nullable=false)
     private Sprint sprint;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="id_jira", nullable=false)
     private Jira jira;
 

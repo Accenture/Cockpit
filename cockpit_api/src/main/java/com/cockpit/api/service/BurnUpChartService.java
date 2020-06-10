@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Mvp;
-import com.cockpit.api.model.dto.BurnUpChartDto;
+import com.cockpit.api.model.dto.BurnUpChartDTO;
 import com.cockpit.api.model.dto.MvpDTO;
 
 import com.cockpit.api.model.dao.Sprint;
@@ -19,32 +19,44 @@ import com.cockpit.api.model.dao.Sprint;
 @Service
 public class BurnUpChartService {
 
-	public static final int SPRINTNUMBER = 8;
+	private JiraService jiraService;
+
+	private UserStoryService userStoryService;
+
+	private SprintService sprintService;
+
+	private MvpService mvpService;
 
 	private ModelMapper modelMapper = new ModelMapper();
 
-	@Autowired
-	private JiraService jiraService;
-	@Autowired
-	private UserStoryService userStoryService;
+	public static final int SPRINT_NUMBER = 8;
 
 	@Autowired
-	private SprintService sprintService;
-	@Autowired
-	private MvpService mvpService;
+	public BurnUpChartService(
+			JiraService jiraService,
+			UserStoryService userStoryService,
+			SprintService sprintService,
+			MvpService mvpService
 
-	public List<BurnUpChartDto> getChartData(Long id) throws ResourceNotFoundException {
-		List<BurnUpChartDto> chartDataList = new ArrayList<>();
+	){
+		this.jiraService = jiraService;
+		this.userStoryService = userStoryService;
+		this.sprintService = sprintService;
+		this.mvpService = mvpService;
+	}
+
+	public List<BurnUpChartDTO> getChartData(Long id) throws ResourceNotFoundException {
+		List<BurnUpChartDTO> chartDataList = new ArrayList<>();
 		MvpDTO mvpDto = mvpService.findMvpById(id);
 		Mvp mvp = modelMapper.map(mvpDto, Mvp.class);
 		Jira jira = jiraService.findByMvp(mvp);
-		double taux = 0.0;
+		double rate = 0.0;
 		long lastNbUsClosed = 0;
 		int iteration = 1;
 		double projection = 0;
 		int totalUSNumber = 0;
-		for (int sprintNumber = 0; sprintNumber < SPRINTNUMBER; sprintNumber++) {
-			BurnUpChartDto chart = new BurnUpChartDto();
+		for (int sprintNumber = 0; sprintNumber < SPRINT_NUMBER; sprintNumber++) {
+			BurnUpChartDTO chart = new BurnUpChartDTO();
 
 			chart.setSprintId(sprintNumber);
 			setTotalStories(chart, sprintNumber, jira);
@@ -54,11 +66,11 @@ public class BurnUpChartService {
 			totalUSNumber = totalUSNumber + actualSprintStories;
 			setExpected(chart, totalUSNumber, actualSprintStories);
 			if (chart.getUsClosed() != null) {
-				taux = ((double) numberOfUsClosed / (sprintNumber + 1));
+				rate = ((double) numberOfUsClosed / (sprintNumber + 1));
 				lastNbUsClosed = numberOfUsClosed;
 			}
 			if (chart.getUsClosed() == null) {
-				projection = lastNbUsClosed + iteration * taux;
+				projection = lastNbUsClosed + iteration * rate;
 				chart.setProjectionUsClosed(projection);
 				iteration++;
 			}
@@ -71,7 +83,7 @@ public class BurnUpChartService {
 
 	}
 
-	private void setUsClosed(BurnUpChartDto chart, int sprintNumber, Jira jira) {
+	private void setUsClosed(BurnUpChartDTO chart, int sprintNumber, Jira jira) {
 		Integer numberOfUsClosed = userStoryService.findSumOfUsClosedForSprint(jira, sprintNumber);
 		int sprintN = sprintService.findSprintNumberForADate(jira, Calendar.getInstance().getTime());
 		if (sprintNumber <= sprintN) {
@@ -80,7 +92,7 @@ public class BurnUpChartService {
 		}
 	}
 
-	private void setTotalStories(BurnUpChartDto chart, int sprintNumber, Jira jira) {
+	private void setTotalStories(BurnUpChartDTO chart, int sprintNumber, Jira jira) {
 
 		Sprint currentSprint = sprintService.findByMvpAndSprintNumber(jira, sprintNumber);
 		if (currentSprint != null) {
@@ -94,7 +106,7 @@ public class BurnUpChartService {
 
 	}
 
-	private void setExpected(BurnUpChartDto chart, int totalUSNumber, int actualSprintStories) {
+	private void setExpected(BurnUpChartDTO chart, int totalUSNumber, int actualSprintStories) {
 
 		if (actualSprintStories != 0) {
 			chart.setExpectedUsClosed(totalUSNumber);

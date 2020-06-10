@@ -27,7 +27,7 @@ public class Sprint {
 
     private int sprintNumber;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="id_jira", nullable=false)
     private Jira jira;
 

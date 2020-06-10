@@ -1,6 +1,6 @@
 package com.cockpit.api.model.dto;
 
-public class BurnUpChartDto {
+public class BurnUpChartDTO {
 	
 	private int sprintId;
 
@@ -12,7 +12,7 @@ public class BurnUpChartDto {
 
 	private Integer expectedUsClosed;
 
-	public BurnUpChartDto() {
+	public BurnUpChartDTO() {
 		 // Empty constructor
 	}
 

@@ -28,7 +28,7 @@ public class Jira{
     @OneToMany(mappedBy = "jira", cascade=CascadeType.ALL)
     private Set<UserStory> userStories;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="id_mvp", nullable=false)
     @JsonIgnore
     private Mvp mvp;
