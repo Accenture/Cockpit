@@ -4,6 +4,7 @@ export const HeaderSlice = createSlice({
   name: 'header',
   initialState: {
     open: false,
+    edit: false,
   },
   reducers: {
     showScrumMasterForm: (state) => {
@@ -12,9 +13,21 @@ export const HeaderSlice = createSlice({
     close: (state) => {
       state.open = false;
     },
+    showEditMvpSMForm: (state) => {
+      state.edit = true;
+    },
+    closeEditMvpSMForm: (state) => {
+      state.edit = false;
+    },
   },
 });
-export const { showScrumMasterForm, close } = HeaderSlice.actions;
+export const {
+  showScrumMasterForm,
+  close,
+  showEditMvpSMForm,
+  closeEditMvpSMForm,
+} = HeaderSlice.actions;
 
 export const showSMFormState = (state) => state.header.open;
+export const editSMFormState = (state) => state.header.edit;
 export default HeaderSlice.reducer;
