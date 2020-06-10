@@ -31,9 +31,11 @@ public class UserStory {
     private String summary;
 
     @ManyToOne
+    @JoinColumn(name = "id_sprint", nullable = false)
     private Sprint sprint;
 
     @ManyToOne
+    @JoinColumn(name = "id_jira", nullable = false)
     private Jira jira;
 
     public Long getId() {

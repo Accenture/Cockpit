@@ -17,6 +17,8 @@ public class Sprint {
 
     private Date sprintEndDate;
 
+    private Date sprintCompleteDate;
+
     private Integer teamMotivation;
 
     private Integer teamMood;
@@ -27,10 +29,13 @@ public class Sprint {
 
     private int sprintNumber;
 
+    private String state;
+
     @ManyToOne
+    @JoinColumn(name = "id_jira", nullable = false)
     private Jira jira;
 
-    @OneToMany(cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "sprint", cascade=CascadeType.ALL)
     private Set<UserStory> userStories;
 
     public Long getId() {
@@ -39,6 +44,14 @@ public class Sprint {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 
     public int getJiraSprintId() {
@@ -63,6 +76,14 @@ public class Sprint {
 
     public void setSprintEndDate(Date sprintEndDate) {
         this.sprintEndDate = sprintEndDate;
+    }
+
+    public Date getSprintCompleteDate() {
+        return sprintCompleteDate;
+    }
+
+    public void setSprintCompleteDate(Date sprintCompleteDate) {
+        this.sprintCompleteDate = sprintCompleteDate;
     }
 
     public Integer getTeamMotivation() {

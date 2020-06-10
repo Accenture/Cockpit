@@ -11,6 +11,15 @@ spring:
   flyway:
     locations: classpath:db/migration
     baseline-on-migrate: true
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+  jira:
+    username: "khojiakbar.abdullazoda@external.total.com"
+    password: ""
+    jiraUrl: "https://tdf.atlassian.net"
+    token: "1CmRqGthbcSRgdNEDq82B12B"
+    encodedToken: "a2hvamlha2Jhci5hYmR1bGxhem9kYUBleHRlcm5hbC50b3RhbC5jb206MUNtUnFHdGhiY1NSZ2RORURxODJCMTJC"
 springdoc:
   api-docs:
     path: /cockpit-api-doc
@@ -18,3 +27,4 @@ springdoc:
     path: /swagger-ui/cockpit-api-doc
 server:
   port: 8085
+

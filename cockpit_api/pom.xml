@@ -18,6 +18,18 @@
 		<java.version>1.8</java.version>
 	</properties>
 
+	<repositories>
+		<repository>
+			<id>atlassian-public</id>
+			<url>https://packages.atlassian.com/maven/repository/public</url>
+		</repository>
+		<repository>
+			<id>atlassianPkgs</id>
+			<url>https://packages.atlassian.com/maven-public/</url>
+		</repository>
+
+	</repositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -72,6 +84,27 @@
 			<artifactId>springdoc-openapi-ui</artifactId>
 			<version>1.2.32</version>
 		</dependency>
+		<dependency>
+			<groupId>com.atlassian.jira</groupId>
+			<artifactId>jira-rest-java-client-app</artifactId>
+			<version>5.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.atlassian.fugue</groupId>
+			<artifactId>fugue</artifactId>
+			<version>4.7.1</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.mashape.unirest</groupId>
+			<artifactId>unirest-java</artifactId>
+			<version>1.4.9</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+			<version>1.10</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -79,6 +112,14 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>11</source>
+					<target>11</target>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
