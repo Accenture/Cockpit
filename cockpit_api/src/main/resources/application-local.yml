@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${DB_HOST}/cockpitdb
-    username: ${DB_USER_NAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:postgresql://localhost:5432/cockpitdb
+    username: postgres
+    password: password
   jpa:
     show-sql: false
     hibernate:
@@ -11,13 +11,6 @@ spring:
   flyway:
     locations: classpath:db/migration
     baseline-on-migrate: true
-  jackson:
-    serialization:
-      fail-on-empty-beans: false
-  jira:
-    username: ${JIRA_USER_NAME}
-    jiraUrl: ${JIRA_HOST_URL}
-    token: "${JIRA_AUTH_TOKEN}
 springdoc:
   api-docs:
     path: /cockpit-api-doc
@@ -25,4 +18,3 @@ springdoc:
     path: /swagger-ui/cockpit-api-doc
 server:
   port: 8085
-
