@@ -6,9 +6,10 @@ import { useHistory, useLocation } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import { useDispatch } from 'react-redux';
 import MvpMenu from '../MvpMenu/MvpMenu';
-import { showScrumMasterForm } from './HeaderSlice';
+import { showScrumMasterForm, showEditMvpSMForm } from './HeaderSlice';
 // styles
 import useStyles from './styles';
+import 'font-awesome/css/font-awesome.min.css';
 
 export default function Header() {
   const classes = useStyles();
@@ -45,6 +46,23 @@ export default function Header() {
               }}
             >
               + New MVP
+            </Button>
+          )}
+          {!isHomePage && (
+            <Button
+              variant="outlined"
+              color="primary"
+              className={classes.addButton}
+              onClick={() => {
+                dispatch(showEditMvpSMForm());
+              }}
+            >
+              <i
+                className="fa fa-pencil"
+                style={{ paddingRight: 10 }}
+                aria-hidden="true"
+              />{' '}
+              Edit MVP
             </Button>
           )}
         </Toolbar>

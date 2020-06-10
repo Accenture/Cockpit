@@ -12,6 +12,7 @@ import TeamCard from '../TeamCard/TeamCard';
 import TechnologyCard from '../TechnologyCard/TechnologyCard';
 import OverviewSprintTabs from '../OverviewSprintTabs/OverviewSprintTabs';
 import useStyles from './styles';
+import EditMvpSMForm from '../EditMvpSM/EditMvpSM';
 
 function MvpInfoPage() {
   const classes = useStyles();
@@ -56,6 +57,7 @@ function MvpInfoPage() {
           </Grid>
         </Grid>
       </Grid>
+      <EditMvpSMForm />
     </div>
   );
 }
