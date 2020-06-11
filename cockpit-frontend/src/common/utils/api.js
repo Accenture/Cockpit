@@ -11,7 +11,7 @@ switch (env) {
     backendUrl = 'https://cockpit-backend-dev.azurewebsites.net';
     break;
   default:
-    backendUrl = 'https://cockpit-backend-dev.azurewebsites.net';
+    backendUrl = 'http://localhost:8085';
 }
 
 export default axios.create({

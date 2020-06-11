@@ -8,8 +8,9 @@ export class Technology extends Model {
 Technology.modelName = 'Technology';
 
 Technology.fields = {
+  id: attr(),
   name: attr(),
-  logoUrl: attr(),
+  url: attr(),
 };
 
 export default Technology;

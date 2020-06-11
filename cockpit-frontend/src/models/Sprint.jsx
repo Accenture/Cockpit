@@ -9,13 +9,13 @@ Sprint.modelName = 'Sprint';
 
 Sprint.fields = {
   id: attr(),
-  sprintNumber: attr(),
-  sprintEndDate: attr(),
   sprintStartDate: attr(),
-  teamMood: attr(),
+  sprintEndDate: attr(),
   teamMotivation: attr(),
-  confidentTarget: attr(),
-  technicalDebtKPI: attr(),
-  mvp: fk('Mvp', 'sprints'),
+  teamMood: attr(),
+  teamConfidence: attr(),
+  totalNbUs: attr(),
+  sprintNumber: attr(),
+  idJira: fk('Jira', 'sprint'),
 };
 export default Sprint;
