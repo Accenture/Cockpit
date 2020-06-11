@@ -1,0 +1,41 @@
+# Cockpit frontend with React
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+    REACT_APP_STAGE=dev npm run build
+  displayName: 'npm install and build for Dev'
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.SourcesDirectory)/build'
+    includeRootFolder: false 
+    archiveType: 'zip' # Options: zip, 7z, tar, wim
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip' 
+    replaceExistingArchive: true 
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  condition: succeeded()
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+
+- task: AzureWebApp@1
+  displayName: 'Deploy Dev Frontend to Azure App Service '
+  inputs:
+    azureSubscription: 'TotalASSIE-District-IT-NonProd-d'
+    appName: 'cockpit-tdf-dev'
+    package: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    appType: webAppLinux
