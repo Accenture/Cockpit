@@ -29,7 +29,7 @@ CREATE TABLE public.mvp(
     id                SERIAL NOT NULL ,
     name              VARCHAR (50) NOT NULL ,
     entity            VARCHAR (50) NOT NULL ,
-    url_mvp_avatar    VARCHAR (50) NOT NULL ,
+    url_mvp_avatar    VARCHAR (255) NOT NULL ,
     cycle             INT  NOT NULL ,
     mvp_description   VARCHAR (255) NOT NULL ,
     status            VARCHAR (50) NOT NULL ,

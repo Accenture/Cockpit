@@ -17,7 +17,7 @@ export default function MvpCard(props) {
     <Card className={isHomePage ? classes.dashboardCard : classes.mvpInfoCard}>
       <CardMedia
         className={classes.cardMedia}
-        image={mvpInfo.mvpAvatarUrl ? mvpInfo.mvpAvatarUrl : logo}
+        image={mvpInfo.urlMvpAvatar ? mvpInfo.urlMvpAvatar : logo}
         title={mvpInfo.name ? mvpInfo.name : 'Unnamed MVP'}
       />
       <CardContent>
@@ -37,17 +37,19 @@ export default function MvpCard(props) {
             </Grid>
           )}
         </Grid>
-        {!isHomePage && mvpInfo.pitch && (
+        {!isHomePage && mvpInfo.mvpDescription && (
           <Grid container spacing={1}>
             <Grid item xs={12}>
-              <Typography className={classes.pitch}>{mvpInfo.pitch}</Typography>
+              <Typography className={classes.mvpDescription}>
+                {mvpInfo.mvpDescription}
+              </Typography>
             </Grid>
           </Grid>
         )}
         <Grid container spacing={3}>
           <Grid item xs={6}>
             <Typography gutterBottom>
-              {mvpInfo.iterationNumber ? mvpInfo.iterationNumber : 'Unknown'}
+              {mvpInfo.cycle ? mvpInfo.cycle : 'Unknown'}
             </Typography>
             <Typography
               className={classes.subTitle}
@@ -59,7 +61,9 @@ export default function MvpCard(props) {
           </Grid>
           <Grid item xs={6}>
             <Typography gutterBottom>
-              {mvpInfo.currentSprint ? mvpInfo.currentSprint : 'Unknown'}
+              {mvpInfo.jira.currentSprint
+                ? mvpInfo.jira.currentSprint
+                : 'Unknown'}
             </Typography>
             <Typography
               className={classes.subTitle}

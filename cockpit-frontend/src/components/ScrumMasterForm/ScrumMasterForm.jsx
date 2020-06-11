@@ -13,8 +13,8 @@ import Dialog from '@material-ui/core/Dialog';
 import { showSMFormState, close } from '../Header/HeaderSlice';
 import {
   SMFormState,
-  setMvp,
-  setJiraId,
+  setMvpName,
+  setJiraProjectKey,
   setEntity,
   setCycle,
   setFormIsValid,
@@ -22,7 +22,7 @@ import {
   setAlltoNull,
   imageUrlState,
   mvpState,
-  jiraIdState,
+  jiraProjectKeyState,
   entityState,
   cycleState,
 } from './ScrumMasterFormSlice';
@@ -40,9 +40,9 @@ export default function ScrumMasterForm() {
   const [isOpened, setIsOpened] = useState(false);
   const imageUrl = useSelector(imageUrlState);
   const mvpName = useSelector(mvpState);
-  const jira = useSelector(jiraIdState);
+  const jiraPK = useSelector(jiraProjectKeyState);
   const selectedEntity = useSelector(entityState);
-  const cycle = useSelector(cycleState);
+  const cycleNumber = useSelector(cycleState);
   const isFormValid = useSelector(SMFormState);
   const open = useSelector(showSMFormState);
   const dispatch = useDispatch();
@@ -68,32 +68,22 @@ export default function ScrumMasterForm() {
   }
   async function submit(e) {
     e.preventDefault();
-    const mvp = {
-      id: jira,
-      name: mvpName,
-      pitch: 'Hello',
-      status: 'inprogress',
-      iterationNumber: cycle,
-      entity: selectedEntity,
-      currentSprint: 2,
-      nbSprint: 0,
-      mvpEndDate: '',
+    const newJira = {
+      jiraProjectKey: jiraPK,
+      currentSprint: 0,
+      jiraProjectId: 0,
       mvpStartDate: '',
-      mvpAvatarUrl: imageUrl,
-      jiraProjectId: 10009,
-      jiraBoardId: 1004,
-      location: '',
-      nbUsersStories: 0,
-      bugsCount: 0,
-      allBugsCount: 0,
-      timeToFix: '',
-      timeToDetect: '',
-      cascade: [{}],
-      sprint: [{}],
-      userStories: [{}],
-      bugHistories: [{}],
+      mvpEndDate: '',
+      mvp: {
+        name: mvpName,
+        entity: selectedEntity,
+        urlMvpAvatar: imageUrl,
+        cycle: cycleNumber,
+        mvpDescription: '',
+        status: 'inprogress',
+      },
     };
-    await MvpService.createMvp(mvp);
+    await MvpService.createNewJiraProject(newJira);
     dispatch(close());
     dispatch(fetchAllMvps());
     dispatch(setAlltoNull());
@@ -157,7 +147,7 @@ export default function ScrumMasterForm() {
             <TextField
               className={classes.textField}
               onChange={(e) => {
-                dispatch(setMvp(e.target.value));
+                dispatch(setMvpName(e.target.value));
                 dispatch(setFormIsValid());
               }}
               required
@@ -178,16 +168,16 @@ export default function ScrumMasterForm() {
             <TextField
               className={classes.textField}
               onChange={(e) => {
-                dispatch(setJiraId(e.target.value));
+                dispatch(setJiraProjectKey(e.target.value));
                 dispatch(setFormIsValid());
               }}
               required
               fullWidth
               variant="outlined"
-              id="jiraID"
-              name="jiraID"
+              id="jiraProjectKey"
+              name="jiraProjectKey"
               placeholder="Jira Key"
-              autoComplete="jiraID"
+              autoComplete="jiraPeojectKey"
               size="small"
             />
           </Grid>

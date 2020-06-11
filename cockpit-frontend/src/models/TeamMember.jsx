@@ -9,11 +9,9 @@ TeamMember.modelName = 'TeamMember';
 
 TeamMember.fields = {
   idMember: attr(),
-  lastName: attr(),
   firstName: attr(),
-  emailId: attr(),
-  avatarUrl: attr(),
-  idRole: attr(),
+  lastName: attr(),
+  email: attr(),
 };
 
 export default TeamMember;

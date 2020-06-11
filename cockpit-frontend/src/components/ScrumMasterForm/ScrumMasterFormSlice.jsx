@@ -4,18 +4,18 @@ export const ScrumMasterFormSlice = createSlice({
   name: 'ScrumMasterForm',
   initialState: {
     mvp: null,
-    jiraId: null,
+    jiraProjectKey: null,
     entity: null,
     cycle: null,
     imageUrl: null,
     formIsValid: false,
   },
   reducers: {
-    setMvp: (state, action) => {
+    setMvpName: (state, action) => {
       state.mvp = action.payload;
     },
-    setJiraId: (state, action) => {
-      state.jiraId = action.payload;
+    setJiraProjectKey: (state, action) => {
+      state.jiraProjectKey = action.payload;
     },
     setEntity: (state, action) => {
       state.entity = action.payload;
@@ -31,7 +31,7 @@ export const ScrumMasterFormSlice = createSlice({
         state.mvp != null &&
         state.entity != null &&
         state.cycle != null &&
-        state.jiraId != null &&
+        state.jiraProjectKey != null &&
         state.imageUrl != null
       )
         state.formIsValid = true;
@@ -40,15 +40,15 @@ export const ScrumMasterFormSlice = createSlice({
       state.mvp = null;
       state.entity = null;
       state.cycle = null;
-      state.jiraId = null;
+      state.jiraProjectKey = null;
       state.imageUrl = null;
       state.formIsValid = false;
     },
   },
 });
 export const {
-  setMvp,
-  setJiraId,
+  setMvpName,
+  setJiraProjectKey,
   setEntity,
   setCycle,
   setFormIsValid,
@@ -57,7 +57,8 @@ export const {
 } = ScrumMasterFormSlice.actions;
 
 export const mvpState = (state) => state.ScrumMasterForm.mvp;
-export const jiraIdState = (state) => state.ScrumMasterForm.jiraId;
+export const jiraProjectKeyState = (state) =>
+  state.ScrumMasterForm.jiraProjectKey;
 export const entityState = (state) => state.ScrumMasterForm.entity;
 export const cycleState = (state) => state.ScrumMasterForm.cycle;
 export const imageUrlState = (state) => state.ScrumMasterForm.imageUrl;
