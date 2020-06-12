@@ -16,7 +16,7 @@ public class UserStory {
 
     private Date doneDate;
 
-    private Integer storyPoint;
+    private double storyPoint;
 
     private String description;
 
@@ -70,11 +70,11 @@ public class UserStory {
         this.doneDate = doneDate;
     }
 
-    public Integer getStoryPoint() {
+    public double getStoryPoint() {
         return storyPoint;
     }
 
-    public void setStoryPoint(Integer storyPoint) {
+    public void setStoryPoint(double storyPoint) {
         this.storyPoint = storyPoint;
     }
 
