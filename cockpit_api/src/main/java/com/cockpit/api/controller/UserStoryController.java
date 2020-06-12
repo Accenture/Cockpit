@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-//@CrossOrigin
+@CrossOrigin
 public class UserStoryController {
     private final UserStoryService userStoryService;
 
