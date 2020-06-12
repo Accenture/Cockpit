@@ -15,7 +15,7 @@ import com.cockpit.api.model.dto.BurnUpChartDTO;
 import com.cockpit.api.service.BurnUpChartService;
 
 @RestController
-//@CrossOrigin
+@CrossOrigin
 public class BurnUpChartController {
 
     private final BurnUpChartService chartService;

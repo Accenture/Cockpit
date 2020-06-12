@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-//@CrossOrigin
+@CrossOrigin
 public class TechnologyController {
     private final TechnologyService technologyService;
 
