@@ -70,14 +70,14 @@ public class JiraGatewayService {
                 .asJson();
         JSONArray jiraProjects = response.getBody().getObject().getJSONArray("values");
         for (Object jiraProject: jiraProjects){
-            if (jiraProject instanceof JSONObject){
-                Jira foundJiraProject = jiraRepository.findByJiraProjectKey(String.valueOf(((JSONObject) jiraProject).getString("key")));
-                if (foundJiraProject != null){
-                    foundJiraProject.setJiraProjectId(((JSONObject) jiraProject).getInt("id"));
-                    jiraRepository.save(modelMapper.map(foundJiraProject, Jira.class));
-                }
+                if (jiraProject instanceof JSONObject){
+                    Jira foundJiraProject = jiraRepository.findByJiraProjectKey(String.valueOf(((JSONObject) jiraProject).getString("key")));
+                    if (foundJiraProject != null){
+                        foundJiraProject.setJiraProjectId(((JSONObject) jiraProject).getInt("id"));
+                        jiraRepository.save(modelMapper.map(foundJiraProject, Jira.class));
+                    }
 
-            }
+                }
         }
     }
 
