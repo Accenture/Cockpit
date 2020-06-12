@@ -78,12 +78,4 @@ public class JiraController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
-
-//    @GetMapping(
-//            value = "api/v1/jira/jiraProjects"
-//    )
-//    public ResponseEntity<String> userInfo() throws UnirestException {
-//        JSONObject projects = jiraGatewayService.updateProjects();
-//        return ResponseEntity.status(HttpStatus.OK).body("ok");
-//    }
 }
