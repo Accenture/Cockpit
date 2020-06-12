@@ -15,11 +15,11 @@ spring:
     serialization:
       fail-on-empty-beans: false
   jira:
-    username: "khojiakbar.abdullazoda@external.total.com"
+    username: ""
     password: ""
     jiraUrl: "https://tdf.atlassian.net"
-    token: "1CmRqGthbcSRgdNEDq82B12B"
-    encodedToken: "a2hvamlha2Jhci5hYmR1bGxhem9kYUBleHRlcm5hbC50b3RhbC5jb206MUNtUnFHdGhiY1NSZ2RORURxODJCMTJC"
+    token: ""
+    encodedToken: ""
 springdoc:
   api-docs:
     path: /cockpit-api-doc
