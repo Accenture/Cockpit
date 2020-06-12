@@ -32,7 +32,7 @@ public class Sprint {
     private String state;
 
     @ManyToOne
-    @JoinColumn(name = "id_jira", nullable = false)
+    @JoinColumn(name="id_jira", nullable=false)
     private Jira jira;
 
     @OneToMany(mappedBy = "sprint", cascade=CascadeType.ALL)

@@ -1,5 +1,7 @@
 package com.cockpit.api.model.dao;
 
+import org.hibernate.engine.internal.Cascade;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -30,12 +32,13 @@ public class UserStory {
 
     private String summary;
 
-    @ManyToOne
-    @JoinColumn(name = "id_sprint", nullable = false)
+
+    @ManyToOne(cascade=CascadeType.ALL)
+    @JoinColumn(name="id_sprint", nullable=false)
     private Sprint sprint;
 
     @ManyToOne
-    @JoinColumn(name = "id_jira", nullable = false)
+    @JoinColumn(name="id_jira", nullable=false)
     private Jira jira;
 
     public Long getId() {

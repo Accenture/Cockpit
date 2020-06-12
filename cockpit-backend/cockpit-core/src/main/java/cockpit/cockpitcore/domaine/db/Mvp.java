@@ -41,7 +41,7 @@ public class Mvp {
     private Integer currentSprint;
 
     @Column(name = "NBSPRINT")
-    @ColumnDefault("0")
+    @ColumnDefault("8")
     private Integer nbSprint;
 
     @Temporal(TemporalType.DATE)
