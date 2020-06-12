@@ -17,6 +17,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.joda.time.DateTime;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -28,16 +29,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-
-import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
-import static com.jayway.jsonpath.JsonPath.parse;
 
 @Configuration
 @EnableScheduling
@@ -77,8 +71,6 @@ public class JiraGatewayService {
         JSONArray jiraProjects = response.getBody().getObject().getJSONArray("values");
         for (Object jiraProject: jiraProjects){
             if (jiraProject instanceof JSONObject){
-                parse(((JSONObject) jiraProject).getString("name"));
-                log.warn(((JSONObject) jiraProject).getString("key"));
                 Jira foundJiraProject = jiraRepository.findByJiraProjectKey(String.valueOf(((JSONObject) jiraProject).getString("key")));
                 if (foundJiraProject != null){
                     foundJiraProject.setJiraProjectId(((JSONObject) jiraProject).getInt("id"));
@@ -98,7 +90,6 @@ public class JiraGatewayService {
         JSONArray jiraBoards = response.getBody().getObject().getJSONArray("values");
         for (Object jiraBoard: jiraBoards){
             if (jiraBoard instanceof JSONObject){
-                parse(((JSONObject) jiraBoard).getString("name"));
                 Jira foundJiraProject = jiraRepository.findByJiraProjectKey(String.valueOf(((JSONObject) jiraBoard).getJSONObject("location").getString("projectKey")));
                 String boardId = String.valueOf(((JSONObject) jiraBoard).getInt("id"));
                 HttpResponse<JsonNode> sprintResponse = Unirest.get(jiraUrl+"/rest/agile/1.0/board/"+boardId+"/sprint")
@@ -121,25 +112,23 @@ public class JiraGatewayService {
                             sprint.setJira(foundJiraProject);
                             sprint.setState(sprintState);
                             if(sprintState.equals("active")){
-                                Calendar startDate = DatatypeConverter.parseDateTime(((JSONObject)jiraSprint).getString("startDate"));
-                                sprint.setSprintStartDate(startDate.getTime());
-                                Calendar endDate = DatatypeConverter.parseDateTime(((JSONObject)jiraSprint).getString("endDate"));
-                                sprint.setSprintEndDate(endDate.getTime());
+                                DateTime startDate = new DateTime(((JSONObject)jiraSprint).getString("startDate"));
+                                sprint.setSprintStartDate(startDate.toDate());
+                                DateTime endDate = new DateTime(((JSONObject)jiraSprint).getString("endDate"));
+                                sprint.setSprintEndDate(endDate.toDate());
                             }else if(sprintState.equals("closed")){
-                                Calendar startDate = DatatypeConverter.parseDateTime(((JSONObject)jiraSprint).getString("startDate"));
-                                sprint.setSprintStartDate(startDate.getTime());
-                                Calendar endDate = DatatypeConverter.parseDateTime(((JSONObject)jiraSprint).getString("endDate"));
-                                sprint.setSprintEndDate(endDate.getTime());
-                                Calendar completeDate = DatatypeConverter.parseDateTime(((JSONObject)jiraSprint).getString("completeDate"));
-                                sprint.setSprintCompleteDate(completeDate.getTime());
+                                DateTime startDate = new DateTime(((JSONObject)jiraSprint).getString("startDate"));
+                                sprint.setSprintStartDate(startDate.toDate());
+                                DateTime endDate = new DateTime(((JSONObject)jiraSprint).getString("endDate"));
+                                sprint.setSprintEndDate(endDate.toDate());
+                                DateTime completeDate = new DateTime(((JSONObject)jiraSprint).getString("completeDate"));
+                                sprint.setSprintCompleteDate(completeDate.toDate());
                             }
                             sprintRepository.save(modelMapper.map(sprint, Sprint.class));
                             log.info("Jira projects' sprints updated");
                             jiraRepository.save(modelMapper.map(foundJiraProject, Jira.class));
                             log.info("Jira projects' current sprint updated");
                         }
-
-                        parse(((JSONObject)jiraSprint).getString("name"));
                     }
                 }
 
@@ -156,7 +145,6 @@ public class JiraGatewayService {
         JSONArray jiraProjects = response.getBody().getObject().getJSONArray("values");
         for (Object jiraProject: jiraProjects){
             if (jiraProject instanceof JSONObject){
-                parse(((JSONObject) jiraProject).getString("name"));
                 String projectKey = (String.valueOf(((JSONObject) jiraProject).getString("key")));
                 Jira foundJiraProject = jiraRepository.findByJiraProjectKey(projectKey);
                 if (foundJiraProject != null){
@@ -214,7 +202,7 @@ public class JiraGatewayService {
                             .body(payload)
                             .asJson();
 
-                    while(jiraProjectIssues.getBody().getObject().getInt("total") > pagination){
+                    while(jiraProjectIssues.getBody().getObject().getInt("total") >= pagination){
                         JSONArray jiraIssues = jiraProjectIssues.getBody().getObject().getJSONArray("issues");
                         if (jiraIssues.length() > 0){
                             for (Object jiraIssue: jiraIssues) {
@@ -229,8 +217,8 @@ public class JiraGatewayService {
                                         DateTime doneDate = new DateTime(((JSONObject) jiraIssue).getJSONObject("versionedRepresentations").getJSONObject("created").getString("1"));
                                         issue.setDoneDate(doneDate.toDate());
                                     }
+                                    // TO DO: Check is replacable by == null
                                     if (!String.valueOf(((JSONObject) jiraIssue).getJSONObject("versionedRepresentations").getJSONObject("customfield_10026").get("1")).equals("null")){
-                                        log.warn(String.valueOf(((JSONObject) jiraIssue).getJSONObject("versionedRepresentations").getJSONObject("customfield_10026").get("1")));
                                         issue.setStoryPoint((Double) ((JSONObject) jiraIssue).getJSONObject("versionedRepresentations").getJSONObject("customfield_10026").get("1"));
                                     }
                                     issue.setIssueKey(((JSONObject) jiraIssue).getString("key"));
@@ -240,8 +228,23 @@ public class JiraGatewayService {
                                     issue.setStatus(((JSONObject) jiraIssue).getJSONObject("versionedRepresentations").getJSONObject("status").getJSONObject("1").getString("name"));
                                     JSONArray listSprints = ((JSONObject) jiraIssue).getJSONObject("versionedRepresentations").getJSONObject("customfield_10020").getJSONArray("2");
                                     if (listSprints.length() != 0){
-                                        JSONObject currentSprint = (JSONObject) listSprints.get(0);
-                                        log.warn(String.valueOf(currentSprint.getInt("id")));
+                                        List<JSONObject> sortedSprints = new ArrayList<>();
+                                        for (int i=0; i < listSprints.length(); i++){
+                                            sortedSprints.add(listSprints.getJSONObject(i));
+                                        }
+                                        Collections.sort(sortedSprints, (jsonObjectA, jsonObjectB) -> {
+                                            int compare = 0;
+                                            try{
+                                                int idA = jsonObjectA.getInt("id");
+                                                int idB = jsonObjectB.getInt("id");
+                                                compare = Integer.compare(idA, idB);
+                                            }catch (JSONException e){
+                                                log.error(String.valueOf(e));
+                                            }
+                                            return compare;
+                                        });
+                                        JSONObject currentSprint = (JSONObject) sortedSprints.get(0);
+                                        // TO TEST: CURRENTLY NOT WORKING
                                         Sprint issueSprint = sprintRepository.findByJiraSprintId(currentSprint.getInt("id"));
                                         if (issueSprint != null ) {
                                             issue.setSprint(issueSprint);
@@ -263,13 +266,9 @@ public class JiraGatewayService {
                             break;
                         }
                     }
-
-
                 }
-
             }
         }
-
     }
 
 }
