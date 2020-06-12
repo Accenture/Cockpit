@@ -49,7 +49,7 @@ public class BurnUpChartService {
 		List<BurnUpChartDTO> chartDataList = new ArrayList<>();
 		MvpDTO mvpDto = mvpService.findMvpById(id);
 		Mvp mvp = modelMapper.map(mvpDto, Mvp.class);
-		Jira jira = jiraService.fing(mvp);
+		Jira jira = jiraService.findByMvp(mvp);
 		double rate = 0.0;
 		long lastNbUsClosed = 0;
 		int iteration = 1;

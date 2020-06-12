@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import static com.jayway.jsonpath.JsonPath.parse;
 
 @RestController
-@CrossOrigin
+//@CrossOrigin
 public class JiraController {
 
     Logger log = LoggerFactory.getLogger(JiraController.class);

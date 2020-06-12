@@ -1,4 +1,4 @@
-import { Model, attr, fk, many } from 'redux-orm';
+import { Model, attr, fk, many, oneToOne } from 'redux-orm';
 
 export class Mvp extends Model {
   toString() {
@@ -16,6 +16,7 @@ Mvp.fields = {
   mvpDescription: attr(),
   status: attr(),
   idTeam: fk('Team', 'mvps'),
+  jira: oneToOne('Jira'),
   technologies: many('Technology'),
 };
 
