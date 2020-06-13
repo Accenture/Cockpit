@@ -1,4 +1,4 @@
-package com.cockpit.api.service.jiraGatewayService;
+package com.cockpit.api.service.jiragateway;
 
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Sprint;
@@ -28,10 +28,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.*;
-
 
 @Configuration
 @EnableScheduling
@@ -39,7 +38,6 @@ import java.util.*;
 public class JiraGatewayService {
 
     private ModelMapper modelMapper = new ModelMapper();
-
     private final JiraRepository jiraRepository;
     private final SprintRepository sprintRepository;
     private final UserStoryRepository userStoryRepository;
@@ -59,11 +57,10 @@ public class JiraGatewayService {
     private String token;
     @Value("${spring.jira.jiraUrl}")
     private String jiraUrl;
-    @Value("${spring.jira.encodedToken}")
-    private String authHeader;
 
     @Scheduled(fixedRate = 10000)
     public void updateProjects() throws UnirestException {
+        // FIXME: Create a function for the call of JIRA API
         HttpResponse<JsonNode> response = Unirest.get(jiraUrl+"/rest/api/3/project/search")
                 .basicAuth(username, token)
                 .header("Accept", "application/json")
@@ -76,16 +73,17 @@ public class JiraGatewayService {
                     foundJiraProject.setJiraProjectId(((JSONObject) jiraProject).getInt("id"));
                     jiraRepository.save(modelMapper.map(foundJiraProject, Jira.class));
                 }
-
             }
-
         }
     }
 
     @Scheduled(fixedRate = 10000)
+    @Transactional
+    //FIXME: This function has too much cognitive complexity
     public void getJiraSprints() throws UnirestException {
+        // FIXME: Create a function for the call of JIRA API
         HttpResponse<JsonNode> response = Unirest.get(jiraUrl+"/rest/agile/1.0/board?type=scrum")
-                .header("Authorization", "Basic "+authHeader)
+                .basicAuth(username, token)
                 .header("Accept", "application/json")
                 .asJson();
         JSONArray jiraBoards = response.getBody().getObject().getJSONArray("values");
@@ -94,7 +92,8 @@ public class JiraGatewayService {
                 Jira foundJiraProject = jiraRepository.findByJiraProjectKey(String.valueOf(((JSONObject) jiraBoard).getJSONObject("location").getString("projectKey")));
                 String boardId = String.valueOf(((JSONObject) jiraBoard).getInt("id"));
                 HttpResponse<JsonNode> sprintResponse = Unirest.get(jiraUrl+"/rest/agile/1.0/board/"+boardId+"/sprint")
-                        .header("Authorization", "Basic "+authHeader)
+                        //.header("Authorization", "Basic " + encodedAuthHeader)
+                        .basicAuth(username, token)
                         .header("Accept", "application/json")
                         .asJson();
                 JSONArray jiraSprints = sprintResponse.getBody().getObject().getJSONArray("values");
@@ -138,7 +137,10 @@ public class JiraGatewayService {
     }
 
     @Scheduled(fixedRate = 10000)
+    @Transactional
+    //FIXME: This function has too much cognitive complexity
     public void getJiraIssues() throws UnirestException {
+        // FIXME: Create a function for the call of JIRA API
         HttpResponse<JsonNode> response = Unirest.get(jiraUrl+"/rest/api/3/project/search")
                 .basicAuth(username, token)
                 .header("Accept", "application/json")
@@ -171,7 +173,6 @@ public class JiraGatewayService {
                     fields.add("customfield_10020");
                     payload.put("maxResults", 100);
                     payload.put("startAt", pagination);
-
 
                     Unirest.setObjectMapper(new ObjectMapper() {
                         private com.fasterxml.jackson.databind.ObjectMapper jacksonObjectMapper
@@ -244,8 +245,7 @@ public class JiraGatewayService {
                                             }
                                             return compare;
                                         });
-                                        JSONObject currentSprint = (JSONObject) sortedSprints.get(0);
-                                        // TO TEST: CURRENTLY NOT WORKING
+                                        JSONObject currentSprint = sortedSprints.get(0);
                                         Sprint issueSprint = sprintRepository.findByJiraSprintId(currentSprint.getInt("id"));
                                         if (issueSprint != null ) {
                                             issue.setSprint(issueSprint);
@@ -271,5 +271,4 @@ public class JiraGatewayService {
             }
         }
     }
-
 }

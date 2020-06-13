@@ -31,11 +31,11 @@ public class Sprint {
 
     private String state;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="id_jira", nullable=false)
     private Jira jira;
 
-    @OneToMany(mappedBy = "sprint", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "sprint")
     private Set<UserStory> userStories;
 
     public Long getId() {

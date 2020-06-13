@@ -41,7 +41,7 @@ public class Mvp {
     )
     private Set<Technology> technologies;
 
-    @OneToOne(mappedBy = "mvp", cascade=CascadeType.ALL)
+    @OneToOne(mappedBy = "mvp")
     private Jira jira;
 
     public Mvp() {

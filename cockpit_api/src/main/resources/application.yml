@@ -15,11 +15,9 @@ spring:
     serialization:
       fail-on-empty-beans: false
   jira:
-    username: ""
-    password: ""
-    jiraUrl: "https://tdf.atlassian.net"
-    token: ""
-    encodedToken: ""
+    username: ${JIRA_USER_NAME}
+    jiraUrl: ${JIRA_HOST_URL}
+    token: "${JIRA_AUTH_TOKEN}
 springdoc:
   api-docs:
     path: /cockpit-api-doc

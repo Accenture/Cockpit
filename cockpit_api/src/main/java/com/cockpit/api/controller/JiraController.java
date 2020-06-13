@@ -1,13 +1,9 @@
 package com.cockpit.api.controller;
-import com.cockpit.api.service.jiraGatewayService.JiraGatewayService;
+import com.cockpit.api.service.jiragateway.JiraGatewayService;
 
 import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dto.JiraDTO;
 import com.cockpit.api.service.JiraService;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.exceptions.UnirestException;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
