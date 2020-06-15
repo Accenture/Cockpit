@@ -13,6 +13,7 @@ import {
 export default function BurnUpChart() {
   const [chartData, setChartData] = useState([]);
   const { id } = useParams();
+
   async function getData(mvpId) {
     const result = await MvpService.getBurnUpChartData(mvpId);
     setChartData(result.data);
@@ -31,7 +32,7 @@ export default function BurnUpChart() {
     gradient.addColorStop(1, darkBlueShadow);
 
     return {
-      labels: chartData.map((sprint) => sprint.sprintId + 1),
+      labels: chartData.map((sprint) => sprint.sprintId),
       datasets: [
         {
           label: 'User Stories Closed',
