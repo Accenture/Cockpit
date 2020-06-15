@@ -23,9 +23,11 @@ public class Jira{
     private Date mvpEndDate;
 
     @OneToMany(mappedBy = "jira", cascade=CascadeType.ALL)
+    @JsonIgnore
     private Set<Sprint> sprints;
 
     @OneToMany(mappedBy = "jira", cascade=CascadeType.ALL)
+    @JsonIgnore
     private Set<UserStory> userStories;
 
 

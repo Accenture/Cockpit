@@ -10,12 +10,12 @@ import com.cockpit.api.model.dao.UserStory;
 
 @Repository
 public interface UserStoryRepository extends CrudRepository<UserStory, Long> {
-	@Query("select COUNT(us) FROM UserStory us, Sprint sp WHERE us.sprint = sp.id AND sp.jira = (:jira) AND us.status='Done' and sp.sprintNumber<=(:sprintNumber)")
-	Integer countNumberOfClosedUsPerSprint(@Param("jira") Jira jira, @Param("sprintNumber") int SprintNumber);
+	@Query("select COUNT(us) FROM UserStory us, Sprint sp WHERE us.sprint.id = sp.id AND sp.jira = (:jira) AND us.status='DONE' and sp.sprintNumber<=(:sprintNumber)")
+	Integer countNumberOfClosedUsPerSprint(@Param("jira") Jira jira, @Param("sprintNumber") int sprintNumber);
 
-	@Query("SELECT us FROM UserStory us, Sprint sp WHERE us.sprint = sp.id AND sp.jira = (:jira) AND sp.sprintNumber" +
+	@Query("SELECT us FROM UserStory us, Sprint sp WHERE us.sprint.id = sp.id AND sp.jira = (:jira) AND sp.sprintNumber" +
 			" = (:sprintNumber)")
-	List<UserStory> findMyUserStories(@Param("jira") Jira jira, @Param("sprintNumber") int SprintNumber);
+	List<UserStory> findMyUserStories(@Param("jira") Jira jira, @Param("sprintNumber") int sprintNumber);
 
 	UserStory findByIssueKey(String issueKey);
 }

@@ -55,7 +55,7 @@ public class BurnUpChartService {
 		int iteration = 1;
 		double projection = 0;
 		int totalUSNumber = 0;
-		for (int sprintNumber = 0; sprintNumber < SPRINT_NUMBER; sprintNumber++) {
+		for (int sprintNumber = 1; sprintNumber <= SPRINT_NUMBER; sprintNumber++) {
 			BurnUpChartDTO chart = new BurnUpChartDTO();
 
 			chart.setSprintId(sprintNumber);
