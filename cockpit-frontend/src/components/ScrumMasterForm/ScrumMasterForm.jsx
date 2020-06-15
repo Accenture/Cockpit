@@ -81,6 +81,22 @@ export default function ScrumMasterForm() {
         cycle: cycleNumber,
         mvpDescription: '',
         status: 'inprogress',
+        team: {
+          name: '',
+          teamMembers: [
+            {
+              firstName: '',
+              lastName: '',
+              email: '',
+            },
+          ],
+        },
+        technologies: [
+          {
+            name: '',
+            url: '',
+          },
+        ],
       },
     };
     await MvpService.createNewJiraProject(newJira);
