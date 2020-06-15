@@ -38,12 +38,16 @@ import java.util.*;
 public class JiraGatewayService {
 
     private ModelMapper modelMapper = new ModelMapper();
-    private final JiraRepository jiraRepository;
     private final SprintRepository sprintRepository;
+    private final JiraRepository jiraRepository;
     private final UserStoryRepository userStoryRepository;
 
     @Autowired
-    public JiraGatewayService(JiraRepository jiraRepository, SprintRepository sprintRepository, UserStoryRepository userStoryRepository) {
+    public JiraGatewayService(
+            JiraRepository jiraRepository,
+            SprintRepository sprintRepository,
+            UserStoryRepository userStoryRepository
+    ) {
         this.jiraRepository = jiraRepository;
         this.sprintRepository = sprintRepository;
         this.userStoryRepository = userStoryRepository;
