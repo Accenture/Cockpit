@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -13,9 +13,36 @@ import useStyles from './styles';
 
 export default function InformationForm() {
   const classes = useStyles();
-
+  const [mvp, setMvp] = useState({
+    id: null,
+    name: 'mvpName',
+    pitch: 'Hello',
+    status: 'inprogress',
+    iterationNumber: 1,
+    entity: 'es',
+    currentSprint: 2,
+    nbSprint: 0,
+    mvpEndDate: '',
+    mvpStartDate: '',
+    mvpAvatarUrl: 'imageUrl',
+    jiraProjectId: 10009,
+    jiraBoardId: 1004,
+    location: '',
+    nbUsersStories: 0,
+    bugsCount: 0,
+    allBugsCount: 0,
+    timeToFix: '',
+    timeToDetect: '',
+    cascade: [{}],
+    sprint: [{}],
+    userStories: [{}],
+    bugHistories: [{}],
+  });
   const mvpId = useParams().id;
-  const mvp = useSelector((state) => mvpSelector(state, mvpId));
+  const mvpInfo = useSelector((state) => mvpSelector(state, mvpId));
+  useEffect(() => {
+    setMvp(mvpInfo);
+  }, [mvpInfo]);
 
   return (
     <Paper className={classes.paper}>
@@ -27,12 +54,11 @@ export default function InformationForm() {
               className={classes.textField}
               required
               fullWidth
-              value={mvp.name ? mvp.name : 'Unnamed MVP'}
+              value={mvpInfo.name ? mvpInfo.name : ''}
               variant="outlined"
               id="mvpName"
               name="mvpName"
               placeholder="MVP Name"
-              autoComplete="mvpName"
               size="small"
             />
           </Grid>
@@ -47,7 +73,6 @@ export default function InformationForm() {
               id="cycle"
               name="cycle"
               placeholder="Cycle"
-              autoComplete="cycle"
               size="small"
               type="number"
               inputProps={{ min: '1', step: '1' }}
@@ -102,7 +127,6 @@ export default function InformationForm() {
                   id="mvpPhoto"
                   name="mvpPhoto"
                   placeholder="http://"
-                  autoComplete="mvpPhoto"
                   size="small"
                 />
               </div>
@@ -124,7 +148,6 @@ export default function InformationForm() {
               id="pitch"
               name="pitch"
               placeholder="Pitch"
-              autoComplete="pitch"
               size="small"
               multiline
               rows="3"
@@ -141,7 +164,6 @@ export default function InformationForm() {
               id="sprintNumber"
               name="sprintNumber"
               placeholder="Sprint number"
-              autoComplete="sprintNumber"
               size="small"
               type="number"
               inputProps={{ min: '0', step: '1' }}
@@ -158,7 +180,7 @@ export default function InformationForm() {
                 shrink: true,
               }}
               variant="outlined"
-              value={mvp.mvpStartDate}
+              value={mvp.mvpStartDate || ''}
             />
           </Grid>
           <Grid item xs={6}>
@@ -173,7 +195,7 @@ export default function InformationForm() {
                 shrink: true,
               }}
               variant="outlined"
-              value={mvp.mvpEndDate}
+              value={mvp.mvpEndDate || ''}
             />
           </Grid>
         </Grid>
