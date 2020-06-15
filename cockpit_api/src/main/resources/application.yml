@@ -11,9 +11,6 @@ spring:
   flyway:
     locations: classpath:db/migration
     baseline-on-migrate: true
-  jackson:
-    serialization:
-      fail-on-empty-beans: false
   jira:
     username: ${JIRA_USER_NAME}
     jiraUrl: ${JIRA_HOST_URL}
