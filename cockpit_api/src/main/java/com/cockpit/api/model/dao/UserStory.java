@@ -1,5 +1,7 @@
 package com.cockpit.api.model.dao;
 
+import org.hibernate.engine.internal.Cascade;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -16,7 +18,7 @@ public class UserStory {
 
     private Date doneDate;
 
-    private Integer storyPoint;
+    private double storyPoint;
 
     private String description;
 
@@ -30,11 +32,12 @@ public class UserStory {
 
     private String summary;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+
+    @ManyToOne(cascade=CascadeType.ALL)
     @JoinColumn(name="id_sprint", nullable=false)
     private Sprint sprint;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name="id_jira", nullable=false)
     private Jira jira;
 
@@ -70,11 +73,11 @@ public class UserStory {
         this.doneDate = doneDate;
     }
 
-    public Integer getStoryPoint() {
+    public double getStoryPoint() {
         return storyPoint;
     }
 
-    public void setStoryPoint(Integer storyPoint) {
+    public void setStoryPoint(double storyPoint) {
         this.storyPoint = storyPoint;
     }
 

@@ -69,4 +69,8 @@ public class SprintService {
     	return sprintRepository.findByJiraAndSprintNumber(jira, sprintNumber);
     }
 
+    Sprint findByJiraSprintId(int jiraSprintId){
+        return sprintRepository.findByJiraSprintId(jiraSprintId);
+    }
+
 }

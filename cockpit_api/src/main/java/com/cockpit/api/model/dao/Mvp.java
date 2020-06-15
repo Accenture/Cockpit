@@ -31,7 +31,7 @@ public class Mvp {
     private String status;
 
     @ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name="id_team", nullable=false)
+    @JoinColumn(name = "id_team", nullable = false)
     private Team team;
 
     @ManyToMany(cascade=CascadeType.ALL)
@@ -41,7 +41,7 @@ public class Mvp {
     )
     private Set<Technology> technologies;
 
-    @OneToOne(mappedBy = "mvp", cascade=CascadeType.ALL)
+    @OneToOne(mappedBy = "mvp")
     private Jira jira;
 
     public Mvp() {

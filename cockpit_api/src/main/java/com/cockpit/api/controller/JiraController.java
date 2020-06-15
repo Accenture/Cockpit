@@ -1,21 +1,30 @@
 package com.cockpit.api.controller;
+import com.cockpit.api.service.jiragateway.JiraGatewayService;
 
 import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dto.JiraDTO;
 import com.cockpit.api.service.JiraService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.jayway.jsonpath.JsonPath.parse;
+
 @RestController
 public class JiraController {
 
+    Logger log = LoggerFactory.getLogger(JiraController.class);
+
     private final JiraService jiraService;
+    private final JiraGatewayService jiraGatewayService;
 
     @Autowired
-    public JiraController(JiraService jiraService) {
+    public JiraController(JiraService jiraService, JiraGatewayService jiraGatewayService) {
         this.jiraService = jiraService;
+        this.jiraGatewayService = jiraGatewayService;
     }
 
     // CREATE new JIRA
@@ -65,4 +74,5 @@ public class JiraController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
 }

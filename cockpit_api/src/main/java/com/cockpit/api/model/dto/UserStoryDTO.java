@@ -14,7 +14,7 @@ public class UserStoryDTO {
 
     private Date doneDate;
 
-    private Integer storyPoint;
+    private double storyPoint;
 
     private String description;
 
@@ -64,11 +64,11 @@ public class UserStoryDTO {
         this.doneDate = doneDate;
     }
 
-    public Integer getStoryPoint() {
+    public double getStoryPoint() {
         return storyPoint;
     }
 
-    public void setStoryPoint(Integer storyPoint) {
+    public void setStoryPoint(double storyPoint) {
         this.storyPoint = storyPoint;
     }
 

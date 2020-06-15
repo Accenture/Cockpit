@@ -24,7 +24,10 @@ public class JiraDTO {
 
     private Set<UserStory> userStories;
 
+    private String state;
+
     private Mvp mvp;
+
 
     public Long getId() {
         return id;
@@ -33,6 +36,15 @@ public class JiraDTO {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
     public String getJiraProjectKey() {
         return jiraProjectKey;
     }

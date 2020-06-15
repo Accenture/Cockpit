@@ -74,4 +74,8 @@ public class UserStoryService {
         return totalStories;
     }
 
+    UserStory findByIssueKey(String issueKey){
+        return userStoryRepository.findByIssueKey(issueKey);
+    }
+
 }

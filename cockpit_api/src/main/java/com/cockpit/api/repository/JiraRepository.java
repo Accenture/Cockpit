@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface JiraRepository extends CrudRepository<Jira, Long> {
-    Jira findByJiraProjectKey(String name);
+    Jira findByJiraProjectKey(String key);
     Jira findByMvp(Mvp mvp);
 }
