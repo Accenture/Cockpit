@@ -26,6 +26,14 @@ function createNewJiraProject(jira) {
     return e;
   }
 }
+function updateJiraProject(jiraProjectKey, jira) {
+  try {
+    return API.post(`${jiraUrl}/update`, jira, headers);
+  } catch (e) {
+    console.log(`Error when creating new Jira Project: ${e}`);
+    return e;
+  }
+}
 function getBurnUpChartData(jiraProjectKey) {
   try {
     return API.get(`${burnUpChartUrl}/${jiraProjectKey}`, headers);
@@ -38,6 +46,7 @@ const MvpService = {
   getAll,
   createNewJiraProject,
   getBurnUpChartData,
+  updateJiraProject,
 };
 
 export default MvpService;

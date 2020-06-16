@@ -36,7 +36,7 @@ import java.util.*;
 @EnableScheduling
 @Service
 public class JiraGatewayService {
-
+/*
     private ModelMapper modelMapper = new ModelMapper();
     private final SprintRepository sprintRepository;
     private final JiraRepository jiraRepository;
