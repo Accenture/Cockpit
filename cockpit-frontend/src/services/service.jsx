@@ -26,9 +26,9 @@ function createNewJiraProject(jira) {
     return e;
   }
 }
-function updateJiraProject(jiraProjectKey, jira) {
+function updateJiraProject(jira) {
   try {
-    return API.post(`${jiraUrl}/update`, jira, headers);
+    return API.put(`${jiraUrl}/update`, jira, headers);
   } catch (e) {
     console.log(`Error when creating new Jira Project: ${e}`);
     return e;
