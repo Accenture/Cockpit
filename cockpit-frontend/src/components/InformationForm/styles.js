@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles((theme) => ({
   paper: {
-    maxHeight: 400,
+    maxHeight: 470,
     overflow: 'auto',
     width: 600,
     borderRadius: 0,
