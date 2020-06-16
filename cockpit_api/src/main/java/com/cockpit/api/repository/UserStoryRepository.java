@@ -1,5 +1,6 @@
 package com.cockpit.api.repository;
 
+import java.util.Date;
 import java.util.List;
 import com.cockpit.api.model.dao.Jira;
 import org.springframework.data.jpa.repository.Query;
@@ -18,4 +19,6 @@ public interface UserStoryRepository extends CrudRepository<UserStory, Long> {
 	List<UserStory> findMyUserStories(@Param("jira") Jira jira, @Param("sprintNumber") int sprintNumber);
 
 	UserStory findByIssueKey(String issueKey);
+
+	List<UserStory> findALlByJiraAndCreationDateBetween(Jira jira, Date sprintStartDate, Date sprintEndDate);
 }

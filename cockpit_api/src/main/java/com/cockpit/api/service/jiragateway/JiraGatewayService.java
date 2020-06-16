@@ -69,6 +69,7 @@ public class JiraGatewayService {
                 .basicAuth(username, token)
                 .header("Accept", "application/json")
                 .asJson();
+        // FIXME: Create a class JiraProject to map data instead of using JSONArray (with getter setter)
         JSONArray jiraProjects = response.getBody().getObject().getJSONArray("values");
         for (Object jiraProject: jiraProjects){
             if (jiraProject instanceof JSONObject){
@@ -90,6 +91,7 @@ public class JiraGatewayService {
                 .basicAuth(username, token)
                 .header("Accept", "application/json")
                 .asJson();
+        // FIXME: Create a class JiraBoard to map data instead of using JSONArray (with getter setter)
         JSONArray jiraBoards = response.getBody().getObject().getJSONArray("values");
         for (Object jiraBoard: jiraBoards){
             if (jiraBoard instanceof JSONObject){
@@ -100,6 +102,7 @@ public class JiraGatewayService {
                         .basicAuth(username, token)
                         .header("Accept", "application/json")
                         .asJson();
+                // FIXME: Create a class JiraSprints to map data instead of using JSONArray (with getter setter)
                 JSONArray jiraSprints = sprintResponse.getBody().getObject().getJSONArray("values");
                 int counter = 0;
                 for(Object jiraSprint: jiraSprints){
@@ -149,6 +152,7 @@ public class JiraGatewayService {
                 .basicAuth(username, token)
                 .header("Accept", "application/json")
                 .asJson();
+        // FIXME: Create a class JiraProject to map data instead of using JSONArray (with getter setter)
         JSONArray jiraProjects = response.getBody().getObject().getJSONArray("values");
         for (Object jiraProject: jiraProjects){
             if (jiraProject instanceof JSONObject){
@@ -207,7 +211,7 @@ public class JiraGatewayService {
                             .header("Content-Type", "application/json")
                             .body(payload)
                             .asJson();
-
+                    // FIXME: Create a class JiraIssue to map data instead of using JSONArray (with getter setter)
                     while(jiraProjectIssues.getBody().getObject().getInt("total") >= pagination){
                         JSONArray jiraIssues = jiraProjectIssues.getBody().getObject().getJSONArray("issues");
                         if (jiraIssues.length() > 0){
@@ -223,7 +227,7 @@ public class JiraGatewayService {
                                         DateTime doneDate = new DateTime(((JSONObject) jiraIssue).getJSONObject("versionedRepresentations").getJSONObject("created").getString("1"));
                                         issue.setDoneDate(doneDate.toDate());
                                     }
-                                    // TO DO: Check is replacable by == null
+                                    // TODO: Replace it by == null
                                     if (!String.valueOf(((JSONObject) jiraIssue).getJSONObject("versionedRepresentations").getJSONObject("customfield_10026").get("1")).equals("null")){
                                         issue.setStoryPoint((Double) ((JSONObject) jiraIssue).getJSONObject("versionedRepresentations").getJSONObject("customfield_10026").get("1"));
                                     }
@@ -274,5 +278,25 @@ public class JiraGatewayService {
                 }
             }
         }
+    }
+
+    @Scheduled(fixedRate = 10000)
+    public void setTotalNbOfUserStoryForEachSprintOfEachProject() {
+        List<Jira> jiraProjectList = jiraRepository.findAllByOrderById();
+        for (Jira jira : jiraProjectList) {
+            int totalNumberOfUserStoriesUntilCurrentSprint = 0;
+            List<Sprint> sprintList = sprintRepository.findByJira(jira);
+            for(Sprint sprint: sprintList) {
+                Date sprintStartDate = sprint.getSprintStartDate();
+                Date sprintEndDate = sprint.getSprintEndDate();
+                if (sprintStartDate != null && sprintEndDate != null) {
+                    List<UserStory> userStoryList = userStoryRepository.findALlByJiraAndCreationDateBetween(jira, sprintStartDate, sprintEndDate);
+                    totalNumberOfUserStoriesUntilCurrentSprint += userStoryList.size();
+                    sprint.setTotalNbUs(totalNumberOfUserStoriesUntilCurrentSprint);
+                    sprintRepository.save(sprint);
+                }
+            }
+        }
+        log.info("Total number of User Stories updated for all sprints of all existing MVPs on Cockpit");
     }
 }
