@@ -7,13 +7,22 @@ import Select from '@material-ui/core/Select';
 import Paper from '@material-ui/core/Paper';
 import FormControl from '@material-ui/core/FormControl';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import Button from '@material-ui/core/Button';
+import {
+  KeyboardDatePicker,
+  MuiPickersUtilsProvider,
+} from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 import MvpService from '../../services/service';
 import { mvpSelector } from '../../redux/selector';
+import { fetchAllMvps } from '../../redux/ormSlice';
+import { closeEditMvpSMForm } from '../Header/HeaderSlice';
 import useStyles from './styles';
 
 export default function InformationForm() {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const [name, setName] = useState('');
   const [pitch, setPitch] = useState('');
@@ -28,7 +37,7 @@ export default function InformationForm() {
   const mvpInfo = useSelector((state) => mvpSelector(state, mvpId));
   useEffect(() => {
     setName(mvpInfo.name);
-    setPitch(mvpInfo.pitch);
+    setPitch(mvpInfo.mvpDescription);
     setCycle(mvpInfo.cycle);
     setStatus(mvpInfo.status);
     setEntity(mvpInfo.entity);
@@ -55,27 +64,31 @@ export default function InformationForm() {
   function handleImageChange(event) {
     setUrlMvpAvatar(event.target.value);
   }
-  function handleStartDateChange(event) {
-    setMvpStartDate(event.target.value);
-  }
-  function handleEndDateChange(event) {
-    setMvpEndDate(event.target.value);
-  }
+  const handleStartDateChange = (date) => {
+    setMvpStartDate(date);
+  };
+
+  const handleEndDateChange = (date) => {
+    setMvpEndDate(date);
+  };
+
   async function submit(e) {
     e.preventDefault();
     const newJira = {
+      id: mvpInfo.jira.id,
       jiraProjectKey: mvpInfo.jira.jiraProjectKey,
       currentSprint: mvpInfo.jira.currentSprint,
       jiraProjectId: mvpInfo.jira.jiraProjectId,
-      mvpStartDate: mvpStartDate,
-      mvpEndDate: mvpEndDate,
+      mvpStartDate,
+      mvpEndDate,
       mvp: {
-        name: name,
-        entity: entity,
-        urlMvpAvatar: urlMvpAvatar,
-        cycle: cycle,
+        id: mvpInfo.id,
+        name,
+        entity,
+        urlMvpAvatar,
+        cycle,
         mvpDescription: pitch,
-        status: status,
+        status,
         team: {
           name: '',
           teamMembers: [
@@ -95,8 +108,12 @@ export default function InformationForm() {
       },
     };
     await MvpService.updateJiraProject(newJira);
-   // dispatch(close());
+    dispatch(closeEditMvpSMForm());
+    dispatch(fetchAllMvps());
   }
+  const handleClose = () => {
+    dispatch(closeEditMvpSMForm());
+  };
   return (
     <Paper className={classes.paper}>
       <form>
@@ -231,35 +248,56 @@ export default function InformationForm() {
             />
           </Grid>
           <Grid item xs={6}>
-            <TextField
-              id="date"
-              label="MVP start date"
-              type="date"
-              // defaultValue="2020-02-24"
-              className={classes.textField}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              variant="outlined"
-              value={mvpStartDate || ''}
-              onChange={handleStartDateChange}
-            />
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                disableToolbar
+                variant="outlined"
+                format="dd/MM/yyyy"
+                margin="normal"
+                id="mvp-start-date"
+                label="MVP Start Date"
+                value={mvpStartDate}
+                onChange={handleStartDateChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+                inputVariant="outlined"
+              />
+            </MuiPickersUtilsProvider>
           </Grid>
           <Grid item xs={6}>
-            <TextField
-              id="date"
-              label="MVP end date"
-              type="date"
-              format="DD/MM/YYYY"
-              // defaultValue="2020-05-24"
-              className={classes.textField}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              variant="outlined"
-              value={mvpEndDate || ''}
-              onChange={handleEndDateChange}
-            />
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <KeyboardDatePicker
+                disableToolbar
+                variant="outlined"
+                format="dd/MM/yyyy"
+                margin="normal"
+                id="mvp-end-date"
+                label="MVP End Date"
+                value={mvpEndDate}
+                onChange={handleEndDateChange}
+                KeyboardButtonProps={{
+                  'aria-label': 'change date',
+                }}
+                inputVariant="outlined"
+              />
+            </MuiPickersUtilsProvider>
+          </Grid>
+          <Grid item xs={6} />
+          <Grid item xs={3}>
+            <Button className={classes.buttonCancel} onClick={handleClose}>
+              Cancel
+            </Button>
+          </Grid>{' '}
+          <Grid item xs={3}>
+            <Button
+              className={classes.buttonSave}
+              onClick={submit}
+              color="primary"
+              variant="contained"
+            >
+              Save
+            </Button>
           </Grid>
         </Grid>
       </form>

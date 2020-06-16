@@ -21,8 +21,16 @@ export default makeStyles((theme) => ({
   },
   imgStyle: {
     height: 50,
-    width: 50,
+    width: 80,
     padding: theme.spacing(0, 0, 0, 1),
     marginTop: 25,
+  },
+  buttonSave: {
+    borderRadius: 20,
+    margin: '16px 0px 16px',
+  },
+  buttonCancel: {
+    borderRadius: 20,
+    margin: '16px 0px',
   },
 }));
