@@ -5,13 +5,10 @@ import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.UserStory;
 import com.cockpit.api.model.dto.UserStoryDTO;
 import com.cockpit.api.repository.UserStoryRepository;
-
 import com.cockpit.api.model.dao.Sprint;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Optional;
 

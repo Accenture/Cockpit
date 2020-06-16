@@ -8,9 +8,7 @@ import com.cockpit.api.repository.SprintRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Date;
-
 import java.util.Optional;
 
 @Service
@@ -69,8 +67,5 @@ public class SprintService {
     	return sprintRepository.findByJiraAndSprintNumber(jira, sprintNumber);
     }
 
-    Sprint findByJiraSprintId(int jiraSprintId){
-        return sprintRepository.findByJiraSprintId(jiraSprintId);
-    }
 
 }
