@@ -97,4 +97,12 @@ public class Jira{
     public void setUserStories(Set<UserStory> userStories) {
         this.userStories = userStories;
     }
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
+// import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
@@ -36,9 +36,7 @@ export default function EditMvpSMForm() {
             <Button className={classes.buttonStyle} variant="contained">
               Overview
             </Button>
-            <Button className={classes.buttonStyle} disabled>
-              Sprint 0
-            </Button>
+
             <Button className={classes.buttonStyle} disabled>
               Sprint 1
             </Button>
@@ -60,6 +58,9 @@ export default function EditMvpSMForm() {
             <Button className={classes.buttonStyle} disabled>
               Sprint 7
             </Button>
+            <Button className={classes.buttonStyle} disabled>
+              Sprint 8
+            </Button>
           </ButtonGroup>
           <div>
             <Tabs
@@ -79,7 +80,7 @@ export default function EditMvpSMForm() {
           </div>
         </div>
       </DialogContent>
-      <DialogActions>
+      {/*  <DialogActions>
         <Button onClick={handleClose} style={{ borderRadius: 20 }}>
           Cancel
         </Button>
@@ -92,7 +93,7 @@ export default function EditMvpSMForm() {
         >
           Save
         </Button>
-      </DialogActions>
+   </DialogActions> */}
     </div>
   );
   return (
