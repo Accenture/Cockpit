@@ -36,7 +36,7 @@ import java.util.*;
 @EnableScheduling
 @Service
 public class JiraGatewayService {
-/*
+
     private ModelMapper modelMapper = new ModelMapper();
     private final SprintRepository sprintRepository;
     private final JiraRepository jiraRepository;
@@ -98,7 +98,6 @@ public class JiraGatewayService {
                 Jira foundJiraProject = jiraRepository.findByJiraProjectKey(String.valueOf(((JSONObject) jiraBoard).getJSONObject("location").getString("projectKey")));
                 String boardId = String.valueOf(((JSONObject) jiraBoard).getInt("id"));
                 HttpResponse<JsonNode> sprintResponse = Unirest.get(jiraUrl+"/rest/agile/1.0/board/"+boardId+"/sprint")
-                        //.header("Authorization", "Basic " + encodedAuthHeader)
                         .basicAuth(username, token)
                         .header("Accept", "application/json")
                         .asJson();
@@ -119,6 +118,7 @@ public class JiraGatewayService {
                             sprint.setJira(foundJiraProject);
                             sprint.setState(sprintState);
                             if(sprintState.equals("active")){
+                                //FIXME: Why not use Date directly? In this case we can remove the corresponding dependency joda-time which is used only in this script
                                 DateTime startDate = new DateTime(((JSONObject)jiraSprint).getString("startDate"));
                                 sprint.setSprintStartDate(startDate.toDate());
                                 DateTime endDate = new DateTime(((JSONObject)jiraSprint).getString("endDate"));
@@ -132,13 +132,14 @@ public class JiraGatewayService {
                                 sprint.setSprintCompleteDate(completeDate.toDate());
                             }
                             sprintRepository.save(modelMapper.map(sprint, Sprint.class));
-                            log.info("Jira projects' sprints updated");
+                            //FIXME: Better not to have logs in a for loop
+                            //log.info("Jira projects' sprints updated");
+                            //FIXME: Better not to have logs in a for loop, and how is current sprint set for foundJiraProject before save?
                             jiraRepository.save(modelMapper.map(foundJiraProject, Jira.class));
-                            log.info("Jira projects' current sprint updated");
+                            //log.info("Jira projects' current sprint updated");
                         }
                     }
                 }
-
             }
         }
     }
@@ -284,19 +285,18 @@ public class JiraGatewayService {
     public void setTotalNbOfUserStoryForEachSprintOfEachProject() {
         List<Jira> jiraProjectList = jiraRepository.findAllByOrderById();
         for (Jira jira : jiraProjectList) {
-            int totalNumberOfUserStoriesUntilCurrentSprint = 0;
-            List<Sprint> sprintList = sprintRepository.findByJira(jira);
-            for(Sprint sprint: sprintList) {
+            List<Sprint> sprintList = sprintRepository.findByJiraOrderBySprintNumber(jira);
+            int totalNumberOfUserStoriesUntilCurrentSprint = userStoryRepository.countUserStoriesByJiraAndCreationDateBefore(jira, sprintList.get(0).getSprintStartDate());
+                for(Sprint sprint: sprintList) {
                 Date sprintStartDate = sprint.getSprintStartDate();
                 Date sprintEndDate = sprint.getSprintEndDate();
                 if (sprintStartDate != null && sprintEndDate != null) {
-                    List<UserStory> userStoryList = userStoryRepository.findALlByJiraAndCreationDateBetween(jira, sprintStartDate, sprintEndDate);
-                    totalNumberOfUserStoriesUntilCurrentSprint += userStoryList.size();
+                    int nbUserStoriesCreatedDuringCurrentSprint= userStoryRepository.countUserStoriesByJiraAndCreationDateBetween(jira, sprintStartDate, sprintEndDate);
+                    totalNumberOfUserStoriesUntilCurrentSprint += nbUserStoriesCreatedDuringCurrentSprint;
                     sprint.setTotalNbUs(totalNumberOfUserStoriesUntilCurrentSprint);
                     sprintRepository.save(sprint);
                 }
             }
         }
-        log.info("Total number of User Stories updated for all sprints of all existing MVPs on Cockpit");
     }
 }
