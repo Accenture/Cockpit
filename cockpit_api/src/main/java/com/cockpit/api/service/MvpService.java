@@ -45,7 +45,7 @@ public class MvpService {
     public MvpDTO updateMvp(MvpDTO mvpDTO) throws ResourceNotFoundException {
         Optional<Mvp> mvpToUpdate = mvpRepository.findById(mvpDTO.getId());
         if (!mvpToUpdate.isPresent()) {
-            throw new ResourceNotFoundException("Mvp not found");
+            throw new ResourceNotFoundException("Mvp to update not found");
         }
         Mvp mvpCreated = mvpRepository.save(modelMapper.map(mvpDTO, Mvp.class));
         return modelMapper.map(mvpCreated, MvpDTO.class);
@@ -54,7 +54,7 @@ public class MvpService {
     public void deleteMvp(Long id) throws ResourceNotFoundException {
         Optional<Mvp> mvpToDelete = mvpRepository.findById(id);
         if (!mvpToDelete.isPresent()) {
-            throw new ResourceNotFoundException("Mvp not found");
+            throw new ResourceNotFoundException("Mvp to delete not found");
         }
         mvpRepository.delete(mvpToDelete.get());
     }
