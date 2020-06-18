@@ -1,7 +1,5 @@
 package com.cockpit.api.model.dao;
 
-import org.hibernate.engine.internal.Cascade;
-
 import javax.persistence.*;
 import java.util.Date;
 

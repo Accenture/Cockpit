@@ -37,7 +37,7 @@ public class JiraService {
     public JiraDTO updateJira(JiraDTO jiraDTO) throws ResourceNotFoundException {
         Jira jiraToUpdate = jiraRepository.findByJiraProjectKey(jiraDTO.getJiraProjectKey());
         if (jiraToUpdate == null) {
-            throw new ResourceNotFoundException("Jira not found");
+            throw new ResourceNotFoundException("Jira to update not found");
         }
         Jira jiraCreated = jiraRepository.save(modelMapper.map(jiraDTO, Jira.class));
         return modelMapper.map(jiraCreated, JiraDTO.class);
@@ -46,7 +46,7 @@ public class JiraService {
     public void deleteJira(Long id) throws ResourceNotFoundException {
         Optional<Jira> jiraToDelete = jiraRepository.findById(id);
         if (!jiraToDelete.isPresent()) {
-            throw new ResourceNotFoundException("Jira not found");
+            throw new ResourceNotFoundException("Jira to delete not found");
         }
         jiraRepository.delete(jiraToDelete.get());
     }
