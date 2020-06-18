@@ -32,6 +32,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.*;
 
+import static javax.management.timer.Timer.*;
+
 @Configuration
 @EnableScheduling
 @Service
@@ -62,7 +64,7 @@ public class JiraGatewayService {
     @Value("${spring.jira.jiraUrl}")
     private String jiraUrl;
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = ONE_MINUTE)
     public void updateProjects() throws UnirestException {
         // FIXME: Create a function for the call of JIRA API
         HttpResponse<JsonNode> response = Unirest.get(jiraUrl+"/rest/api/3/project/search")
@@ -82,7 +84,7 @@ public class JiraGatewayService {
         }
     }
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
     @Transactional
     //FIXME: This function has too much cognitive complexity
     public void getJiraSprints() throws UnirestException {
@@ -101,7 +103,7 @@ public class JiraGatewayService {
                         .basicAuth(username, token)
                         .header("Accept", "application/json")
                         .asJson();
-                // FIXME: Create a class JiraSprints to map data instead of using JSONArray (with getter setter)
+                // FIXME: Create a class JiraSprint to map data instead of using JSONArray (with getter setter)
                 JSONArray jiraSprints = sprintResponse.getBody().getObject().getJSONArray("values");
                 int counter = 0;
                 for(Object jiraSprint: jiraSprints){
@@ -132,9 +134,9 @@ public class JiraGatewayService {
                                 sprint.setSprintCompleteDate(completeDate.toDate());
                             }
                             sprintRepository.save(modelMapper.map(sprint, Sprint.class));
-                            //FIXME: Better not to have logs in a for loop
+                            //FIXME: This log should be out of for loop if it is sprints updated
                             //log.info("Jira projects' sprints updated");
-                            //FIXME: Better not to have logs in a for loop, and how is current sprint set for foundJiraProject before save?
+                            //FIXME: How is current sprint set for foundJiraProject before save?
                             jiraRepository.save(modelMapper.map(foundJiraProject, Jira.class));
                             //log.info("Jira projects' current sprint updated");
                         }
@@ -144,7 +146,7 @@ public class JiraGatewayService {
         }
     }
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
     @Transactional
     //FIXME: This function has too much cognitive complexity
     public void getJiraIssues() throws UnirestException {
@@ -281,7 +283,7 @@ public class JiraGatewayService {
         }
     }
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
     public void setTotalNbOfUserStoryForEachSprintOfEachProject() {
         List<Jira> jiraProjectList = jiraRepository.findAllByOrderById();
         for (Jira jira : jiraProjectList) {
@@ -291,7 +293,7 @@ public class JiraGatewayService {
                 Date sprintStartDate = sprint.getSprintStartDate();
                 Date sprintEndDate = sprint.getSprintEndDate();
                 if (sprintStartDate != null && sprintEndDate != null) {
-                    int nbUserStoriesCreatedDuringCurrentSprint= userStoryRepository.countUserStoriesByJiraAndCreationDateBetween(jira, sprintStartDate, sprintEndDate);
+                    int nbUserStoriesCreatedDuringCurrentSprint= userStoryRepository.countUserStoriesByJiraAndCreationDateGreaterThanAndCreationDateLessThanEqual(jira, sprintStartDate, sprintEndDate);
                     totalNumberOfUserStoriesUntilCurrentSprint += nbUserStoriesCreatedDuringCurrentSprint;
                     sprint.setTotalNbUs(totalNumberOfUserStoriesUntilCurrentSprint);
                     sprintRepository.save(sprint);
