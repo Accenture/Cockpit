@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -8,112 +8,84 @@ import Paper from '@material-ui/core/Paper';
 import FormControl from '@material-ui/core/FormControl';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import Button from '@material-ui/core/Button';
 import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider,
 } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
-import MvpService from '../../services/service';
 import { mvpSelector } from '../../redux/selector';
-import { fetchAllMvps } from '../../redux/ormSlice';
-import { closeEditMvpSMForm } from '../Header/HeaderSlice';
+import {
+  setName,
+  setPitch,
+  setEntity,
+  setCycle,
+  setStatus,
+  setImageUrl,
+  setMvpStartDate,
+  setMvpEndDate,
+  nameState,
+  pitchState,
+  entityState,
+  cycleState,
+  statusState,
+  imageUrlState,
+  mvpStartDateState,
+  mvpEndDateState,
+} from './InformationFormSlice';
 import useStyles from './styles';
 
 export default function InformationForm() {
   const classes = useStyles();
   const dispatch = useDispatch();
-
-  const [name, setName] = useState('');
-  const [pitch, setPitch] = useState('');
-  const [cycle, setCycle] = useState(0);
-  const [status, setStatus] = useState('');
-  const [entity, setEntity] = useState('');
-  const [urlMvpAvatar, setUrlMvpAvatar] = useState('');
-  const [nbSprint, setNbSprint] = useState(8);
-  const [mvpStartDate, setMvpStartDate] = useState(0);
-  const [mvpEndDate, setMvpEndDate] = useState(0);
+  const nbSprint = 8;
   const mvpId = useParams().id;
   const mvpInfo = useSelector((state) => mvpSelector(state, mvpId));
+
+  const name = useSelector(nameState);
+  const pitch = useSelector(pitchState);
+  const cycle = useSelector(cycleState);
+  const entity = useSelector(entityState);
+  const status = useSelector(statusState);
+  const urlMvpAvatar = useSelector(imageUrlState);
+  const mvpStartDate = useSelector(mvpStartDateState);
+  const mvpEndDate = useSelector(mvpEndDateState);
+
   useEffect(() => {
-    setName(mvpInfo.name);
-    setPitch(mvpInfo.mvpDescription);
-    setCycle(mvpInfo.cycle);
-    setStatus(mvpInfo.status);
-    setEntity(mvpInfo.entity);
-    setUrlMvpAvatar(mvpInfo.urlMvpAvatar);
-    // setNbSprint(mvpInfo.nbSprint);
-    setMvpStartDate(mvpInfo.jira.mvpStartDate);
-    setMvpEndDate(mvpInfo.jira.mvpEndDate);
-  }, [mvpInfo]);
+    dispatch(setName(mvpInfo.name));
+    dispatch(setPitch(mvpInfo.mvpDescription));
+    dispatch(setCycle(mvpInfo.cycle));
+    dispatch(setStatus(mvpInfo.status));
+    dispatch(setEntity(mvpInfo.entity));
+    dispatch(setImageUrl(mvpInfo.urlMvpAvatar));
+    dispatch(setMvpStartDate(mvpInfo.jira.mvpStartDate));
+    dispatch(setMvpEndDate(mvpInfo.jira.mvpEndDate));
+  }, [dispatch, mvpInfo]);
   function handleNameChange(event) {
-    setName(event.target.value);
+    dispatch(setName(event.target.value));
   }
   function handlePitchChange(event) {
-    setPitch(event.target.value);
+    dispatch(setPitch(event.target.value));
   }
   function handleCycleChange(event) {
-    setCycle(event.target.value);
+    dispatch(setCycle(event.target.value));
   }
   function handleStatusChange(event) {
-    setStatus(event.target.value);
+    dispatch(setStatus(event.target.value));
   }
   function handleEntityChange(event) {
-    setEntity(event.target.value);
+    dispatch(setEntity(event.target.value));
   }
   function handleImageChange(event) {
-    setUrlMvpAvatar(event.target.value);
+    dispatch(setImageUrl(event.target.value));
   }
   const handleStartDateChange = (date) => {
-    setMvpStartDate(date);
+    dispatch(setMvpStartDate(date));
   };
 
   const handleEndDateChange = (date) => {
-    setMvpEndDate(date);
+    dispatch(setMvpEndDate(date));
   };
 
-  async function submit(e) {
-    e.preventDefault();
-    const newJira = {
-      id: mvpInfo.jira.id,
-      jiraProjectKey: mvpInfo.jira.jiraProjectKey,
-      currentSprint: mvpInfo.jira.currentSprint,
-      jiraProjectId: mvpInfo.jira.jiraProjectId,
-      mvpStartDate,
-      mvpEndDate,
-      mvp: {
-        id: mvpInfo.id,
-        name,
-        entity,
-        urlMvpAvatar,
-        cycle,
-        mvpDescription: pitch,
-        status,
-        team: {
-          name: '',
-          teamMembers: [
-            {
-              firstName: '',
-              lastName: '',
-              email: '',
-            },
-          ],
-        },
-        technologies: [
-          {
-            name: '',
-            url: '',
-          },
-        ],
-      },
-    };
-    await MvpService.updateJiraProject(newJira);
-    dispatch(closeEditMvpSMForm());
-    dispatch(fetchAllMvps());
-  }
-  const handleClose = () => {
-    dispatch(closeEditMvpSMForm());
-  };
   return (
     <Paper className={classes.paper}>
       <form>
@@ -165,7 +137,9 @@ export default function InformationForm() {
                 value={status || ''}
                 onChange={handleStatusChange}
               >
-                <MenuItem value="condidates">Condidates</MenuItem>
+                <MenuItem value="condidates" disabled>
+                  Condidates
+                </MenuItem>
                 <MenuItem value="inprogress">In progress</MenuItem>
                 <MenuItem value="transferred">Transferred</MenuItem>
               </Select>
@@ -282,22 +256,6 @@ export default function InformationForm() {
                 inputVariant="outlined"
               />
             </MuiPickersUtilsProvider>
-          </Grid>
-          <Grid item xs={6} />
-          <Grid item xs={3}>
-            <Button className={classes.buttonCancel} onClick={handleClose}>
-              Cancel
-            </Button>
-          </Grid>{' '}
-          <Grid item xs={3}>
-            <Button
-              className={classes.buttonSave}
-              onClick={submit}
-              color="primary"
-              variant="contained"
-            >
-              Save
-            </Button>
           </Grid>
         </Grid>
       </form>
