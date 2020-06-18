@@ -60,7 +60,7 @@ public class JiraGatewayServiceTest {
         Mockito.when(jiraRepository.findAllByOrderById()).thenReturn(mockJiraList);
         Mockito.when(sprintRepository.findByJiraOrderBySprintNumber(Mockito.any(Jira.class))).thenReturn(mockSprintList);
         Mockito.when(userStoryRepository.countUserStoriesByJiraAndCreationDateBefore(Mockito.any(Jira.class), Mockito.any(Date.class))).thenReturn(2);
-        Mockito.when(userStoryRepository.countUserStoriesByJiraAndCreationDateBetween(Mockito.any(Jira.class), Mockito.any(Date.class),  Mockito.any(Date.class))).thenReturn(3);
+        Mockito.when(userStoryRepository.countUserStoriesByJiraAndCreationDateGreaterThanAndCreationDateLessThanEqual(Mockito.any(Jira.class), Mockito.any(Date.class),  Mockito.any(Date.class))).thenReturn(3);
 
         // when
         jiraGatewayService.setTotalNbOfUserStoryForEachSprintOfEachProject();
