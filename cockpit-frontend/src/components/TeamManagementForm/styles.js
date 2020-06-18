@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles((theme) => ({
   paper: {
-    maxHeight: 400,
+    height: 400,
     overflow: 'auto',
     width: 600,
     borderRadius: 0,
@@ -19,10 +19,8 @@ export default makeStyles((theme) => ({
     marginTop: 8,
     'margin-bottom': 8,
   },
-  imgStyle: {
-    height: 50,
-    width: 80,
-    padding: theme.spacing(0, 0, 0, 1),
-    marginTop: 25,
+  buttonSave: {
+    borderRadius: 20,
+    margin: 32,
   },
 }));

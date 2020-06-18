@@ -3,6 +3,9 @@ package com.cockpit.api.controller;
 import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dto.TeamDTO;
 import com.cockpit.api.service.TeamService;
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,15 +23,22 @@ public class TeamController {
         this.teamService = teamService;
     }
 
-    // CREATE a new Team
+    // CREATE a new Team and assign it to an MVP
     @PostMapping(
-            value = "/api/v1/team/create"
+            value = "/api/v1/team/create/{mvpId}"
     )
-    public ResponseEntity<TeamDTO> createTeam(@RequestBody TeamDTO teamDTO) {
-        TeamDTO newTeam = teamService.createNewTeam(teamDTO);
+    public ResponseEntity<TeamDTO> createTeam(@PathVariable Long mvpId, @RequestBody TeamDTO teamDTO) throws ResourceNotFoundException {
+        TeamDTO newTeam = teamService.createNewTeam(teamDTO,mvpId);
         return ResponseEntity.ok(newTeam);
     }
-
+    // GET ALL
+    @GetMapping(
+            value = "/api/v1/team/all"
+    )
+    public ResponseEntity<List<TeamDTO>> getTeams() {
+    	  List<TeamDTO> mvpList = teamService.findAll();
+          return ResponseEntity.ok(mvpList);
+    }
     // GET Team BY ID
     @GetMapping(
             value = "/api/v1/team/{id}"

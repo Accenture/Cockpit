@@ -10,6 +10,8 @@ import mvnMenuReducer from '../components/MvpMenu/mvpMenuSlice';
 import ormReducer from './ormSlice';
 import headerReducer from '../components/Header/HeaderSlice';
 import smFormReducer from '../components/ScrumMasterForm/ScrumMasterFormSlice';
+import editMvpFormReducer from '../components/InformationForm/InformationFormSlice';
+import teamManagementFormReducer from '../components/TeamManagementForm/TeamManagementFormSlice';
 
 const persistConfig = {
   key: 'reduxStates',
@@ -21,6 +23,8 @@ const reducers = combineReducers({
   header: headerReducer,
   ScrumMasterForm: smFormReducer,
   orm: ormReducer,
+  InformationForm: editMvpFormReducer,
+  TeamManagementForm: teamManagementFormReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);
