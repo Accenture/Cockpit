@@ -66,7 +66,7 @@ public class JiraGatewayServiceTest {
         jiraGatewayService.setTotalNbOfUserStoryForEachSprintOfEachProject();
 
         // then
-        Assert.assertEquals(mockSprint.getTotalNbUs().intValue(), 5);
+        Assert.assertEquals(5, mockSprint.getTotalNbUs().intValue());
     }
 
 }
