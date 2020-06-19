@@ -230,7 +230,7 @@ export default function InformationForm() {
                 margin="normal"
                 id="mvp-start-date"
                 label="MVP Start Date"
-                value={mvpStartDate}
+                value={mvpStartDate || ''}
                 onChange={handleStartDateChange}
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
@@ -249,7 +249,7 @@ export default function InformationForm() {
                 id="mvp-end-date"
                 label="MVP End Date"
                 value={mvpEndDate}
-                onChange={handleEndDateChange}
+                onChange={handleEndDateChange || ''}
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
