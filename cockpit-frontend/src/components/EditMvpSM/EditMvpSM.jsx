@@ -149,14 +149,16 @@ export default function EditMvpSMForm() {
         <Button onClick={handleClose} style={{ borderRadius: 20 }}>
           Cancel
         </Button>
-        <Button
-          onClick={value === 1 ? submit : handleClose}
-          color="primary"
-          variant="contained"
-          style={{ borderRadius: 20 }}
-        >
-          Save
-        </Button>
+        {value === 0 && (
+          <Button
+            onClick={submit}
+            color="primary"
+            variant="contained"
+            style={{ borderRadius: 20 }}
+          >
+            Save
+          </Button>
+        )}
       </DialogActions>
     </div>
   );

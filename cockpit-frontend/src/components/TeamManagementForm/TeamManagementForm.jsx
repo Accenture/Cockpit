@@ -11,9 +11,10 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { fetchAllMvps } from '../../redux/ormSlice';
+
 import MvpService from '../../services/service';
-import { setselectedTeam, selectedTeamState } from './TeamManagementFormSlice';
 import useStyles from './styles';
 
 export default function TeamManagementForm() {
@@ -22,13 +23,13 @@ export default function TeamManagementForm() {
   const [teams, setTeams] = useState([]);
   const [value, setValue] = useState(0);
   const [teamName, setTeamName] = useState('');
+  const [selectedTeam, setSelectedTeam] = useState('');
   const [open, setOpen] = React.useState(false);
   const dispatch = useDispatch();
-  const selectedTeam = useSelector(selectedTeamState);
   const mvpId = useParams().id;
   function handleChange(event) {
     const found = teams.find((element) => element.id === event.target.value);
-    dispatch(setselectedTeam(found));
+    setSelectedTeam(found);
   }
   useEffect(() => {
     async function getAllTeam() {
@@ -38,6 +39,7 @@ export default function TeamManagementForm() {
     getAllTeam();
   }, []);
   const handleValueChange = (event, valeur) => {
+    setOpen(false);
     setValue(valeur);
   };
   async function save(event) {
@@ -48,6 +50,7 @@ export default function TeamManagementForm() {
     await MvpService.createNewTeam(team, mvpId);
     setOpen(true);
     setTeamName('');
+    dispatch(fetchAllMvps());
   }
   function handleNameChange(event) {
     setTeamName(event.target.value);
@@ -62,6 +65,13 @@ export default function TeamManagementForm() {
 
     setOpen(false);
   };
+  async function assign(event) {
+    event.preventDefault();
+    await MvpService.assignTeam(mvpId, selectedTeam.id);
+    setOpen(true);
+    setTeamName('');
+    dispatch(fetchAllMvps());
+  }
   return (
     <Paper className={classes.paper}>
       <form>
@@ -83,35 +93,47 @@ export default function TeamManagementForm() {
           </ButtonGroup>
 
           {value === 1 && (
-            <FormControl
-              required
-              size="small"
-              fullWidth
-              variant="outlined"
-              style={{ marginTop: 32 }}
-            >
-              <Select
-                displayEmpty
-                onChange={handleChange}
-                value={selectedTeam.id || ''}
-              >
-                <MenuItem disabled value="">
-                  select a team
-                </MenuItem>
-                {teams.map((team) =>
-                  team.name !== '' ? (
-                    <MenuItem key={team.id} value={team.id}>
-                      {team.name}
+            <Grid container className={classes.containerAssign}>
+              <Grid item xs={8}>
+                <FormControl required size="small" fullWidth variant="outlined">
+                  <Select
+                    displayEmpty
+                    onChange={handleChange}
+                    value={selectedTeam.id || ''}
+                  >
+                    <MenuItem disabled value="">
+                      select a team
                     </MenuItem>
-                  ) : (
-                    ''
-                  ),
-                )}
-              </Select>
-            </FormControl>
+                    {teams.map((team) =>
+                      team.name !== '' ? (
+                        <MenuItem key={team.id} value={team.id}>
+                          {team.name}
+                        </MenuItem>
+                      ) : (
+                        ''
+                      ),
+                    )}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={4}>
+                <Button
+                  onClick={assign}
+                  id="submit"
+                  value="Submit"
+                  type="submit"
+                  disabled={selectedTeam === ''}
+                  variant="outlined"
+                  color="primary"
+                  className={classes.buttonAssign}
+                >
+                  assign
+                </Button>
+              </Grid>
+            </Grid>
           )}
           {value === 2 && (
-            <Grid container style={{ marginTop: 32 }}>
+            <Grid container className={classes.containerAdd}>
               <Grid item xs={8}>
                 <FormLabel className={classes.formLabel}>Name</FormLabel>
                 <TextField
@@ -141,17 +163,15 @@ export default function TeamManagementForm() {
                   save
                 </Button>
               </Grid>
-              <Snackbar
-                open={open}
-                autoHideDuration={6000}
-                onClose={handleClose}
-              >
-                <Alert onClose={handleClose} severity="success">
-                  Team successfully created and assigned to this MVP !
-                </Alert>
-              </Snackbar>
             </Grid>
           )}
+          <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity="success">
+              {value === 2 &&
+                'Team successfully created and assigned to this MVP!'}{' '}
+              {value === 1 && 'Team successfully assigned to this MVP!'}
+            </Alert>
+          </Snackbar>
         </Grid>
       </form>
     </Paper>
