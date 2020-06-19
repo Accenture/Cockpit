@@ -59,6 +59,14 @@ function createNewTeam(team, mvpId) {
     return e;
   }
 }
+function assignTeam(id, teamId) {
+  try {
+    return API.put(`${mvpUrl}/${id}/assignTeam/${teamId}`, headers);
+  } catch (e) {
+    console.log(`Error when creating new team: ${e}`);
+    return e;
+  }
+}
 const MvpService = {
   getAll,
   createNewJiraProject,
@@ -66,6 +74,7 @@ const MvpService = {
   updateJiraProject,
   getTeams,
   createNewTeam,
+  assignTeam,
 };
 
 export default MvpService;

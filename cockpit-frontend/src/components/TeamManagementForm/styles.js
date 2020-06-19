@@ -23,4 +23,14 @@ export default makeStyles((theme) => ({
     borderRadius: 20,
     margin: 32,
   },
+  buttonAssign: {
+    borderRadius: 20,
+    margin: '0px 24px',
+  },
+  containerAdd: {
+    marginTop: 32,
+  },
+  containerAssign: {
+    marginTop: 60,
+  },
 }));
