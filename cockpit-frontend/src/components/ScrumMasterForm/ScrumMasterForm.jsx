@@ -70,16 +70,11 @@ export default function ScrumMasterForm() {
     e.preventDefault();
     const newJira = {
       jiraProjectKey: jiraPK,
-     // currentSprint: 0,
-    //  jiraProjectId: 0,
-    //  mvpStartDate: '',
-     // mvpEndDate: '',
       mvp: {
         name: mvpName,
         entity: selectedEntity,
         urlMvpAvatar: imageUrl,
         cycle: cycleNumber,
-     //   mvpDescription: '',
         status: 'inprogress',
       },
     };
