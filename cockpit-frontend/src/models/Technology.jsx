@@ -1,3 +1,4 @@
+/*
 import { Model, attr } from 'redux-orm';
 
 export class Technology extends Model {
@@ -14,3 +15,4 @@ Technology.fields = {
 };
 
 export default Technology;
+*/
