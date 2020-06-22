@@ -283,7 +283,7 @@ public class JiraGatewayService {
         }
     }
 
-    @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_SECOND)
+    @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
     public void setTotalNbOfUserStoryForEachSprintOfEachProject() {
         List<Jira> jiraProjectList = jiraRepository.findAllByOrderById();
         for (Jira jira : jiraProjectList) {
