@@ -1,3 +1,4 @@
+/*
 import { Model, attr, fk } from 'redux-orm';
 
 export class Sprint extends Model {
@@ -16,6 +17,11 @@ Sprint.fields = {
   teamConfidence: attr(),
   totalNbUs: attr(),
   sprintNumber: attr(),
-  idJira: fk('Jira', 'sprint'),
+  idJira: fk({
+    to: 'Jira',
+    as: 'jira',
+    relatedName: 'sprints',
+  }),
 };
 export default Sprint;
+*/

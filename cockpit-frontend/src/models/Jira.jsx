@@ -1,4 +1,5 @@
-import { Model, attr, many } from 'redux-orm';
+/*
+import { Model, attr, oneToOne } from 'redux-orm';
 
 export class Jira extends Model {
   toString() {
@@ -14,7 +15,12 @@ Jira.fields = {
   jiraProjectId: attr(),
   mvpStartDate: attr(),
   mvpEndDate: attr(),
-  technologies: many('Technology'),
+  idMvp: oneToOne({
+    to: 'Mvp',
+    as: 'mvp',
+    relatedName: 'jira',
+  }),
 };
 
 export default Jira;
+*/

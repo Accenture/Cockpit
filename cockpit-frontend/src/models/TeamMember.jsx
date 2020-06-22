@@ -1,3 +1,4 @@
+/*
 import { Model, attr } from 'redux-orm';
 
 export class TeamMember extends Model {
@@ -15,3 +16,4 @@ TeamMember.fields = {
 };
 
 export default TeamMember;
+*/

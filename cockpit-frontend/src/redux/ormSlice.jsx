@@ -24,8 +24,11 @@ const ormSlice = createSlice({
     [fetchAllMvps.fulfilled]: withSession((session, action) => {
       // Add mvp to the state array
       action.payload.forEach((mvp) => {
-        if (session.Mvp.withId(mvp.id) == null) session.Mvp.create(mvp);
-        else session.Mvp.withId(mvp.id).update(mvp);
+        if (session.Mvp.withId(mvp.id) == null) {
+          session.Mvp.create(mvp);
+        } else {
+          session.Mvp.withId(mvp.id).update(mvp);
+        }
       });
     }),
   },
