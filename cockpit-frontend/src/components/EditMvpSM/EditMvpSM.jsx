@@ -67,22 +67,6 @@ export default function EditMvpSMForm() {
         cycle,
         mvpDescription: pitch,
         status,
-        team: {
-          name: '',
-          teamMembers: [
-            {
-              firstName: '',
-              lastName: '',
-              email: '',
-            },
-          ],
-        },
-        technologies: [
-          {
-            name: '',
-            url: '',
-          },
-        ],
       },
     };
     await MvpService.updateJiraProject(newJira);
