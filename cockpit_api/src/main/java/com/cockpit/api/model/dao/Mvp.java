@@ -25,7 +25,7 @@ public class Mvp {
     @NotNull(message="Cycle is mandatory")
     private int cycle;
 
-    @NotNull(message="MVP Description is mandatory")
+   
     private String mvpDescription;
 
     private String status;
