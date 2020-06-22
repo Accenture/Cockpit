@@ -283,12 +283,15 @@ public class JiraGatewayService {
         }
     }
 
-    @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
+    @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_SECOND)
     public void setTotalNbOfUserStoryForEachSprintOfEachProject() {
         List<Jira> jiraProjectList = jiraRepository.findAllByOrderById();
         for (Jira jira : jiraProjectList) {
             List<Sprint> sprintList = sprintRepository.findByJiraOrderBySprintNumber(jira);
-            int totalNumberOfUserStoriesUntilCurrentSprint = userStoryRepository.countUserStoriesByJiraAndCreationDateBefore(jira, sprintList.get(0).getSprintStartDate());
+            int totalNumberOfUserStoriesUntilCurrentSprint = 0;
+            if (sprintList.size() > 0) {
+                totalNumberOfUserStoriesUntilCurrentSprint = userStoryRepository.countUserStoriesByJiraAndCreationDateBefore(jira, sprintList.get(0).getSprintStartDate());
+            }
                 for(Sprint sprint: sprintList) {
                 Date sprintStartDate = sprint.getSprintStartDate();
                 Date sprintEndDate = sprint.getSprintEndDate();

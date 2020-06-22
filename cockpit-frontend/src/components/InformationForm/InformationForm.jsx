@@ -47,8 +47,8 @@ export default function InformationForm() {
   const entity = useSelector(entityState);
   const status = useSelector(statusState);
   const urlMvpAvatar = useSelector(imageUrlState);
-  const mvpStartDate = useSelector(mvpStartDateState);
-  const mvpEndDate = useSelector(mvpEndDateState);
+  const mvpStartDate = useSelector(mvpStartDateState) || new Date();
+  const mvpEndDate = useSelector(mvpEndDateState) || new Date();
 
   useEffect(() => {
     dispatch(setName(mvpInfo.name));
