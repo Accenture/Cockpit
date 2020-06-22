@@ -38,7 +38,7 @@ import static javax.management.timer.Timer.*;
 @EnableScheduling
 @Service
 public class JiraGatewayService {
-/*
+
     private ModelMapper modelMapper = new ModelMapper();
     private final SprintRepository sprintRepository;
     private final JiraRepository jiraRepository;
@@ -301,5 +301,4 @@ public class JiraGatewayService {
             }
         }
     }
-    */
 }
