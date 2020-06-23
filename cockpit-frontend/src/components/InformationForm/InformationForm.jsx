@@ -103,6 +103,7 @@ export default function InformationForm() {
               placeholder="MVP Name"
               size="small"
               onChange={handleNameChange}
+              inputProps={{ maxLength: 50 }}
             />
           </Grid>
           <Grid item xs={12}>
@@ -203,6 +204,7 @@ export default function InformationForm() {
               multiline
               rows="3"
               onChange={handlePitchChange}
+              inputProps={{ maxLength: 500 }}
             />
           </Grid>
           <Grid item xs={12}>
