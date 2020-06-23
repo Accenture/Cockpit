@@ -104,15 +104,11 @@ export default function TeamManagementForm() {
                     <MenuItem disabled value="">
                       select a team
                     </MenuItem>
-                    {teams.map((team) =>
-                      team.name !== '' ? (
-                        <MenuItem key={team.id} value={team.id}>
-                          {team.name}
-                        </MenuItem>
-                      ) : (
-                        ''
-                      ),
-                    )}
+                    {teams.map((team) => (
+                      <MenuItem key={team.id} value={team.id}>
+                        {team.name}
+                      </MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               </Grid>
@@ -141,9 +137,9 @@ export default function TeamManagementForm() {
                   required
                   fullWidth
                   variant="outlined"
-                  id="mvpName"
+                  id="teamName"
                   name="name"
-                  placeholder="MVP Name"
+                  placeholder="Team Name"
                   size="small"
                   value={teamName || ''}
                   onChange={handleNameChange}
