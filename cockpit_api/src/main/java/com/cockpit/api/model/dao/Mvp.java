@@ -25,7 +25,8 @@ public class Mvp {
     @NotNull(message="Cycle is mandatory")
     private int cycle;
 
-   
+    private int scopeCommitment;
+
     private String mvpDescription;
 
     private String status;
@@ -46,6 +47,14 @@ public class Mvp {
 
     public Mvp() {
         // Empty constructor
+    }
+
+    public int getScopeCommitment() {
+        return scopeCommitment;
+    }
+
+    public void setScopeCommitment(int scopeCommitment) {
+        this.scopeCommitment = scopeCommitment;
     }
 
     public void setName(String name) {

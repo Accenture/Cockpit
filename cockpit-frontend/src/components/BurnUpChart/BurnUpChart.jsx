@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import MvpService from '../../services/service';
+import { mvpSelector } from '../../redux/selector';
 import {
+  red,
   white,
   darkBlue,
   lightBlueShadow,
@@ -13,6 +16,14 @@ import {
 export default function BurnUpChart() {
   const [chartData, setChartData] = useState([]);
   const { id } = useParams();
+
+  const { scopeCommitment } = useSelector((state) => mvpSelector(state)).find(
+    (mvp) => mvp.id.toString() === id,
+  );
+
+  const scopeCommitmentArray = new Array(chartData.length).fill(
+    scopeCommitment,
+  );
 
   async function getData(mvpId) {
     const result = await MvpService.getBurnUpChartData(mvpId);
@@ -69,6 +80,13 @@ export default function BurnUpChart() {
           borderDash: [4, 2],
           lineTension: 0,
           data: chartData.map((sprint) => sprint.projectionUsClosed),
+        },
+        {
+          label: 'Scope Commitment',
+          fill: false,
+          borderColor: red,
+          lineTension: 0.1,
+          data: scopeCommitmentArray,
         },
       ],
     };

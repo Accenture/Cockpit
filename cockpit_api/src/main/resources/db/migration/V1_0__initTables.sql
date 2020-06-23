@@ -31,6 +31,7 @@ CREATE TABLE public.mvp(
     entity            VARCHAR (50),
     url_mvp_avatar    VARCHAR,
     cycle             INT,
+    scope_commitment  INT,
     mvp_description   VARCHAR (500),
     status            VARCHAR (50),
     id_team           INT,
