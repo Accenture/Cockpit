@@ -15,6 +15,7 @@ import {
   pitchState,
   entityState,
   cycleState,
+  scopeCommitmentState,
   statusState,
   imageUrlState,
   mvpStartDateState,
@@ -39,6 +40,7 @@ export default function EditMvpSMForm() {
   const name = useSelector(nameState);
   const pitch = useSelector(pitchState);
   const cycle = useSelector(cycleState);
+  const scopeCommitment = useSelector(scopeCommitmentState);
   const entity = useSelector(entityState);
   const status = useSelector(statusState);
   const urlMvpAvatar = useSelector(imageUrlState);
@@ -65,6 +67,7 @@ export default function EditMvpSMForm() {
         entity,
         urlMvpAvatar,
         cycle,
+        scopeCommitment,
         mvpDescription: pitch,
         status,
       },
