@@ -77,4 +77,15 @@ public class MvpService {
 		Mvp updatedtMvp = mvpRepository.save(mvpToAssignedTo.get());
 		return modelMapper.map(updatedtMvp, MvpDTO.class);
 	}
+	public MvpDTO unassignTeamOfMvp(Long id) throws ResourceNotFoundException {
+		Optional<Mvp> mvp = mvpRepository.findById(id);
+		if (!mvp.isPresent()) {
+			throw new ResourceNotFoundException("Mvp to assign to is not found");
+		}
+
+		
+		mvp.get().setTeam(null);
+		Mvp updatedtMvp = mvpRepository.save(mvp.get());
+		return modelMapper.map(updatedtMvp, MvpDTO.class);
+	}
 }
