@@ -13,6 +13,10 @@ export default function MvpCard(props) {
   const classes = useStyles();
   const { mvpInfo } = props;
   const isHomePage = useLocation().pathname === '/';
+  let status;
+  if (mvpInfo.status === 'inprogress') status = 'In Progress';
+  else if (mvpInfo.status === 'transferred') status = 'Transferred';
+  else status = 'Unknown status';
   return (
     <Card className={isHomePage ? classes.dashboardCard : classes.mvpInfoCard}>
       <CardMedia
@@ -29,11 +33,7 @@ export default function MvpCard(props) {
           </Grid>
           {!isHomePage && (
             <Grid item xs={5} className={classes.mvpStatusCard}>
-              <Typography className={classes.subTitle}>
-                {mvpInfo.status
-                  ? mvpInfo.status.toUpperCase()
-                  : 'Unknown status'}
-              </Typography>
+              <Typography className={classes.subTitle}>{status}</Typography>
             </Grid>
           )}
         </Grid>
