@@ -1,5 +1,7 @@
-package com.cockpit.api.model.dto;
+package com.cockpit.api.serializer;
 
+
+// Not used but may be useful later
 public class IssueDTO {
     private Integer id;
     private String key;

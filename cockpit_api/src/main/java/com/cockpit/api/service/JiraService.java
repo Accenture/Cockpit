@@ -4,11 +4,15 @@ import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Mvp;
 import com.cockpit.api.model.dto.JiraDTO;
+import com.cockpit.api.model.dto.MvpDTO;
 import com.cockpit.api.repository.JiraRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class JiraService {
@@ -19,6 +23,11 @@ public class JiraService {
     @Autowired
     public JiraService(JiraRepository jiraRepository) {
         this.jiraRepository = jiraRepository;
+    }
+
+    public List<JiraDTO> findAllJira(){
+        List<Jira> jiraList = jiraRepository.findAllByOrderById();
+        return jiraList.stream().map(jira -> modelMapper.map(jira, JiraDTO.class)).collect(Collectors.toList());
     }
 
     public JiraDTO createNewJiraProject(JiraDTO jiraDTO){

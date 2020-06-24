@@ -3,23 +3,31 @@ package com.cockpit.api.service;
 import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Sprint;
+import com.cockpit.api.model.dto.JiraDTO;
 import com.cockpit.api.model.dto.SprintDTO;
 import com.cockpit.api.repository.SprintRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SprintService {
     private final SprintRepository sprintRepository;
 
-    private ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     public SprintService(SprintRepository sprintRepository) {
         this.sprintRepository = sprintRepository;
+    }
+
+    public List<SprintDTO> getAllSprints(){
+        List<Sprint> sprints = sprintRepository.findAll();
+        return sprints.stream().map(sprint -> modelMapper.map(sprint, SprintDTO.class)).collect(Collectors.toList());
     }
 
     public SprintDTO createNewSprint(SprintDTO sprintDTO){
