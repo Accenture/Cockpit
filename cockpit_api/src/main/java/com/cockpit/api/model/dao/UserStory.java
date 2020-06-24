@@ -16,7 +16,7 @@ public class UserStory {
 
     private Date doneDate;
 
-    private double storyPoint;
+    private Double storyPoint;
 
     private String description;
 
@@ -31,7 +31,7 @@ public class UserStory {
     private String summary;
 
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name="id_sprint")
     private Sprint sprint;
 
@@ -71,11 +71,11 @@ public class UserStory {
         this.doneDate = doneDate;
     }
 
-    public double getStoryPoint() {
+    public Double getStoryPoint() {
         return storyPoint;
     }
 
-    public void setStoryPoint(double storyPoint) {
+    public void setStoryPoint(Double storyPoint) {
         this.storyPoint = storyPoint;
     }
 

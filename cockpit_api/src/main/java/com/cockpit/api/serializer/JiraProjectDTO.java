@@ -1,4 +1,4 @@
-package com.cockpit.api.model.dto;
+package com.cockpit.api.serializer;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

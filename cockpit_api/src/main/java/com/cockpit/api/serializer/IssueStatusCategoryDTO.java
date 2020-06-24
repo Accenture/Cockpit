@@ -1,4 +1,5 @@
-package com.cockpit.api.model.dto;
+package com.cockpit.api.serializer;
+// Not used but may be useful later
 
 public class IssueStatusCategoryDTO {
     private Integer id;

@@ -1,14 +1,16 @@
 package com.cockpit.api.service.jiragateway;
 
+import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Sprint;
 import com.cockpit.api.model.dao.UserStory;
-import com.cockpit.api.model.dto.JiraBoardDTO;
-import com.cockpit.api.model.dto.JiraProjectDTO;
+import com.cockpit.api.serializer.JiraBoardDTO;
+import com.cockpit.api.serializer.JiraProjectDTO;
 import com.cockpit.api.model.dto.JiraSprintDTO;
 import com.cockpit.api.repository.JiraRepository;
 import com.cockpit.api.repository.SprintRepository;
 import com.cockpit.api.repository.UserStoryRepository;
+import com.cockpit.api.service.UserStoryService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -41,24 +43,30 @@ import java.util.*;
 @EnableScheduling
 @Service
 public class JiraGatewayService {
-	
-    private ModelMapper modelMapper = new ModelMapper();
+
+    private final ModelMapper modelMapper = new ModelMapper();
     private final SprintRepository sprintRepository;
     private final JiraRepository jiraRepository;
     private final UserStoryRepository userStoryRepository;
-    private EntityManager entityManager;
+    private final UserStoryService userStoryService;
+    private static final String VALUESFIELD ="values";
+    private static final String STATUSFIELD ="status";
+    private static final String CREATEDFIELD = "created";
+    private static final String STORYPOINTFIELD = "customfield_10026";
+    private static final String HEADERKEY = "Accept";
+    private static final String HEADERVALUE = "application/json";
 
     @Autowired
     public JiraGatewayService(
             JiraRepository jiraRepository,
             SprintRepository sprintRepository,
             UserStoryRepository userStoryRepository,
-            EntityManager entityManager
+            UserStoryService userStoryService
     ) {
-        this.jiraRepository = jiraRepository;
-        this.sprintRepository = sprintRepository;
+        this.jiraRepository     = jiraRepository;
+        this.sprintRepository   = sprintRepository;
         this.userStoryRepository = userStoryRepository;
-        this.entityManager = entityManager;
+        this.userStoryService = userStoryService;
     }
 
     static Logger log = LoggerFactory.getLogger(JiraGatewayService.class);
@@ -73,7 +81,7 @@ public class JiraGatewayService {
     @Scheduled(fixedDelay = 1000)
     public void updateProjects() throws UnirestException, JsonProcessingException {
         HttpResponse<JsonNode> jiraProjects = getJira();
-        JSONArray jiraProjectsList = jiraProjects.getBody().getObject().getJSONArray("values");
+        JSONArray jiraProjectsList = jiraProjects.getBody().getObject().getJSONArray(VALUESFIELD);
         for (Object jiraProject: jiraProjectsList){
             if (jiraProject instanceof JSONObject){
                 ObjectMapper mapper = new ObjectMapper();
@@ -93,9 +101,9 @@ public class JiraGatewayService {
     public void getJiraSprints() throws UnirestException, JsonProcessingException {
         HttpResponse<JsonNode> response = Unirest.get(jiraUrl+"/rest/agile/1.0/board?type=scrum")
                 .basicAuth(username, token)
-                .header("Accept", "application/json")
+                .header(HEADERKEY, HEADERVALUE)
                 .asJson();
-        JSONArray jiraBoards = response.getBody().getObject().getJSONArray("values");
+        JSONArray jiraBoards = response.getBody().getObject().getJSONArray(VALUESFIELD);
         for (Object jiraBoard: jiraBoards){
             if (jiraBoard instanceof JSONObject){
                 ObjectMapper mapper = new ObjectMapper();
@@ -103,9 +111,9 @@ public class JiraGatewayService {
                 Jira foundJiraProject = jiraRepository.findByJiraProjectKey(jbProject.getLocation().getProjectKey());
                 HttpResponse<JsonNode> sprintResponse = Unirest.get(jiraUrl+"/rest/agile/1.0/board/"+jbProject.getId()+"/sprint")
                         .basicAuth(username, token)
-                        .header("Accept", "application/json")
+                        .header(HEADERKEY, HEADERVALUE)
                         .asJson();
-                JSONArray jiraSprints = sprintResponse.getBody().getObject().getJSONArray("values");
+                JSONArray jiraSprints = sprintResponse.getBody().getObject().getJSONArray(VALUESFIELD);
                 saveSprints(jiraSprints, foundJiraProject);
             }
         }
@@ -116,7 +124,7 @@ public class JiraGatewayService {
     @Transactional
     public void getJiraIssues() throws UnirestException, JsonProcessingException {
         HttpResponse<JsonNode> response = getJira();
-        JSONArray jiraProjects = response.getBody().getObject().getJSONArray("values");
+        JSONArray jiraProjects = response.getBody().getObject().getJSONArray(VALUESFIELD);
         for (Object jiraProject: jiraProjects){
             if (jiraProject instanceof JSONObject){
                 ObjectMapper mapper = new ObjectMapper();
@@ -126,55 +134,14 @@ public class JiraGatewayService {
                     int pagination = 0;
                     ObjectNode payload = getIssuesBody(jProject, pagination);
                     mapBodyObject();
-
-                    HttpResponse<JsonNode> jiraProjectIssues = Unirest.post(jiraUrl+"/rest/api/3/search")
-                            .basicAuth(username, token)
-                            .header("Accept", "application/json")
-                            .header("Content-Type", "application/json")
-                            .body(payload)
-                            .asJson();
-                    // FIXME: Create a class JiraIssue to map data instead of using JSONArray (with getter setter)
+                    HttpResponse<JsonNode> jiraProjectIssues = searchInJira(payload);
                     while(jiraProjectIssues.getBody().getObject().getInt("total") >= pagination){
-                        log.warn(String.valueOf(jiraProjectIssues.getBody()));
                         JSONArray jiraIssues = jiraProjectIssues.getBody().getObject().getJSONArray("issues");
                         if (jiraIssues.length() > 0){
-                            for (Object jiraIssue: jiraIssues) {
-                                if (jiraIssue instanceof JSONObject && ((JSONObject) jiraIssue).getJSONObject("versionedRepresentations").getJSONObject("issuetype").getJSONObject("1").getString("name").equals("Story")) {
-                                    UserStory issue = userStoryRepository.findByIssueKey(String.valueOf(((JSONObject) jiraIssue).getString("key")));
-                                    if (issue == null){
-                                        issue = new UserStory();
-                                    }
-                                    DateTime creationDate = new DateTime(((JSONObject) jiraIssue).getJSONObject("versionedRepresentations").getJSONObject("created").getString("1"));
-                                    issue.setCreationDate(creationDate.toDate());
-                                    if (((JSONObject) jiraIssue).getJSONObject("versionedRepresentations").getJSONObject("status").getJSONObject("1").getString("name").equals("Done")){
-                                        DateTime doneDate = new DateTime(((JSONObject) jiraIssue).getJSONObject("versionedRepresentations").getJSONObject("created").getString("1"));
-                                        issue.setDoneDate(doneDate.toDate());
-                                    }
-                                    // TODO: Replace it by == null
-                                    if (!String.valueOf(((JSONObject) jiraIssue).getJSONObject("versionedRepresentations").getJSONObject("customfield_10026").get("1")).equals("null")){
-                                        issue.setStoryPoint((Double) ((JSONObject) jiraIssue).getJSONObject("versionedRepresentations").getJSONObject("customfield_10026").get("1"));
-                                    }
-                                    issue.setIssueKey(((JSONObject) jiraIssue).getString("key"));
-                                    issue.setJiraIssueId(((JSONObject) jiraIssue).getInt("id"));
-                                    issue.setSummary(((JSONObject) jiraIssue).getJSONObject("versionedRepresentations").getJSONObject("summary").getString("1"));
-                                    issue.setPriority(((JSONObject) jiraIssue).getJSONObject("versionedRepresentations").getJSONObject("priority").getJSONObject("1").getString("name"));
-                                    issue.setStatus(((JSONObject) jiraIssue).getJSONObject("versionedRepresentations").getJSONObject("status").getJSONObject("1").getString("name"));
-                                    JSONArray listSprints = ((JSONObject) jiraIssue).getJSONObject("versionedRepresentations").getJSONObject("customfield_10020").getJSONArray("2");
-                                    if (listSprints.length() != 0){
-                                        sortAndSaveBySprintId(listSprints, issue);
-                                    }
-                                    issue.setJira(foundJiraProject);
-                                    userStoryRepository.save(modelMapper.map(issue, UserStory.class));
-                                }
-                            }
+                            saveIssues(jiraIssues, foundJiraProject);
                             pagination += 100;
                             payload.put("startAt", pagination);
-                            jiraProjectIssues = Unirest.post(jiraUrl+"/rest/api/3/search")
-                                    .basicAuth(username, token)
-                                    .header("Accept", "application/json")
-                                    .header("Content-Type", "application/json")
-                                    .body(payload)
-                                    .asJson();
+                            jiraProjectIssues = searchInJira(payload);
                         }else{
                             break;
                         }
@@ -185,33 +152,74 @@ public class JiraGatewayService {
     }
 
 //    @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
+//    @Scheduled(fixedDelay = 1000)
+//    public void setTotalNbOfUserStoryForEachSprintOfEachProject() {
+//        List<Jira> jiraProjectList = jiraRepository.findAllByOrderById();
+//        for (Jira jira : jiraProjectList) {
+//            List<Sprint> sprintList = sprintRepository.findByJiraOrderBySprintNumber(jira);
+//            int totalNumberOfUserStoriesUntilCurrentSprint = userStoryRepository.countUserStoriesByJiraAndCreationDateBefore(jira, sprintList.get(0).getSprintStartDate());
+//                for(Sprint sprint: sprintList) {
+//                Date sprintStartDate = sprint.getSprintStartDate();
+//                Date sprintEndDate = sprint.getSprintEndDate();
+//                if (sprintStartDate != null && sprintEndDate != null) {
+//                    int nbUserStoriesCreatedDuringCurrentSprint= userStoryRepository.countUserStoriesByJiraAndCreationDateGreaterThanAndCreationDateLessThanEqual(jira, sprintStartDate, sprintEndDate);
+//                    totalNumberOfUserStoriesUntilCurrentSprint += nbUserStoriesCreatedDuringCurrentSprint;
+//                    sprint.setTotalNbUs(totalNumberOfUserStoriesUntilCurrentSprint);
+//                    sprintRepository.save(sprint);
+//                }
+//            }
+//        }
+//    }
+
     @Scheduled(fixedDelay = 1000)
-    public void setTotalNbOfUserStoryForEachSprintOfEachProject() {
+    public void deleteJiraProjects() throws UnirestException {
         List<Jira> jiraProjectList = jiraRepository.findAllByOrderById();
-        for (Jira jira : jiraProjectList) {
-            List<Sprint> sprintList = sprintRepository.findByJiraOrderBySprintNumber(jira);
-            int totalNumberOfUserStoriesUntilCurrentSprint = 0;
-            if (sprintList.size() > 0) {
-                totalNumberOfUserStoriesUntilCurrentSprint = userStoryRepository.countUserStoriesByJiraAndCreationDateBefore(jira, sprintList.get(0).getSprintStartDate());
-            }
-                for(Sprint sprint: sprintList) {
-                Date sprintStartDate = sprint.getSprintStartDate();
-                Date sprintEndDate = sprint.getSprintEndDate();
-                if (sprintStartDate != null && sprintEndDate != null) {
-                    int nbUserStoriesCreatedDuringCurrentSprint= userStoryRepository.countUserStoriesByJiraAndCreationDateGreaterThanAndCreationDateLessThanEqual(jira, sprintStartDate, sprintEndDate);
-                    totalNumberOfUserStoriesUntilCurrentSprint += nbUserStoriesCreatedDuringCurrentSprint;
-                    sprint.setTotalNbUs(totalNumberOfUserStoriesUntilCurrentSprint);
-                    sprintRepository.save(sprint);
-                }
+        for(Jira jira : jiraProjectList){
+            HttpResponse<JsonNode> jiraProject = Unirest.get(jiraUrl+"/rest/api/3/project/"+jira.getJiraProjectKey())
+                    .basicAuth(username, token)
+                    .header(HEADERKEY, HEADERVALUE)
+                    .asJson();
+            if (jiraProject.getStatus() == 404) {
+                jiraRepository.delete(jira);
             }
 
         }
     }
 
+    @Scheduled(fixedDelay = 1000)
+    public void deleteJiraSprint() throws UnirestException{
+        List<Sprint> sprintList = sprintRepository.findAll();
+        for (Sprint sprint : sprintList){
+            HttpResponse<JsonNode> foundSprint = Unirest.get(jiraUrl+"/rest/agile/1.0/sprint/"+sprint.getJiraSprintId())
+                    .basicAuth(username, token)
+                    .header(HEADERKEY, HEADERVALUE)
+                    .asJson();
+            if (foundSprint.getStatus() == 404) {
+                sprintRepository.delete(sprint);
+            }
+        }
+    }
+
+    @Scheduled(fixedDelay = 1000)
+    public void deleteJiraIssues() throws UnirestException {
+        List<UserStory> userStories = userStoryRepository.findAll();
+        for (UserStory userStory : userStories){
+            HttpResponse<JsonNode> foundIssue = Unirest.get(jiraUrl+"/rest/api/3/issue/"+userStory.getJiraIssueId())
+                    .basicAuth(username, token)
+                    .header(HEADERKEY, HEADERVALUE)
+                    .asJson();
+            if (foundIssue.getStatus() == 404) {
+                log.warn(String.valueOf(userStory.getId()));
+                userStoryRepository.delete(userStory);
+            }
+        }
+    }
+
+
     public HttpResponse<JsonNode> getJira() throws UnirestException {
         return Unirest.get(jiraUrl+"/rest/api/3/project/search")
                 .basicAuth(username, token)
-                .header("Accept", "application/json")
+                .header(HEADERKEY, HEADERVALUE)
                 .asJson();
     }
 
@@ -235,6 +243,7 @@ public class JiraGatewayService {
                     if(sprintState.equals("active")){
                         sprint.setSprintStartDate(jsProject.getStartDate());
                         sprint.setSprintEndDate(jsProject.getEndDate());
+                        foundJiraProject.setCurrentSprint(counter);
                     }else if(sprintState.equals("closed")){
                         sprint.setSprintStartDate(jsProject.getStartDate());
                         sprint.setSprintEndDate(jsProject.getEndDate());
@@ -253,19 +262,18 @@ public class JiraGatewayService {
         ArrayNode expand = payload.putArray("expand");
         expand.add("names");
         expand.add("schema");
-//        expand.add("versionedRepresentations");
+        expand.add("versionedRepresentations");
         payload.put("jql", "project = "+jProject.getKey());
         ArrayNode fields = payload.putArray("fields");
         fields.add("summary");
-        fields.add("status");
+        fields.add(STATUSFIELD);
         fields.add("issuetype");
         fields.add("project");
         fields.add("priority");
-        fields.add("created");
+        fields.add(CREATEDFIELD);
         fields.add("description");
-        fields.add("created");
         fields.add("resolutiondate");
-        fields.add("customfield_10026");
+        fields.add(STORYPOINTFIELD);
         fields.add("customfield_10020");
         payload.put("maxResults", 100);
         payload.put("startAt", pagination);
@@ -274,7 +282,7 @@ public class JiraGatewayService {
 
     public void mapBodyObject(){
         Unirest.setObjectMapper(new com.mashape.unirest.http.ObjectMapper() {
-            private com.fasterxml.jackson.databind.ObjectMapper jacksonObjectMapper
+            private final com.fasterxml.jackson.databind.ObjectMapper jacksonObjectMapper
                     = new com.fasterxml.jackson.databind.ObjectMapper();
 
             public <T> T readValue(String value, Class<T> valueType) {
@@ -318,5 +326,47 @@ public class JiraGatewayService {
         if (issueSprint != null ) {
             issue.setSprint(issueSprint);
         }
+    }
+
+    public void saveIssues(JSONArray jiraIssues, Jira foundJiraProject){
+        for (Object jiraIssue: jiraIssues) {
+            JSONObject issueVersionedRep = ((JSONObject) jiraIssue).getJSONObject("versionedRepresentations");
+            if (issueVersionedRep.getJSONObject("issuetype").getJSONObject("1").getString("name").equals("Story")) {
+                UserStory issue = userStoryRepository.findByIssueKey(String.valueOf(((JSONObject) jiraIssue).getString("key")));
+                if (issue == null){
+                    issue = new UserStory();
+                }
+                DateTime creationDate = new DateTime(issueVersionedRep.getJSONObject(CREATEDFIELD).getString("1"));
+                issue.setCreationDate(creationDate.toDate());
+                if (issueVersionedRep.getJSONObject(STATUSFIELD).getJSONObject("1").getString("name").equals("Done")){
+                    DateTime doneDate = new DateTime(issueVersionedRep.getJSONObject(CREATEDFIELD).getString("1"));
+                    issue.setDoneDate(doneDate.toDate());
+                }
+                Object sprintDetails = (issueVersionedRep.getJSONObject(STORYPOINTFIELD).get("1"));
+                if (sprintDetails == null){
+                    issue.setStoryPoint((Double) issueVersionedRep.getJSONObject(STORYPOINTFIELD).get("1"));
+                }
+                issue.setIssueKey(((JSONObject) jiraIssue).getString("key"));
+                issue.setJiraIssueId(((JSONObject) jiraIssue).getInt("id"));
+                issue.setSummary(issueVersionedRep.getJSONObject("summary").getString("1"));
+                issue.setPriority(issueVersionedRep.getJSONObject("priority").getJSONObject("1").getString("name"));
+                issue.setStatus(issueVersionedRep.getJSONObject(STATUSFIELD).getJSONObject("1").getString("name"));
+                JSONArray listSprints = issueVersionedRep.getJSONObject("customfield_10020").getJSONArray("2");
+                if (listSprints.length() != 0){
+                    sortAndSaveBySprintId(listSprints, issue);
+                }
+                issue.setJira(foundJiraProject);
+                userStoryRepository.save(modelMapper.map(issue, UserStory.class));
+            }
+        }
+    }
+
+    public HttpResponse<JsonNode> searchInJira(ObjectNode payload) throws UnirestException {
+        return Unirest.post(jiraUrl+"/rest/api/3/search")
+                .basicAuth(username, token)
+                .header(HEADERKEY, HEADERVALUE)
+                .header("Content-Type", HEADERVALUE)
+                .body(payload)
+                .asJson();
     }
 }

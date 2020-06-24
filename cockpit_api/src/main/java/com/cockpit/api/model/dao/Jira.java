@@ -31,7 +31,7 @@ public class Jira{
     @JsonIgnore
     private Set<Sprint> sprints;
 
-    @OneToMany(mappedBy = "jira", cascade=CascadeType.ALL)
+    @OneToMany(mappedBy = "jira", cascade=CascadeType.PERSIST)
     @JsonIgnore
     private Set<UserStory> userStories;
 
