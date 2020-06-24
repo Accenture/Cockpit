@@ -24,4 +24,6 @@ public interface UserStoryRepository extends CrudRepository<UserStory, Long> {
 
 	int countUserStoriesByJiraAndCreationDateBefore(Jira jira, Date firstSprintStartDate);
 
+	List<UserStory> findAll();
+
 }

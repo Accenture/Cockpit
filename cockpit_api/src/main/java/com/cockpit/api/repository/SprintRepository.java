@@ -10,10 +10,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SprintRepository extends CrudRepository<Sprint, Long> {
-
 	Sprint findTopBySprintStartDateLessThanEqualAndJiraEqualsOrderBySprintNumberDesc(Date date, Jira jira);
     Sprint findByJiraAndSprintNumber(Jira jira, int sprintNumber);
     Sprint findByJiraSprintId(int jiraSprintId);
     List<Sprint> findByJiraOrderBySprintNumber(Jira jira);
-
+    List<Sprint> findAll();
 }

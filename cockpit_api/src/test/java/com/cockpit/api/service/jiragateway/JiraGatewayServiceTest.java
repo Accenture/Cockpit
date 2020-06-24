@@ -5,6 +5,7 @@ import com.cockpit.api.model.dao.Sprint;
 import com.cockpit.api.repository.JiraRepository;
 import com.cockpit.api.repository.SprintRepository;
 import com.cockpit.api.repository.UserStoryRepository;
+import com.cockpit.api.service.UserStoryService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,12 +32,15 @@ public class JiraGatewayServiceTest {
     @MockBean
     private SprintRepository sprintRepository;
 
+    @MockBean
+    private UserStoryService userStoryService;
+
     private static final Date SPRINT_START_DATE = new Date();
     private static final Date SPRINT_END_DATE = new Date(SPRINT_START_DATE.getTime() + 1000 * 60 * 60 * 24 * 14);
 
     @Before
     public void setUp() {
-        this.jiraGatewayService = new JiraGatewayService(jiraRepository, sprintRepository, userStoryRepository);
+        this.jiraGatewayService = new JiraGatewayService(jiraRepository, sprintRepository, userStoryRepository, userStoryService);
     }
 
     @Test
@@ -63,7 +67,7 @@ public class JiraGatewayServiceTest {
         Mockito.when(userStoryRepository.countUserStoriesByJiraAndCreationDateGreaterThanAndCreationDateLessThanEqual(Mockito.any(Jira.class), Mockito.any(Date.class),  Mockito.any(Date.class))).thenReturn(3);
 
         // when
-        jiraGatewayService.setTotalNbOfUserStoryForEachSprintOfEachProject();
+//        jiraGatewayService.setTotalNbOfUserStoryForEachSprintOfEachProject();
 
         // then
         Assert.assertEquals(5, mockSprint.getTotalNbUs().intValue());

@@ -1,6 +1,7 @@
-package com.cockpit.api.model.dto;
+package com.cockpit.api.serializer;
 
 import java.util.Date;
+// Not used but may be useful later
 
 public class IssueFieldsDTO {
     private IssueTypeDTO issueType;

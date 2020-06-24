@@ -3,6 +3,7 @@ package com.cockpit.api.service;
 import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.UserStory;
+import com.cockpit.api.model.dto.SprintDTO;
 import com.cockpit.api.model.dto.UserStoryDTO;
 import com.cockpit.api.repository.UserStoryRepository;
 import com.cockpit.api.model.dao.Sprint;
@@ -11,16 +12,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserStoryService {
     private final UserStoryRepository userStoryRepository;
 
-    private ModelMapper modelMapper = new ModelMapper();
+    private final ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     public UserStoryService(UserStoryRepository userStoryRepository) {
         this.userStoryRepository = userStoryRepository;
+    }
+
+    public List<UserStoryDTO> getAllUserStories(){
+        List<UserStory> userStories = userStoryRepository.findAll();
+        return userStories.stream().map(userStory -> modelMapper.map(userStory, UserStoryDTO.class)).collect(Collectors.toList());
     }
 
     public UserStoryDTO createNewUserStory(UserStoryDTO userStoryDTO){

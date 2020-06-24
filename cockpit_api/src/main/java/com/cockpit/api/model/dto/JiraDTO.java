@@ -12,7 +12,7 @@ public class JiraDTO {
 
     private String jiraProjectKey;
 
-    private int currentSprint;
+    private Integer currentSprint;
 
     private int jiraProjectId;
 
@@ -49,7 +49,7 @@ public class JiraDTO {
         return jiraProjectKey;
     }
 
-    public int getCurrentSprint() {
+    public Integer getCurrentSprint() {
         return currentSprint;
     }
 
@@ -73,7 +73,7 @@ public class JiraDTO {
         this.jiraProjectKey = jiraProjectKey;
     }
 
-    public void setCurrentSprint(int currentSprint) {
+    public void setCurrentSprint(Integer currentSprint) {
         this.currentSprint = currentSprint;
     }
 

@@ -1,8 +1,9 @@
-package com.cockpit.api.model.dto;
+package com.cockpit.api.serializer;
 
-import org.json.JSONArray;
+import com.cockpit.api.serializer.IssueDTO;
 
 import java.util.ArrayList;
+// Not used but may be useful later
 
 public class JiraProjectIssueDTO {
     private Integer total;
