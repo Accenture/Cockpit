@@ -1,38 +1,35 @@
 package com.cockpit.api.controller;
 
+import static org.junit.Assert.assertEquals;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.Optional;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.junit.Assert.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.Optional;
-
-import com.cockpit.api.controller.MvpController;
 import com.cockpit.api.model.dao.Mvp;
 import com.cockpit.api.model.dao.Team;
 import com.cockpit.api.repository.MvpRepository;
 import com.cockpit.api.repository.TeamRepository;
 import com.cockpit.api.service.MvpService;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletResponse;
-
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = { MvpController.class, MvpService.class })
 @WebMvcTest
-public class UnassignTeamControllerTest {
+public class MvpControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
