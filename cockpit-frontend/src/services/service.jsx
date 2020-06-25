@@ -18,7 +18,14 @@ function getAll() {
     return e;
   }
 }
-
+function getOne(id) {
+  try {
+    return API.get(`${mvpUrl}/${id}`, headers);
+  } catch (e) {
+    console.log(`Error when getting Mvp: ${e}`);
+    return e;
+  }
+}
 function createNewJiraProject(jira) {
   try {
     return API.post(`${jiraUrl}/create`, jira, headers);
@@ -84,6 +91,7 @@ const MvpService = {
   createNewTeam,
   assignTeam,
   unassignTeam,
+  getOne,
 };
 
 export default MvpService;

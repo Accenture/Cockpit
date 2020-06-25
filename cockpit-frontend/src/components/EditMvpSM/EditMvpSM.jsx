@@ -24,7 +24,7 @@ import {
 import { editSMFormState, closeEditMvpSMForm } from '../Header/HeaderSlice';
 import { mvpSelector } from '../../redux/selector';
 import MvpService from '../../services/service';
-import { fetchAllMvps } from '../../redux/ormSlice';
+import { getOneMvp } from '../../redux/ormSlice';
 
 import useStyles from './styles';
 
@@ -74,7 +74,7 @@ export default function EditMvpSMForm() {
     };
     await MvpService.updateJiraProject(newJira);
     dispatch(closeEditMvpSMForm());
-    dispatch(fetchAllMvps());
+    dispatch(getOneMvp(mvpInfo.id));
   }
   const body = (
     <div>

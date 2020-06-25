@@ -8,7 +8,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllMvps } from '../../redux/ormSlice';
+import { getOneMvp } from '../../redux/ormSlice';
 import useStyles from './styles';
 import MvpService from '../../services/service';
 import { mvpSelector } from '../../redux/selector';
@@ -43,12 +43,12 @@ export default function MvpTeam(props) {
     event.preventDefault();
     await MvpService.assignTeam(mvpId, selectedTeam.id);
     setOpen(true);
-    dispatch(fetchAllMvps());
+    dispatch(getOneMvp(mvpId));
   }
   async function unassign(event) {
     event.preventDefault();
     await MvpService.unassignTeam(mvpId);
-    dispatch(fetchAllMvps());
+    dispatch(getOneMvp(mvpId));
     mvpTeam = null;
     props.sendValue(0);
   }
