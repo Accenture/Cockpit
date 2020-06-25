@@ -37,6 +37,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.*;
 
+import static javax.management.timer.Timer.ONE_SECOND;
+import static javax.management.timer.Timer.ONE_MINUTE;
+
 @Configuration
 @EnableScheduling
 @Service
@@ -76,7 +79,7 @@ public class JiraGatewayService {
     @Value("${spring.jira.jiraUrl}")
     private String jiraUrl;
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
     public void updateProjects() throws UnirestException, JsonProcessingException {
         HttpResponse<JsonNode> jiraProjects = getJira();
         JSONArray jiraProjectsList = jiraProjects.getBody().getObject().getJSONArray(VALUESFIELD);
@@ -93,8 +96,7 @@ public class JiraGatewayService {
         }
     }
 
-//    @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
     @Transactional
     public void getJiraSprints() throws UnirestException, JsonProcessingException {
         HttpResponse<JsonNode> response = Unirest.get(jiraUrl+"/rest/agile/1.0/board?type=scrum")
@@ -117,7 +119,7 @@ public class JiraGatewayService {
         }
     }
 
-//    @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
+    @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
     @Scheduled(fixedDelay = 1000)
     @Transactional
     public void getJiraIssues() throws UnirestException, JsonProcessingException {
@@ -149,27 +151,26 @@ public class JiraGatewayService {
         }
     }
 
-//    @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
-//    @Scheduled(fixedDelay = 1000)
-//    public void setTotalNbOfUserStoryForEachSprintOfEachProject() {
-//        List<Jira> jiraProjectList = jiraRepository.findAllByOrderById();
-//        for (Jira jira : jiraProjectList) {
-//            List<Sprint> sprintList = sprintRepository.findByJiraOrderBySprintNumber(jira);
-//            int totalNumberOfUserStoriesUntilCurrentSprint = userStoryRepository.countUserStoriesByJiraAndCreationDateBefore(jira, sprintList.get(0).getSprintStartDate());
-//                for(Sprint sprint: sprintList) {
-//                Date sprintStartDate = sprint.getSprintStartDate();
-//                Date sprintEndDate = sprint.getSprintEndDate();
-//                if (sprintStartDate != null && sprintEndDate != null) {
-//                    int nbUserStoriesCreatedDuringCurrentSprint= userStoryRepository.countUserStoriesByJiraAndCreationDateGreaterThanAndCreationDateLessThanEqual(jira, sprintStartDate, sprintEndDate);
-//                    totalNumberOfUserStoriesUntilCurrentSprint += nbUserStoriesCreatedDuringCurrentSprint;
-//                    sprint.setTotalNbUs(totalNumberOfUserStoriesUntilCurrentSprint);
-//                    sprintRepository.save(sprint);
-//                }
-//            }
-//        }
-//    }
+    @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
+    public void setTotalNbOfUserStoryForEachSprintOfEachProject() {
+        List<Jira> jiraProjectList = jiraRepository.findAllByOrderById();
+        for (Jira jira : jiraProjectList) {
+            List<Sprint> sprintList = sprintRepository.findByJiraOrderBySprintNumber(jira);
+            int totalNumberOfUserStoriesUntilCurrentSprint = userStoryRepository.countUserStoriesByJiraAndCreationDateBefore(jira, sprintList.get(0).getSprintStartDate());
+                for(Sprint sprint: sprintList) {
+                Date sprintStartDate = sprint.getSprintStartDate();
+                Date sprintEndDate = sprint.getSprintEndDate();
+                if (sprintStartDate != null && sprintEndDate != null) {
+                    int nbUserStoriesCreatedDuringCurrentSprint= userStoryRepository.countUserStoriesByJiraAndCreationDateGreaterThanAndCreationDateLessThanEqual(jira, sprintStartDate, sprintEndDate);
+                    totalNumberOfUserStoriesUntilCurrentSprint += nbUserStoriesCreatedDuringCurrentSprint;
+                    sprint.setTotalNbUs(totalNumberOfUserStoriesUntilCurrentSprint);
+                    sprintRepository.save(sprint);
+                }
+            }
+        }
+    }
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
     public void deleteJiraProjects() throws UnirestException {
         List<Jira> jiraProjectList = jiraRepository.findAllByOrderById();
         for(Jira jira : jiraProjectList){
@@ -183,7 +184,7 @@ public class JiraGatewayService {
         }
     }
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
     public void deleteJiraSprint() throws UnirestException{
         List<Sprint> sprintList = sprintRepository.findAll();
         for (Sprint sprint : sprintList){
@@ -197,7 +198,7 @@ public class JiraGatewayService {
         }
     }
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
     public void deleteJiraIssues() throws UnirestException {
         List<UserStory> userStories = userStoryRepository.findAll();
         for (UserStory userStory : userStories){
@@ -206,7 +207,6 @@ public class JiraGatewayService {
                     .header(HEADERKEY, HEADERVALUE)
                     .asJson();
             if (foundIssue.getStatus() == 404) {
-                log.warn(String.valueOf(userStory.getId()));
                 userStoryRepository.delete(userStory);
             }
         }
