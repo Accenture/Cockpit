@@ -1,6 +1,5 @@
 package com.cockpit.api.service.jiragateway;
 
-import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Sprint;
 import com.cockpit.api.model.dao.UserStory;
@@ -49,7 +48,7 @@ public class JiraGatewayService {
     private final SprintRepository sprintRepository;
     private final JiraRepository jiraRepository;
     private final UserStoryRepository userStoryRepository;
-    private final UserStoryService userStoryService;
+    final UserStoryService userStoryService;
     private static final String VALUESFIELD ="values";
     private static final String STATUSFIELD ="status";
     private static final String CREATEDFIELD = "created";
