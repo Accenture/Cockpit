@@ -12,6 +12,10 @@ export const fetchAllMvps = createAsyncThunk('mvps/fetchAllMvps', async () => {
   const allMvps = await MvpService.getAll();
   return allMvps.data;
 });
+export const getOneMvp = createAsyncThunk('mvps/getOneMvp', async (id) => {
+  const mvp = await MvpService.getOne(id);
+  return mvp.data;
+});
 
 const ormSlice = createSlice({
   name: 'mvps',
@@ -30,6 +34,17 @@ const ormSlice = createSlice({
           session.Mvp.withId(mvp.id).update(mvp);
         }
       });
+    }),
+    [getOneMvp.fulfilled]: withSession((session, action) => {
+      // Add mvp to the state array
+      //   action.payload.forEach((mvp) => {
+      const mvp = action.payload;
+      if (session.Mvp.withId(mvp.id) == null) {
+        session.Mvp.create(mvp);
+      } else {
+        session.Mvp.withId(mvp.id).update(mvp);
+      }
+      //  });
     }),
   },
 });

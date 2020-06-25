@@ -9,7 +9,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllMvps } from '../../redux/ormSlice';
+import { getOneMvp } from '../../redux/ormSlice';
 import MvpTeam from './mvpTeam';
 import MvpService from '../../services/service';
 import useStyles from './styles';
@@ -41,7 +41,7 @@ export default function TeamManagementForm() {
     await MvpService.createNewTeam(team, mvpId);
     setOpen(true);
     setTeamName('');
-    dispatch(fetchAllMvps());
+    dispatch(getOneMvp(mvpId));
     setValue(0);
   }
   function handleNameChange(event) {
