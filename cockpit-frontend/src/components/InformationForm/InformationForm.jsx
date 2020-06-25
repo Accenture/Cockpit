@@ -19,6 +19,7 @@ import {
   setPitch,
   setEntity,
   setCycle,
+  setScopeCommitment,
   setStatus,
   setImageUrl,
   setMvpStartDate,
@@ -27,6 +28,7 @@ import {
   pitchState,
   entityState,
   cycleState,
+  scopeCommitmentState,
   statusState,
   imageUrlState,
   mvpStartDateState,
@@ -44,11 +46,12 @@ export default function InformationForm() {
   const name = useSelector(nameState);
   const pitch = useSelector(pitchState);
   const cycle = useSelector(cycleState);
+  const scopeCommitment = useSelector(scopeCommitmentState);
   const entity = useSelector(entityState);
   const status = useSelector(statusState);
   const urlMvpAvatar = useSelector(imageUrlState);
-  const mvpStartDate = useSelector(mvpStartDateState);
-  const mvpEndDate = useSelector(mvpEndDateState);
+  const mvpStartDate = useSelector(mvpStartDateState) || new Date();
+  const mvpEndDate = useSelector(mvpEndDateState) || new Date();
 
   useEffect(() => {
     dispatch(setName(mvpInfo.name));
@@ -56,6 +59,7 @@ export default function InformationForm() {
     dispatch(setCycle(mvpInfo.cycle));
     dispatch(setStatus(mvpInfo.status));
     dispatch(setEntity(mvpInfo.entity));
+    dispatch(setScopeCommitment(mvpInfo.scopeCommitment));
     dispatch(setImageUrl(mvpInfo.urlMvpAvatar));
     dispatch(setMvpStartDate(mvpInfo.jira.mvpStartDate));
     dispatch(setMvpEndDate(mvpInfo.jira.mvpEndDate));
@@ -68,6 +72,9 @@ export default function InformationForm() {
   }
   function handleCycleChange(event) {
     dispatch(setCycle(event.target.value));
+  }
+  function handleScopeCommitmentChange(event) {
+    dispatch(setScopeCommitment(event.target.value));
   }
   function handleStatusChange(event) {
     dispatch(setStatus(event.target.value));
@@ -103,6 +110,7 @@ export default function InformationForm() {
               placeholder="MVP Name"
               size="small"
               onChange={handleNameChange}
+              inputProps={{ maxLength: 50 }}
             />
           </Grid>
           <Grid item xs={12}>
@@ -120,6 +128,25 @@ export default function InformationForm() {
               type="number"
               inputProps={{ min: '1', step: '1' }}
               onChange={handleCycleChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <FormLabel className={classes.formLabel}>
+              Scope commitment
+            </FormLabel>
+            <TextField
+              className={classes.textField}
+              value={scopeCommitment}
+              required
+              fullWidth
+              variant="outlined"
+              id="scopeCommitment"
+              name="scopeCommitment"
+              placeholder="Scope commitment"
+              size="small"
+              type="number"
+              inputProps={{ min: '1', step: '1' }}
+              onChange={handleScopeCommitmentChange}
             />
           </Grid>
           <Grid item xs={12}>
@@ -203,6 +230,7 @@ export default function InformationForm() {
               multiline
               rows="3"
               onChange={handlePitchChange}
+              inputProps={{ maxLength: 500 }}
             />
           </Grid>
           <Grid item xs={12}>

@@ -70,33 +70,12 @@ export default function ScrumMasterForm() {
     e.preventDefault();
     const newJira = {
       jiraProjectKey: jiraPK,
-      currentSprint: 0,
-      jiraProjectId: 0,
-      mvpStartDate: '',
-      mvpEndDate: '',
       mvp: {
         name: mvpName,
         entity: selectedEntity,
         urlMvpAvatar: imageUrl,
         cycle: cycleNumber,
-        mvpDescription: '',
         status: 'inprogress',
-        team: {
-          name: '',
-          teamMembers: [
-            {
-              firstName: '',
-              lastName: '',
-              email: '',
-            },
-          ],
-        },
-        technologies: [
-          {
-            name: '',
-            url: '',
-          },
-        ],
       },
     };
     await MvpService.createNewJiraProject(newJira);
@@ -174,6 +153,7 @@ export default function ScrumMasterForm() {
               placeholder="MVP Name"
               autoComplete="mvpName"
               size="small"
+              inputProps={{ maxLength: 50 }}
             />
           </Grid>
           <Grid item xs={12}>

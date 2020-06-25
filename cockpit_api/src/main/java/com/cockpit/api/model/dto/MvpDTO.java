@@ -17,6 +17,8 @@ public class MvpDTO {
 
     private int cycle;
 
+    private int scopeCommitment;
+
     private String mvpDescription;
 
     private String status;
@@ -26,6 +28,14 @@ public class MvpDTO {
     private Set<Technology> technologies;
 
     private Jira jira;
+
+    public int getScopeCommitment() {
+        return scopeCommitment;
+    }
+
+    public void setScopeCommitment(int scopeCommitment) {
+        this.scopeCommitment = scopeCommitment;
+    }
 
     public void setName(String name) {
         this.name = name;
