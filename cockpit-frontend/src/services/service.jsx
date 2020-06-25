@@ -10,7 +10,7 @@ const headers = {
     'Access-Control-Allow-Origin': '*',
   },
 };
-function getAll() {
+function getAllMvp() {
   try {
     return API.get(`${mvpUrl}/all`, headers);
   } catch (e) {
@@ -18,7 +18,7 @@ function getAll() {
     return e;
   }
 }
-function getOne(id) {
+function getOneMvp(id) {
   try {
     return API.get(`${mvpUrl}/${id}`, headers);
   } catch (e) {
@@ -83,7 +83,7 @@ function unassignTeam(id) {
   }
 }
 const MvpService = {
-  getAll,
+  getAllMvp,
   createNewJiraProject,
   getBurnUpChartData,
   updateJiraProject,
@@ -91,7 +91,7 @@ const MvpService = {
   createNewTeam,
   assignTeam,
   unassignTeam,
-  getOne,
+  getOneMvp,
 };
 
 export default MvpService;
