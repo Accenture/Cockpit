@@ -9,11 +9,11 @@ const withSession = (reducer) => (state, action) => {
 };
 
 export const fetchAllMvps = createAsyncThunk('mvps/fetchAllMvps', async () => {
-  const allMvps = await MvpService.getAll();
+  const allMvps = await MvpService.getAllMvp();
   return allMvps.data;
 });
 export const getOneMvp = createAsyncThunk('mvps/getOneMvp', async (id) => {
-  const mvp = await MvpService.getOne(id);
+  const mvp = await MvpService.getOneMvp(id);
   return mvp.data;
 });
 
