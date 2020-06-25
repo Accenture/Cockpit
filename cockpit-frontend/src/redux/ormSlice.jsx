@@ -37,14 +37,12 @@ const ormSlice = createSlice({
     }),
     [getOneMvp.fulfilled]: withSession((session, action) => {
       // Add mvp to the state array
-      //   action.payload.forEach((mvp) => {
       const mvp = action.payload;
       if (session.Mvp.withId(mvp.id) == null) {
         session.Mvp.create(mvp);
       } else {
         session.Mvp.withId(mvp.id).update(mvp);
       }
-      //  });
     }),
   },
 });
