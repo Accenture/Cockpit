@@ -2,6 +2,7 @@ package com.cockpit.api.service.jiragateway;
 
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Sprint;
+import com.cockpit.api.model.dao.UserStory;
 import com.cockpit.api.repository.JiraRepository;
 import com.cockpit.api.repository.SprintRepository;
 import com.cockpit.api.repository.UserStoryRepository;
@@ -18,6 +19,9 @@ import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 public class JiraGatewayServiceTest {
@@ -44,6 +48,7 @@ public class JiraGatewayServiceTest {
         this.jiraGatewayService = new JiraGatewayService(jiraRepository, sprintRepository, userStoryRepository, userStoryService);
     }
 
+
     @Test
     public void whenUpdateTotalNbUserStoriesTaskRunsThenUpdateTotalNbUserStoriesInSprint() {
         // Given
@@ -61,17 +66,64 @@ public class JiraGatewayServiceTest {
         mockJiraList.add(mockJira);
         List<Sprint> mockSprintList = new ArrayList<>();
         mockSprintList.add(mockSprint);
-
         Mockito.when(jiraRepository.findAllByOrderById()).thenReturn(mockJiraList);
         Mockito.when(sprintRepository.findByJiraOrderBySprintNumber(Mockito.any(Jira.class))).thenReturn(mockSprintList);
         Mockito.when(userStoryRepository.countUserStoriesByJiraAndCreationDateBefore(Mockito.any(Jira.class), Mockito.any(Date.class))).thenReturn(2);
         Mockito.when(userStoryRepository.countUserStoriesByJiraAndCreationDateGreaterThanAndCreationDateLessThanEqual(Mockito.any(Jira.class), Mockito.any(Date.class),  Mockito.any(Date.class))).thenReturn(3);
 
-        // when
-//        jiraGatewayService.setTotalNbOfUserStoryForEachSprintOfEachProject();
+//      when
+        jiraGatewayService.setTotalNbOfUserStoryForEachSprintOfEachProject();
 
         // then
         Assert.assertEquals(5, mockSprint.getTotalNbUs().intValue());
+    }
+
+    @Test
+    public void whenDeleteOnJira_thenDeleteOnCockpit(){
+        Jira mockJira = new Jira();
+        Sprint mockSprint = new Sprint();
+
+        mockJira.setId(99999L);
+        mockJira.setJiraProjectKey("TEST");
+
+        mockSprint.setJira(mockJira);
+        mockSprint.setId(99999L);
+        mockSprint.setJiraSprintId(10024);
+        mockSprint.setSprintNumber(2);
+
+        UserStory mockUserStory = new UserStory();
+
+        mockUserStory.setJira(mockJira);
+        mockUserStory.setId(99999L);
+        mockUserStory.setSprint(mockSprint);
+
+        jiraRepository.save(mockJira);
+        sprintRepository.save(mockSprint);
+        userStoryRepository.save(mockUserStory);
+
+        Optional<Jira> foundJira = jiraRepository.findById(mockJira.getId());
+
+        Optional<Sprint> foundSprint = sprintRepository.findById(mockSprint.getId());
+
+        Optional<UserStory> foundUserStory = userStoryRepository.findById(mockUserStory.getId());
+
+
+        List<UserStory> mockUserStoryList = new ArrayList<>();
+        foundUserStory.ifPresent(mockUserStoryList::add);
+
+        List<Sprint> mockSprintList = new ArrayList<>();
+        foundSprint.ifPresent(mockSprintList::add);
+
+        List<Jira> mockJiraList = new ArrayList<>();
+        foundJira.ifPresent(mockJiraList::add);
+
+        Mockito.when(userStoryRepository.findAll()).thenReturn(mockUserStoryList);
+        userStoryRepository.delete(mockUserStory);
+        Mockito.when(sprintRepository.findAll()).thenReturn(mockSprintList);
+        sprintRepository.delete(mockSprint);
+        Mockito.when(jiraRepository.findAllByOrderById()).thenReturn(mockJiraList);
+        jiraRepository.delete(mockJira);
+        assertThat(jiraRepository.count()).isEqualTo(0);
     }
 
 }
