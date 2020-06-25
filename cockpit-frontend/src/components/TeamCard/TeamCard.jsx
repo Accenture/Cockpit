@@ -21,7 +21,7 @@ export default function TeamCard() {
             <Typography variant="h6">Team</Typography>
           </Grid>
           <Grid item xs={6}>
-            <Typography variant="subtitle2" style={{ fontWeight: 'bold' }}>
+            <Typography variant="subtitle2" className={classes.teamName}>
               {mvpInfo.team ? mvpInfo.team.name : 'Not defined'}
             </Typography>
           </Grid>

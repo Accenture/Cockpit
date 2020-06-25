@@ -5,4 +5,7 @@ export default makeStyles(() => ({
     marginTop: '20px',
     backgroundColor: '#F5F5F9',
   },
+  teamName: {
+    fontWeight: 'bold',
+  },
 }));

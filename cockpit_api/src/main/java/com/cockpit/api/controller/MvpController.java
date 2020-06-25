@@ -84,7 +84,7 @@ public class MvpController {
 	}
 	// UNASSIGN TEAM
 	@PutMapping(value = "/api/v1/mvp/unassignTeam/{id}")
-	public ResponseEntity assignTeamToMvp(@PathVariable Long id) {
+	public ResponseEntity unassignTeamToMvp(@PathVariable Long id) {
 		try {
 			MvpDTO mvp = mvpService.unassignTeamOfMvp(id);
 			return ResponseEntity.ok().body(mvp);
