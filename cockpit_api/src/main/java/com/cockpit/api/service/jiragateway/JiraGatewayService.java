@@ -45,6 +45,7 @@ import static javax.management.timer.Timer.ONE_MINUTE;
 public class JiraGatewayService {
 
     private final ModelMapper modelMapper = new ModelMapper();
+
     private final SprintRepository sprintRepository;
     private final JiraRepository jiraRepository;
     private final UserStoryRepository userStoryRepository;
@@ -155,7 +156,10 @@ public class JiraGatewayService {
         List<Jira> jiraProjectList = jiraRepository.findAllByOrderById();
         for (Jira jira : jiraProjectList) {
             List<Sprint> sprintList = sprintRepository.findByJiraOrderBySprintNumber(jira);
-            int totalNumberOfUserStoriesUntilCurrentSprint = userStoryRepository.countUserStoriesByJiraAndCreationDateBefore(jira, sprintList.get(0).getSprintStartDate());
+            int totalNumberOfUserStoriesUntilCurrentSprint = 0;
+            if (sprintList.size() > 0) {
+                totalNumberOfUserStoriesUntilCurrentSprint = userStoryRepository.countUserStoriesByJiraAndCreationDateBefore(jira, sprintList.get(0).getSprintStartDate());
+            }
                 for(Sprint sprint: sprintList) {
                 Date sprintStartDate = sprint.getSprintStartDate();
                 Date sprintEndDate = sprint.getSprintEndDate();

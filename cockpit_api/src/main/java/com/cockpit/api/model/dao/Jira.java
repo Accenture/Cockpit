@@ -2,6 +2,10 @@ package com.cockpit.api.model.dao;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
+
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.boot.context.properties.bind.DefaultValue;
+
 import java.util.Date;
 import java.util.Set;
 
@@ -14,7 +18,7 @@ public class Jira{
     private Long id;
 
     private String jiraProjectKey;
-
+    
     private Integer currentSprint;
 
     private Integer jiraProjectId;

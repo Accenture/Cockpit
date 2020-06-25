@@ -15,6 +15,7 @@ import {
   pitchState,
   entityState,
   cycleState,
+  scopeCommitmentState,
   statusState,
   imageUrlState,
   mvpStartDateState,
@@ -39,6 +40,7 @@ export default function EditMvpSMForm() {
   const name = useSelector(nameState);
   const pitch = useSelector(pitchState);
   const cycle = useSelector(cycleState);
+  const scopeCommitment = useSelector(scopeCommitmentState);
   const entity = useSelector(entityState);
   const status = useSelector(statusState);
   const urlMvpAvatar = useSelector(imageUrlState);
@@ -65,24 +67,9 @@ export default function EditMvpSMForm() {
         entity,
         urlMvpAvatar,
         cycle,
+        scopeCommitment,
         mvpDescription: pitch,
         status,
-        team: {
-          name: '',
-          teamMembers: [
-            {
-              firstName: '',
-              lastName: '',
-              email: '',
-            },
-          ],
-        },
-        technologies: [
-          {
-            name: '',
-            url: '',
-          },
-        ],
       },
     };
     await MvpService.updateJiraProject(newJira);
@@ -149,14 +136,16 @@ export default function EditMvpSMForm() {
         <Button onClick={handleClose} style={{ borderRadius: 20 }}>
           Cancel
         </Button>
-        <Button
-          onClick={value === 1 ? submit : handleClose}
-          color="primary"
-          variant="contained"
-          style={{ borderRadius: 20 }}
-        >
-          Save
-        </Button>
+        {value === 0 && (
+          <Button
+            onClick={submit}
+            color="primary"
+            variant="contained"
+            style={{ borderRadius: 20 }}
+          >
+            Save
+          </Button>
+        )}
       </DialogActions>
     </div>
   );
