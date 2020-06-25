@@ -17,7 +17,7 @@ import com.cockpit.api.repository.TeamRepository;
 import com.cockpit.api.service.MvpService;
 
 @RunWith(SpringRunner.class)
-public class UnassignTeamServiceTest {
+public class MvpServiceTest {
 
 	private MvpService mvpService;
 
