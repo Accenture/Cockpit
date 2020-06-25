@@ -80,7 +80,7 @@ public class MvpService {
 	public MvpDTO unassignTeamOfMvp(Long id) throws ResourceNotFoundException {
 		Optional<Mvp> mvp = mvpRepository.findById(id);
 		if (!mvp.isPresent()) {
-			throw new ResourceNotFoundException("Mvp to assign to is not found");
+			throw new ResourceNotFoundException("Mvp to unassign to is not found");
 		}
 
 		

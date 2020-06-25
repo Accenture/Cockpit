@@ -102,7 +102,7 @@ export default function MvpTeam(props) {
       </Grid>
       <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
         <Alert onClose={handleClose} severity="success">
-          Team successfully to this MVP!
+          Team successfully assigned to this MVP!
         </Alert>
       </Snackbar>
     </div>
