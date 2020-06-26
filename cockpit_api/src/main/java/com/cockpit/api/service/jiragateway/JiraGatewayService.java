@@ -3,8 +3,7 @@ package com.cockpit.api.service.jiragateway;
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Sprint;
 import com.cockpit.api.model.dao.UserStory;
-import com.cockpit.api.serializer.JiraBoardDTO;
-import com.cockpit.api.serializer.JiraProjectDTO;
+import com.cockpit.api.serializer.*;
 import com.cockpit.api.model.dto.JiraSprintDTO;
 import com.cockpit.api.repository.JiraRepository;
 import com.cockpit.api.repository.SprintRepository;
@@ -174,42 +173,74 @@ public class JiraGatewayService {
     }
 
     @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
-    public void deleteJiraProjects() throws UnirestException {
+    public void deleteJiraProjects() throws UnirestException, JsonProcessingException {
         List<Jira> jiraProjectList = jiraRepository.findAllByOrderById();
-        for(Jira jira : jiraProjectList){
-            HttpResponse<JsonNode> jiraProject = Unirest.get(jiraUrl+"/rest/api/3/project/"+jira.getJiraProjectKey())
-                    .basicAuth(username, token)
-                    .header(HEADERKEY, HEADERVALUE)
-                    .asJson();
-            if (jiraProject.getStatus() == 404) {
-                jiraRepository.delete(jira);
+        JSONArray jiraProjects = getJiraProjects();
+        for (Jira foundJiraInDB: jiraProjectList){
+            boolean found = false;
+            for (Object jiraProject: jiraProjects){
+                ObjectMapper mapper = new ObjectMapper();
+                JiraProjectDTO jProject = mapper.readValue(jiraProject.toString(), JiraProjectDTO.class);
+                if (foundJiraInDB.getJiraProjectKey().equals(jProject.getKey())){
+                    found = true;
+                }
+            }
+            if (!found){
+                jiraRepository.delete(foundJiraInDB);
             }
         }
     }
 
     @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
-    public void deleteJiraSprint() throws UnirestException{
+    public void deleteJiraSprint() throws UnirestException, JsonProcessingException {
         List<Sprint> sprintList = sprintRepository.findAll();
-        for (Sprint sprint : sprintList){
-            HttpResponse<JsonNode> foundSprint = Unirest.get(jiraUrl+"/rest/agile/1.0/sprint/"+sprint.getJiraSprintId())
-                    .basicAuth(username, token)
-                    .header(HEADERKEY, HEADERVALUE)
-                    .asJson();
-            if (foundSprint.getStatus() == 404) {
-                sprintRepository.delete(sprint);
+        HttpResponse<JsonNode> boards = Unirest.get(jiraUrl+"/rest/agile/1.0/board?type=scrum")
+                .basicAuth(username, token)
+                .header(HEADERKEY, HEADERVALUE)
+                .asJson();
+        JSONArray boardList = boards.getBody().getObject().getJSONArray(VALUESFIELD);
+        for(Sprint foundSprintDb : sprintList){
+            boolean found = false;
+            for (Object board : boardList){
+                ObjectMapper mapper = new ObjectMapper();
+                BoardsDTO boardsDTO = mapper.readValue(board.toString(), BoardsDTO.class);
+                HttpResponse<JsonNode> sprints = Unirest.get(jiraUrl+"/rest/agile/1.0/board/"+boardsDTO.getId()+"/sprint")
+                        .basicAuth(username, token)
+                        .header(HEADERKEY, HEADERVALUE)
+                        .asJson();
+                JSONArray boardSprints = sprints.getBody().getObject().getJSONArray(VALUESFIELD);
+                for (Object sprint : boardSprints){
+                    BoardSprintDTO boardSprintDTO = mapper.readValue(sprint.toString(), BoardSprintDTO.class);
+                    if (foundSprintDb.getId().equals(boardSprintDTO.getId())){
+                        found = true;
+                    }
+                }
+            }
+            if (!found){
+                sprintRepository.delete(foundSprintDb);
             }
         }
     }
 
     @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
-    public void deleteJiraIssues() throws UnirestException {
+    public void deleteJiraIssues() throws UnirestException, JsonProcessingException {
         List<UserStory> userStories = userStoryRepository.findAll();
+        HttpResponse<JsonNode> jiraIssues = Unirest.get(jiraUrl+"/rest/api/3/search?jql=issuetype=Story")
+                .basicAuth(username, token)
+                .header(HEADERKEY, HEADERVALUE)
+                .asJson();
+        JSONArray jiraIssueList = jiraIssues.getBody().getObject().getJSONArray("issues");
+
         for (UserStory userStory : userStories){
-            HttpResponse<JsonNode> foundIssue = Unirest.get(jiraUrl+"/rest/api/3/issue/"+userStory.getJiraIssueId())
-                    .basicAuth(username, token)
-                    .header(HEADERKEY, HEADERVALUE)
-                    .asJson();
-            if (foundIssue.getStatus() == 404) {
+            boolean found = false;
+            for (Object jiraIssue : jiraIssueList){
+                ObjectMapper mapper = new ObjectMapper();
+                IssueDTO issueDTO = mapper.readValue(jiraIssue.toString(), IssueDTO.class);
+                if (userStory.getIssueKey().equals(issueDTO.getKey())){
+                    found = true;
+                }
+            }
+            if (!found){
                 userStoryRepository.delete(userStory);
             }
         }
@@ -368,5 +399,13 @@ public class JiraGatewayService {
                 .header("Content-Type", HEADERVALUE)
                 .body(payload)
                 .asJson();
+    }
+
+    public JSONArray getJiraProjects() throws UnirestException {
+        HttpResponse<JsonNode> jiraProjectsResponse = Unirest.get(jiraUrl+"/rest/api/3/project/")
+                .basicAuth(username, token)
+                .header(HEADERKEY, HEADERVALUE)
+                .asJson();
+        return jiraProjectsResponse.getBody().getArray();
     }
 }

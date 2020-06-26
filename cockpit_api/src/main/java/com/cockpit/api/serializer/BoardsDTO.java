@@ -3,15 +3,10 @@ package com.cockpit.api.serializer;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class IssueDTO {
-    private Integer id;
-    private String key;
+public class BoardsDTO {
+    private Long id;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
-    }
-
-    public String getKey() {
-        return key;
     }
 }

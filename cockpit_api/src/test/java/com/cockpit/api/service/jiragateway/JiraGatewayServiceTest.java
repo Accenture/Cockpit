@@ -7,23 +7,36 @@ import com.cockpit.api.repository.JiraRepository;
 import com.cockpit.api.repository.SprintRepository;
 import com.cockpit.api.repository.UserStoryRepository;
 import com.cockpit.api.service.UserStoryService;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import org.json.JSONArray;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 public class JiraGatewayServiceTest {
+
+    @Value("${spring.jira.username}")
+    private String username;
+    @Value("${spring.jira.token}")
+    private String token;
+    @Value("${spring.jira.jiraUrl}")
+    private String jiraUrl;
+
 
     private JiraGatewayService jiraGatewayService;
 
@@ -78,7 +91,7 @@ public class JiraGatewayServiceTest {
     }
 
     @Test
-    public void whenDeleteOnJira_thenDeleteOnCockpit(){
+    public void whenDeleteOnJira_thenDeleteOnCockpit() throws UnirestException {
         Jira mockJira = new Jira();
         Sprint mockSprint = new Sprint();
 
@@ -96,33 +109,37 @@ public class JiraGatewayServiceTest {
         mockUserStory.setId(99999L);
         mockUserStory.setSprint(mockSprint);
 
-        jiraRepository.save(mockJira);
-        sprintRepository.save(mockSprint);
-        userStoryRepository.save(mockUserStory);
-
-        Optional<Jira> foundJira = jiraRepository.findById(mockJira.getId());
-
-        Optional<Sprint> foundSprint = sprintRepository.findById(mockSprint.getId());
-
-        Optional<UserStory> foundUserStory = userStoryRepository.findById(mockUserStory.getId());
-
 
         List<UserStory> mockUserStoryList = new ArrayList<>();
-        foundUserStory.ifPresent(mockUserStoryList::add);
+        mockUserStoryList.add(mockUserStory);
 
         List<Sprint> mockSprintList = new ArrayList<>();
-        foundSprint.ifPresent(mockSprintList::add);
+        mockSprintList.add(mockSprint);
 
         List<Jira> mockJiraList = new ArrayList<>();
-        foundJira.ifPresent(mockJiraList::add);
+        mockJiraList.add(mockJira);
+        JSONArray mockJiraJsonList = new JSONArray(mockJiraList);
 
-        Mockito.when(userStoryRepository.findAll()).thenReturn(mockUserStoryList);
-        userStoryRepository.delete(mockUserStory);
-        Mockito.when(sprintRepository.findAll()).thenReturn(mockSprintList);
-        sprintRepository.delete(mockSprint);
         Mockito.when(jiraRepository.findAllByOrderById()).thenReturn(mockJiraList);
-        jiraRepository.delete(mockJira);
+//        Mockito.when(Unirest.get(jiraUrl+"/rest/api/3/project/")
+//                .basicAuth(username, token)
+//                .header("Accept", "application/json")
+//                .asJson()).thenReturn();
+
+//        jiraGatewayService.deleteJiraProjects();
+
+//        Mockito.when(userStoryRepository.findAll()).thenReturn(mockUserStoryList);
+//        userStoryRepository.delete(mockUserStory);
+//
+//        Mockito.when(sprintRepository.findAll()).thenReturn(mockSprintList);
+//        sprintRepository.delete(mockSprint);
+//
+//
+
         assertThat(jiraRepository.count()).isEqualTo(0);
+
     }
+
+
 
 }
