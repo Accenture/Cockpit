@@ -40,7 +40,7 @@ public class JiraGatewayServiceTest {
     }
 
     @Test
-    public void whenUpdateTotalNbUserStoriesTaskRuns_thenUpdateTotalNbUserStoriesInSprint() {
+    public void whenUpdateTotalNbUserStoriesTaskRunsThenUpdateTotalNbUserStoriesInSprint() {
         // Given
         Jira mockJira = new Jira();
         Sprint mockSprint = new Sprint();
