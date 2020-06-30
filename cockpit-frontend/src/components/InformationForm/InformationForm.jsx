@@ -29,17 +29,18 @@ import {
   entityState,
   cycleState,
   scopeCommitmentState,
+  sprintNumberState,
   statusState,
   imageUrlState,
   mvpStartDateState,
   mvpEndDateState,
+  setSprintNumber,
 } from './InformationFormSlice';
 import useStyles from './styles';
 
 export default function InformationForm() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const nbSprint = 8;
   const mvpId = useParams().id;
   const mvpInfo = useSelector((state) => mvpSelector(state, mvpId));
 
@@ -47,6 +48,7 @@ export default function InformationForm() {
   const pitch = useSelector(pitchState);
   const cycle = useSelector(cycleState);
   const scopeCommitment = useSelector(scopeCommitmentState);
+  const nbSprint = useSelector(sprintNumberState);
   const entity = useSelector(entityState);
   const status = useSelector(statusState);
   const urlMvpAvatar = useSelector(imageUrlState);
@@ -60,6 +62,7 @@ export default function InformationForm() {
     dispatch(setStatus(mvpInfo.status));
     dispatch(setEntity(mvpInfo.entity));
     dispatch(setScopeCommitment(mvpInfo.scopeCommitment));
+    dispatch(setSprintNumber(mvpInfo.sprintNumber));
     dispatch(setImageUrl(mvpInfo.urlMvpAvatar));
     dispatch(setMvpStartDate(mvpInfo.jira.mvpStartDate));
     dispatch(setMvpEndDate(mvpInfo.jira.mvpEndDate));
@@ -75,6 +78,9 @@ export default function InformationForm() {
   }
   function handleScopeCommitmentChange(event) {
     dispatch(setScopeCommitment(event.target.value));
+  }
+  function handleSprintNumberChange(event) {
+    dispatch(setSprintNumber(event.target.value));
   }
   function handleStatusChange(event) {
     dispatch(setStatus(event.target.value));
@@ -246,7 +252,8 @@ export default function InformationForm() {
               placeholder="Sprint number"
               size="small"
               type="number"
-              inputProps={{ min: '0', step: '1' }}
+              inputProps={{ min: '1', max: '12', step: '1' }}
+              onChange={handleSprintNumberChange}
             />
           </Grid>
           <Grid item xs={6}>

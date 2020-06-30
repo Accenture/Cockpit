@@ -76,6 +76,7 @@ export default function ScrumMasterForm() {
         urlMvpAvatar: imageUrl,
         cycle: cycleNumber,
         status: 'inprogress',
+        sprintNumber: 8,
       },
     };
     await MvpService.createNewJiraProject(newJira);

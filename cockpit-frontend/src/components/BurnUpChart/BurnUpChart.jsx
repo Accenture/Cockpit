@@ -102,7 +102,9 @@ export default function BurnUpChart() {
       position: 'bottom',
       labels: {
         filter(item) {
-          const lastData = chartData.find((sprint) => sprint.sprintId === 7);
+          const lastData = chartData.find(
+            (sprint) => sprint.sprintId === chartData.length,
+          );
           if (
             lastData != null &&
             item.text.includes('Forecast') &&
