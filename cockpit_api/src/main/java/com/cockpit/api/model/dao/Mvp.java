@@ -2,6 +2,9 @@ package com.cockpit.api.model.dao;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
+import org.hibernate.annotations.ColumnDefault;
+
 import java.util.Set;
 
 @Entity
@@ -26,7 +29,9 @@ public class Mvp {
     private int cycle;
 
     private int scopeCommitment;
-
+  
+    private int sprintNumber;
+    
     private String mvpDescription;
 
     private String status;
@@ -130,5 +135,13 @@ public class Mvp {
     public Long getId() { return id; }
 
     public void setId(Long id) { this.id = id; }
+
+	public int getSprintNumber() {
+		return sprintNumber;
+	}
+
+	public void setSprintNumber(int sprintNumber) {
+		this.sprintNumber = sprintNumber;
+	}
 
 }
