@@ -11,4 +11,8 @@ export default makeStyles(() => ({
   capitalizedText: {
     textTransform: 'capitalize',
   },
+  inline: {
+    display: 'inline',
+    color: 'gray',
+  },
 }));
