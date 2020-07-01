@@ -9,6 +9,7 @@ export default makeStyles((theme) => ({
   },
   inline: {
     display: 'inline',
+    color: 'gray',
   },
   noMembers: {
     margin: 32,
@@ -16,5 +17,9 @@ export default makeStyles((theme) => ({
   },
   capitalizedText: {
     textTransform: 'capitalize',
+  },
+  emailText: {
+    textTransform: 'none',
+    color: '#3f51b5',
   },
 }));

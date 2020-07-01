@@ -35,7 +35,8 @@ export default function TeamMemberList() {
                   primary={`${member.firstName} ${member.lastName}`}
                   secondary={
                     <>
-                      {member.email} <br />
+                      <span className={classes.emailText}>{member.email}</span>
+                      <br />
                       <Typography
                         component="span"
                         variant="body2"

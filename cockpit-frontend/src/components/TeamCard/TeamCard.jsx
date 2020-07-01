@@ -38,7 +38,7 @@ export default function TeamCard() {
           </Grid>
         </Grid>
         {teamMembers.length > 0 && (
-          <List className={classes.root}>
+          <List>
             {teamMembers.map((member) => (
               <div key={member.id}>
                 <ListItem alignItems="flex-start">
