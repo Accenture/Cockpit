@@ -8,7 +8,10 @@ switch (env) {
     backendUrl = 'http://localhost:8085';
     break;
   case 'dev':
-    backendUrl = 'https://cockpit-backend-dev.azurewebsites.net';
+    backendUrl = 'https://azwbdcokp02.azurewebsites.net/';
+    break;
+  case 'qa':
+    backendUrl = 'https://azwbqcokp02.azurewebsites.net/';
     break;
   default:
     backendUrl = 'http://localhost:8085';
