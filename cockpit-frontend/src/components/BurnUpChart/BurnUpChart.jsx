@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import MvpService from '../../services/service';
+import { useSelector, useDispatch } from 'react-redux';
+
 import { mvpSelector } from '../../redux/selector';
 import {
   red,
@@ -12,11 +12,12 @@ import {
   mediumBlueShadow,
   darkBlueShadow,
 } from '../../common/scss/colorVarialble.scss';
+import { fetchBurnUpData, burnUpChartState } from './BurnUpChartSlice';
 
 export default function BurnUpChart() {
-  const [chartData, setChartData] = useState([]);
+  const chartData = useSelector(burnUpChartState);
   const { id } = useParams();
-
+  const dispatch = useDispatch();
   const { scopeCommitment } = useSelector((state) => mvpSelector(state)).find(
     (mvp) => mvp.id.toString() === id,
   );
@@ -25,14 +26,9 @@ export default function BurnUpChart() {
     scopeCommitment,
   );
 
-  async function getData(mvpId) {
-    const result = await MvpService.getBurnUpChartData(mvpId);
-    setChartData(result.data);
-  }
-
   useEffect(() => {
-    getData(id);
-  }, [id]);
+    dispatch(fetchBurnUpData(id));
+  }, [dispatch, id]);
 
   const data = (canvas) => {
     // style for filled chart
