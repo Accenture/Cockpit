@@ -26,6 +26,7 @@ import { editSMFormState, closeEditMvpSMForm } from '../Header/HeaderSlice';
 import { mvpSelector } from '../../redux/selector';
 import MvpService from '../../services/service';
 import { getOneMvp } from '../../redux/ormSlice';
+import { fetchBurnUpData } from '../BurnUpChart/BurnUpChartSlice';
 
 import useStyles from './styles';
 
@@ -78,6 +79,9 @@ export default function EditMvpSMForm() {
     await MvpService.updateJiraProject(newJira);
     dispatch(closeEditMvpSMForm());
     dispatch(getOneMvp(mvpInfo.id));
+    if (sprintNumber !== mvpInfo.sprintNumber) {
+      dispatch(fetchBurnUpData(mvpId));
+    }
   }
   const body = (
     <div>
