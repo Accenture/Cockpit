@@ -16,6 +16,10 @@ public class TeamMember{
     private String lastName;
 
     private String email;
+    
+    private String role;
+    
+    private String urlTeamMemberAvatar;
 
     @ManyToMany(mappedBy = "teamMembers")
     @JsonIgnore
@@ -60,4 +64,21 @@ public class TeamMember{
     public Set<Team> getTeams() {
         return teams;
     }
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
+	public String getUrlTeamMemberAvatar() {
+		return urlTeamMemberAvatar;
+	}
+
+	public void setUrlTeamMemberAvatar(String urlTeamMemberAvatar) {
+		this.urlTeamMemberAvatar = urlTeamMemberAvatar;
+	}
+    
 }
