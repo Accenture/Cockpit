@@ -10,6 +10,8 @@ CREATE TABLE public.team_member(
     first_name   VARCHAR (50),
     last_name    VARCHAR (50),
     email        VARCHAR (255),
+    role        VARCHAR (255),
+    url_team_member_avatar    VARCHAR,
     CONSTRAINT team_member_PK PRIMARY KEY (id)
 )WITHOUT OIDS;
 
@@ -32,6 +34,7 @@ CREATE TABLE public.mvp(
     url_mvp_avatar    VARCHAR,
     cycle             INT,
     scope_commitment  INT,
+    sprint_number     INT,
     mvp_description   VARCHAR (500),
     status            VARCHAR (50),
     id_team           INT,

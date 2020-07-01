@@ -14,6 +14,7 @@ import MvpTeam from './mvpTeam';
 import MvpService from '../../services/service';
 import useStyles from './styles';
 import { mvpSelector } from '../../redux/selector';
+import TeamMemberList from '../TeamMemberList/TeamMemberList';
 
 export default function TeamManagementForm() {
   const classes = useStyles();
@@ -127,6 +128,7 @@ export default function TeamManagementForm() {
           </Snackbar>
         </Grid>
       </form>
+      <TeamMemberList />
     </Paper>
   );
 }

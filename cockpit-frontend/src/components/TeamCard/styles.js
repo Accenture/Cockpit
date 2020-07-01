@@ -8,4 +8,7 @@ export default makeStyles(() => ({
   teamName: {
     fontWeight: 'bold',
   },
+  capitalizedText: {
+    textTransform: 'capitalize',
+  },
 }));
