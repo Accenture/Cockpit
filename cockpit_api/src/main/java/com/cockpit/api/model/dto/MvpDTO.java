@@ -19,7 +19,7 @@ public class MvpDTO {
 
     private int scopeCommitment;
     
-    private int sprintNumber;
+    private Integer sprintNumber;
 
     private String mvpDescription;
 
@@ -113,11 +113,11 @@ public class MvpDTO {
 
     public void setId(Long id) { this.id = id; }
 
-	public int getSprintNumber() {
+	public Integer getSprintNumber() {
 		return sprintNumber;
 	}
 
-	public void setSprintNumber(int sprintNumber) {
+	public void setSprintNumber(Integer sprintNumber) {
 		this.sprintNumber = sprintNumber;
 	}
     
