@@ -15,4 +15,8 @@ export default makeStyles(() => ({
     display: 'inline',
     color: 'gray',
   },
+  listItem: {
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
 }));
