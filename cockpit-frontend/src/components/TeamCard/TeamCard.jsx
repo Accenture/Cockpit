@@ -41,7 +41,7 @@ export default function TeamCard() {
           <List>
             {teamMembers.map((member) => (
               <div key={member.id}>
-                <ListItem alignItems="flex-start">
+                <ListItem alignItems="flex-start" className={classes.listItem}>
                   <ListItemAvatar>
                     <Avatar
                       alt="No Image"
