@@ -54,7 +54,11 @@ public class BurnUpChartService {
 		int iteration = 1;
 		double projection = 0;
 		int totalUSNumber = 0;
-		for (int sprintNumber = 1; sprintNumber <= mvp.getSprintNumber(); sprintNumber++) {
+		int maxSprintNumber = 8;
+		if (mvp.getSprintNumber() != null) {
+			maxSprintNumber = mvp.getSprintNumber();
+		}
+		for (int sprintNumber = 1; sprintNumber <= maxSprintNumber; sprintNumber++) {
 			BurnUpChartDTO chart = new BurnUpChartDTO();
 
 			chart.setSprintId(sprintNumber);
