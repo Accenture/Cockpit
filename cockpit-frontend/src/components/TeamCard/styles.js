@@ -18,5 +18,9 @@ export default makeStyles(() => ({
   listItem: {
     paddingTop: 0,
     paddingBottom: 0,
+    paddingLeft: 0,
+  },
+  uppercaseText: {
+    textTransform: 'uppercase',
   },
 }));

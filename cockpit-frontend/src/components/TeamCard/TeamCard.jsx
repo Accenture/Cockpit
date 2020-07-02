@@ -46,11 +46,10 @@ export default function TeamCard() {
                     <Avatar
                       alt="No Image"
                       src={member.urlTeamMemberAvatar}
-                      className={classes.capitalizedText}
+                      className={classes.uppercaseText}
                     >
-                      {`${member.firstName.charAt(0)} ${member.lastName.charAt(
-                        0,
-                      )}`}
+                      {member.firstName.charAt(0)}
+                      {member.lastName.charAt(0)}
                     </Avatar>
                   </ListItemAvatar>
                   <ListItemText
