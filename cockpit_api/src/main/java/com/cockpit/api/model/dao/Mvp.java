@@ -4,7 +4,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.Set;
 
@@ -31,7 +30,6 @@ public class Mvp {
 
     private int scopeCommitment;
 
-    @ColumnDefault("0")
     private Integer sprintNumber;
     
     private String mvpDescription;
