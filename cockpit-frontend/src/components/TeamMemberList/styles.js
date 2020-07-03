@@ -12,7 +12,6 @@ export default makeStyles((theme) => ({
     color: 'gray',
   },
   noMembers: {
-    margin: 32,
     color: 'gray',
   },
   capitalizedText: {
@@ -21,5 +20,20 @@ export default makeStyles((theme) => ({
   emailText: {
     textTransform: 'none',
     color: '#3f51b5',
+  },
+  addButton: {
+    borderRadius: 20,
+    textTransform: 'capitalize',
+  },
+  grid: {
+    padding: theme.spacing(2, 4, 1),
+    width: 'calc(100%)',
+  },
+  formLabel: {
+    fontWeight: 'bold',
+  },
+  textField: {
+    marginTop: 8,
+    marginBottom: 8,
   },
 }));
