@@ -25,9 +25,11 @@ export default function TeamCard() {
     <Card className={classes.teamCard}>
       <CardContent>
         <Grid container alignItems="center">
-          <Grid item xs={6}>
-            <Typography variant="h6">Team</Typography>
-          </Grid>
+          {teamMembers.length === 0 && (
+            <Grid item xs={6}>
+              <Typography variant="h6">Team</Typography>
+            </Grid>
+          )}
           <Grid item xs={6}>
             <Typography
               variant="subtitle2"
