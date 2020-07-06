@@ -15,6 +15,16 @@ spring:
     username: ${JIRA_USER_NAME}
     jiraUrl: ${JIRA_HOST_URL}
     token: ${JIRA_AUTH_TOKEN}
+  security:
+    oauth2:
+      client:
+        provider:
+          okta:
+            issuer-uri: https://external-total.okta.com/oauth2/default
+        registration:
+          okta:
+            client-id: 0oajesx698Xd6LGCi4x6
+            client-secret: 98g9E1zbg-siLbIRK2A_1-WUdBxxDuiePHEddsPR
 springdoc:
   api-docs:
     path: /cockpit-api-doc
