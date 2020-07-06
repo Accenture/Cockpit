@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,12 +32,14 @@ public class JiraGatewayServiceTest {
     @MockBean
     private SprintRepository sprintRepository;
 
+    private EntityManager entityManager;
+
     private static final Date SPRINT_START_DATE = new Date();
     private static final Date SPRINT_END_DATE = new Date(SPRINT_START_DATE.getTime() + 1000 * 60 * 60 * 24 * 14);
 
     @Before
     public void setUp() {
-        this.jiraGatewayService = new JiraGatewayService(jiraRepository, sprintRepository, userStoryRepository);
+        this.jiraGatewayService = new JiraGatewayService(jiraRepository, sprintRepository, userStoryRepository, entityManager);
     }
 
     @Test

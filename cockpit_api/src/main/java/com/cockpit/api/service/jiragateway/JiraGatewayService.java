@@ -29,6 +29,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.util.*;
 
@@ -43,16 +45,19 @@ public class JiraGatewayService {
     private final SprintRepository sprintRepository;
     private final JiraRepository jiraRepository;
     private final UserStoryRepository userStoryRepository;
+    private EntityManager entityManager;
 
     @Autowired
     public JiraGatewayService(
             JiraRepository jiraRepository,
             SprintRepository sprintRepository,
-            UserStoryRepository userStoryRepository
+            UserStoryRepository userStoryRepository,
+            EntityManager entityManager
     ) {
         this.jiraRepository = jiraRepository;
         this.sprintRepository = sprintRepository;
         this.userStoryRepository = userStoryRepository;
+        this.entityManager = entityManager;
     }
 
     static Logger log = LoggerFactory.getLogger(JiraGatewayService.class);
