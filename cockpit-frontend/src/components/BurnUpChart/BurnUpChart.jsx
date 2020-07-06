@@ -12,7 +12,11 @@ import {
   mediumBlueShadow,
   darkBlueShadow,
 } from '../../common/scss/colorVarialble.scss';
-import { fetchBurnUpData, burnUpChartState } from './BurnUpChartSlice';
+import {
+  fetchBurnUpData,
+  burnUpChartState,
+  initState,
+} from './BurnUpChartSlice';
 
 export default function BurnUpChart() {
   const chartData = useSelector(burnUpChartState);
@@ -22,11 +26,13 @@ export default function BurnUpChart() {
     (mvp) => mvp.id.toString() === id,
   );
 
-  const scopeCommitmentArray = new Array(chartData.length).fill(
-    scopeCommitment,
-  );
+  const scopeCommitmentArray = new Array(chartData.length);
+  if (scopeCommitment !== 0) {
+    scopeCommitmentArray.fill(scopeCommitment);
+  }
 
   useEffect(() => {
+    dispatch(initState());
     dispatch(fetchBurnUpData(id));
   }, [dispatch, id]);
 
