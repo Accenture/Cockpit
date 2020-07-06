@@ -70,7 +70,7 @@ function assignTeam(id, teamId) {
   try {
     return API.put(`${mvpUrl}/${id}/assignTeam/${teamId}`, headers);
   } catch (e) {
-    console.log(`Error when creating new team: ${e}`);
+    console.log(`Error when assign team: ${e}`);
     return e;
   }
 }
@@ -78,7 +78,7 @@ function unassignTeam(id) {
   try {
     return API.put(`${mvpUrl}/unassignTeam/${id}`, headers);
   } catch (e) {
-    console.log(`Error when creating new team: ${e}`);
+    console.log(`Error when unassign team: ${e}`);
     return e;
   }
 }

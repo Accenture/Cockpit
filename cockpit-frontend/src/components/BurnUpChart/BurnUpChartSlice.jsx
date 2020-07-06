@@ -13,7 +13,11 @@ export const BurnUpChartSlice = createSlice({
   initialState: {
     chartData: [],
   },
-  reducers: {},
+  reducers: {
+    initState: (state) => {
+      state.chartData = [];
+    },
+  },
   extraReducers: {
     [fetchBurnUpData.fulfilled]: (state, action) => {
       state.chartData = action.payload;
@@ -21,5 +25,5 @@ export const BurnUpChartSlice = createSlice({
   },
 });
 export const burnUpChartState = (state) => state.BurnUpChart.chartData;
-export const { fetchData } = BurnUpChartSlice.actions;
+export const { fetchData, initState } = BurnUpChartSlice.actions;
 export default BurnUpChartSlice.reducer;
