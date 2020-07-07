@@ -108,10 +108,7 @@ export default function TeamMemberList() {
     setRole(member.role);
     setEmail(member.email);
   }
-  function deleteTeamMember(member) {
-    MvpService.deleteTeamMember(mvpInfo.team.id, member.id);
-    dispatch(getOneMvp(mvpId));
-  }
+
   return (
     <div>
       <Grid container spacing={1} className={classes.grid}>
