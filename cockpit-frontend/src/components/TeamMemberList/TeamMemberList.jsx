@@ -37,18 +37,20 @@ export default function TeamMemberList() {
   const dispatch = useDispatch();
   const mvpId = useParams().id;
   const mvpInfo = useSelector((state) => mvpSelector(state, mvpId));
+  function closeForm() {
+    setOpen(false);
+  }
   useEffect(() => {
     if (mvpInfo.team) {
       setTeamMembers(mvpInfo.team.teamMembers);
     }
+    closeForm();
   }, [mvpInfo]);
 
   function displayForm() {
     setOpen(true);
   }
-  function closeForm() {
-    setOpen(false);
-  }
+
   /* function checkURL() {
     if (avatarUrl !== '') setValidUrl(false);
     else setValidUrl(true);
@@ -86,7 +88,7 @@ export default function TeamMemberList() {
     <div>
       <Grid container spacing={1} className={classes.grid}>
         <Grid item xs={6}>
-          {teamMembers.length > 0 && (
+          {mvpInfo.team && teamMembers.length > 0 && (
             <List className={classes.root}>
               {teamMembers.map((member) => (
                 <div key={member.id}>
@@ -125,92 +127,97 @@ export default function TeamMemberList() {
             <div className={classes.noMembers}>No Team members yet</div>
           )}
         </Grid>
-        <Grid item xs={6}>
-          <Button
-            className={classes.addButton}
-            variant="outlined"
-            color="primary"
-            startIcon={<AddIcon />}
-            onClick={displayForm}
-          >
-            Add A Member
-          </Button>
-          {open && (
-            <form onSubmit={submit}>
-              <Grid container spacing={1}>
-                <Grid item xs={12}>
-                  <FormLabel className={classes.formLabel}>
-                    First Name
-                  </FormLabel>
-                  <TextField
-                    className={classes.textField}
-                    required
-                    fullWidth
-                    variant="outlined"
-                    placeholder="Member First Name"
-                    size="small"
-                    inputProps={{ maxLength: 50 }}
-                    onChange={(event) => setFirstName(event.target.value)}
-                    value={firstName}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <FormLabel className={classes.formLabel}>Last Name</FormLabel>
-                  <TextField
-                    className={classes.textField}
-                    required
-                    fullWidth
-                    variant="outlined"
-                    placeholder="Member Last Name"
-                    size="small"
-                    inputProps={{ maxLength: 50 }}
-                    onChange={(event) => setLastName(event.target.value)}
-                    value={lastName}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <FormLabel className={classes.formLabel}>Role</FormLabel>
-                  <FormControl
-                    required
-                    size="small"
-                    fullWidth
-                    variant="outlined"
-                    className={classes.textField}
-                  >
-                    <Select
-                      displayEmpty
-                      onChange={(event) => setRole(event.target.value)}
-                      value={role || ''}
+        {mvpInfo.team && (
+          <Grid item xs={6}>
+            <Button
+              className={classes.addButton}
+              variant="outlined"
+              color="primary"
+              startIcon={<AddIcon />}
+              onClick={displayForm}
+            >
+              Add A Member
+            </Button>
+            {open && (
+              <form onSubmit={submit}>
+                <Grid container spacing={1}>
+                  <Grid item xs={12}>
+                    <FormLabel className={classes.formLabel}>
+                      First Name
+                    </FormLabel>
+                    <TextField
+                      className={classes.textField}
+                      required
+                      fullWidth
+                      variant="outlined"
+                      placeholder="Member First Name"
+                      size="small"
+                      inputProps={{ maxLength: 50 }}
+                      onChange={(event) => setFirstName(event.target.value)}
+                      value={firstName}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormLabel className={classes.formLabel}>
+                      Last Name
+                    </FormLabel>
+                    <TextField
+                      className={classes.textField}
+                      required
+                      fullWidth
+                      variant="outlined"
+                      placeholder="Member Last Name"
+                      size="small"
+                      inputProps={{ maxLength: 50 }}
+                      onChange={(event) => setLastName(event.target.value)}
+                      value={lastName}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormLabel className={classes.formLabel}>Role</FormLabel>
+                    <FormControl
+                      required
+                      size="small"
+                      fullWidth
+                      variant="outlined"
+                      className={classes.textField}
                     >
-                      <MenuItem value="" disabled>
-                        Select a Role
-                      </MenuItem>
-                      <MenuItem value="PO">PO</MenuItem>
-                      <MenuItem value="PPO">PPO</MenuItem>
-                      <MenuItem value="Scrum Master">Scrum Master</MenuItem>
-                      <MenuItem value="Technical Lead">Technical Lead</MenuItem>
-                      <MenuItem value="Application Developer">
-                        Application Developer
-                      </MenuItem>
-                      <MenuItem value="DevOps">DevOps</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12}>
-                  <FormLabel className={classes.formLabel}>Email</FormLabel>
-                  <TextField
-                    className={classes.textField}
-                    required
-                    fullWidth
-                    variant="outlined"
-                    placeholder="Member Email"
-                    size="small"
-                    type="email"
-                    onChange={(event) => setEmail(event.target.value)}
-                    value={email}
-                  />
-                </Grid>
-                {/*     <Grid item xs={12}>
+                      <Select
+                        displayEmpty
+                        onChange={(event) => setRole(event.target.value)}
+                        value={role || ''}
+                      >
+                        <MenuItem value="" disabled>
+                          Select a Role
+                        </MenuItem>
+                        <MenuItem value="PO">PO</MenuItem>
+                        <MenuItem value="PPO">PPO</MenuItem>
+                        <MenuItem value="Scrum Master">Scrum Master</MenuItem>
+                        <MenuItem value="Technical Lead">
+                          Technical Lead
+                        </MenuItem>
+                        <MenuItem value="Application Developer">
+                          Application Developer
+                        </MenuItem>
+                        <MenuItem value="DevOps">DevOps</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormLabel className={classes.formLabel}>Email</FormLabel>
+                    <TextField
+                      className={classes.textField}
+                      required
+                      fullWidth
+                      variant="outlined"
+                      placeholder="Member Email"
+                      size="small"
+                      type="email"
+                      onChange={(event) => setEmail(event.target.value)}
+                      value={email}
+                    />
+                  </Grid>
+                  {/*     <Grid item xs={12}>
                   <FormLabel className={classes.formLabel}>
                     Avatar URL
                   </FormLabel>
@@ -235,36 +242,38 @@ export default function TeamMemberList() {
                     onError={() => checkURL()}
                   />
                 </Grid> */}
-                <Grid item xs={5} />
-                <Grid item xs={3}>
-                  <Button className={classes.addButton} onClick={closeForm}>
-                    Discard
-                  </Button>
+                  <Grid item xs={5} />
+                  <Grid item xs={3}>
+                    <Button className={classes.addButton} onClick={closeForm}>
+                      Discard
+                    </Button>
+                  </Grid>
+                  <Grid item xs={1} />
+                  <Grid item xs={3}>
+                    <Button
+                      disabled={
+                        firstName.length === 0 ||
+                        lastName.length === 0 ||
+                        email.length === 0 ||
+                        role.length === 0
+                      }
+                      type="submit"
+                      color="primary"
+                      variant="outlined"
+                      className={classes.addButton}
+                    >
+                      Add
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid item xs={1} />
-                <Grid item xs={3}>
-                  <Button
-                    disabled={
-                      firstName.length === 0 ||
-                      lastName.length === 0 ||
-                      email.length === 0 ||
-                      role.length === 0
-                    }
-                    type="submit"
-                    color="primary"
-                    variant="outlined"
-                    className={classes.addButton}
-                  >
-                    Add
-                  </Button>
-                </Grid>
-              </Grid>
-            </form>
-          )}
-        </Grid>
+              </form>
+            )}
+          </Grid>
+        )}
         <Snackbar open={snackBar} autoHideDuration={6000} onClose={handleClose}>
           <Alert onClose={handleClose} severity="success">
-            Team Member successfully added to {mvpInfo.team.name} team!
+            Team Member successfully added to{' '}
+            {mvpInfo.team ? mvpInfo.team.name : ''} team!
           </Alert>
         </Snackbar>
       </Grid>
