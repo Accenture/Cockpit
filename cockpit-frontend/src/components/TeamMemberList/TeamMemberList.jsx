@@ -83,7 +83,16 @@ export default function TeamMemberList() {
     }
     setSnackBar(false);
   };
-
+  function fieldsValidator() {
+    if (
+      firstName.length === 0 ||
+      lastName.length === 0 ||
+      email.length === 0 ||
+      role.length === 0
+    )
+      return true;
+    return false;
+  }
   return (
     <div>
       <Grid container spacing={1} className={classes.grid}>
@@ -95,7 +104,7 @@ export default function TeamMemberList() {
                   <ListItem alignItems="flex-start">
                     <ListItemAvatar>
                       <Avatar
-                        alt="Remy Sharp"
+                        alt="team member"
                         src={member.urlTeamMemberAvatar}
                       />
                     </ListItemAvatar>
@@ -251,12 +260,7 @@ export default function TeamMemberList() {
                   <Grid item xs={1} />
                   <Grid item xs={3}>
                     <Button
-                      disabled={
-                        firstName.length === 0 ||
-                        lastName.length === 0 ||
-                        email.length === 0 ||
-                        role.length === 0
-                      }
+                      disabled={fieldsValidator()}
                       type="submit"
                       color="primary"
                       variant="outlined"
