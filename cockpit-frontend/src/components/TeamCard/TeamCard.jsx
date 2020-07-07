@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
@@ -14,13 +14,15 @@ import useStyles from './styles';
 import { mvpSelector } from '../../redux/selector';
 
 export default function TeamCard() {
-  let teamMembers = [];
   const classes = useStyles();
   const mvpId = useParams().id;
   const mvpInfo = useSelector((state) => mvpSelector(state, mvpId));
-  if (mvpInfo.team) {
-    teamMembers = mvpInfo.team.teamMembers;
-  }
+  const [teamMembers, setTeamMembers] = React.useState([]);
+  useEffect(() => {
+    if (mvpInfo.team) {
+      setTeamMembers(mvpInfo.team.teamMembers);
+    }
+  }, [mvpInfo]);
   return (
     <Card className={classes.teamCard}>
       <CardContent>

@@ -254,6 +254,12 @@ export default function InformationForm() {
               type="number"
               inputProps={{ min: '1', max: '12', step: '1' }}
               onChange={handleSprintNumberChange}
+              error={nbSprint > 12}
+              helperText={
+                nbSprint > 12
+                  ? 'Sprint Number must be less than or equal to 12'
+                  : ' '
+              }
             />
           </Grid>
           <Grid item xs={6}>

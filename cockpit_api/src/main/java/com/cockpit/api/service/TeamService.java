@@ -1,18 +1,21 @@
 package com.cockpit.api.service;
 
-import com.cockpit.api.exception.ResourceNotFoundException;
-import com.cockpit.api.model.dao.Mvp;
-import com.cockpit.api.model.dao.Team;
-import com.cockpit.api.model.dto.TeamDTO;
-import com.cockpit.api.repository.MvpRepository;
-import com.cockpit.api.repository.TeamRepository;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import com.cockpit.api.exception.ResourceNotFoundException;
+import com.cockpit.api.model.dao.Mvp;
+import com.cockpit.api.model.dao.Team;
+import com.cockpit.api.model.dao.TeamMember;
+import com.cockpit.api.model.dto.TeamDTO;
+import com.cockpit.api.model.dto.TeamMemberDTO;
+import com.cockpit.api.repository.MvpRepository;
+import com.cockpit.api.repository.TeamRepository;
 
 @Service
 public class TeamService {
@@ -26,8 +29,8 @@ public class TeamService {
         this.teamRepository = teamRepository;
         this.mvpRepository=mvpRepository;
     }
-
-    public TeamDTO createNewTeam(TeamDTO teamDTO, Long mvpId) throws ResourceNotFoundException{
+  
+	public TeamDTO createNewTeam(TeamDTO teamDTO, Long mvpId) throws ResourceNotFoundException{
         Team teamCreated = teamRepository.save(modelMapper.map(teamDTO, Team.class));
         Optional<Mvp> mvp = mvpRepository.findById(mvpId);
         if (!mvp.isPresent()) {
@@ -69,4 +72,18 @@ public class TeamService {
         return teamList.stream().map(team -> modelMapper.map(team, TeamDTO.class)).collect(Collectors.toList());
 
     }
+
+	public TeamDTO createTeamMember(Long idTeam, TeamMemberDTO member) throws ResourceNotFoundException {
+
+		Optional<Team> teamToUpdate = teamRepository.findById(idTeam);
+		if (!teamToUpdate.isPresent()) {
+			throw new ResourceNotFoundException("Team member not found");
+		}
+
+		teamToUpdate.get().getTeamMembers().add(modelMapper.map(member, TeamMember.class));
+		Team team = teamRepository.save(teamToUpdate.get());
+
+		return modelMapper.map(team, TeamDTO.class);
+	}
+
 }

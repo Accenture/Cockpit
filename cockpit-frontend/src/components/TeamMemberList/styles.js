@@ -5,7 +5,6 @@ export default makeStyles((theme) => ({
     width: '100%',
     maxWidth: '26ch',
     backgroundColor: theme.palette.background.paper,
-    margin: 32,
   },
   inline: {
     display: 'inline',
@@ -24,6 +23,7 @@ export default makeStyles((theme) => ({
   addButton: {
     borderRadius: 20,
     textTransform: 'capitalize',
+    margin: '32px 0',
   },
   grid: {
     padding: theme.spacing(2, 4, 1),
