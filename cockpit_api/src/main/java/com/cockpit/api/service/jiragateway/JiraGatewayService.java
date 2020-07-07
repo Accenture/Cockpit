@@ -52,9 +52,9 @@ public class JiraGatewayService {
     private static final String VALUESFIELD ="values";
     private static final String STATUSFIELD ="status";
     private static final String CREATEDFIELD = "created";
-    private static final String STORYPOINTFIELD = "customfield_10026";
     private static final String HEADERKEY = "Accept";
     private static final String HEADERVALUE = "application/json";
+
 
     @Autowired
     public JiraGatewayService(
@@ -87,6 +87,7 @@ public class JiraGatewayService {
                 ObjectMapper mapper = new ObjectMapper();
                 JiraProjectDTO jProject = mapper.readValue(jiraProject.toString(), JiraProjectDTO.class);
                 Jira foundJiraProject = jiraRepository.findByJiraProjectKey(jProject.getKey());
+                log.warn(String.valueOf(foundJiraProject));
                 if (foundJiraProject != null){
                     foundJiraProject.setJiraProjectId(jProject.getId());
                     jiraRepository.save(modelMapper.map(foundJiraProject, Jira.class));
@@ -122,6 +123,8 @@ public class JiraGatewayService {
     @Scheduled(fixedDelay = 1000)
     @Transactional
     public void getJiraIssues() throws UnirestException, JsonProcessingException {
+        String storyPointsField = getFieldId("Story Points");
+        String sprintField = getFieldId("Sprint");
         HttpResponse<JsonNode> response = getJira();
         JSONArray jiraProjects = response.getBody().getObject().getJSONArray(VALUESFIELD);
         for (Object jiraProject: jiraProjects){
@@ -131,13 +134,13 @@ public class JiraGatewayService {
                 Jira foundJiraProject = jiraRepository.findByJiraProjectKey(jProject.getKey());
                 if (foundJiraProject != null){
                     int pagination = 0;
-                    ObjectNode payload = getIssuesBody(jProject, pagination);
+                    ObjectNode payload = getIssuesBody(jProject, pagination, storyPointsField, sprintField);
                     mapBodyObject();
                     HttpResponse<JsonNode> jiraProjectIssues = searchInJira(payload);
                     while(jiraProjectIssues.getBody().getObject().getInt("total") >= pagination){
                         JSONArray jiraIssues = jiraProjectIssues.getBody().getObject().getJSONArray("issues");
                         if (jiraIssues.length() > 0){
-                            saveIssues(jiraIssues, foundJiraProject);
+                            saveIssues(jiraIssues, foundJiraProject, storyPointsField, sprintField);
                             pagination += 100;
                             payload.put("startAt", pagination);
                             jiraProjectIssues = searchInJira(payload);
@@ -287,7 +290,7 @@ public class JiraGatewayService {
         }
     }
 
-    public ObjectNode getIssuesBody(JiraProjectDTO jProject, int pagination){
+    public ObjectNode getIssuesBody(JiraProjectDTO jProject, int pagination, String storyPointsField, String sprintField){
         JsonNodeFactory jnf = JsonNodeFactory.instance;
         ObjectNode payload = jnf.objectNode();
         ArrayNode expand = payload.putArray("expand");
@@ -304,8 +307,8 @@ public class JiraGatewayService {
         fields.add(CREATEDFIELD);
         fields.add("description");
         fields.add("resolutiondate");
-        fields.add(STORYPOINTFIELD);
-        fields.add("customfield_10020");
+        fields.add(storyPointsField);
+        fields.add(sprintField);
         payload.put("maxResults", 100);
         payload.put("startAt", pagination);
         return payload;
@@ -359,7 +362,7 @@ public class JiraGatewayService {
         }
     }
 
-    public void saveIssues(JSONArray jiraIssues, Jira foundJiraProject){
+    public void saveIssues(JSONArray jiraIssues, Jira foundJiraProject, String storyPointsField, String sprintField){
         for (Object jiraIssue: jiraIssues) {
             JSONObject issueVersionedRep = ((JSONObject) jiraIssue).getJSONObject("versionedRepresentations");
             if (issueVersionedRep.getJSONObject("issuetype").getJSONObject("1").getString("name").equals("Story")) {
@@ -373,16 +376,16 @@ public class JiraGatewayService {
                     DateTime doneDate = new DateTime(issueVersionedRep.getJSONObject(CREATEDFIELD).getString("1"));
                     issue.setDoneDate(doneDate.toDate());
                 }
-                Object sprintDetails = (issueVersionedRep.getJSONObject(STORYPOINTFIELD).get("1"));
+                Object sprintDetails = (issueVersionedRep.getJSONObject(storyPointsField).get("1"));
                 if (sprintDetails == null){
-                    issue.setStoryPoint((Double) issueVersionedRep.getJSONObject(STORYPOINTFIELD).get("1"));
+                    issue.setStoryPoint((Double) issueVersionedRep.getJSONObject(storyPointsField).get("1"));
                 }
                 issue.setIssueKey(((JSONObject) jiraIssue).getString("key"));
                 issue.setJiraIssueId(((JSONObject) jiraIssue).getInt("id"));
                 issue.setSummary(issueVersionedRep.getJSONObject("summary").getString("1"));
                 issue.setPriority(issueVersionedRep.getJSONObject("priority").getJSONObject("1").getString("name"));
                 issue.setStatus(issueVersionedRep.getJSONObject(STATUSFIELD).getJSONObject("1").getString("name"));
-                JSONArray listSprints = issueVersionedRep.getJSONObject("customfield_10020").getJSONArray("2");
+                JSONArray listSprints = issueVersionedRep.getJSONObject(sprintField).getJSONArray("2");
                 if (listSprints.length() != 0){
                     sortAndSaveBySprintId(listSprints, issue);
                 }
@@ -407,5 +410,21 @@ public class JiraGatewayService {
                 .header(HEADERKEY, HEADERVALUE)
                 .asJson();
         return jiraProjectsResponse.getBody().getArray();
+    }
+
+    public String getFieldId(String fieldName) throws UnirestException, JsonProcessingException {
+        HttpResponse<JsonNode> fieldList = Unirest.get(jiraUrl+"/rest/api/3/field?name=Sprint/")
+                .basicAuth(username, token)
+                .header(HEADERKEY, HEADERVALUE)
+                .asJson();
+        JSONArray fields = fieldList.getBody().getArray();
+        for(Object field : fields){
+            ObjectMapper mapper = new ObjectMapper();
+            FieldsDTO fieldsDTO = mapper.readValue(field.toString(), FieldsDTO.class);
+            if (fieldsDTO.getName().equals(fieldName)){
+                return fieldsDTO.getId();
+            }
+        }
+        return null;
     }
 }
