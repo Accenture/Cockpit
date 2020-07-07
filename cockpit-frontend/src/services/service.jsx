@@ -90,7 +90,17 @@ function createNewTeamMember(teamMember, teamId) {
     return e;
   }
 }
-
+function deleteTeamMember(teamId, teamMemberId) {
+  try {
+    return API.put(
+      `${teamUrl}/${teamId}/deleteTeamMember/${teamMemberId}`,
+      headers,
+    );
+  } catch (e) {
+    console.log(`Error when deleting team member: ${e}`);
+    return e;
+  }
+}
 const MvpService = {
   getAllMvp,
   createNewJiraProject,
@@ -102,6 +112,7 @@ const MvpService = {
   unassignTeam,
   getOneMvp,
   createNewTeamMember,
+  deleteTeamMember,
 };
 
 export default MvpService;

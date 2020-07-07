@@ -76,14 +76,26 @@ public class TeamController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
 	}
+
 	// ADD a Team member
-		@PutMapping(value = "/api/v1/team/addTeamMember/{id}")
-		public ResponseEntity addTeamMember(@RequestBody TeamMemberDTO teamMemberDTO, @PathVariable Long id) {
-			try {
-				TeamDTO teamUpdated = teamService.createTeamMember(id, teamMemberDTO);
-				return ResponseEntity.ok().body(teamUpdated);
-			} catch (com.cockpit.api.exception.ResourceNotFoundException e) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-			}
+	@PutMapping(value = "/api/v1/team/addTeamMember/{id}")
+	public ResponseEntity addTeamMember(@RequestBody TeamMemberDTO teamMemberDTO, @PathVariable Long id) {
+		try {
+			TeamDTO teamUpdated = teamService.createTeamMember(id, teamMemberDTO);
+			return ResponseEntity.ok().body(teamUpdated);
+		} catch (com.cockpit.api.exception.ResourceNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
+	}
+
+	// DELETE a Team member
+	@PutMapping(value = "/api/v1/team/{id}/deleteTeamMember/{teamMeberId}")
+	public ResponseEntity deleteTeamMember(@PathVariable("id") Long id, @PathVariable("teamMeberId") Long teamMeberId) {
+		try {
+			TeamDTO teamUpdated = teamService.deleteTeamMember(id, teamMeberId);
+			return ResponseEntity.ok().body(teamUpdated);
+		} catch (com.cockpit.api.exception.ResourceNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
+	}
 }
