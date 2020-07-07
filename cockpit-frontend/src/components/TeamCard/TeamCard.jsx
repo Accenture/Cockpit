@@ -21,7 +21,7 @@ export default function TeamCard() {
   useEffect(() => {
     if (mvpInfo.team) {
       setTeamMembers(mvpInfo.team.teamMembers);
-    }
+    } else setTeamMembers([]);
   }, [mvpInfo]);
   return (
     <Card className={classes.teamCard}>
