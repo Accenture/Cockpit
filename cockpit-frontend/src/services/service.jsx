@@ -82,6 +82,15 @@ function unassignTeam(id) {
     return e;
   }
 }
+function createNewTeamMember(teamMember, teamId) {
+  try {
+    return API.put(`${teamUrl}/addTeamMember/${teamId}`, teamMember, headers);
+  } catch (e) {
+    console.log(`Error when creating new team member: ${e}`);
+    return e;
+  }
+}
+
 const MvpService = {
   getAllMvp,
   createNewJiraProject,
@@ -92,6 +101,7 @@ const MvpService = {
   assignTeam,
   unassignTeam,
   getOneMvp,
+  createNewTeamMember,
 };
 
 export default MvpService;
