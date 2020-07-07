@@ -36,4 +36,7 @@ export default makeStyles((theme) => ({
     marginTop: 8,
     marginBottom: 8,
   },
+  item: {
+    cursor: 'pointer',
+  },
 }));

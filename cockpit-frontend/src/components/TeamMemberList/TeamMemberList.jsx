@@ -32,6 +32,7 @@ export default function TeamMemberList() {
   const [role, setRole] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [teamMembers, setTeamMembers] = React.useState([]);
+  const [update, setUpdate] = React.useState(false);
   // const [validUrl, setValidUrl] = React.useState(true);
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -39,6 +40,12 @@ export default function TeamMemberList() {
   const mvpInfo = useSelector((state) => mvpSelector(state, mvpId));
   function closeForm() {
     setOpen(false);
+    setUpdate(false);
+    setFirstName('');
+    setLastName('');
+    setAvatarUrl('');
+    setRole('');
+    setEmail('');
   }
   useEffect(() => {
     if (mvpInfo.team) {
@@ -93,6 +100,18 @@ export default function TeamMemberList() {
       return true;
     return false;
   }
+  function handleClick(member) {
+    setUpdate(true);
+    setOpen(true);
+    setFirstName(member.firstName);
+    setLastName(member.lastName);
+    setRole(member.role);
+    setEmail(member.email);
+  }
+  function deleteTeamMember(member) {
+    MvpService.deleteTeamMember(mvpInfo.team.id, member.id);
+    dispatch(getOneMvp(mvpId));
+  }
   return (
     <div>
       <Grid container spacing={1} className={classes.grid}>
@@ -101,7 +120,11 @@ export default function TeamMemberList() {
             <List className={classes.root}>
               {teamMembers.map((member) => (
                 <div key={member.id}>
-                  <ListItem alignItems="flex-start">
+                  <ListItem
+                    alignItems="flex-start"
+                    onClick={() => handleClick(member)}
+                    className={classes.item}
+                  >
                     <ListItemAvatar>
                       <Avatar
                         alt="team member"
@@ -138,15 +161,17 @@ export default function TeamMemberList() {
         </Grid>
         {mvpInfo.team && (
           <Grid item xs={6}>
-            <Button
-              className={classes.addButton}
-              variant="outlined"
-              color="primary"
-              startIcon={<AddIcon />}
-              onClick={displayForm}
-            >
-              Add A Member
-            </Button>
+            {!update && (
+              <Button
+                className={classes.addButton}
+                variant="outlined"
+                color="primary"
+                startIcon={<AddIcon />}
+                onClick={displayForm}
+              >
+                Add A Member
+              </Button>
+            )}
             {open && (
               <form onSubmit={submit}>
                 <Grid container spacing={1}>
@@ -258,17 +283,19 @@ export default function TeamMemberList() {
                     </Button>
                   </Grid>
                   <Grid item xs={1} />
-                  <Grid item xs={3}>
-                    <Button
-                      disabled={fieldsValidator()}
-                      type="submit"
-                      color="primary"
-                      variant="outlined"
-                      className={classes.addButton}
-                    >
-                      Add
-                    </Button>
-                  </Grid>
+                  {!update && (
+                    <Grid item xs={3}>
+                      <Button
+                        disabled={fieldsValidator()}
+                        type="submit"
+                        color="primary"
+                        variant="outlined"
+                        className={classes.addButton}
+                      >
+                        Add
+                      </Button>
+                    </Grid>
+                  )}
                 </Grid>
               </form>
             )}
