@@ -8,8 +8,10 @@ import com.cockpit.api.repository.SprintRepository;
 import com.cockpit.api.repository.UserStoryRepository;
 import com.cockpit.api.service.UserStoryService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,21 +20,21 @@ import org.mockito.Mockito;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+
 
 @RunWith(SpringRunner.class)
-@TestPropertySource("classpath:application.yml")
+@SpringBootTest
 public class JiraGatewayServiceTest {
-
-    private JiraGatewayService jiraGatewayService;
 
     @MockBean
     private JiraRepository jiraRepository;
@@ -46,12 +48,12 @@ public class JiraGatewayServiceTest {
     @MockBean
     private UserStoryService userStoryService;
 
+    private JiraGatewayService jiraGatewayService;
+
     @Value("${spring.jira.username}")
     private String username;
     @Value("${spring.jira.token}")
     private String token;
-    @Value("${spring.jira.jiraUrl}")
-    private String jiraUrl;
 
     static Logger log = LoggerFactory.getLogger(JiraGatewayService.class);
 
@@ -60,13 +62,12 @@ public class JiraGatewayServiceTest {
 
     @Before
     public void setUp() {
-        log.warn("USER" + username);
         this.jiraGatewayService = new JiraGatewayService(jiraRepository, sprintRepository, userStoryRepository, userStoryService);
     }
 
 
     @Test
-    public void whenUpdateTotalNbUserStoriesTaskRuns_thenUpdateTotalNbUserStoriesInSprint() {
+    public void whenUpdateTotalNbUserStoriesTaskRunsThenUpdateTotalNbUserStoriesInSprint() {
         // Given
         Jira mockJira = new Jira();
         Sprint mockSprint = new Sprint();
@@ -95,7 +96,7 @@ public class JiraGatewayServiceTest {
     }
 
     @Test
-    public void whenDeleteOnJirathenDeleteOnCockpit() throws UnirestException, JsonProcessingException {
+    public void whenDeleteOnJiraThenDeleteOnCockpit() throws UnirestException, JsonProcessingException, JSONException {
         Jira mockJira = new Jira();
         Sprint mockSprint = new Sprint();
 
@@ -122,13 +123,19 @@ public class JiraGatewayServiceTest {
 
         List<Jira> mockJiraList = new ArrayList<>();
         mockJiraList.add(mockJira);
-
+        mockJiraList.add(mockJira);
 
         Mockito.when(jiraRepository.findAllByOrderById()).thenReturn(mockJiraList);
-        Mockito.when(jiraGatewayService.getJiraProjects()).thenReturn(new JSONArray(mockJiraList));
+        JSONArray mockJiraJsonArray = new JSONArray();
+        for (Jira jira : mockJiraList) {
+            mockJiraJsonArray.put(jira);
+        }
 
+        JiraGatewayService jiraGatewayService1 = mock(JiraGatewayService.class);
+        ReflectionTestUtils.setField(jiraGatewayService, "username", username);
+        ReflectionTestUtils.setField(jiraGatewayService, "token", token);
+        Mockito.when(jiraGatewayService1.getJiraProjects()).thenReturn(mockJiraJsonArray);
         jiraGatewayService.deleteJiraProjects();
-
         assertThat(jiraRepository.count()).isEqualTo(0);
 
     }

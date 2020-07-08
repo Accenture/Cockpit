@@ -15,4 +15,11 @@ spring:
     username: ${JIRA_USER_NAME}
     jiraUrl: ${JIRA_HOST_URL}
     token: ${JIRA_AUTH_TOKEN}
+springdoc:
+  api-docs:
+    path: /cockpit-api-doc
+  swagger-ui:
+    path: /swagger-ui/cockpit-api-doc
+server:
+  port: 8085
 
