@@ -18,6 +18,8 @@
     "date-fns": "^2.14.0",
     "font-awesome": "^4.7.0",
     "node-sass": "^4.14.0",
+    "oidc-client": "^1.10.1",
+    "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-chartjs-2": "^2.9.0",
     "react-dom": "^16.13.1",
