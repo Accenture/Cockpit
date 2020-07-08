@@ -137,6 +137,8 @@ public class JiraGatewayServiceTest {
         ReflectionTestUtils.setField(jiraGatewayService, "token", token);
         Mockito.when(jiraGatewayService1.getJiraProjects()).thenReturn(mockJiraJsonArray);
         jiraGatewayService.deleteJiraProjects();
+
+//        Mockito.when(jiraGatewayService1.)
         assertThat(jiraRepository.count()).isEqualTo(0);
 
     }
