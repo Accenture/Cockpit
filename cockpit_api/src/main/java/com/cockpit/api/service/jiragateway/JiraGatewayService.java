@@ -36,7 +36,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.util.*;
-
 import static javax.management.timer.Timer.ONE_SECOND;
 import static javax.management.timer.Timer.ONE_MINUTE;
 
@@ -76,8 +75,10 @@ public class JiraGatewayService {
     private String username;
     @Value("${spring.jira.token}")
     private String token;
-    @Value("${spring.jira.jiraUrl}")
-    private String jiraUrl;
+//    @Value("${spring.jira.jiraUrl}")
+    private static final String jiraUrl="https://tdf.atlassian.net";
+//    private String token="TmgJIsfKVlvTMIL1neS2DE5B";
+//    private String username="khojiakbar.abdullazoda@external.total.com";
 
     @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
     public void updateProjects() throws UnirestException, JsonProcessingException {
