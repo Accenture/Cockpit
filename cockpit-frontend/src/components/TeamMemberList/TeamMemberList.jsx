@@ -244,6 +244,7 @@ export default function TeamMemberList() {
                           Application Developer
                         </MenuItem>
                         <MenuItem value="DevOps">DevOps</MenuItem>
+                        <MenuItem value="Scrum Master">Data Scientist</MenuItem>
                       </Select>
                     </FormControl>
                   </Grid>
