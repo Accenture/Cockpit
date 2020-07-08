@@ -8,21 +8,18 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dao.Team;
-import com.cockpit.api.model.dao.TeamMember;
 import com.cockpit.api.model.dto.TeamMemberDTO;
 import com.cockpit.api.repository.MvpRepository;
+import com.cockpit.api.repository.TeamMemberRepository;
 import com.cockpit.api.repository.TeamRepository;
 
 @RunWith(SpringRunner.class)
 public class TeamServiceTest {
-
-	private ModelMapper modelMapper = new ModelMapper();
 
 	private TeamService teamService;
 
@@ -32,9 +29,12 @@ public class TeamServiceTest {
 	@MockBean
 	MvpRepository mvpRepository;
 
+	@MockBean
+	TeamMemberRepository teamMemberRepository;
+
 	@Before
 	public void setUp() {
-		this.teamService = new TeamService(teamRepository, mvpRepository);
+		this.teamService = new TeamService(teamRepository, mvpRepository, teamMemberRepository);
 	}
 
 	@Test
@@ -43,7 +43,7 @@ public class TeamServiceTest {
 
 		Team mockTeam = new Team();
 		mockTeam.setId(1l);
-		mockTeam.setTeamMembers( new HashSet<>());
+		mockTeam.setTeamMembers(new HashSet<>());
 		Optional<Team> team = Optional.ofNullable(mockTeam);
 
 		// given
