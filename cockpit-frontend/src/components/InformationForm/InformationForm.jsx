@@ -196,6 +196,7 @@ export default function InformationForm() {
                 <MenuItem value="RC">RC</MenuItem>
                 <MenuItem value="MS">MS</MenuItem>
                 <MenuItem value="GRP">GRP</MenuItem>
+                <MenuItem value="TDF">TDF</MenuItem>
               </Select>
             </FormControl>
           </Grid>
