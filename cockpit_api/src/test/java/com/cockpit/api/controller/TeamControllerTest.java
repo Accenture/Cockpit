@@ -20,11 +20,11 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.cockpit.api.model.dao.Team;
+import com.cockpit.api.model.dao.TeamMember;
 import com.cockpit.api.model.dto.TeamDTO;
 import com.cockpit.api.model.dto.TeamMemberDTO;
 import com.cockpit.api.service.TeamService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = { TeamController.class })
@@ -37,34 +37,58 @@ public class TeamControllerTest {
 	private MockMvc mockMvc;
 
 	@MockBean
-	private TeamService teamService ;
-	
+	private TeamService teamService;
+
 	@Test
-	public void whenAddTeamMemberThenReturn200() throws Exception
-	{
-		
-		TeamMemberDTO mockTeamMember= new TeamMemberDTO();
-		
-		Team mockTeam= new Team();
+	public void whenAddTeamMemberThenReturn200() throws Exception {
+
+		TeamMemberDTO mockTeamMember = new TeamMemberDTO();
+
+		Team mockTeam = new Team();
 		mockTeam.setId(1l);
 		TeamDTO teamDto = modelMapper.map(mockTeam, TeamDTO.class);
-		
+
 		// given
-		Mockito.when(teamService.createTeamMember(mockTeam.getId(),mockTeamMember)).thenReturn(teamDto);
-	
-		
+		Mockito.when(teamService.createTeamMember(mockTeam.getId(), mockTeamMember)).thenReturn(teamDto);
+
 		// when
-				MvcResult result = mockMvc
-						.perform(MockMvcRequestBuilders.put("/api/v1/team/addTeamMember/{id}", mockTeam.getId())
+		MvcResult result = mockMvc
+				.perform(MockMvcRequestBuilders.put("/api/v1/team/addTeamMember/{id}", mockTeam.getId())
 						.content(new ObjectMapper().writeValueAsString(mockTeamMember))
-						.contentType(MediaType.APPLICATION_JSON)
-						.accept(MediaType.APPLICATION_JSON))
-						.andExpect(status().isOk()).andReturn();
+						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andReturn();
 
-				MockHttpServletResponse response = result.getResponse();
+		MockHttpServletResponse response = result.getResponse();
 
-				// then
-				assertEquals(HttpStatus.OK.value(), response.getStatus());
-		
+		// then
+		assertEquals(HttpStatus.OK.value(), response.getStatus());
+
+	}
+
+	@Test
+	public void whenDeleteTeamMemberThenReturn200() throws Exception {
+
+		Team mockTeam = new Team();
+		mockTeam.setId(1l);
+
+		TeamMember mockTeamMember = new TeamMember();
+		mockTeamMember.setId(1l);
+
+		TeamDTO teamDto = modelMapper.map(mockTeam, TeamDTO.class);
+
+		// given
+		Mockito.when(teamService.deleteTeamMember(mockTeam.getId(), mockTeamMember.getId())).thenReturn(teamDto);
+
+		// when
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+				.put("/api/v1/team/{id}/deleteTeamMember/{teamMeberId}", mockTeam.getId(), mockTeamMember.getId())
+				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+				.andReturn();
+
+		MockHttpServletResponse response = result.getResponse();
+
+		// then
+		assertEquals(HttpStatus.OK.value(), response.getStatus());
+
 	}
 }

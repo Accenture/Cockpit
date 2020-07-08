@@ -18,8 +18,12 @@ import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import { mvpSelector } from '../../redux/selector';
-import MvpService from '../../services/service';
+import MvpService from '../../services/ApiService';
 import { getOneMvp } from '../../redux/ormSlice';
 import useStyles from './styles';
 
@@ -33,7 +37,8 @@ export default function TeamMemberList() {
   const [email, setEmail] = React.useState('');
   const [teamMembers, setTeamMembers] = React.useState([]);
   const [update, setUpdate] = React.useState(false);
-  // const [validUrl, setValidUrl] = React.useState(true);
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [selectedMember, setSelectedMember] = React.useState({});
   const classes = useStyles();
   const dispatch = useDispatch();
   const mvpId = useParams().id;
@@ -58,10 +63,13 @@ export default function TeamMemberList() {
     setOpen(true);
   }
 
-  /* function checkURL() {
-    if (avatarUrl !== '') setValidUrl(false);
-    else setValidUrl(true);
-  } */
+  const handleClickOpen = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
 
   async function submit(e) {
     e.preventDefault();
@@ -107,10 +115,12 @@ export default function TeamMemberList() {
     setLastName(member.lastName);
     setRole(member.role);
     setEmail(member.email);
+    setSelectedMember(member);
   }
-  function deleteTeamMember(member) {
-    MvpService.deleteTeamMember(mvpInfo.team.id, member.id);
+  async function deleteTeamMember() {
+    await MvpService.deleteTeamMember(mvpInfo.team.id, selectedMember.id);
     dispatch(getOneMvp(mvpId));
+    handleCloseDialog();
   }
   return (
     <div>
@@ -251,32 +261,19 @@ export default function TeamMemberList() {
                       value={email}
                     />
                   </Grid>
-                  {/*     <Grid item xs={12}>
-                  <FormLabel className={classes.formLabel}>
-                    Avatar URL
-                  </FormLabel>
-                  <TextField
-                    className={classes.textField}
-                    fullWidth
-                    variant="outlined"
-                    placeholder="http://"
-                    size="small"
-                    onChange={(event) => {
-                      setAvatarUrl(event.target.value);
-                    }}
-                    value={avatarUrl}
-                    error={!validUrl}
-                    helperText={!validUrl ? 'Incorrect image URL.' : ' '}
-                  />
-                  <img
-                    style={{ height: 0 }}
-                    alt=""
-                    src={avatarUrl}
-                    onLoad={() => setValidUrl(true)}
-                    onError={() => checkURL()}
-                  />
-                </Grid> */}
-                  <Grid item xs={5} />
+
+                  <Grid item xs={5}>
+                    {' '}
+                    {update && (
+                      <Button
+                        color="secondary"
+                        className={classes.deleteButton}
+                        onClick={handleClickOpen}
+                      >
+                        Delete
+                      </Button>
+                    )}
+                  </Grid>
                   <Grid item xs={3}>
                     <Button className={classes.addButton} onClick={closeForm}>
                       Discard
@@ -301,12 +298,28 @@ export default function TeamMemberList() {
             )}
           </Grid>
         )}
-        <Snackbar open={snackBar} autoHideDuration={6000} onClose={handleClose}>
+        <Snackbar open={snackBar} autoHideDuration={3000} onClose={handleClose}>
           <Alert onClose={handleClose} severity="success">
             Team Member successfully added to{' '}
             {mvpInfo.team ? mvpInfo.team.name : ''} team!
           </Alert>
         </Snackbar>
+        <Dialog open={openDialog} onClose={handleCloseDialog}>
+          <DialogContent>
+            <DialogContentText>
+              Are you sure you want to delete the selected Team Member
+              definitely?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={deleteTeamMember} color="primary">
+              Yes
+            </Button>
+            <Button onClick={handleCloseDialog} color="primary">
+              No
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Grid>
     </div>
   );

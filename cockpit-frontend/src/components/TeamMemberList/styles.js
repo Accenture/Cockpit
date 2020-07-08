@@ -39,4 +39,10 @@ export default makeStyles((theme) => ({
   item: {
     cursor: 'pointer',
   },
+  deleteButton: {
+    textDecoration: 'underline',
+    borderRadius: 20,
+    textTransform: 'capitalize',
+    margin: '32px 0',
+  },
 }));
