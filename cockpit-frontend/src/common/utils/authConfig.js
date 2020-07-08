@@ -4,9 +4,13 @@ const authConfig = {
     redirect_uri: `${window.location.protocol}//${window.location.hostname}${
       window.location.port ? `:${window.location.port}` : ''
     }/login/oauth2/code/okta`,
-    // post_logout_redirect_uri: `${window.location.protocol}//${window.location.hostname}:${window.location.port}/`,
-    response_type: 'token',
-    scope: 'openid',
+    // redirect_uri: 'http://localhost:3000/login/oauth2/code/okta',
+    post_logout_redirect_uri: `${window.location.protocol}//${window.location.hostname}:${window.location.port}/`,
+    response_type: 'code',
+    scope: 'openid profile',
+    // grantType: 'password',
+    load_user_info: true,
+    web_auth_response_type: 'id_token token',
     authority: 'https://external-total.okta.com/oauth2/default',
   },
   // Prod config to be modified
@@ -16,7 +20,7 @@ const authConfig = {
       window.location.port ? `:${window.location.port}` : ''
     }/login/oauth2/code/okta`,
     // post_logout_redirect_uri: `${window.location.protocol}//${window.location.hostname}:${window.location.port}/`,
-    response_type: 'token',
+    response_type: 'id_token token',
     scope: 'openid',
     authority: 'https://external-total.okta.com/oauth2/default',
   },

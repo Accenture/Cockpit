@@ -19,12 +19,11 @@ spring:
     oauth2:
       client:
         provider:
-          okta:
-            issuer-uri: https://external-total.okta.com/oauth2/default
+          issuer-uri: https://pp-sso-digitalpassport.hubtotal.net/sso
         registration:
-          okta:
-            client-id: 0oajesx698Xd6LGCi4x6
-            client-secret: 98g9E1zbg-siLbIRK2A_1-WUdBxxDuiePHEddsPR
+          digitalpassport:
+            client-id: cockpit-dev
+            client-secret: rUSzLV3CVndX5hhf3Jvm
 springdoc:
   api-docs:
     path: /cockpit-api-doc
