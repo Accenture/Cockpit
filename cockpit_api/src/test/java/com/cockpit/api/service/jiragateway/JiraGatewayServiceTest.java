@@ -20,7 +20,7 @@ import java.util.List;
 @RunWith(SpringRunner.class)
 public class JiraGatewayServiceTest {
 
-  /*  private JiraGatewayService jiraGatewayService;
+   private JiraGatewayService jiraGatewayService;
 
     @MockBean
     private JiraRepository jiraRepository;
@@ -68,5 +68,5 @@ public class JiraGatewayServiceTest {
         // then
         Assert.assertEquals(5, mockSprint.getTotalNbUs().intValue());
     }
-*/
+
 }
