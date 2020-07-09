@@ -12,10 +12,6 @@ public class FieldsDTO {
         return id;
     }
 
-    public String getKey() {
-        return key;
-    }
-
     public String getName() {
         return name;
     }
