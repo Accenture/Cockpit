@@ -14,7 +14,7 @@ export default class AuthService {
     Log.logger = console;
     Log.level = Log.DEBUG;
     this.UserManager.events.addUserLoaded(() => {
-      if (window.location.href.indexOf('signin-oidc') !== -1) {
+      if (window.location.href.indexOf('login/oauth2/code/okta') !== -1) {
         this.navigateToHomePage();
       }
     });
@@ -29,14 +29,12 @@ export default class AuthService {
   }
 
   signinRedirectCallback = () => {
-    console.log('1');
     this.UserManager.signinRedirectCallback().then(() => {
       '';
     });
   };
 
   getUser = async () => {
-    console.log('2');
     const user = await this.UserManager.getUser();
     if (!user) {
       return await this.UserManager.signinRedirectCallback();
@@ -45,26 +43,24 @@ export default class AuthService {
   };
 
   parseJwt = (token) => {
-    console.log('3');
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace('-', '+').replace('_', '/');
     return JSON.parse(window.atob(base64));
   };
 
   signinRedirect = () => {
-    console.log('4');
     localStorage.setItem('redirectUri', window.location.pathname);
     this.UserManager.signinRedirect({});
   };
 
   isAuthenticated = () => {
-    console.log('5');
     const oidcStorage = JSON.parse(
       sessionStorage.getItem(
-        `oidc.user:${process.env.REACT_APP_AUTH_URL}:${process.env.REACT_APP_IDENTITY_CLIENT_ID}`,
+        `oidc.user:https://external-total.okta.com/oauth2/default:0oajesx698Xd6LGCi4x6`,
       ),
     );
-
+    console.log(!!oidcStorage);
+    //console.log(!!oidcStorage.access_token);
     return !!oidcStorage && !!oidcStorage.access_token;
   };
 

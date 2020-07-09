@@ -6,7 +6,7 @@ const authConfig = {
     }/login/oauth2/code/okta`,
     // redirect_uri: 'http://localhost:3000/login/oauth2/code/okta',
     post_logout_redirect_uri: `${window.location.protocol}//${window.location.hostname}:${window.location.port}/`,
-    response_type: 'code',
+    response_type: 'token id_token',
     scope: 'openid profile',
     // grantType: 'password',
     load_user_info: true,
