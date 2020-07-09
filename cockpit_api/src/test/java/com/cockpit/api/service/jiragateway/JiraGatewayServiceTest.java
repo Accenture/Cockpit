@@ -34,7 +34,7 @@ import static org.mockito.Mockito.mock;
 
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = JiraGatewayService.class)
 public class JiraGatewayServiceTest {
 
     @MockBean
