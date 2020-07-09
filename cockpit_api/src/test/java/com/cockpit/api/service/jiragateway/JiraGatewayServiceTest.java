@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 
 
@@ -55,6 +56,8 @@ public class JiraGatewayServiceTest {
     private String username;
     @Value("${spring.jira.token}")
     private String token;
+    @Value("${spring.jira.jiraUrl}")
+    private String jiraUrl;
 
     static Logger log = LoggerFactory.getLogger(JiraGatewayService.class);
 
@@ -89,7 +92,7 @@ public class JiraGatewayServiceTest {
         Mockito.when(userStoryRepository.countUserStoriesByJiraAndCreationDateBefore(Mockito.any(Jira.class), Mockito.any(Date.class))).thenReturn(2);
         Mockito.when(userStoryRepository.countUserStoriesByJiraAndCreationDateGreaterThanAndCreationDateLessThanEqual(Mockito.any(Jira.class), Mockito.any(Date.class),  Mockito.any(Date.class))).thenReturn(3);
 
-//      when
+        // when
         jiraGatewayService.setTotalNbOfUserStoryForEachSprintOfEachProject();
 
         // then
@@ -114,12 +117,15 @@ public class JiraGatewayServiceTest {
         mockUserStory.setJira(mockJira);
         mockUserStory.setId(99999L);
         mockUserStory.setSprint(mockSprint);
+        mockUserStory.setIssueKey("TC");
 
 
         List<UserStory> mockUserStoryList = new ArrayList<>();
         mockUserStoryList.add(mockUserStory);
+        mockUserStoryList.add(mockUserStory);
 
         List<Sprint> mockSprintList = new ArrayList<>();
+        mockSprintList.add(mockSprint);
         mockSprintList.add(mockSprint);
 
         List<Jira> mockJiraList = new ArrayList<>();
@@ -132,13 +138,32 @@ public class JiraGatewayServiceTest {
             mockJiraJsonArray.put(jira);
         }
 
-        JiraGatewayService jiraGatewayService1 = mock(JiraGatewayService.class);
+        JiraGatewayService mockJiraGatewayService = mock(JiraGatewayService.class);
         ReflectionTestUtils.setField(jiraGatewayService, "username", username);
         ReflectionTestUtils.setField(jiraGatewayService, "token", token);
-        Mockito.when(jiraGatewayService1.getJiraProjects()).thenReturn(mockJiraJsonArray);
+        ReflectionTestUtils.setField(jiraGatewayService, "jiraUrl", jiraUrl);
+
+        Mockito.when(mockJiraGatewayService.getJiraProjects()).thenReturn(mockJiraJsonArray);
         jiraGatewayService.deleteJiraProjects();
 
-//        Mockito.when(jiraGatewayService1.)
+        Mockito.when(sprintRepository.findAll()).thenReturn(mockSprintList);
+        JSONArray mockSprintJsonArray = new JSONArray();
+        for (Sprint sprint : mockSprintList) {
+            mockSprintJsonArray.put(sprint);
+        }
+        Mockito.when(mockJiraGatewayService.getJiraSprints(anyLong())).thenReturn(mockSprintJsonArray);
+        jiraGatewayService.deleteJiraSprint();
+
+        Mockito.when(userStoryRepository.findAll()).thenReturn(mockUserStoryList);
+        JSONArray mockUserStoryJsonArray = new JSONArray();
+        for (UserStory userStory : mockUserStoryList) {
+            mockUserStoryJsonArray.put(userStory);
+        }
+        Mockito.when(mockJiraGatewayService.getJiraIssueList()).thenReturn(mockUserStoryJsonArray);
+        jiraGatewayService.deleteJiraIssues();
+
+        assertThat(userStoryRepository.count()).isEqualTo(0);
+        assertThat(sprintRepository.count()).isEqualTo(0);
         assertThat(jiraRepository.count()).isEqualTo(0);
 
     }

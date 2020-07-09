@@ -75,10 +75,9 @@ public class JiraGatewayService {
     private String username;
     @Value("${spring.jira.token}")
     private String token;
-//    @Value("${spring.jira.jiraUrl}")
-    private static final String jiraUrl="https://tdf.atlassian.net";
-//    private String token="TmgJIsfKVlvTMIL1neS2DE5B";
-//    private String username="khojiakbar.abdullazoda@external.total.com";
+    @Value("${spring.jira.jiraUrl}")
+    private String jiraUrl;
+
 
     @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
     public void updateProjects() throws UnirestException, JsonProcessingException {
@@ -89,7 +88,6 @@ public class JiraGatewayService {
                 ObjectMapper mapper = new ObjectMapper();
                 JiraProjectDTO jProject = mapper.readValue(jiraProject.toString(), JiraProjectDTO.class);
                 Jira foundJiraProject = jiraRepository.findByJiraProjectKey(jProject.getKey());
-                log.warn(String.valueOf(foundJiraProject));
                 if (foundJiraProject != null){
                     foundJiraProject.setJiraProjectId(jProject.getId());
                     jiraRepository.save(modelMapper.map(foundJiraProject, Jira.class));
@@ -197,21 +195,13 @@ public class JiraGatewayService {
     @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
     public void deleteJiraSprint() throws UnirestException, JsonProcessingException {
         List<Sprint> sprintList = sprintRepository.findAll();
-        HttpResponse<JsonNode> boards = Unirest.get(jiraUrl+"/rest/agile/1.0/board?type=scrum")
-                .basicAuth(username, token)
-                .header(HEADERKEY, HEADERVALUE)
-                .asJson();
-        JSONArray boardList = boards.getBody().getObject().getJSONArray(VALUESFIELD);
+        JSONArray boardList = getSprintList();
         for(Sprint foundSprintDb : sprintList){
             boolean found = false;
             for (Object board : boardList){
                 ObjectMapper mapper = new ObjectMapper();
                 BoardsDTO boardsDTO = mapper.readValue(board.toString(), BoardsDTO.class);
-                HttpResponse<JsonNode> sprints = Unirest.get(jiraUrl+"/rest/agile/1.0/board/"+boardsDTO.getId()+"/sprint")
-                        .basicAuth(username, token)
-                        .header(HEADERKEY, HEADERVALUE)
-                        .asJson();
-                JSONArray boardSprints = sprints.getBody().getObject().getJSONArray(VALUESFIELD);
+                JSONArray boardSprints = getJiraSprints(boardsDTO.getId());
                 for (Object sprint : boardSprints){
                     BoardSprintDTO boardSprintDTO = mapper.readValue(sprint.toString(), BoardSprintDTO.class);
                     if (foundSprintDb.getId().equals(boardSprintDTO.getId())){
@@ -228,12 +218,7 @@ public class JiraGatewayService {
     @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
     public void deleteJiraIssues() throws UnirestException, JsonProcessingException {
         List<UserStory> userStories = userStoryRepository.findAll();
-        HttpResponse<JsonNode> jiraIssues = Unirest.get(jiraUrl+"/rest/api/3/search?jql=issuetype=Story")
-                .basicAuth(username, token)
-                .header(HEADERKEY, HEADERVALUE)
-                .asJson();
-        JSONArray jiraIssueList = jiraIssues.getBody().getObject().getJSONArray("issues");
-
+        JSONArray jiraIssueList = getJiraIssueList();
         for (UserStory userStory : userStories){
             boolean found = false;
             for (Object jiraIssue : jiraIssueList){
@@ -410,6 +395,30 @@ public class JiraGatewayService {
                 .header(HEADERKEY, HEADERVALUE)
                 .asJson();
         return jiraProjectsResponse.getBody().getArray();
+    }
+
+    public JSONArray getSprintList() throws UnirestException {
+        HttpResponse<JsonNode> boards = Unirest.get(jiraUrl+"/rest/agile/1.0/board?type=scrum")
+                .basicAuth(username, token)
+                .header(HEADERKEY, HEADERVALUE)
+                .asJson();
+        return boards.getBody().getObject().getJSONArray(VALUESFIELD);
+    }
+
+    public JSONArray getJiraSprints(Long boardId) throws UnirestException {
+        HttpResponse<JsonNode> sprints = Unirest.get(jiraUrl+"/rest/agile/1.0/board/"+boardId+"/sprint")
+                .basicAuth(username, token)
+                .header(HEADERKEY, HEADERVALUE)
+                .asJson();
+        return sprints.getBody().getObject().getJSONArray(VALUESFIELD);
+    }
+
+    public JSONArray getJiraIssueList() throws UnirestException {
+        HttpResponse<JsonNode> jiraIssues = Unirest.get(jiraUrl+"/rest/api/3/search?jql=issuetype=Story")
+                .basicAuth(username, token)
+                .header(HEADERKEY, HEADERVALUE)
+                .asJson();
+        return jiraIssues.getBody().getObject().getJSONArray("issues");
     }
 
     public String getFieldId(String fieldName) throws UnirestException, JsonProcessingException {
