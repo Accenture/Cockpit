@@ -5,7 +5,7 @@ export const Logout = () => (
   <AuthConsumer>
     {({ logout }) => {
       logout();
-      return <span>Logging Out</span>;
+      return <span>Logout Page</span>;
     }}
   </AuthConsumer>
 );

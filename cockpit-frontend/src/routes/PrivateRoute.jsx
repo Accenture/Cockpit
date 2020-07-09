@@ -6,7 +6,6 @@ export const PrivateRoute = ({ component, ...rest }) => {
   const renderFn = (Component) => (props) => (
     <AuthConsumer>
       {({ isAuthenticated, signinRedirect }) => {
-                console.log(!!Component && isAuthenticated());
         if (!!Component && isAuthenticated()) {
           return <Component {...props} />;
         }

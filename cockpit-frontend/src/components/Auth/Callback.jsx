@@ -5,7 +5,7 @@ export const Callback = () => (
   <AuthConsumer>
     {({ signinRedirectCallback }) => {
       signinRedirectCallback();
-      return <span>Callback loading</span>;
+      return <span>Callback Page</span>;
     }}
   </AuthConsumer>
 );

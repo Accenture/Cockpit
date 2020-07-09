@@ -14,7 +14,7 @@ function Routes() {
     <Router>
       <Suspense fallback={<HomePage />}>
         <Switch>
-          <Route exact path="/signin-oidc" component={Callback} />
+          <Route exact path="/login/oauth2/code/okta" component={Callback} />
           <Route exact path="/logout" component={Logout} />
           <PrivateRoute exact path="/" component={HomePage} />
           <Route exact path="/mvp-info/:id" component={MvpInfoPage} />
