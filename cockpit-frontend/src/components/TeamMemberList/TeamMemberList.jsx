@@ -23,7 +23,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import { mvpSelector } from '../../redux/selector';
-import MvpService from '../../services/ApiService';
+import MvpService from '../../services/apiService';
 import { getOneMvp } from '../../redux/ormSlice';
 import useStyles from './styles';
 
@@ -244,7 +244,9 @@ export default function TeamMemberList() {
                           Application Developer
                         </MenuItem>
                         <MenuItem value="DevOps">DevOps</MenuItem>
-                        <MenuItem value="Scrum Master">Data Scientist</MenuItem>
+                        <MenuItem value="Data Scientist">
+                          Data Scientist
+                        </MenuItem>
                       </Select>
                     </FormControl>
                   </Grid>

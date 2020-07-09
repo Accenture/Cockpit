@@ -11,7 +11,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOneMvp } from '../../redux/ormSlice';
 import MvpTeam from './mvpTeam';
-import MvpService from '../../services/ApiService';
+import MvpService from '../../services/apiService';
 import useStyles from './styles';
 import { mvpSelector } from '../../redux/selector';
 import TeamMemberList from '../TeamMemberList/TeamMemberList';

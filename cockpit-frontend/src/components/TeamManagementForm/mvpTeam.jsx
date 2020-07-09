@@ -10,7 +10,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOneMvp } from '../../redux/ormSlice';
 import useStyles from './styles';
-import MvpService from '../../services/ApiService';
+import MvpService from '../../services/apiService';
 import { mvpSelector } from '../../redux/selector';
 
 export default function MvpTeam(props) {
