@@ -80,8 +80,7 @@ public class JiraGatewayService {
 
     @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
     public void updateProjects() throws UnirestException, JsonProcessingException {
-        HttpResponse<JsonNode> jiraProjects = getJira();
-        JSONArray jiraProjectsList = jiraProjects.getBody().getObject().getJSONArray(VALUESFIELD);
+        JSONArray jiraProjectsList = getJira();
         for (Object jiraProject: jiraProjectsList){
             if (jiraProject instanceof JSONObject){
                 ObjectMapper mapper = new ObjectMapper();
@@ -124,8 +123,7 @@ public class JiraGatewayService {
     public void getJiraIssues() throws UnirestException, JsonProcessingException {
         String storyPointsField = getFieldId("Story Points");
         String sprintField = getFieldId("Sprint");
-        HttpResponse<JsonNode> response = getJira();
-        JSONArray jiraProjects = response.getBody().getObject().getJSONArray(VALUESFIELD);
+        JSONArray jiraProjects = getJira();
         for (Object jiraProject: jiraProjects){
             if (jiraProject instanceof JSONObject){
                 ObjectMapper mapper = new ObjectMapper();
@@ -236,11 +234,12 @@ public class JiraGatewayService {
     }
 
 
-    public HttpResponse<JsonNode> getJira() throws UnirestException {
-        return Unirest.get(jiraUrl+"/rest/api/3/project/search")
+    public JSONArray getJira() throws UnirestException {
+        HttpResponse<JsonNode> jiraProjectsResponse = Unirest.get(jiraUrl+"/rest/api/3/project/search")
                 .basicAuth(username, token)
                 .header(HEADERKEY, HEADERVALUE)
                 .asJson();
+        return jiraProjectsResponse.getBody().getObject().getJSONArray(VALUESFIELD);
     }
 
     public void saveSprints(JSONArray jiraSprints, Jira foundJiraProject) throws JsonProcessingException {
