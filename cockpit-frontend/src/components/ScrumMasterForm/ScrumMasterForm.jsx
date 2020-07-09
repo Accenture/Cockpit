@@ -28,7 +28,7 @@ import {
 } from './ScrumMasterFormSlice';
 import '../../App.scss';
 import useStyles from './styles';
-import MvpService from '../../services/ApiService';
+import MvpService from '../../services/apiService';
 import { fetchAllMvps } from '../../redux/ormSlice';
 
 let url = '';

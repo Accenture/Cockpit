@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import MvpService from '../../services/ApiService';
+import MvpService from '../../services/apiService';
 
 export const fetchBurnUpData = createAsyncThunk(
   'burnUpChart/fetchData',

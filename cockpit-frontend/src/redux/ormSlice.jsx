@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import MvpService from '../services/ApiService';
+import MvpService from '../services/apiService';
 import orm from './orm';
 
 const withSession = (reducer) => (state, action) => {

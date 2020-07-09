@@ -24,7 +24,7 @@ import {
 } from '../InformationForm/InformationFormSlice';
 import { editSMFormState, closeEditMvpSMForm } from '../Header/HeaderSlice';
 import { mvpSelector } from '../../redux/selector';
-import MvpService from '../../services/ApiService';
+import MvpService from '../../services/apiService';
 import { getOneMvp } from '../../redux/ormSlice';
 import { fetchBurnUpData } from '../BurnUpChart/BurnUpChartSlice';
 
