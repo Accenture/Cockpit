@@ -28,7 +28,7 @@ import {
 } from './ScrumMasterFormSlice';
 import '../../App.scss';
 import useStyles from './styles';
-import MvpService from '../../services/service';
+import MvpService from '../../services/apiService';
 import { fetchAllMvps } from '../../redux/ormSlice';
 
 let url = '';
@@ -76,6 +76,7 @@ export default function ScrumMasterForm() {
         urlMvpAvatar: imageUrl,
         cycle: cycleNumber,
         status: 'inprogress',
+        sprintNumber: 8,
       },
     };
     await MvpService.createNewJiraProject(newJira);
@@ -203,6 +204,7 @@ export default function ScrumMasterForm() {
                 <MenuItem value="RC">RC</MenuItem>
                 <MenuItem value="MS">MS</MenuItem>
                 <MenuItem value="GRP">GRP</MenuItem>
+                <MenuItem value="TDF">TDF</MenuItem>
               </Select>
             </FormControl>
           </Grid>

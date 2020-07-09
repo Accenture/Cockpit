@@ -10,7 +10,7 @@ const headers = {
     'Access-Control-Allow-Origin': '*',
   },
 };
-function getAll() {
+function getAllMvp() {
   try {
     return API.get(`${mvpUrl}/all`, headers);
   } catch (e) {
@@ -18,7 +18,14 @@ function getAll() {
     return e;
   }
 }
-
+function getOneMvp(id) {
+  try {
+    return API.get(`${mvpUrl}/${id}`, headers);
+  } catch (e) {
+    console.log(`Error when getting Mvp: ${e}`);
+    return e;
+  }
+}
 function createNewJiraProject(jira) {
   try {
     return API.post(`${jiraUrl}/create`, jira, headers);
@@ -63,18 +70,49 @@ function assignTeam(id, teamId) {
   try {
     return API.put(`${mvpUrl}/${id}/assignTeam/${teamId}`, headers);
   } catch (e) {
-    console.log(`Error when creating new team: ${e}`);
+    console.log(`Error when assign team: ${e}`);
+    return e;
+  }
+}
+function unassignTeam(id) {
+  try {
+    return API.put(`${mvpUrl}/unassignTeam/${id}`, headers);
+  } catch (e) {
+    console.log(`Error when unassign team: ${e}`);
+    return e;
+  }
+}
+function createNewTeamMember(teamMember, teamId) {
+  try {
+    return API.put(`${teamUrl}/addTeamMember/${teamId}`, teamMember, headers);
+  } catch (e) {
+    console.log(`Error when creating new team member: ${e}`);
+    return e;
+  }
+}
+function deleteTeamMember(teamId, teamMemberId) {
+  try {
+    return API.put(
+      `${teamUrl}/${teamId}/deleteTeamMember/${teamMemberId}`,
+      headers,
+    );
+  } catch (e) {
+    console.log(`Error when deleting team member: ${e}`);
     return e;
   }
 }
 const MvpService = {
-  getAll,
+  getAllMvp,
   createNewJiraProject,
   getBurnUpChartData,
   updateJiraProject,
   getTeams,
   createNewTeam,
   assignTeam,
+  unassignTeam,
+  getOneMvp,
+  createNewTeamMember,
+  deleteTeamMember,
 };
 
 export default MvpService;

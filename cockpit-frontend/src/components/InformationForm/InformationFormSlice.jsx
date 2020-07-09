@@ -7,6 +7,7 @@ export const InformationFormSlice = createSlice({
     pitch: '',
     cycle: 0,
     scopeCommitment: 0,
+    sprintNumber: 0,
     status: '',
     entity: '',
     urlMvpAvatar: '',
@@ -29,6 +30,9 @@ export const InformationFormSlice = createSlice({
     setScopeCommitment: (state, action) => {
       state.scopeCommitment = action.payload;
     },
+    setSprintNumber: (state, action) => {
+      state.sprintNumber = action.payload;
+    },
     setStatus: (state, action) => {
       state.status = action.payload;
     },
@@ -49,6 +53,7 @@ export const {
   setEntity,
   setCycle,
   setScopeCommitment,
+  setSprintNumber,
   setStatus,
   setImageUrl,
   setMvpStartDate,
@@ -61,6 +66,7 @@ export const entityState = (state) => state.InformationForm.entity;
 export const cycleState = (state) => state.InformationForm.cycle;
 export const scopeCommitmentState = (state) =>
   state.InformationForm.scopeCommitment;
+export const sprintNumberState = (state) => state.InformationForm.sprintNumber;
 export const statusState = (state) => state.InformationForm.status;
 export const imageUrlState = (state) => state.InformationForm.urlMvpAvatar;
 export const mvpStartDateState = (state) => state.InformationForm.mvpStartDate;

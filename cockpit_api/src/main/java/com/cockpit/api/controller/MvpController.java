@@ -82,4 +82,14 @@ public class MvpController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		}
 	}
+	// UNASSIGN TEAM
+	@PutMapping(value = "/api/v1/mvp/unassignTeam/{id}")
+	public ResponseEntity unassignTeamToMvp(@PathVariable Long id) {
+		try {
+			MvpDTO mvp = mvpService.unassignTeamOfMvp(id);
+			return ResponseEntity.ok().body(mvp);
+		} catch (ResourceNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+		}
+	}
 }
