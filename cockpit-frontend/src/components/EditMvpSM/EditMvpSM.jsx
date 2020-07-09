@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
 import { useParams } from 'react-router-dom';
@@ -38,7 +38,7 @@ export default function EditMvpSMForm() {
   const open = useSelector(editSMFormState);
   const mvpId = useParams().id;
   const mvpInfo = useSelector((state) => mvpSelector(state, mvpId));
-
+  const [sprints, setSprints] = useState([]);
   const name = useSelector(nameState);
   const pitch = useSelector(pitchState);
   const cycle = useSelector(cycleState);
@@ -49,6 +49,14 @@ export default function EditMvpSMForm() {
   const urlMvpAvatar = useSelector(imageUrlState);
   const mvpStartDate = useSelector(mvpStartDateState);
   const mvpEndDate = useSelector(mvpEndDateState);
+
+  useEffect(() => {
+    const list = [];
+    for (let i = 1; i <= mvpInfo.sprintNumber; i += 1) {
+      list.push(i);
+    }
+    setSprints(list);
+  }, [mvpInfo]);
   const handleClose = () => {
     dispatch(closeEditMvpSMForm());
   };
@@ -95,31 +103,15 @@ export default function EditMvpSMForm() {
             <Button className={classes.buttonStyle} variant="contained">
               Overview
             </Button>
-
-            <Button className={classes.buttonStyle} disabled>
-              Sprint 1
-            </Button>
-            <Button className={classes.buttonStyle} disabled>
-              Sprint 2
-            </Button>
-            <Button className={classes.buttonStyle} disabled>
-              Sprint 3
-            </Button>
-            <Button className={classes.buttonStyle} disabled>
-              Sprint 4
-            </Button>
-            <Button className={classes.buttonStyle} disabled>
-              Sprint 5
-            </Button>
-            <Button className={classes.buttonStyle} disabled>
-              Sprint 6
-            </Button>
-            <Button className={classes.buttonStyle} disabled>
-              Sprint 7
-            </Button>
-            <Button className={classes.buttonStyle} disabled>
-              Sprint 8
-            </Button>
+            {sprints.map((number) => (
+              <Button
+                key={number}
+                className={classes.buttonStyle}
+                disabled={number > mvpInfo.jira.currentSprint}
+              >
+                Sprint {number}
+              </Button>
+            ))}
           </ButtonGroup>
           <div>
             <Tabs
