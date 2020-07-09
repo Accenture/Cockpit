@@ -16,6 +16,7 @@ import {
   entityState,
   cycleState,
   scopeCommitmentState,
+  sprintNumberState,
   statusState,
   imageUrlState,
   mvpStartDateState,
@@ -23,8 +24,9 @@ import {
 } from '../InformationForm/InformationFormSlice';
 import { editSMFormState, closeEditMvpSMForm } from '../Header/HeaderSlice';
 import { mvpSelector } from '../../redux/selector';
-import MvpService from '../../services/service';
-import { fetchAllMvps } from '../../redux/ormSlice';
+import MvpService from '../../services/apiService';
+import { getOneMvp } from '../../redux/ormSlice';
+import { fetchBurnUpData } from '../BurnUpChart/BurnUpChartSlice';
 
 import useStyles from './styles';
 
@@ -41,6 +43,7 @@ export default function EditMvpSMForm() {
   const pitch = useSelector(pitchState);
   const cycle = useSelector(cycleState);
   const scopeCommitment = useSelector(scopeCommitmentState);
+  const sprintNumber = useSelector(sprintNumberState);
   const entity = useSelector(entityState);
   const status = useSelector(statusState);
   const urlMvpAvatar = useSelector(imageUrlState);
@@ -68,13 +71,17 @@ export default function EditMvpSMForm() {
         urlMvpAvatar,
         cycle,
         scopeCommitment,
+        sprintNumber,
         mvpDescription: pitch,
         status,
       },
     };
     await MvpService.updateJiraProject(newJira);
     dispatch(closeEditMvpSMForm());
-    dispatch(fetchAllMvps());
+    dispatch(getOneMvp(mvpInfo.id));
+    if (sprintNumber !== mvpInfo.sprintNumber) {
+      dispatch(fetchBurnUpData(mvpId));
+    }
   }
   const body = (
     <div>

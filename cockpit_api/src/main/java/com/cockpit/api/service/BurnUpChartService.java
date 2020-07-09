@@ -29,7 +29,6 @@ public class BurnUpChartService {
 
 	private ModelMapper modelMapper = new ModelMapper();
 
-	public static final int SPRINT_NUMBER = 8;
 
 	@Autowired
 	public BurnUpChartService(
@@ -55,7 +54,11 @@ public class BurnUpChartService {
 		int iteration = 1;
 		double projection = 0;
 		int totalUSNumber = 0;
-		for (int sprintNumber = 1; sprintNumber <= SPRINT_NUMBER; sprintNumber++) {
+		int maxSprintNumber = 8;
+		if (mvp.getSprintNumber() != null) {
+			maxSprintNumber = mvp.getSprintNumber();
+		}
+		for (int sprintNumber = 1; sprintNumber <= maxSprintNumber; sprintNumber++) {
 			BurnUpChartDTO chart = new BurnUpChartDTO();
 
 			chart.setSprintId(sprintNumber);

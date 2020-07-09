@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
 import Paper from '@material-ui/core/Paper';
-import FormControl from '@material-ui/core/FormControl';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
@@ -11,33 +8,28 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Snackbar from '@material-ui/core/Snackbar';
 import MuiAlert from '@material-ui/lab/Alert';
 import { useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { fetchAllMvps } from '../../redux/ormSlice';
-
-import MvpService from '../../services/service';
+import { useDispatch, useSelector } from 'react-redux';
+import { getOneMvp } from '../../redux/ormSlice';
+import MvpTeam from './mvpTeam';
+import MvpService from '../../services/apiService';
 import useStyles from './styles';
+import { mvpSelector } from '../../redux/selector';
+import TeamMemberList from '../TeamMemberList/TeamMemberList';
 
 export default function TeamManagementForm() {
   const classes = useStyles();
 
-  const [teams, setTeams] = useState([]);
   const [value, setValue] = useState(0);
   const [teamName, setTeamName] = useState('');
-  const [selectedTeam, setSelectedTeam] = useState('');
+  const [mvpTeam, setMvpTeam] = useState('');
   const [open, setOpen] = React.useState(false);
   const dispatch = useDispatch();
   const mvpId = useParams().id;
-  function handleChange(event) {
-    const found = teams.find((element) => element.id === event.target.value);
-    setSelectedTeam(found);
-  }
+  const mvpInfo = useSelector((state) => mvpSelector(state, mvpId));
+
   useEffect(() => {
-    async function getAllTeam() {
-      const result = await MvpService.getTeams();
-      setTeams(result.data);
-    }
-    getAllTeam();
-  }, []);
+    setMvpTeam(mvpInfo.team);
+  }, [mvpInfo]);
   const handleValueChange = (event, valeur) => {
     setOpen(false);
     setValue(valeur);
@@ -50,7 +42,8 @@ export default function TeamManagementForm() {
     await MvpService.createNewTeam(team, mvpId);
     setOpen(true);
     setTeamName('');
-    dispatch(fetchAllMvps());
+    dispatch(getOneMvp(mvpId));
+    setValue(0);
   }
   function handleNameChange(event) {
     setTeamName(event.target.value);
@@ -65,69 +58,34 @@ export default function TeamManagementForm() {
 
     setOpen(false);
   };
-  async function assign(event) {
-    event.preventDefault();
-    await MvpService.assignTeam(mvpId, selectedTeam.id);
+
+  function getValue(val) {
+    setValue(val);
     setOpen(true);
-    setTeamName('');
-    dispatch(fetchAllMvps());
   }
   return (
     <Paper className={classes.paper}>
       <form>
         <Grid className={classes.grid} container spacing={1}>
-          <ButtonGroup color="primary" style={{ marginTop: 32 }}>
-            <Button
-              style={{ textTransform: 'capitalize' }}
-              onClick={(e) => handleValueChange(e, 2)}
-            >
-              + Add a new team
-            </Button>
+          {!mvpTeam && (
+            <ButtonGroup color="primary" style={{ marginTop: 32 }}>
+              <Button
+                style={{ textTransform: 'capitalize' }}
+                onClick={(e) => handleValueChange(e, 2)}
+              >
+                + Add a new team
+              </Button>
 
-            <Button
-              style={{ textTransform: 'capitalize' }}
-              onClick={(e) => handleValueChange(e, 1)}
-            >
-              assign an existing team
-            </Button>
-          </ButtonGroup>
-
-          {value === 1 && (
-            <Grid container className={classes.containerAssign}>
-              <Grid item xs={8}>
-                <FormControl required size="small" fullWidth variant="outlined">
-                  <Select
-                    displayEmpty
-                    onChange={handleChange}
-                    value={selectedTeam.id || ''}
-                  >
-                    <MenuItem disabled value="">
-                      select a team
-                    </MenuItem>
-                    {teams.map((team) => (
-                      <MenuItem key={team.id} value={team.id}>
-                        {team.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={4}>
-                <Button
-                  onClick={assign}
-                  id="submit"
-                  value="Submit"
-                  type="submit"
-                  disabled={selectedTeam === ''}
-                  variant="outlined"
-                  color="primary"
-                  className={classes.buttonAssign}
-                >
-                  assign
-                </Button>
-              </Grid>
-            </Grid>
+              <Button
+                style={{ textTransform: 'capitalize' }}
+                onClick={(e) => handleValueChange(e, 1)}
+              >
+                assign an existing team
+              </Button>
+            </ButtonGroup>
           )}
+
+          {(value === 1 || mvpTeam) && <MvpTeam sendValue={getValue} />}
           {value === 2 && (
             <Grid container className={classes.containerAdd}>
               <Grid item xs={8}>
@@ -163,13 +121,14 @@ export default function TeamManagementForm() {
           )}
           <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
             <Alert onClose={handleClose} severity="success">
-              {value === 2 &&
-                'Team successfully created and assigned to this MVP!'}{' '}
-              {value === 1 && 'Team successfully assigned to this MVP!'}
+              {value === 0
+                ? ' Team successfully unassigned!'
+                : ' Team successfully created and assigned to this MVP!'}
             </Alert>
           </Snackbar>
         </Grid>
       </form>
+      <TeamMemberList />
     </Paper>
   );
 }

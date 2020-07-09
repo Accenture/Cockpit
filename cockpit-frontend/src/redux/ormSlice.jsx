@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import MvpService from '../services/service';
+import MvpService from '../services/apiService';
 import orm from './orm';
 
 const withSession = (reducer) => (state, action) => {
@@ -9,8 +9,12 @@ const withSession = (reducer) => (state, action) => {
 };
 
 export const fetchAllMvps = createAsyncThunk('mvps/fetchAllMvps', async () => {
-  const allMvps = await MvpService.getAll();
+  const allMvps = await MvpService.getAllMvp();
   return allMvps.data;
+});
+export const getOneMvp = createAsyncThunk('mvps/getOneMvp', async (id) => {
+  const mvp = await MvpService.getOneMvp(id);
+  return mvp.data;
 });
 
 const ormSlice = createSlice({
@@ -30,6 +34,15 @@ const ormSlice = createSlice({
           session.Mvp.withId(mvp.id).update(mvp);
         }
       });
+    }),
+    [getOneMvp.fulfilled]: withSession((session, action) => {
+      // Add mvp to the state array
+      const mvp = action.payload;
+      if (session.Mvp.withId(mvp.id) == null) {
+        session.Mvp.create(mvp);
+      } else {
+        session.Mvp.withId(mvp.id).update(mvp);
+      }
     }),
   },
 });
