@@ -65,30 +65,32 @@ export default function EditMvpSMForm() {
   };
   async function submit(e) {
     e.preventDefault();
-    const newJira = {
-      id: mvpInfo.jira.id,
-      jiraProjectKey: mvpInfo.jira.jiraProjectKey,
-      currentSprint: mvpInfo.jira.currentSprint,
-      jiraProjectId: mvpInfo.jira.jiraProjectId,
-      mvpStartDate,
-      mvpEndDate,
-      mvp: {
-        id: mvpInfo.id,
-        name,
-        entity,
-        urlMvpAvatar,
-        cycle,
-        scopeCommitment,
-        sprintNumber,
-        mvpDescription: pitch,
-        status,
-      },
-    };
-    await MvpService.updateJiraProject(newJira);
-    dispatch(closeEditMvpSMForm());
-    dispatch(getOneMvp(mvpInfo.id));
-    if (sprintNumber !== mvpInfo.sprintNumber) {
-      dispatch(fetchBurnUpData(mvpId));
+    if (sprintNumber <= 12 && sprintNumber >= mvpInfo.jira.currentSprint) {
+      const newJira = {
+        id: mvpInfo.jira.id,
+        jiraProjectKey: mvpInfo.jira.jiraProjectKey,
+        currentSprint: mvpInfo.jira.currentSprint,
+        jiraProjectId: mvpInfo.jira.jiraProjectId,
+        mvpStartDate,
+        mvpEndDate,
+        mvp: {
+          id: mvpInfo.id,
+          name,
+          entity,
+          urlMvpAvatar,
+          cycle,
+          scopeCommitment,
+          sprintNumber,
+          mvpDescription: pitch,
+          status,
+        },
+      };
+      await MvpService.updateJiraProject(newJira);
+      dispatch(closeEditMvpSMForm());
+      dispatch(getOneMvp(mvpInfo.id));
+      if (sprintNumber !== mvpInfo.sprintNumber) {
+        dispatch(fetchBurnUpData(mvpId));
+      }
     }
   }
   const body = (

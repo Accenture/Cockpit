@@ -255,11 +255,14 @@ export default function InformationForm() {
               type="number"
               inputProps={{ min: '1', max: '12', step: '1' }}
               onChange={handleSprintNumberChange}
-              error={nbSprint > 12}
+              error={nbSprint > 12 || nbSprint < mvpInfo.jira.currentSprint}
               helperText={
+                // eslint-disable-next-line no-nested-ternary
                 nbSprint > 12
                   ? 'Sprint Number must be less than or equal to 12'
-                  : ' '
+                  : nbSprint < mvpInfo.jira.currentSprint
+                  ? 'Sprint Number must be greater than or equal to Current Sprint'
+                  : ''
               }
             />
           </Grid>
