@@ -8,9 +8,6 @@ import com.cockpit.api.repository.SprintRepository;
 import com.cockpit.api.repository.UserStoryRepository;
 import com.cockpit.api.service.UserStoryService;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,7 +16,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,8 +30,7 @@ import java.util.Date;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.*;
 
 
 @RunWith(SpringRunner.class)
@@ -136,7 +131,6 @@ public class JiraGatewayServiceTest {
         notFoundUserStory.setSprint(mockSprint);
         notFoundUserStory.setIssueKey("NU");
 
-
         List<UserStory> mockUserStoryList = new ArrayList<>();
         mockUserStoryList.add(mockUserStory);
         List<UserStory> notFoundUserStoryList = new ArrayList<>();
@@ -164,7 +158,7 @@ public class JiraGatewayServiceTest {
         Mockito.when(jiraRepository.findAllByOrderById()).thenReturn(mockJiraList);
         Mockito.when(mockJiraGatewayService.getJiraProjects()).thenReturn(notFoundJiraJsonArray);
         jiraGatewayService.deleteJiraProjects();
-        assertThat(jiraRepository.findByJiraProjectKey(mockJira.getJiraProjectKey())).isNull();
+        verify(jiraRepository, atLeastOnce()).delete(mockJira);
 
         // TEST SPRINT DELETE SCHEDULED TASK
         Mockito.when(sprintRepository.findAll()).thenReturn(mockSprintList);
@@ -174,7 +168,7 @@ public class JiraGatewayServiceTest {
         }
         Mockito.when(mockJiraGatewayService.getJiraSprints(anyLong())).thenReturn(notFoundSprintJsonArray);
         jiraGatewayService.deleteJiraSprint();
-        assertThat(sprintRepository.findByJiraSprintId(notFoundSprint.getJiraSprintId())).isNull();
+        verify(sprintRepository, atLeastOnce()).delete(mockSprint);
 
         // TEST USER STORY DELETE SCHEDULED TASK
         Mockito.when(userStoryRepository.findAll()).thenReturn(mockUserStoryList);
@@ -184,7 +178,7 @@ public class JiraGatewayServiceTest {
         }
         Mockito.when(mockJiraGatewayService.getJiraIssueList()).thenReturn(notFoundUserStoryJsonArray);
         jiraGatewayService.deleteJiraIssues();
-        assertThat(userStoryRepository.findByIssueKey(notFoundUserStory.getIssueKey())).isNull();
+        verify(userStoryRepository, atLeastOnce()).delete(mockUserStory);
 
     }
 }
