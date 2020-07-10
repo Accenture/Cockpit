@@ -33,13 +33,12 @@ public class Sprint {
 
     private String state;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name="id_jira", nullable=false)
     @JsonIgnore
     private Jira jira;
 
-    @OneToMany(mappedBy = "sprint")
-    @JsonIgnore
+    @OneToMany(mappedBy = "sprint", cascade = CascadeType.ALL)
     private Set<UserStory> userStories;
 
     public Long getId() {
