@@ -5,6 +5,7 @@ import FormControl from '@material-ui/core/FormControl';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Box from '@material-ui/core/Box';
+import moment from 'moment/moment';
 import BurnUpChart from '../BurnUpChart/BurnUpChart';
 import { mvpSelector } from '../../redux/selector';
 
@@ -60,10 +61,19 @@ export default function OverviewSprintTabs(props) {
             ))}
           </Select>{' '}
         </FormControl>
-        <div> Sprint {selectedSprint} </div>
-        <div>
-          {' '}
-          from {mvp.jira.mvpStartDate} to {mvp.jira.mvpEndDate}
+        <div style={{ textAlign: 'center', marginTop: 16 }}>
+          <div style={{ fontWeight: 'bold' }}> SPRINT {selectedSprint} </div>
+          <div style={{ color: 'rgba(0, 0, 0, 0.54)', marginTop: 8 }}>
+            {' '}
+            From{' '}
+            {mvp.jira.mvpStartDate
+              ? moment(mvp.jira.mvpStartDate).format('MMMM Do')
+              : moment(new Date()).format('MMMM Do')}{' '}
+            To{' '}
+            {mvp.jira.mvpEndDate
+              ? moment(mvp.jira.mvpEndDate).format('MMMM Do')
+              : moment(new Date()).format('MMMM Do')}
+          </div>
         </div>
       </TabPanel>
     </div>
