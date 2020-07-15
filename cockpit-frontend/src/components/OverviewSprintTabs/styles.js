@@ -14,4 +14,13 @@ export default makeStyles((theme) => ({
     backgroundColor: lightGrey,
     padding: 4,
   },
+  parent: {
+    textAlign: 'center',
+    marginTop: 16,
+  },
+  dateStyle: {
+    color: 'rgba(0, 0, 0, 0.54)',
+    marginTop: 8,
+  },
+  sprintNumber: { fontWeight: 'bold' },
 }));

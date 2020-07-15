@@ -26,6 +26,8 @@ export default function OverviewSprintTabs(props) {
   const mvp = useSelector((state) => mvpSelector(state, mvpId));
   const [sprints, setSprints] = useState([]);
   const [selectedSprint, setSelectedSprint] = useState({});
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
   const classes = useStyles();
   const { selectedTab } = props;
 
@@ -41,6 +43,8 @@ export default function OverviewSprintTabs(props) {
   }, [mvp]);
   function handleChange(event) {
     setSelectedSprint(event.target.value);
+    setStartDate(mvp.jira.mvpStartDate);
+    setEndDate(mvp.jira.mvpEndDate);
   }
   return (
     <div className={classes.root}>
@@ -61,17 +65,17 @@ export default function OverviewSprintTabs(props) {
             ))}
           </Select>{' '}
         </FormControl>
-        <div style={{ textAlign: 'center', marginTop: 16 }}>
-          <div style={{ fontWeight: 'bold' }}> SPRINT {selectedSprint} </div>
-          <div style={{ color: 'rgba(0, 0, 0, 0.54)', marginTop: 8 }}>
+        <div className={classes.parent}>
+          <div className={classes.sprintNumber}> SPRINT {selectedSprint} </div>
+          <div className={classes.dateStyle}>
             {' '}
             From{' '}
             {mvp.jira.mvpStartDate
-              ? moment(mvp.jira.mvpStartDate).format('MMMM Do')
+              ? moment(startDate).format('MMMM Do')
               : moment(new Date()).format('MMMM Do')}{' '}
             To{' '}
             {mvp.jira.mvpEndDate
-              ? moment(mvp.jira.mvpEndDate).format('MMMM Do')
+              ? moment(endDate).format('MMMM Do')
               : moment(new Date()).format('MMMM Do')}
           </div>
         </div>
