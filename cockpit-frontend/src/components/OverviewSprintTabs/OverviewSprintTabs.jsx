@@ -53,13 +53,14 @@ export default function OverviewSprintTabs(props) {
       </TabPanel>
       <TabPanel value={selectedTab} index="sprint">
         <FormControl size="small" className={classes.formControl}>
-          <Select displayEmpty value={selectedSprint} onChange={handleChange}>
+          <Select
+            displayEmpty
+            value={selectedSprint}
+            onChange={handleChange}
+            className={classes.sprintNumber}
+          >
             {sprints.map((sprint) => (
-              <MenuItem
-                key={sprint}
-                value={sprint}
-                style={{ fontWeight: 'bold' }}
-              >
+              <MenuItem key={sprint} value={sprint}>
                 Sprint {sprint}
               </MenuItem>
             ))}
