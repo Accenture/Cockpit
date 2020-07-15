@@ -10,7 +10,7 @@ export const PrivateRoute = ({ component, ...rest }) => {
           return <Component {...props} />;
         }
         signinRedirect();
-        return <span>loading home page</span>;
+        return <span>Loading</span>;
       }}
     </AuthConsumer>
   );
