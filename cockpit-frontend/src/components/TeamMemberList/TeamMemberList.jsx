@@ -247,6 +247,8 @@ export default function TeamMemberList() {
                         <MenuItem value="Data Scientist">
                           Data Scientist
                         </MenuItem>
+                        <MenuItem value="UI">UI</MenuItem>
+                        <MenuItem value="UX">UX</MenuItem>
                       </Select>
                     </FormControl>
                   </Grid>
