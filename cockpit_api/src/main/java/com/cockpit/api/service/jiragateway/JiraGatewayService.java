@@ -103,6 +103,13 @@ public class JiraGatewayService {
         for (Object jiraBoard: jiraBoards){
             if (jiraBoard instanceof JSONObject){
                 Jira foundJiraProject = jiraRepository.findByJiraProjectKey(String.valueOf(((JSONObject) jiraBoard).getJSONObject("location").getString("projectKey")));
+                Date today = new Date();
+                Sprint currentSprint = sprintRepository.findTopBySprintStartDateLessThanEqualAndJiraEqualsOrderBySprintNumberDesc(today,foundJiraProject);
+                if (currentSprint != null) {
+                    foundJiraProject.setCurrentSprint(currentSprint.getSprintNumber());
+                    jiraRepository.save(modelMapper.map(foundJiraProject, Jira.class));
+                    //log.info("Jira projects' current sprint updated");
+                }
                 String boardId = String.valueOf(((JSONObject) jiraBoard).getInt("id"));
                 HttpResponse<JsonNode> sprintResponse = Unirest.get(jiraUrl+"/rest/agile/1.0/board/"+boardId+"/sprint")
                         .basicAuth(username, token)
@@ -124,6 +131,7 @@ public class JiraGatewayService {
                             sprint.setSprintNumber(counter);
                             sprint.setJira(foundJiraProject);
                             sprint.setState(sprintState);
+                            // Set current sprint
                             if(sprintState.equals("active")){
                                 //FIXME: Why not use Date directly? In this case we can remove the corresponding dependency joda-time which is used only in this script
                                 DateTime startDate = new DateTime(((JSONObject)jiraSprint).getString("startDate"));
@@ -142,8 +150,7 @@ public class JiraGatewayService {
                             //FIXME: This log should be out of for loop if it is sprints updated
                             //log.info("Jira projects' sprints updated");
                             //FIXME: How is current sprint set for foundJiraProject before save?
-                            jiraRepository.save(modelMapper.map(foundJiraProject, Jira.class));
-                            //log.info("Jira projects' current sprint updated");
+
                         }
                     }
                 }
@@ -307,6 +314,7 @@ public class JiraGatewayService {
                     sprintRepository.save(sprint);
                 }
             }
+
         }
     } 
 }

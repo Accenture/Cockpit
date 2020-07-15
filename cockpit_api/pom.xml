@@ -89,7 +89,7 @@
 			<artifactId>unirest-java</artifactId>
 			<version>1.4.9</version>
 		</dependency>
-		<!-- IAM -->
+		<!-- IAM
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
@@ -102,6 +102,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-client</artifactId>
 		</dependency>
+				-->
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
