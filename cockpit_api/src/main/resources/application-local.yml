@@ -15,15 +15,15 @@ spring:
     username: ${JIRA_USER_NAME}
     jiraUrl: ${JIRA_HOST_URL}
     token: ${JIRA_AUTH_TOKEN}
-  security:
-    oauth2:
-      client:
-        provider:
-          issuer-uri: https://pp-sso-digitalpassport.hubtotal.net/sso
-        registration:
-          digitalpassport:
-            client-id: cockpit-dev
-            client-secret: rUSzLV3CVndX5hhf3Jvm
+  # security:
+      # oauth2:
+      # client:
+      #   provider:
+      #     issuer-uri: https://pp-sso-digitalpassport.hubtotal.net/sso
+      #   registration:
+      #     digitalpassport:
+      #       client-id: cockpit-dev
+    # client-secret: rUSzLV3CVndX5hhf3Jvm
 springdoc:
   api-docs:
     path: /cockpit-api-doc
