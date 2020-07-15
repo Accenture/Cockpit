@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Grid from '@material-ui/core/Grid';
+
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Obeya from '../Obeya/Obeya';
@@ -19,6 +20,7 @@ function MvpInfoPage() {
   const mvpId = useParams().id;
   const mvp = useSelector((state) => mvpSelector(state, mvpId));
   const [selectedTab, setSelectedTab] = useState('overview');
+
   return (
     <div>
       <Header />
@@ -44,11 +46,13 @@ function MvpInfoPage() {
                   onClick={() => {
                     setSelectedTab('sprint');
                   }}
-                  disabled
+                  disabled={mvp.jira.currentSprint === 0}
                 >
                   Sprint
                 </Button>
               </ButtonGroup>
+
+          
             </Grid>
             <Grid item xs={4}>
               <Obeya />
