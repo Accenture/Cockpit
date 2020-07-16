@@ -1,5 +1,5 @@
 import { UserManager, WebStorageStateStore, Log } from 'oidc-client';
-import authConfig from '../common/utils/authConfig';
+import AUTH_CONFIG from '../common/utils/authConfig';
 
 export default class AuthService {
   UserManager;
@@ -7,13 +7,13 @@ export default class AuthService {
   constructor() {
     const stage = process.env.REACT_APP_STAGE === 'prod' ? 'prod' : 'preprod';
     this.UserManager = new UserManager({
-      ...authConfig[stage],
+      ...AUTH_CONFIG[stage],
       userStore: new WebStorageStateStore({ store: window.sessionStorage }),
     });
     Log.logger = console;
     Log.level = Log.DEBUG;
     this.UserManager.events.addUserLoaded(() => {
-      if (window.location.href.indexOf('login/oauth2/code/okta') !== -1) {
+      if (window.location.href.indexOf('authenticaiton') !== -1) {
         this.navigateToHomePage();
       }
     });
@@ -55,6 +55,7 @@ export default class AuthService {
   };
 
   isAuthenticated = () => {
+    console.log('User Is authencated');
     const oidcStorage = JSON.parse(
       sessionStorage.getItem(
         `oidc.user:https://external-total.okta.com/oauth2/default:0oajesx698Xd6LGCi4x6`,
