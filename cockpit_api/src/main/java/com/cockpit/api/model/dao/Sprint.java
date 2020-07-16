@@ -1,5 +1,7 @@
 package com.cockpit.api.model.dao;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
@@ -33,9 +35,11 @@ public class Sprint {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="id_jira", nullable=false)
+    @JsonIgnore
     private Jira jira;
 
     @OneToMany(mappedBy = "sprint")
+    @JsonIgnore
     private Set<UserStory> userStories;
 
     public Long getId() {
