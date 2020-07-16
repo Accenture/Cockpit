@@ -26,7 +26,7 @@ const AUTH_CONFIG = {
         'https://pp-api-digitalpassport.hubtotal.net/sso/oauth2/total/connect/jwk_uri',
       registration_endpoint:
         'https://pp-sso-digitalpassport.hubtotal.net/sso/oauth2/total/connect/register',
-    }
+    },
   },
   // Prod config to be modified
   prod: {

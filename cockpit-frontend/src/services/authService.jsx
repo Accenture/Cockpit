@@ -28,7 +28,6 @@ export default class AuthService {
   }
 
   signinRedirectCallback = () => {
-    debugger;
     this.UserManager.signinRedirectCallback().then(() => {
       '';
     });
