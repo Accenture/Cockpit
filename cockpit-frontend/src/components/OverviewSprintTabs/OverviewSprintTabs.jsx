@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux';
 import Box from '@material-ui/core/Box';
 import moment from 'moment/moment';
 import BurnUpChart from '../BurnUpChart/BurnUpChart';
+import MvpService from '../../services/apiService';
+
 import { mvpSelector } from '../../redux/selector';
 
 // styles
@@ -32,8 +34,22 @@ export default function OverviewSprintTabs(props) {
   const { selectedTab } = props;
 
   useEffect(() => {
+    async function getSprint() {
+      const sprint = await MvpService.getSprint(
+        mvp.jira.id,
+        mvp.jira.currentSprint,
+      );
+      if (sprint.data) {
+        setStartDate(sprint.data.sprintStartDate);
+        setEndDate(sprint.data.sprintEndDate);
+      } else {
+        setStartDate(null);
+        setEndDate(null);
+      }
+    }
     if (mvp.jira.currentSprint > 0) {
       setSelectedSprint(mvp.jira.currentSprint);
+      getSprint();
       const list = [];
       for (let i = 1; i <= mvp.jira.currentSprint; i += 1) {
         list.push(i);
@@ -41,10 +57,21 @@ export default function OverviewSprintTabs(props) {
       setSprints(list);
     }
   }, [mvp]);
-  function handleChange(event) {
+  async function handleChange(event) {
     setSelectedSprint(event.target.value);
-    setStartDate(mvp.jira.mvpStartDate);
-    setEndDate(mvp.jira.mvpEndDate);
+
+    const sprint = await MvpService.getSprint(mvp.jira.id, event.target.value);
+    if (sprint.data) {
+      setStartDate(sprint.data.sprintStartDate);
+      if (event.target.value !== mvp.jira.currentSprint) {
+        setEndDate(sprint.data.sprintCompleteDate);
+      } else {
+        setEndDate(sprint.data.sprintEndDate);
+      }
+    } else {
+      setStartDate(null);
+      setEndDate(null);
+    }
   }
   return (
     <div className={classes.root}>
@@ -71,11 +98,11 @@ export default function OverviewSprintTabs(props) {
           <div className={classes.dateStyle}>
             {' '}
             From{' '}
-            {mvp.jira.mvpStartDate
+            {startDate
               ? moment(startDate).format('MMMM Do')
               : moment(new Date()).format('MMMM Do')}{' '}
             To{' '}
-            {mvp.jira.mvpEndDate
+            {endDate
               ? moment(endDate).format('MMMM Do')
               : moment(new Date()).format('MMMM Do')}
           </div>

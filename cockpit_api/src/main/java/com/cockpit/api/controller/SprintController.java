@@ -1,23 +1,40 @@
 package com.cockpit.api.controller;
 
-import com.cockpit.api.exception.ResourceNotFoundException;
-import com.cockpit.api.model.dto.SprintDTO;
-import com.cockpit.api.service.SprintService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.cockpit.api.exception.ResourceNotFoundException;
+import com.cockpit.api.model.dao.Jira;
+import com.cockpit.api.model.dao.Sprint;
+import com.cockpit.api.model.dto.JiraDTO;
+import com.cockpit.api.model.dto.SprintDTO;
+import com.cockpit.api.service.JiraService;
+import com.cockpit.api.service.SprintService;
 
 @RestController
 @CrossOrigin
 public class SprintController {
     private final SprintService sprintService;
-
+    private final JiraService jiraService;
+	private ModelMapper modelMapper = new ModelMapper();
+	
     @Autowired
     public SprintController(
-            SprintService sprintService
+            SprintService sprintService,  JiraService jiraService
     ) {
         this.sprintService = sprintService;
+        this.jiraService=jiraService;
     }
 
     // CREATE a new Sprint
@@ -64,6 +81,19 @@ public class SprintController {
             sprintService.deleteSprint(id);
             return ResponseEntity.ok("One Sprint has been deleted");
         } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+    // GET Sprint BY Sprint Number And Jira
+    @GetMapping(
+            value = "/api/v1/sprint/{jiraId}/{sprintNumber}"
+    )
+    public ResponseEntity getSprintBySprintNumberAndJira(@PathVariable Long jiraId, @PathVariable int sprintNumber) {
+        try {
+        	JiraDTO jira = jiraService.findJiraById(jiraId);
+            Sprint sprintFound = sprintService.findByMvpAndSprintNumber(modelMapper.map(jira, Jira.class), sprintNumber);
+            return ResponseEntity.ok().body(sprintFound);
+        } catch (com.cockpit.api.exception.ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }

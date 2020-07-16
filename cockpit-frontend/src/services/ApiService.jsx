@@ -4,6 +4,7 @@ const mvpUrl = 'mvp';
 const jiraUrl = 'jira';
 const burnUpChartUrl = 'burnUpChart';
 const teamUrl = 'team';
+const sprintUrl = 'sprint';
 const headers = {
   headers: {
     'Content-Type': 'application/json',
@@ -101,6 +102,14 @@ function deleteTeamMember(teamId, teamMemberId) {
     return e;
   }
 }
+function getSprint(jiraId, sprintNumber) {
+  try {
+    return API.get(`${sprintUrl}/${jiraId}/${sprintNumber}`, headers);
+  } catch (e) {
+    console.log(`Error when getting Sprint: ${e}`);
+    return e;
+  }
+}
 const MvpService = {
   getAllMvp,
   createNewJiraProject,
@@ -113,6 +122,7 @@ const MvpService = {
   getOneMvp,
   createNewTeamMember,
   deleteTeamMember,
+  getSprint,
 };
 
 export default MvpService;
