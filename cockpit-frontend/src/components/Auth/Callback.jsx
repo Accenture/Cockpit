@@ -6,7 +6,6 @@ export const Callback = () => (
     {({ signinRedirectCallback }) => {
       signinRedirectCallback();
       // eslint-disable-next-line no-debugger
-      debugger;
       return <span>Login in progress – please wait...</span>;
     }}
   </AuthConsumer>
