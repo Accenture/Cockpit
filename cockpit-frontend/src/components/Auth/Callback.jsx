@@ -4,7 +4,6 @@ import { AuthConsumer } from '../../services/authProvider';
 export function Callback() {
   function setUserToSessionStorage() {
     const hash = window.location.href.split('#');
-    console.log(hash);
     if (hash.length > 1) {
       const param = hash[1].split('&');
       if (param.length > 0) {
@@ -17,7 +16,6 @@ export function Callback() {
             idToken[1].length > 0
           ) {
             window.sessionStorage.setItem('id_token', idToken[1]);
-            console.log('Id token set');
           }
         }
       }
