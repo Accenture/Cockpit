@@ -13,7 +13,7 @@ function Routes() {
     <Router>
       <Suspense fallback={<HomePage />}>
         <Switch>
-          <Route exact path="authenticaiton" component={Callback} />
+          <Route exact path="/authentication" component={Callback} />
           <Route exact path="/logout" component={Logout} />
           <PrivateRoute exact path="/" component={HomePage} />
           <Route exact path="/mvp-info/:id" component={MvpInfoPage} />

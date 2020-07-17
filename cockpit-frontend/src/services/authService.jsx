@@ -1,8 +1,10 @@
-import { UserManager, WebStorageStateStore, Log } from 'oidc-client';
+import { UserManager, User, WebStorageStateStore, Log } from 'oidc-client';
 import AUTH_CONFIG from '../common/utils/authConfig';
 
 export default class AuthService {
   UserManager;
+
+  User;
 
   constructor() {
     const stage = process.env.REACT_APP_STAGE === 'prod' ? 'prod' : 'preprod';
@@ -13,7 +15,7 @@ export default class AuthService {
     Log.logger = console;
     Log.level = Log.DEBUG;
     this.UserManager.events.addUserLoaded(() => {
-      if (window.location.href.indexOf('authenticaiton') !== -1) {
+      if (window.location.href.indexOf('authentication') !== -1) {
         this.navigateToHomePage();
       }
     });
@@ -28,13 +30,18 @@ export default class AuthService {
   }
 
   signinRedirectCallback = () => {
-    this.UserManager.signinRedirectCallback().then(() => {
-      '';
+    this.UserManager.signinRedirectCallback().then((user) => {
+      // DigitalPass is missing CORS Headers for request to succeed
+      this.User = user;
     });
   };
 
   getUser = async () => {
-    const user = await this.UserManager.getUser();
+    console.log('Getting users ....');
+    this.User = new User();
+    const user = await this.UserManager.getUser().then((u) => {
+      this.User = u;
+    });
     if (!user) {
       // eslint-disable-next-line no-return-await
       return await this.UserManager.signinRedirectCallback();
@@ -49,18 +56,14 @@ export default class AuthService {
   };
 
   signinRedirect = () => {
-    localStorage.setItem('redirectUri', window.location.pathname);
     this.UserManager.signinRedirect({});
   };
 
   isAuthenticated = () => {
     console.log('User Is authencated');
-    const oidcStorage = JSON.parse(
-      sessionStorage.getItem(
-        `oidc.user:https://external-total.okta.com/oauth2/default:0oajesx698Xd6LGCi4x6`,
-      ),
-    );
-    return !!oidcStorage && !!oidcStorage.access_token;
+    const idToken = sessionStorage.getItem('id_token');
+    console.log('User is authenticated');
+    return !!idToken;
   };
 
   navigateToHomePage = () => {
@@ -87,14 +90,14 @@ export default class AuthService {
 
   logout = () => {
     this.UserManager.signoutRedirect({
-      id_token_hint: localStorage.getItem('id_token'),
+      id_token_hint: sessionStorage.getItem('id_token'),
     });
     this.UserManager.clearStaleState();
   };
 
   signoutRedirectCallback = () => {
     this.UserManager.signoutRedirectCallback().then(() => {
-      localStorage.clear();
+      sessionStorage.clear();
       window.location.replace(process.env.REACT_APP_PUBLIC_URL);
     });
     this.UserManager.clearStaleState();

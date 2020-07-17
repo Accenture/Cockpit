@@ -8,8 +8,8 @@ const AUTH_CONFIG = {
       */
     redirect_uri: 'https://azwbdcokp01.azurewebsites.net/authentication',
     // post_logout_redirect_uri: `${window.location.protocol}//${window.location.hostname}:${window.location.port}/`,
-    response_type: 'token id_token',
-    scope: 'openid email igg firstname lastname',
+    response_type: 'id_token token',
+    scope: 'openid email',
     load_user_info: false,
     authority: 'https://pp-sso-digitalpassport.hubtotal.net/sso/oauth2/total',
     metadata: {
