@@ -163,6 +163,9 @@ export default function BurnUpChart() {
         }
         handlePopoverOpen(event);
       },
+      onLeave() {
+        handlePopoverClose();
+      },
     },
     responsive: true,
     datasetStrokeWidth: 3,
