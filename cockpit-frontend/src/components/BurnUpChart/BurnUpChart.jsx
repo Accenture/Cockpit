@@ -35,14 +35,13 @@ export default function BurnUpChart() {
     scopeCommitmentArray.fill(scopeCommitment);
   }
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [left, setLeft] = React.useState(0);
   const [text, setText] = React.useState('');
   const handlePopoverOpen = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handlePopoverClose = () => {
-    setAnchorEl(null);
+    setAnchorEl(false);
   };
 
   const open = Boolean(anchorEl);
@@ -135,28 +134,23 @@ export default function BurnUpChart() {
       },
       onHover(event, itemId) {
         if (itemId.datasetIndex === 0) {
-          setLeft(70);
           setText('represents the accumulation of US closed in each sprint');
         }
         if (itemId.datasetIndex === 1) {
-          setLeft(220);
           setText(
             'reflects the total of [the US done in the previous sprints + the current sprint scope]',
           );
         }
         if (itemId.datasetIndex === 2) {
-          setLeft(350);
           setText(
             'reflects the total of [the US done in the previous sprints + the average]',
           );
         }
 
         if (itemId.datasetIndex === 3) {
-          setLeft(500);
           setText('reflects the sum of Users stories in backlog');
         }
         if (itemId.datasetIndex === 4) {
-          setLeft(620);
           setText(
             'reflects the number of US identified by the team during the scoping phase and commits implementing them during the cycle',
           );
@@ -193,20 +187,26 @@ export default function BurnUpChart() {
 
   return (
     <div className="burnup-chart">
-      <Line data={data} options={options} redraw id="canvas" />
+      <Line
+        style={{ zIndex: 1 }}
+        data={data}
+        options={options}
+        responsive
+        id="canvas"
+      />
       <Popover
-        style={{ left }}
+        style={{ zIndex: -1, marginTop: 12 }}
         open={open}
         anchorEl={anchorEl}
         onClose={handlePopoverClose}
         disableRestoreFocus
         anchorOrigin={{
           vertical: 'bottom',
-          horizontal: 'left',
+          horizontal: 'center',
         }}
         transformOrigin={{
           vertical: 'top',
-          horizontal: 'left',
+          horizontal: 'center',
         }}
       >
         <Typography className={classes.popover}>{text}</Typography>
