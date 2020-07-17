@@ -12,36 +12,30 @@ export default class AuthService {
       ...AUTH_CONFIG[stage],
       userStore: new WebStorageStateStore({ store: window.sessionStorage }),
     });
-    Log.logger = console;
-    Log.level = Log.DEBUG;
     this.UserManager.events.addUserLoaded(() => {
       if (window.location.href.indexOf('authentication') !== -1) {
         this.navigateToHomePage();
       }
     });
     this.UserManager.events.addSilentRenewError((e) => {
-      console.log('silent renew error', e.message);
+      console.log('Silent renew error', e.message);
     });
 
     this.UserManager.events.addAccessTokenExpired(() => {
-      console.log('token expired');
+      console.log('Token expired');
       this.signinSilent();
     });
   }
 
   signinRedirectCallback = () => {
     this.UserManager.signinRedirectCallback().then((user) => {
+      console.log('Signin redirect callback get user');
       // DigitalPass is missing CORS Headers for request to succeed
-      this.User = user;
     });
   };
 
   getUser = async () => {
-    console.log('Getting users ....');
-    this.User = new User();
-    const user = await this.UserManager.getUser().then((u) => {
-      this.User = u;
-    });
+    const user = await this.UserManager.getUser();
     if (!user) {
       // eslint-disable-next-line no-return-await
       return await this.UserManager.signinRedirectCallback();
@@ -49,25 +43,28 @@ export default class AuthService {
     return user;
   };
 
-  parseJwt = (token) => {
-    const base64Url = token.split('.')[1];
-    const base64 = base64Url.replace('-', '+').replace('_', '/');
-    return JSON.parse(window.atob(base64));
-  };
-
   signinRedirect = () => {
     this.UserManager.signinRedirect({});
   };
 
   isAuthenticated = () => {
-    console.log('User Is authencated');
     const idToken = sessionStorage.getItem('id_token');
-    console.log('User is authenticated');
-    return !!idToken;
+    if (idToken != null) {
+    const tokenBody = idToken.split('.')[1];
+      const decodedToken = JSON.parse(window.atob(tokenBody));
+      if (decodedToken.exp && decodedToken.exp * 1000 > Date.now()) {
+        return true;
+      }
+    }
+    return false;
   };
 
   navigateToHomePage = () => {
     window.location.replace('/');
+  };
+
+  createSigninRequest = () => {
+    return this.UserManager.createSigninRequest();
   };
 
   signinSilent = () => {
@@ -84,9 +81,6 @@ export default class AuthService {
     this.UserManager.signinSilentCallback();
   };
 
-  createSigninRequest = () => {
-    return this.UserManager.createSigninRequest();
-  };
 
   logout = () => {
     this.UserManager.signoutRedirect({

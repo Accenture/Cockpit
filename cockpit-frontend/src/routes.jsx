@@ -13,10 +13,10 @@ function Routes() {
     <Router>
       <Suspense fallback={<HomePage />}>
         <Switch>
+          <PrivateRoute exact path="/" component={HomePage} />
+          <PrivateRoute exact path="/mvp-info/:id" component={MvpInfoPage} />
           <Route exact path="/authentication" component={Callback} />
           <Route exact path="/logout" component={Logout} />
-          <PrivateRoute exact path="/" component={HomePage} />
-          <Route exact path="/mvp-info/:id" component={MvpInfoPage} />
           <Route exact path="/logout/callback" component={LogoutCallback} />
           <Route exact path="/silentrenew" component={SilentRenew} />
         </Switch>
