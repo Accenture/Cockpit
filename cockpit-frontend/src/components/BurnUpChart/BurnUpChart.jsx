@@ -18,8 +18,11 @@ import {
   burnUpChartState,
   initState,
 } from './BurnUpChartSlice';
+import useStyles from './styles';
 
 export default function BurnUpChart() {
+  const classes = useStyles();
+
   const chartData = useSelector(burnUpChartState);
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -155,13 +158,10 @@ export default function BurnUpChart() {
         if (itemId.datasetIndex === 4) {
           setLeft(620);
           setText(
-            'reflects the number of US identified by the team during the scoping phase',
+            'reflects the number of US identified by the team during the scoping phase and commits implementing them during the cycle',
           );
         }
         handlePopoverOpen(event);
-      },
-      onLeave() {
-        handlePopoverClose();
       },
     },
     responsive: true,
@@ -206,7 +206,7 @@ export default function BurnUpChart() {
           horizontal: 'left',
         }}
       >
-        <Typography>{text}</Typography>
+        <Typography className={classes.popover}>{text}</Typography>
       </Popover>
     </div>
   );
