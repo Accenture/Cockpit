@@ -1,0 +1,3 @@
+ALTER TABLE jira
+ADD COLUMN board_id INTEGER;
+
