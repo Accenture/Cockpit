@@ -32,7 +32,7 @@ public class UserStory {
 
 
     @ManyToOne(cascade=CascadeType.ALL)
-    @JoinColumn(name="id_sprint", nullable=false)
+    @JoinColumn(name="id_sprint")
     private Sprint sprint;
 
     @ManyToOne
