@@ -1,4 +1,4 @@
-import { UserManager, User, WebStorageStateStore, Log } from 'oidc-client';
+import { UserManager, WebStorageStateStore } from 'oidc-client';
 import AUTH_CONFIG from '../common/utils/authConfig';
 
 export default class AuthService {
@@ -7,7 +7,7 @@ export default class AuthService {
   User;
 
   constructor() {
-    const stage = process.env.REACT_APP_STAGE === 'prod' ? 'prod' : 'preprod';
+    const stage = process.env.REACT_APP_STAGE;
     this.UserManager = new UserManager({
       ...AUTH_CONFIG[stage],
       userStore: new WebStorageStateStore({ store: window.sessionStorage }),
@@ -28,7 +28,7 @@ export default class AuthService {
   }
 
   signinRedirectCallback = () => {
-    this.UserManager.signinRedirectCallback().then((user) => {
+    this.UserManager.signinRedirectCallback().then(() => {
       console.log('Signin redirect callback get user');
       // DigitalPass is missing CORS Headers for request to succeed
     });
@@ -50,7 +50,7 @@ export default class AuthService {
   isAuthenticated = () => {
     const idToken = sessionStorage.getItem('id_token');
     if (idToken != null) {
-    const tokenBody = idToken.split('.')[1];
+      const tokenBody = idToken.split('.')[1];
       const decodedToken = JSON.parse(window.atob(tokenBody));
       if (decodedToken.exp && decodedToken.exp * 1000 > Date.now()) {
         return true;
@@ -80,7 +80,6 @@ export default class AuthService {
   signinSilentCallback = () => {
     this.UserManager.signinSilentCallback();
   };
-
 
   logout = () => {
     this.UserManager.signoutRedirect({
