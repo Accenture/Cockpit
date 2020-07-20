@@ -9,12 +9,24 @@ import { SilentRenew } from './components/Auth/SilentRenew';
 import { PrivateRoute } from './routes/PrivateRoute';
 
 function Routes() {
+  const env = process.env.REACT_APP_STAGE;
+  function isNotLocal() {
+    return env === 'dev' || env === 'qa' || env === 'prod';
+  }
   return (
     <Router>
       <Suspense fallback={<HomePage />}>
         <Switch>
-          <PrivateRoute exact path="/" component={HomePage} />
-          <PrivateRoute exact path="/mvp-info/:id" component={MvpInfoPage} />
+          {isNotLocal() ? (
+            <PrivateRoute exact path="/" component={HomePage} />
+          ) : (
+            <Route exact path="/" component={HomePage} />
+          )}
+          {isNotLocal() ? (
+            <PrivateRoute exact path="/mvp-info/:id" component={MvpInfoPage} />
+          ) : (
+            <Route exact path="/mvp-info/:id" component={MvpInfoPage} />
+          )}
           <Route exact path="/authentication" component={Callback} />
           <Route exact path="/logout" component={Logout} />
           <Route exact path="/logout/callback" component={LogoutCallback} />
