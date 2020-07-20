@@ -15,15 +15,11 @@ spring:
     username: ${JIRA_USER_NAME}
     jiraUrl: ${JIRA_HOST_URL}
     token: ${JIRA_AUTH_TOKEN}
-  # security:
-      # oauth2:
-      # client:
-      #   provider:
-      #     issuer-uri: https://pp-sso-digitalpassport.hubtotal.net/sso
-      #   registration:
-      #     digitalpassport:
-      #       client-id: cockpit-dev
-    # client-secret: rUSzLV3CVndX5hhf3Jvm
+    urlProjects: https://${JIRA_HOST_URL}/rest/api/2/project
+    urlBoards: https://${JIRA_HOST_URL}/rest/agile/1.0/board?maxResults=%s&startAt=%s&type=scrum
+    urlSprints: https://${JIRA_HOST_URL}/rest/agile/1.0/board/
+    urlIssues: https://${JIRA_HOST_URL}/rest/api/2/search?jql=
+    urlAllIssues: https://${JIRA_HOST_URL}/rest/api/2/search?maxResults=%s&startAt=%s&jql=issuetype=Story
 springdoc:
   api-docs:
     path: /cockpit-api-doc

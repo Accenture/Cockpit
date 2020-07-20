@@ -3,8 +3,6 @@ package com.cockpit.api.model.dao;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 
-import org.hibernate.annotations.ColumnDefault;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import java.util.Date;
 import java.util.Set;
@@ -26,6 +24,8 @@ public class Jira{
     private Date mvpStartDate;
 
     private Date mvpEndDate;
+    
+    private Integer boardId;
 
     @OneToMany(mappedBy = "jira", cascade=CascadeType.ALL)
     @JsonIgnore
@@ -110,4 +110,13 @@ public class Jira{
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+	public Integer getBoardId() {
+		return boardId;
+	}
+
+	public void setBoardId(Integer boardId) {
+		this.boardId = boardId;
+	}
+	
 }
