@@ -2,6 +2,8 @@ package com.cockpit.api.repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+
 import com.cockpit.api.model.dao.Jira;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -25,5 +27,9 @@ public interface UserStoryRepository extends CrudRepository<UserStory, Long> {
 	int countUserStoriesByJiraAndCreationDateBefore(Jira jira, Date firstSprintStartDate);
 
 	List<UserStory> findAll();
+
+	Optional<UserStory> findByJiraIssueId(int jiraIssueId);
+
+	void deleteAllByIssueKeyNotIn(List<String> toBeDeletedUS);
 
 }
