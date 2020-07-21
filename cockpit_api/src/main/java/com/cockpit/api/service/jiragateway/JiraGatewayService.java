@@ -6,12 +6,7 @@ import static javax.management.timer.Timer.ONE_SECOND;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,20 +42,11 @@ public class JiraGatewayService {
     private List<Sprint> sprintsToRemove = new ArrayList<>();
     HttpEntity<String> request;
     HttpHeaders headers;
-
     RestTemplate restTemplate = new RestTemplate();
-
-    private final ModelMapper modelMapper = new ModelMapper();
-
     private final SprintRepository sprintRepository;
     private final JiraRepository jiraRepository;
     private final UserStoryRepository userStoryRepository;
     final UserStoryService userStoryService;
-    private static final String VALUESFIELD = "values";
-    private static final String STATUSFIELD = "status";
-    private static final String CREATEDFIELD = "created";
-    private static final String HEADERKEY = "Accept";
-    private static final String HEADERVALUE = "application/json";
 
     @Autowired
     public JiraGatewayService(JiraRepository jiraRepository, SprintRepository sprintRepository,
@@ -70,7 +56,7 @@ public class JiraGatewayService {
         this.userStoryRepository = userStoryRepository;
         this.userStoryService = userStoryService;
     }
-    
+
     @Value("${spring.jira.username}")
     private String username;
     @Value("${spring.jira.token}")
@@ -154,9 +140,41 @@ public class JiraGatewayService {
                     reorderSprintNumberPerJira(jira);
                 }
             }
-            List<Sprint> sprintsToRemove = getSprintsToRemove();
-            cleanWrongSprintFromMvp(sprintsToRemove);
         } catch (Exception e) {
+        }
+    }
+
+    @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
+    public void setTotalNbOfUserStoryForEachSprintOfEachProject() {
+        List<Jira> jiraProjectList = jiraRepository.findAllByOrderById();
+        for
+        (Jira jira : jiraProjectList) {
+            List<Sprint> sprintList =
+                    sprintRepository.findByJiraOrderBySprintNumber(jira);
+            int
+                    totalNumberOfUserStoriesUntilCurrentSprint = 0;
+            if (sprintList.size() >
+                    0) {
+                totalNumberOfUserStoriesUntilCurrentSprint = userStoryRepository
+                        .countUserStoriesByJiraAndCreationDateBefore(jira,
+                                sprintList.get(0).getSprintStartDate());
+            }
+            for (Sprint sprint :
+                    sprintList) {
+                Date sprintStartDate = sprint.getSprintStartDate();
+                Date sprintEndDate = sprint.getSprintEndDate();
+                if (sprintStartDate != null &&
+                        sprintEndDate != null) {
+                    int nbUserStoriesCreatedDuringCurrentSprint =
+                            userStoryRepository
+                                    .countUserStoriesByJiraAndCreationDateGreaterThanAndCreationDateLessThanEqual
+                                            (jira, sprintStartDate, sprintEndDate);
+                    totalNumberOfUserStoriesUntilCurrentSprint +=
+                            nbUserStoriesCreatedDuringCurrentSprint;
+                    sprint.setTotalNbUs(totalNumberOfUserStoriesUntilCurrentSprint);
+                    sprintRepository.save(sprint);
+                }
+            }
         }
     }
 
@@ -181,7 +199,7 @@ public class JiraGatewayService {
         }
     }
 */
-    public void cleanWrongSprintFromMvp(List<Sprint> sprints) {
+    public void cleanWrongSprintFromJira(List<Sprint> sprints) {
         if (sprints != null && !sprints.isEmpty()) {
             for (Sprint sprint : sprints) {
 
@@ -191,8 +209,12 @@ public class JiraGatewayService {
         }
     }
 
-    public List<Sprint> getSprintsToRemove() {
-        return sprintsToRemove;
+    public void getSprintsToRemove(List<SprintJira>  sprintListJira, List<Sprint> sprintList) {
+        for (Sprint sprint: sprintList) {
+            if (sprintListJira.stream().filter(sprintJira -> sprint.getJiraSprintId() == sprintJira.getId()).count() == 0 ) {
+                sprintsToRemove.add(sprint);
+            }
+        }
     }
 
     public List<SprintJira> getSprintsFromJira(int boardId, String urlSprints) throws Exception {
@@ -205,12 +227,12 @@ public class JiraGatewayService {
         return newSprintsList;
     }
 
-    public void reorderSprintNumberPerJira(Jira jira) throws Exception {
+    public void reorderSprintNumberPerJira(Jira jira) {
         List<Sprint> mvpSprints;
         mvpSprints = sprintRepository.findByJiraOrderBySprintNumber(jira);
 
         if (mvpSprints != null || !mvpSprints.isEmpty()) {
-            int count = 0;
+            int count = 1;
             for (Sprint sprint : mvpSprints) {
                 sprint.setSprintNumber(count);
                 sprintRepository.save(sprint);
@@ -221,10 +243,14 @@ public class JiraGatewayService {
 
     public void updateSprintsInDB(List<SprintJira> sprintJiraList, Jira jira) {
         int sprintNumber = 1;
+        List<Sprint> sprints = sprintRepository.findByJiraOrderBySprintNumber(jira);
         for (SprintJira sprintJira : Optional.ofNullable(sprintJiraList).orElse(Collections.emptyList())) {
             Sprint sprintExist = sprintRepository.findByJiraSprintId(sprintJira.getId());
-            if (sprintExist == null && sprintJira.getOriginBoardId() == jira.getBoardId()) {
+            if (sprintJira.getOriginBoardId() == jira.getBoardId()) {
                 Sprint newSprint = new Sprint();
+                if (sprintExist != null) {
+                    newSprint.setId(sprintExist.getId());
+                }
                 newSprint.setJiraSprintId(sprintJira.getId());
                 newSprint.setState(sprintJira.getState());
                 newSprint.setJira(jira);
@@ -250,6 +276,8 @@ public class JiraGatewayService {
             }
             sprintNumber++;
         }
+        getSprintsToRemove(sprintJiraList, sprints);
+        cleanWrongSprintFromJira(sprintsToRemove);
     }
 
     public void updateBoardIdInJira(String urlBoards) throws Exception {
