@@ -122,7 +122,7 @@ public class JiraGatewayService {
 
     }
 
-    @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 2 * ONE_HOUR)
+    @Scheduled(initialDelay = 5 * ONE_SECOND, fixedDelay = 2 * ONE_HOUR)
     public void updateBoardIdInJira() {
         try {
             updateBoardIdInJira(urlBoards);
@@ -130,7 +130,7 @@ public class JiraGatewayService {
         }
     }
 
-    @Scheduled(initialDelay = 3 * ONE_SECOND, fixedDelay = ONE_HOUR)
+    @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = ONE_HOUR)
     public void updateSprintsFromJira() {
         try {
             List<Jira> jiraList = jiraRepository.findAllByOrderById();
@@ -181,7 +181,7 @@ public class JiraGatewayService {
         }
     }
 
-    @Scheduled(initialDelay = 5 * ONE_SECOND, fixedDelay = ONE_HOUR)
+    @Scheduled(initialDelay = 15 * ONE_SECOND, fixedDelay = ONE_HOUR)
     public void updateUserStoryInDBFromJira() {
         List<Sprint> sprintList;
         try {
