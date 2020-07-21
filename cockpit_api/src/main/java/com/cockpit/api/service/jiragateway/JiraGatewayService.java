@@ -5,9 +5,13 @@ import static javax.management.timer.Timer.ONE_MINUTE;
 import static javax.management.timer.Timer.ONE_SECOND;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import org.modelmapper.ModelMapper;
+import java.util.stream.Collectors;
+
+import com.cockpit.api.model.dao.UserStory;
+import com.cockpit.api.model.dto.jira.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +27,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Sprint;
-import com.cockpit.api.model.dto.jira.Board;
-import com.cockpit.api.model.dto.jira.JiraBoard;
-import com.cockpit.api.model.dto.jira.Project;
-import com.cockpit.api.model.dto.jira.SprintHeaders;
-import com.cockpit.api.model.dto.jira.SprintJira;
 import com.cockpit.api.repository.JiraRepository;
 import com.cockpit.api.repository.SprintRepository;
 import com.cockpit.api.repository.UserStoryRepository;
@@ -40,6 +39,7 @@ public class JiraGatewayService {
     Logger log = LoggerFactory.getLogger(JiraGatewayService.class);
 
     private List<Sprint> sprintsToRemove = new ArrayList<>();
+    private List<UserStory> stories = new ArrayList<>();
     HttpEntity<String> request;
     HttpHeaders headers;
     RestTemplate restTemplate = new RestTemplate();
@@ -69,7 +69,10 @@ public class JiraGatewayService {
     private String urlBoards;
     @Value("${spring.jira.urlSprints}")
     private String urlSprints;
-
+    @Value("${spring.jira.urlIssues}")
+    private String urlIssues;
+    @Value("${spring.jira.urlAllIssues}")
+    private String urlAllIssues;
 
     // added by Rihab
     public HttpHeaders addAuthorizationToHeaders() {
@@ -93,7 +96,7 @@ public class JiraGatewayService {
         try {
             responseEntity = restTemplate.exchange(url, HttpMethod.GET, request, Class.forName(className));
         } catch (Exception e) {
-            throw new Exception(" Exception jira update projects", e);
+            throw new Exception("Exception Call jira for url" + url);
         }
         return responseEntity;
     }
@@ -178,27 +181,115 @@ public class JiraGatewayService {
         }
     }
 
-    /* @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
-    @Transactional
-    public void getJiraSprints() throws UnirestException, JsonProcessingException {
-
-        HttpResponse<JsonNode> response = Unirest.get(jiraUrl + "/rest/agile/1.0/board?type=scrum")
-                .basicAuth(username, token).header(HEADERKEY, HEADERVALUE).asJson();
-        JSONArray jiraBoards = response.getBody().getObject().getJSONArray(VALUESFIELD);
-        for (Object jiraBoard : jiraBoards) {
-            if (jiraBoard instanceof JSONObject) {
-                ObjectMapper mapper = new ObjectMapper();
-                JiraBoardDTO jbProject = mapper.readValue(jiraBoard.toString(), JiraBoardDTO.class);
-                Jira foundJiraProject = jiraRepository.findByJiraProjectKey(jbProject.getLocation().getProjectKey());
-                HttpResponse<JsonNode> sprintResponse = Unirest
-                        .get(jiraUrl + "/rest/agile/1.0/board/" + jbProject.getId() + "/sprint")
-                        .basicAuth(username, token).header(HEADERKEY, HEADERVALUE).asJson();
-                JSONArray jiraSprints = sprintResponse.getBody().getObject().getJSONArray(VALUESFIELD);
-                saveSprints(jiraSprints, foundJiraProject);
+    @Scheduled(initialDelay = 5 * ONE_SECOND, fixedDelay = ONE_HOUR)
+    public void updateUserStoryInDBFromJira() {
+        List<Sprint> sprintList;
+        try {
+            sprintList = sprintRepository.findAll();
+            for (Sprint sprint : Optional.ofNullable(sprintList).orElse(Collections.emptyList())) {
+                updateUserStoryInDBForASprintFromJira(sprint, urlIssues);
             }
+        } catch (Exception e) {
+            log.error(e.getMessage());
         }
     }
-*/
+
+    @Scheduled(initialDelay = 30 * ONE_SECOND, fixedDelay = ONE_HOUR)
+    public void cleaningUselessUSFromDB() {
+        log.info("UserStory - Start cleaning useless user stories - Thread : " + Thread.currentThread().getName());
+        try{
+            cleanUserStoriesNotLongerExists(urlAllIssues);
+        }
+        catch (Exception e) {
+            log.error("Exception thrown when trying to delete user stories in DB not present in JIRA");
+            log.debug(e.getMessage());
+        }
+        log.info("UserStory - End cleaning useless user stories - Thread : " + Thread.currentThread().getName());
+    }
+
+    public void cleanUserStoriesNotLongerExists(String urlIssues) throws Exception {
+        List<Issue> issueList = new ArrayList<Issue>();
+        List<UserStory> userStoryList = null;
+        int maxResults = 100;
+        int startAt = 0;
+        int totalValues = 0;
+        int i = 1;
+        while (totalValues >= startAt) {
+            String url = String.format(urlIssues, maxResults, startAt);
+            ResponseEntity<Issues> result = (ResponseEntity<Issues>) callJira(url, Issues.class.getName());
+            if (result.getStatusCode().is2xxSuccessful()) {
+                totalValues = result.getBody().getTotal();
+                startAt = (maxResults * i) + 1;
+                issueList.addAll(result.getBody().getIssues());
+                i++;
+            } else {
+                throw new Exception("Unable to get Issues From Jira");
+            }
+        }
+        try {
+            clearDBFromDifferenceInUserStories(issueList);
+        }
+        catch (Exception e) {
+            log.error("UserStory - Unable to clean user stories that no longer exists in JIRA");
+            log.error(e.getMessage());
+        }
+    }
+
+    private void clearDBFromDifferenceInUserStories(List<Issue> issueList){
+
+        if(!issueList.isEmpty()){
+            List<String> newIssues = issueList.stream().map(Issue::getKey).collect(Collectors.toList());
+            userStoryRepository.deleteAllByIssueKeyNotIn(newIssues);
+        }
+
+    }
+
+    public List<UserStory> updateUserStoryInDBForASprintFromJira(Sprint sprint, String urlIssues) throws Exception {
+
+        String sprintId = String.valueOf(sprint.getJiraSprintId());
+        String jql = "Sprint=" + sprintId + " AND issuetype=Story&expand=changelog";
+        String url = urlIssues + jql;
+        ResponseEntity<Issues> result = (ResponseEntity<Issues>) callJira(url, Issues.class.getName());
+        List<Issue> issueList = (result.getBody().getIssues());
+        if (result.getStatusCode().is2xxSuccessful()) {
+            return getUserStories(sprint, issueList);
+        }
+        return stories;
+    }
+    private List<UserStory> getUserStories(Sprint sprint, List<Issue> issueList) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
+        for (Issue issue : Optional.ofNullable(issueList).orElse(Collections.emptyList())) {
+            UserStory userStory;
+
+            Optional<UserStory> optionalUserStory = userStoryRepository.findByJiraIssueId(Integer.parseInt(issue.getId()));
+
+            userStory = optionalUserStory.orElseGet(UserStory::new);
+
+            userStory.setJiraIssueId(Integer.parseInt(issue.getId()));
+            userStory.setIssueKey(issue.getKey());
+            if (sprint != null) {
+                userStory.setSprint(sprint);
+            }
+
+            if (issue.getFields() != null) {
+                userStory.setSummary(issue.getFields().getSummary());
+                userStory.setDescription("");
+                userStory.setJira(jiraRepository.findByJiraProjectId(Integer.parseInt(issue.getFields().getProject().getId())).get());
+                userStory.setPriority((issue.getFields().getPriority() == null) ? "N/A" : issue.getFields().getPriority().getName());
+                userStory.setStoryPoint((issue.getFields().getCustomfield10026() == null) ? 0 : (double) issue.getFields().getCustomfield10026());
+                try {
+                    userStory.setCreationDate((issue.getFields().getCreated() == null) ? null : dateFormat.parse(issue.getFields().getCreated()));
+                } catch (ParseException e) {
+                    log.error("Exception thrown when parsing updateDate for UserStory Status");
+                }
+            }
+            stories.add(userStory);
+            userStoryRepository.save(userStory);
+        }
+        return stories;
+    }
+
     public void cleanWrongSprintFromJira(List<Sprint> sprints) {
         if (sprints != null && !sprints.isEmpty()) {
             for (Sprint sprint : sprints) {
