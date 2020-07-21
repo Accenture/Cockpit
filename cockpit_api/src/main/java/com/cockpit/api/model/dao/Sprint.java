@@ -33,7 +33,7 @@ public class Sprint {
 
     private String state;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name="id_jira", nullable=false)
     @JsonIgnore
     private Jira jira;
