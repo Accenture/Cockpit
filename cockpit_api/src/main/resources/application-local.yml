@@ -15,11 +15,11 @@ spring:
     username: ${JIRA_USER_NAME}
     jiraUrl: ${JIRA_HOST_URL}
     token: ${JIRA_AUTH_TOKEN}
-    urlProjects: https://${JIRA_HOST_URL}/rest/api/2/project
-    urlBoards: https://${JIRA_HOST_URL}/rest/agile/1.0/board?maxResults=%s&startAt=%s&type=scrum
-    urlSprints: https://${JIRA_HOST_URL}/rest/agile/1.0/board/
-    urlIssues: https://${JIRA_HOST_URL}/rest/api/2/search?jql=
-    urlAllIssues: https://${JIRA_HOST_URL}/rest/api/2/search?maxResults=%s&startAt=%s&jql=issuetype=Story
+    urlProjects: ${JIRA_HOST_URL}/rest/api/2/project
+    urlBoards: ${JIRA_HOST_URL}/rest/agile/1.0/board?maxResults=%s&startAt=%s&type=scrum
+    urlSprints: ${JIRA_HOST_URL}/rest/agile/1.0/board/
+    urlIssues: ${JIRA_HOST_URL}/rest/api/2/search?jql=
+    urlAllIssues: ${JIRA_HOST_URL}/rest/api/2/search?maxResults=%s&startAt=%s&jql=issuetype=Story
 springdoc:
   api-docs:
     path: /cockpit-api-doc
