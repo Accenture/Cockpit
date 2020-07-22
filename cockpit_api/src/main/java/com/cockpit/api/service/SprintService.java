@@ -3,7 +3,6 @@ package com.cockpit.api.service;
 import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Sprint;
-import com.cockpit.api.model.dto.JiraDTO;
 import com.cockpit.api.model.dto.SprintDTO;
 import com.cockpit.api.repository.SprintRepository;
 import org.modelmapper.ModelMapper;

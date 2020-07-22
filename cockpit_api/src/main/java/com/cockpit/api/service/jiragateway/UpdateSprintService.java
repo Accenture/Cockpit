@@ -2,7 +2,6 @@ package com.cockpit.api.service.jiragateway;
 
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Sprint;
-import com.cockpit.api.model.dao.UserStory;
 import com.cockpit.api.model.dto.jira.SprintHeaders;
 import com.cockpit.api.model.dto.jira.SprintJira;
 import com.cockpit.api.repository.JiraRepository;
@@ -36,13 +35,13 @@ public class UpdateSprintService {
     private final SprintRepository sprintRepository;
     private final UserStoryRepository userStoryRepository;
     private final JiraRepository jiraRepository;
-    private final JiraApiConfiguration configurationJiraAPIs;
+    private final JiraApiService configurationJiraAPIs;
     final UserStoryService userStoryService;
 
     @Autowired
     public UpdateSprintService(JiraRepository jiraRepository, SprintRepository sprintRepository,
-                              UserStoryRepository userStoryRepository,
-                              UserStoryService userStoryService, JiraApiConfiguration configurationJiraAPIs) {
+                               UserStoryRepository userStoryRepository,
+                               UserStoryService userStoryService, JiraApiService configurationJiraAPIs) {
         this.jiraRepository = jiraRepository;
         this.userStoryRepository = userStoryRepository;
         this.sprintRepository = sprintRepository;
@@ -55,6 +54,7 @@ public class UpdateSprintService {
 
     @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = ONE_HOUR)
     public void updateSprintsFromJira() {
+        log.info("Sprint - Start update sprints- Thread : {}", Thread.currentThread().getName());
         try {
             List<Jira> jiraList = jiraRepository.findAllByOrderById();
             for (Jira jira : Optional.ofNullable(jiraList).orElse(Collections.emptyList())) {
@@ -63,26 +63,27 @@ public class UpdateSprintService {
                     if (sprintList != null && !sprintList.isEmpty()) {
                         updateSprintsInDB(sprintList, jira);
                     }
-                    reorderSprintNumberPerJira(jira);
                 }
             }
         } catch (Exception e) {
+            log.error("Failed to update Sprints from Jira: {}", e.getMessage());
         }
+        log.info("Sprint - End update sprints- Thread : {}", Thread.currentThread().getName());
     }
 
-    @Scheduled(initialDelay = 90 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
+    @Scheduled(initialDelay = 90 * ONE_SECOND, fixedDelay = ONE_HOUR)
     public void setTotalNbOfUserStoryForEachSprintOfEachProject() {
+        log.info("Sprint - Start update TotalNbUserStory for each sprint- Thread : {}", Thread.currentThread().getName());
         List<Jira> jiraProjectList = jiraRepository.findAllByOrderById();
         for (Jira jira : jiraProjectList) {
             List<Sprint> sprintList = sprintRepository.findByJiraOrderBySprintNumber(jira);
             int totalNumberOfUserStoriesUntilCurrentSprint = 0;
-            if (sprintList.size() > 0) {
+            if (!sprintList.isEmpty()) {
                 totalNumberOfUserStoriesUntilCurrentSprint = userStoryRepository
                         .countUserStoriesByJiraAndCreationDateBefore(jira,
                                 sprintList.get(0).getSprintStartDate());
             }
-            for (Sprint sprint :
-                    sprintList) {
+            for (Sprint sprint : sprintList) {
                 Date sprintStartDate = sprint.getSprintStartDate();
                 Date sprintEndDate = sprint.getSprintEndDate();
                 Date sprintCompletionDate = sprint.getSprintCompleteDate();
@@ -91,17 +92,15 @@ public class UpdateSprintService {
                     if (sprintCompletionDate != null) {
                         sprintEndDate = sprintCompletionDate;
                     }
-                    int nbUserStoriesCreatedDuringCurrentSprint =
-                            userStoryRepository
-                                    .countUserStoriesByJiraAndCreationDateGreaterThanAndCreationDateLessThanEqual
-                                            (jira, sprintStartDate, sprintEndDate);
-                    totalNumberOfUserStoriesUntilCurrentSprint +=
-                            nbUserStoriesCreatedDuringCurrentSprint;
+                    int nbUserStoriesCreatedDuringCurrentSprint = userStoryRepository
+                            .countUserStoriesByJiraAndCreationDateGreaterThanAndCreationDateLessThanEqual(jira, sprintStartDate, sprintEndDate);
+                    totalNumberOfUserStoriesUntilCurrentSprint += nbUserStoriesCreatedDuringCurrentSprint;
                     sprint.setTotalNbUs(totalNumberOfUserStoriesUntilCurrentSprint);
                     sprintRepository.save(sprint);
                 }
             }
         }
+        log.info("Sprint - End update TotalNbUserStory for each sprint- Thread : {}", Thread.currentThread().getName());
     }
 
 
@@ -115,60 +114,52 @@ public class UpdateSprintService {
         return newSprintsList;
     }
 
-    public void reorderSprintNumberPerJira(Jira jira) {
-        List<Sprint> mvpSprints;
-        mvpSprints = sprintRepository.findByJiraOrderBySprintNumber(jira);
-
-        if (mvpSprints != null || !mvpSprints.isEmpty()) {
-            int count = 1;
-            for (Sprint sprint : mvpSprints) {
-                sprint.setSprintNumber(count);
-                sprintRepository.save(sprint);
-                count++;
-            }
-        }
-    }
-
     public void updateSprintsInDB(List<SprintJira> sprintJiraList, Jira jira) {
         int sprintNumber = 1;
         List<Sprint> sprints = sprintRepository.findByJiraOrderBySprintNumber(jira);
         for (SprintJira sprintJira : Optional.ofNullable(sprintJiraList).orElse(Collections.emptyList())) {
             Sprint sprintExist = sprintRepository.findByJiraSprintId(sprintJira.getId());
-            if (sprintJira.getOriginBoardId() == jira.getBoardId()) {
-                Sprint newSprint = new Sprint();
-                if (sprintExist != null) {
-                    newSprint.setId(sprintExist.getId());
-                }
-                newSprint.setJiraSprintId(sprintJira.getId());
-                newSprint.setState(sprintJira.getState());
-                newSprint.setJira(jira);
-                newSprint.setSprintNumber(sprintNumber);
-                if (newSprint.getState().equals("active")) {
-                    jira.setCurrentSprint(sprintNumber);
-                }
-                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-                if (sprintJira.getStartDate() != null && sprintJira.getEndDate() != null) {
-                    try {
-                        newSprint.setSprintStartDate(dateFormat.parse(sprintJira.getStartDate()));
-                        newSprint.setSprintEndDate(dateFormat.parse(sprintJira.getEndDate()));
-                        if (sprintJira.getCompleteDate() != null) {
-                            newSprint.setSprintCompleteDate(dateFormat.parse(sprintJira.getCompleteDate()));
-                        }
-                    } catch (Exception e) {
-                        log.error("ERROR : Unable to parse either startDate or End date of Sprint or Complete Date of Sprint");
-                    }
-                }
-                sprintRepository.save(newSprint);
-            } else if (sprintExist != null && sprintJira.getId() == sprintExist.getJiraSprintId()) {
-                if (sprintJira.getOriginBoardId() != jira.getBoardId()) {
+
+            if (sprintJira.getOriginBoardId().equals(jira.getBoardId())) {
+                sprintRepository.save(setNewSprint(sprintExist, sprintJira, jira, sprintNumber));
+            } else if (sprintExist != null && sprintJira.getId() == sprintExist.getJiraSprintId()
+                    && !sprintJira.getOriginBoardId().equals(jira.getBoardId())) {
                     sprintsToRemove.add(sprintExist);
-                }
             }
             sprintNumber++;
         }
         getSprintsToRemove(sprintJiraList, sprints);
         cleanWrongSprintFromJira(sprintsToRemove);
     }
+
+    public Sprint setNewSprint(Sprint sprintExist, SprintJira sprintJira, Jira jira, int sprintNumber) {
+        Sprint newSprint = new Sprint();
+        if (sprintExist != null) {
+            newSprint.setId(sprintExist.getId());
+        }
+        newSprint.setJiraSprintId(sprintJira.getId());
+        newSprint.setState(sprintJira.getState());
+        newSprint.setJira(jira);
+        newSprint.setSprintNumber(sprintNumber);
+        if (newSprint.getState().equals("active")) {
+            jira.setCurrentSprint(sprintNumber);
+        }
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        if (sprintJira.getStartDate() != null && sprintJira.getEndDate() != null) {
+            try {
+                newSprint.setSprintStartDate(dateFormat.parse(sprintJira.getStartDate()));
+                newSprint.setSprintEndDate(dateFormat.parse(sprintJira.getEndDate()));
+                if (sprintJira.getCompleteDate() != null) {
+                    newSprint.setSprintCompleteDate(dateFormat.parse(sprintJira.getCompleteDate()));
+                }
+            } catch (Exception e) {
+                log.error("ERROR : Unable to parse either startDate or End date of Sprint or Complete Date of Sprint");
+            }
+        }
+        return newSprint;
+    }
+
+
     public void cleanWrongSprintFromJira(List<Sprint> sprints) {
         if (sprints != null && !sprints.isEmpty()) {
             for (Sprint sprint : sprints) {

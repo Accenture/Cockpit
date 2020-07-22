@@ -48,7 +48,7 @@ public class TeamService {
 	public TeamDTO findTeamById(Long id) throws ResourceNotFoundException {
 		Optional<Team> teamRes = teamRepository.findById(id);
 		if (!teamRes.isPresent()) {
-			throw new ResourceNotFoundException("Team not found");
+			throw new ResourceNotFoundException("Team can not be found");
 		}
 		return modelMapper.map(teamRes.get(), TeamDTO.class);
 	}
