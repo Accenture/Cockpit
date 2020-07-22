@@ -22,7 +22,7 @@ public interface UserStoryRepository extends CrudRepository<UserStory, Long> {
 
 	UserStory findByIssueKey(String issueKey);
 
-	int countUserStoriesByJiraAndCreationDateGreaterThanAndCreationDateLessThanEqual (Jira jira, Date sprintStartDate, Date sprintEndDate);
+	List<UserStory> findByJiraAndCreationDateGreaterThanAndCreationDateLessThanEqual (Jira jira, Date sprintStartDate, Date sprintEndDate);
 
 	int countUserStoriesByJiraAndCreationDateBefore(Jira jira, Date firstSprintStartDate);
 
