@@ -210,7 +210,9 @@ public class Fields {
     }
 
     @JsonProperty("customfield_10074")
-    public void setCustomfield10074(CustomField customfield10074) { this.customfield10074 = customfield10074; }
+    public void setCustomfield10074(CustomField customfield10074) {
+        this.customfield10074 = customfield10074;
+    }
 
     @JsonProperty("customfield_10075")
     public CustomField getCustomfield10075() {
@@ -238,7 +240,9 @@ public class Fields {
     }
 
     @JsonProperty("customfield_10076")
-    public void setCustomfield10076(CustomField customfield10076) { this.customfield10076 = customfield10076; }
+    public void setCustomfield10076(CustomField customfield10076) {
+        this.customfield10076 = customfield10076;
+    }
 
     @JsonProperty("customfield_10077")
     public CustomField getCustomfield10077() {
@@ -691,22 +695,34 @@ public class Fields {
     }
 
     @JsonProperty("customfield_10020")
-    public Object getCustomfield10020() { return customfield10020; }
+    public Object getCustomfield10020() {
+        return customfield10020;
+    }
 
     @JsonProperty("customfield_10020")
-    public void setCustomfield10020(Object customfield10020) { this.customfield10020 = customfield10020; }
+    public void setCustomfield10020(Object customfield10020) {
+        this.customfield10020 = customfield10020;
+    }
 
     @JsonProperty("customfield_10071")
-    public Object getCustomfield10071() { return customfield10071; }
+    public Object getCustomfield10071() {
+        return customfield10071;
+    }
 
     @JsonProperty("customfield_10071")
-    public void setCustomfield10071(Object customfield10071) { this.customfield10071 = customfield10071; }
+    public void setCustomfield10071(Object customfield10071) {
+        this.customfield10071 = customfield10071;
+    }
 
     @JsonProperty("customfield_10072")
-    public Object getCustomfield10072() { return customfield10072; }
+    public Object getCustomfield10072() {
+        return customfield10072;
+    }
 
     @JsonProperty("customfield_10072")
-    public void setCustomfield10072(Object customfield10072) { this.customfield10072 = customfield10072; }
+    public void setCustomfield10072(Object customfield10072) {
+        this.customfield10072 = customfield10072;
+    }
 
     @JsonProperty
     public void setAdditionalProperties(Map<String, Object> additionalProperties) {
@@ -743,5 +759,14 @@ public class Fields {
         this.additionalProperties.put(name, value);
     }
 
+    @JsonProperty("status")
+    public Status getStatus() {
+        return status;
+    }
+
+    @JsonProperty("status")
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 }
 
