@@ -91,12 +91,12 @@ public class UpdateSprintService {
                     if (sprintCompletionDate != null) {
                         sprintEndDate = sprintCompletionDate;
                     }
-                    List<UserStory> nbUserStoriesCreatedDuringCurrentSprint =
+                    int nbUserStoriesCreatedDuringCurrentSprint =
                             userStoryRepository
-                                    .findByJiraAndCreationDateGreaterThanAndCreationDateLessThanEqual
+                                    .countUserStoriesByJiraAndCreationDateGreaterThanAndCreationDateLessThanEqual
                                             (jira, sprintStartDate, sprintEndDate);
                     totalNumberOfUserStoriesUntilCurrentSprint +=
-                            nbUserStoriesCreatedDuringCurrentSprint.size();
+                            nbUserStoriesCreatedDuringCurrentSprint;
                     sprint.setTotalNbUs(totalNumberOfUserStoriesUntilCurrentSprint);
                     sprintRepository.save(sprint);
                 }

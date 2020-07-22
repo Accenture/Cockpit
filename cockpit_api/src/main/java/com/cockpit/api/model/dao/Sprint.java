@@ -39,6 +39,7 @@ public class Sprint {
     private Jira jira;
 
     @OneToMany(mappedBy = "sprint", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<UserStory> userStories;
 
     public Long getId() {
