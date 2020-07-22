@@ -4,7 +4,6 @@ import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Mvp;
 import com.cockpit.api.model.dto.JiraDTO;
-import com.cockpit.api.model.dto.MvpDTO;
 import com.cockpit.api.repository.JiraRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

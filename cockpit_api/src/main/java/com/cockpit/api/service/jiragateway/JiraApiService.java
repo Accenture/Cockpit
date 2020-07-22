@@ -4,7 +4,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -13,15 +12,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import java.util.Base64;
 
-@Configuration
 @Service
-public class JiraApiConfiguration {
-    Logger log = LoggerFactory.getLogger(JiraApiConfiguration.class);
+public class JiraApiService {
+    Logger log = LoggerFactory.getLogger(JiraApiService.class);
     HttpEntity<String> request;
     HttpHeaders headers;
     RestTemplate restTemplate = new RestTemplate();
+
     @Autowired
-    public JiraApiConfiguration() {
+    public JiraApiService() {
         // Empty Constructor
     }
 
@@ -34,7 +33,7 @@ public class JiraApiConfiguration {
 
         headers = this.addAuthorizationToHeaders();
         request = new HttpEntity<>(headers);
-        ResponseEntity<?> responseEntity = null;
+        ResponseEntity<?> responseEntity;
 
         try {
             responseEntity = restTemplate.exchange(url, HttpMethod.GET, request, Class.forName(className));

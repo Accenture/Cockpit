@@ -1,7 +1,6 @@
 package com.cockpit.api.service.jiragateway;
 
 import static javax.management.timer.Timer.ONE_HOUR;
-import static javax.management.timer.Timer.ONE_MINUTE;
 import static javax.management.timer.Timer.ONE_SECOND;
 
 import java.util.*;
@@ -19,8 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.repository.JiraRepository;
-import com.cockpit.api.repository.SprintRepository;
-import com.cockpit.api.repository.UserStoryRepository;
 import com.cockpit.api.service.UserStoryService;
 
 @Configuration
@@ -31,14 +28,14 @@ public class UpdateJiraService {
     Logger log = LoggerFactory.getLogger(UpdateJiraService.class);
 
     private final JiraRepository jiraRepository;
-    private final JiraApiConfiguration jiraApiConfiguration;
+    private final JiraApiService jiraApiService;
     final UserStoryService userStoryService;
 
     @Autowired
-    public UpdateJiraService(JiraRepository jiraRepository, JiraApiConfiguration jiraApiConfiguration,
+    public UpdateJiraService(JiraRepository jiraRepository, JiraApiService jiraApiService,
                              UserStoryService userStoryService) {
         this.jiraRepository = jiraRepository;
-        this.jiraApiConfiguration = jiraApiConfiguration;
+        this.jiraApiService = jiraApiService;
         this.userStoryService = userStoryService;
     }
 
@@ -47,45 +44,48 @@ public class UpdateJiraService {
     @Value("${spring.jira.urlBoards}")
     private String urlBoards;
 
-    @Scheduled(initialDelay = 5 * ONE_SECOND, fixedDelay = 10 * ONE_MINUTE)
+    @Scheduled(initialDelay = 5 * ONE_SECOND, fixedDelay = ONE_HOUR)
     public void updateProjectId() throws Exception {
-        ResponseEntity<Project[]> response = (ResponseEntity<Project[]>) jiraApiConfiguration.callJira(urlProjects,
+        log.info("Jira - Start update jira project id- Thread : {}", Thread.currentThread().getName());
+        ResponseEntity<Project[]> response = (ResponseEntity<Project[]>) jiraApiService.callJira(urlProjects,
                 Project[].class.getName());
         List<Project> jiraProjectsList = Arrays.asList(response.getBody());
         List<Jira> jiraList = jiraRepository.findAllByOrderById();
         for (Jira jira : jiraList) {
             if (jiraProjectsList.stream().filter(projet -> projet.getKey().equals(jira.getJiraProjectKey())).findFirst()
                     .isPresent()) {
-                Project jProjet = jiraProjectsList.stream()
+                Project jiraProjectToUpdate = jiraProjectsList.stream()
                         .filter(projet -> projet.getKey().equals(jira.getJiraProjectKey())).findFirst().get();
-                jira.setJiraProjectId(Integer.parseInt(jProjet.getId()));
+                jira.setJiraProjectId(Integer.parseInt(jiraProjectToUpdate.getId()));
                 jiraRepository.save(jira);
             }
-
         }
-
+        log.info("Jira - End update jira project id- Thread : {}", Thread.currentThread().getName());
     }
 
-    @Scheduled(initialDelay = 5 * ONE_SECOND, fixedDelay = 2 * ONE_HOUR)
+    @Scheduled(initialDelay = 5 * ONE_SECOND, fixedDelay = ONE_HOUR)
     public void updateBoardIdInJira() {
+        log.info("Jira - Start update jira board id- Thread : {}", Thread.currentThread().getName());
         try {
             updateBoardIdInJira(urlBoards);
         } catch (Exception e) {
+            log.error("Failed to update board id of jira: {}", e.getMessage());
         }
+        log.info("Jira - End update jira board id- Thread : {}", Thread.currentThread().getName());
     }
 
     public void updateBoardIdInJira(String urlBoards) throws Exception {
         List<JiraBoard> foundJiraBoards = new ArrayList<>();
-        List<JiraBoard> boardList = null;
+        List<JiraBoard> boardList;
 
         int maxResults = 50;
         int startAt = 0;
-        int numberOfBoardIdReceived = 0;
+        int numberOfBoardIdReceived;
         int totalBoardId;
 
         do {
             String url = String.format(urlBoards, maxResults, startAt);
-            ResponseEntity<Board> result = (ResponseEntity<Board>) jiraApiConfiguration.callJira(url, Board.class.getName());
+            ResponseEntity<Board> result = (ResponseEntity<Board>) jiraApiService.callJira(url, Board.class.getName());
 
             if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
                 maxResults = result.getBody().getMaxResults();
@@ -96,7 +96,7 @@ public class UpdateJiraService {
                 boardList = result.getBody().getValues();
                 updateBoard(boardList);
             } else {
-                throw new Exception("jira - Response code : while trying to update board for the jira ");
+                throw new Exception("Failed to update board for the jira");
             }
             startAt = startAt + maxResults;
             foundJiraBoards.addAll(boardList);
@@ -107,11 +107,10 @@ public class UpdateJiraService {
         for (JiraBoard board : boardList) {
             try {
                 if (board.getLocation() != null && board.getLocation().getProjectId() != null) {
-                    Optional<Jira> optional = jiraRepository.findByJiraProjectId((board.getLocation().getProjectId()));
-                    if (optional.isPresent()) {
-                        Jira jira = optional.get();
-                        jira.setBoardId(board.getId());
-                        jiraRepository.save(jira);
+                    Jira foundJira = jiraRepository.findByJiraProjectId((board.getLocation().getProjectId()));
+                    if (foundJira != null) {
+                        foundJira.setBoardId(board.getId());
+                        jiraRepository.save(foundJira);
                     }
                 }
             } catch (Exception e) {

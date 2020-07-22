@@ -35,51 +35,53 @@ public class UpdateUserStoryService {
     private final SprintRepository sprintRepository;
     private final JiraRepository jiraRepository;
     private final UserStoryRepository userStoryRepository;
-    final JiraApiConfiguration jiraApiConfiguration;
+    final JiraApiService jiraApiService;
     final UserStoryService userStoryService;
 
     @Autowired
     public UpdateUserStoryService(JiraRepository jiraRepository, SprintRepository sprintRepository,
                                   UserStoryRepository userStoryRepository, UserStoryService userStoryService,
-                                  JiraApiConfiguration jiraApiConfiguration) {
+                                  JiraApiService jiraApiService) {
         this.jiraRepository = jiraRepository;
         this.sprintRepository = sprintRepository;
         this.userStoryRepository = userStoryRepository;
         this.userStoryService = userStoryService;
-        this.jiraApiConfiguration = jiraApiConfiguration;
+        this.jiraApiService = jiraApiService;
     }
 
     @Value("${spring.jira.urlIssues}")
     private String urlIssues;
-    @Value("${spring.jira.urlAllIssues}")
-    private String urlAllIssues;
+    @Value("${spring.jira.urlAllUserStories}")
+    private String urlAllUserStories;
 
     @Scheduled(initialDelay = 15 * ONE_SECOND, fixedDelay = ONE_HOUR)
     public void updateUserStoryInDBFromJira() {
+        log.info("UserStory - Start update user stories- Thread : {}", Thread.currentThread().getName());
         List<Sprint> sprintList;
         try {
             sprintList = sprintRepository.findAll();
             for (Sprint sprint : Optional.ofNullable(sprintList).orElse(Collections.emptyList())) {
                 updateUserStoryInDBForASprintFromJira(sprint, urlIssues);
             }
-            if (sprintList.size() > 0) {
+            if (!sprintList.isEmpty()) {
                 updateUserStoryInDBForBakclogFromJira(sprintList.get(0).getJira().getJiraProjectKey(), urlIssues);
             }
         } catch (Exception e) {
             log.error(e.getMessage());
         }
+        log.info("UserStory - End update user stories- Thread : {}", Thread.currentThread().getName());
     }
 
     @Scheduled(initialDelay = 60 * ONE_SECOND, fixedDelay = ONE_HOUR)
     public void cleaningUselessUSFromDB() {
-        log.info("UserStory - Start cleaning useless user stories - Thread : " + Thread.currentThread().getName());
+        log.info("UserStory - Start cleaning user stories - Thread : {}", Thread.currentThread().getName());
         try {
-            cleanUserStoriesNotLongerExists(urlAllIssues);
+            cleanUserStoriesNotLongerExists(urlAllUserStories);
         } catch (Exception e) {
             log.error("Exception thrown when trying to delete user stories in DB not present in JIRA");
             log.debug(e.getMessage());
         }
-        log.info("UserStory - End cleaning useless user stories - Thread : " + Thread.currentThread().getName());
+        log.info("UserStory - End cleaning user stories - Thread : {}", Thread.currentThread().getName());
     }
 
     public void cleanUserStoriesNotLongerExists(String urlIssues) throws Exception {
@@ -90,7 +92,7 @@ public class UpdateUserStoryService {
         int i = 1;
         while (totalValues >= startAt) {
             String url = String.format(urlIssues, maxResults, startAt);
-            ResponseEntity<Issues> result = (ResponseEntity<Issues>) jiraApiConfiguration.callJira(url, Issues.class.getName());
+            ResponseEntity<Issues> result = (ResponseEntity<Issues>) jiraApiService.callJira(url, Issues.class.getName());
             if (result.getStatusCode().is2xxSuccessful()) {
                 totalValues = result.getBody().getTotal();
                 startAt = (maxResults * i);
@@ -127,7 +129,7 @@ public class UpdateUserStoryService {
         String jqlBacklogUS = "project=" + jiraProjectKey + " AND Sprint=null AND issuetype=Story&expand=changelog";
 
         String urlBacklogUS = urlIssues + jqlBacklogUS;
-        ResponseEntity<Issues> resultBacklogUS = (ResponseEntity<Issues>) jiraApiConfiguration.callJira(urlBacklogUS, Issues.class.getName());
+        ResponseEntity<Issues> resultBacklogUS = (ResponseEntity<Issues>) jiraApiService.callJira(urlBacklogUS, Issues.class.getName());
 
         List<Issue> issueListBacklogUS = (resultBacklogUS.getBody().getIssues());
         if (resultBacklogUS.getStatusCode().is2xxSuccessful()) {
@@ -142,7 +144,7 @@ public class UpdateUserStoryService {
         String jqlSprintUS = "Sprint=" + sprintId + " AND issuetype=Story&expand=changelog";
         String urlSprintUS = urlIssues + jqlSprintUS;
 
-        ResponseEntity<Issues> resultSprintUS = (ResponseEntity<Issues>) jiraApiConfiguration.callJira(urlSprintUS, Issues.class.getName());
+        ResponseEntity<Issues> resultSprintUS = (ResponseEntity<Issues>) jiraApiService.callJira(urlSprintUS, Issues.class.getName());
         List<Issue> issueListSprintUS = (resultSprintUS.getBody().getIssues());
         if (resultSprintUS.getStatusCode().is2xxSuccessful()) {
             return getUserStories(sprint, issueListSprintUS);
@@ -151,37 +153,38 @@ public class UpdateUserStoryService {
     }
 
     private List<UserStory> getUserStories(Sprint sprint, List<Issue> issueList) {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-
         for (Issue issue : Optional.ofNullable(issueList).orElse(Collections.emptyList())) {
             UserStory userStory;
-
             Optional<UserStory> optionalUserStory = userStoryRepository.findByJiraIssueId(Integer.parseInt(issue.getId()));
-
             userStory = optionalUserStory.orElseGet(UserStory::new);
-
-            userStory.setJiraIssueId(Integer.parseInt(issue.getId()));
-            userStory.setIssueKey(issue.getKey());
-            if (sprint != null) {
-                userStory.setSprint(sprint);
-            }
-
-            if (issue.getFields() != null) {
-                userStory.setSummary(issue.getFields().getSummary());
-                userStory.setDescription("");
-                userStory.setStatus(issue.getFields().getStatus().getName());
-                userStory.setJira(jiraRepository.findByJiraProjectId(Integer.parseInt(issue.getFields().getProject().getId())).get());
-                userStory.setPriority((issue.getFields().getPriority() == null) ? "N/A" : issue.getFields().getPriority().getName());
-                userStory.setStoryPoint((issue.getFields().getCustomfield10026() == null) ? 0 : (double) issue.getFields().getCustomfield10026());
-                try {
-                    userStory.setCreationDate((issue.getFields().getCreated() == null) ? null : dateFormat.parse(issue.getFields().getCreated()));
-                } catch (ParseException e) {
-                    log.error("Exception thrown when parsing updateDate for UserStory Status");
-                }
-            }
-            stories.add(userStory);
+            stories.add(setUserStory(userStory, sprint, issue));
             userStoryRepository.save(userStory);
         }
         return stories;
+    }
+
+    private UserStory setUserStory(UserStory userStory, Sprint sprint, Issue issue) {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        userStory.setJiraIssueId(Integer.parseInt(issue.getId()));
+        userStory.setIssueKey(issue.getKey());
+        if (sprint != null) {
+            userStory.setSprint(sprint);
+        }
+
+        if (issue.getFields() != null) {
+            userStory.setSummary(issue.getFields().getSummary());
+            userStory.setDescription("");
+            userStory.setStatus(issue.getFields().getStatus().getName());
+            userStory.setJira(jiraRepository.findByJiraProjectId(Integer.parseInt(issue.getFields().getProject().getId())));
+            userStory.setPriority((issue.getFields().getPriority() == null) ? "N/A" : issue.getFields().getPriority().getName());
+            // Custome field could be different for each Jira server
+            userStory.setStoryPoint((issue.getFields().getCustomfield10026() == null) ? 0 : (double) issue.getFields().getCustomfield10026());
+            try {
+                userStory.setCreationDate((issue.getFields().getCreated() == null) ? null : dateFormat.parse(issue.getFields().getCreated()));
+            } catch (ParseException e) {
+                log.error("Exception thrown when parsing updateDate for UserStory Status");
+            }
+        }
+        return userStory;
     }
 }
