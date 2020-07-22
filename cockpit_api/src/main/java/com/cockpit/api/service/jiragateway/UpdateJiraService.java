@@ -46,7 +46,7 @@ public class UpdateJiraService {
 
     @Scheduled(initialDelay = 5 * ONE_SECOND, fixedDelay = ONE_HOUR)
     public void updateProjectId() throws Exception {
-        log.info("Jira - Start update jira project id- Thread : {}", Thread.currentThread().getName());
+        log.info("Jira - Start update jira project id");
         ResponseEntity<Project[]> response = (ResponseEntity<Project[]>) jiraApiService.callJira(urlProjects,
                 Project[].class.getName());
         List<Project> jiraProjectsList = Arrays.asList(response.getBody());
@@ -60,18 +60,18 @@ public class UpdateJiraService {
                 jiraRepository.save(jira);
             }
         }
-        log.info("Jira - End update jira project id- Thread : {}", Thread.currentThread().getName());
+        log.info("Jira - End update jira project id");
     }
 
     @Scheduled(initialDelay = 5 * ONE_SECOND, fixedDelay = ONE_HOUR)
     public void updateBoardIdInJira() {
-        log.info("Jira - Start update jira board id- Thread : {}", Thread.currentThread().getName());
+        log.info("Jira - Start update jira board id");
         try {
             updateBoardIdInJira(urlBoards);
         } catch (Exception e) {
             log.error("Failed to update board id of jira: {}", e.getMessage());
         }
-        log.info("Jira - End update jira board id- Thread : {}", Thread.currentThread().getName());
+        log.info("Jira - End update jira board id");
     }
 
     public void updateBoardIdInJira(String urlBoards) throws Exception {

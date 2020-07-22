@@ -56,7 +56,7 @@ public class UpdateUserStoryService {
 
     @Scheduled(initialDelay = 15 * ONE_SECOND, fixedDelay = ONE_HOUR)
     public void updateUserStoryInDBFromJira() {
-        log.info("UserStory - Start update user stories- Thread : {}", Thread.currentThread().getName());
+        log.info("UserStory - Start update user stories");
         List<Sprint> sprintList;
         try {
             sprintList = sprintRepository.findAll();
@@ -69,19 +69,19 @@ public class UpdateUserStoryService {
         } catch (Exception e) {
             log.error(e.getMessage());
         }
-        log.info("UserStory - End update user stories- Thread : {}", Thread.currentThread().getName());
+        log.info("UserStory - End update user stories");
     }
 
     @Scheduled(initialDelay = 60 * ONE_SECOND, fixedDelay = ONE_HOUR)
     public void cleaningUselessUSFromDB() {
-        log.info("UserStory - Start cleaning user stories - Thread : {}", Thread.currentThread().getName());
+        log.info("UserStory - Start cleaning user stories");
         try {
             cleanUserStoriesNotLongerExists(urlAllUserStories);
         } catch (Exception e) {
             log.error("Exception thrown when trying to delete user stories in DB not present in JIRA");
             log.debug(e.getMessage());
         }
-        log.info("UserStory - End cleaning user stories - Thread : {}", Thread.currentThread().getName());
+        log.info("UserStory - End cleaning user stories");
     }
 
     public void cleanUserStoriesNotLongerExists(String urlIssues) throws Exception {
