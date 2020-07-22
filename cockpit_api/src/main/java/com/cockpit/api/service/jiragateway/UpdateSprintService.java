@@ -54,7 +54,7 @@ public class UpdateSprintService {
 
     @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = ONE_HOUR)
     public void updateSprintsFromJira() {
-        log.info("Sprint - Start update sprints- Thread : {}", Thread.currentThread().getName());
+        log.info("Sprint - Start update sprints");
         try {
             List<Jira> jiraList = jiraRepository.findAllByOrderById();
             for (Jira jira : Optional.ofNullable(jiraList).orElse(Collections.emptyList())) {
@@ -68,12 +68,12 @@ public class UpdateSprintService {
         } catch (Exception e) {
             log.error("Failed to update Sprints from Jira: {}", e.getMessage());
         }
-        log.info("Sprint - End update sprints- Thread : {}", Thread.currentThread().getName());
+        log.info("Sprint - End update sprints");
     }
 
     @Scheduled(initialDelay = 90 * ONE_SECOND, fixedDelay = ONE_HOUR)
     public void setTotalNbOfUserStoryForEachSprintOfEachProject() {
-        log.info("Sprint - Start update TotalNbUserStory for each sprint- Thread : {}", Thread.currentThread().getName());
+        log.info("Sprint - Start update TotalNbUserStory for each sprint");
         List<Jira> jiraProjectList = jiraRepository.findAllByOrderById();
         for (Jira jira : jiraProjectList) {
             List<Sprint> sprintList = sprintRepository.findByJiraOrderBySprintNumber(jira);
@@ -100,7 +100,7 @@ public class UpdateSprintService {
                 }
             }
         }
-        log.info("Sprint - End update TotalNbUserStory for each sprint- Thread : {}", Thread.currentThread().getName());
+        log.info("Sprint - End update TotalNbUserStory for each sprint");
     }
 
 
