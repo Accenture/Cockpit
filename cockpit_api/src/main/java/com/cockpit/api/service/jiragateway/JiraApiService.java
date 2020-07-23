@@ -1,7 +1,5 @@
 package com.cockpit.api.service.jiragateway;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -14,7 +12,6 @@ import java.util.Base64;
 
 @Service
 public class JiraApiService {
-    Logger log = LoggerFactory.getLogger(JiraApiService.class);
     HttpEntity<String> request;
     HttpHeaders headers;
     RestTemplate restTemplate = new RestTemplate();
@@ -45,11 +42,11 @@ public class JiraApiService {
     public HttpHeaders addAuthorizationToHeaders() {
 
         String jiraCredentials = username + ":" + token;
-        byte[] plainCredsBytes = jiraCredentials.getBytes();
-        byte[] base64CredsBytes = Base64.getEncoder().encode(plainCredsBytes);
-        String base64Creds = new String(base64CredsBytes);
+        byte[] plainCredentialBytes = jiraCredentials.getBytes();
+        byte[] base64CredentialBytes = Base64.getEncoder().encode(plainCredentialBytes);
+        String base64Credential = new String(base64CredentialBytes);
         headers = new HttpHeaders();
-        headers.add("Authorization", "Basic " + base64Creds);
+        headers.add("Authorization", "Basic " + base64Credential);
         return headers;
 
     }

@@ -29,8 +29,8 @@ import static javax.management.timer.Timer.*;
 @EnableScheduling
 @Service
 @Transactional
-public class UpdateUserStoryService {
-    Logger log = LoggerFactory.getLogger(UpdateUserStoryService.class);
+public class UpdateUserStory {
+    Logger log = LoggerFactory.getLogger(UpdateUserStory.class);
     private List<UserStory> stories = new ArrayList<>();
     private final SprintRepository sprintRepository;
     private final JiraRepository jiraRepository;
@@ -39,9 +39,9 @@ public class UpdateUserStoryService {
     final UserStoryService userStoryService;
 
     @Autowired
-    public UpdateUserStoryService(JiraRepository jiraRepository, SprintRepository sprintRepository,
-                                  UserStoryRepository userStoryRepository, UserStoryService userStoryService,
-                                  JiraApiService jiraApiService) {
+    public UpdateUserStory(JiraRepository jiraRepository, SprintRepository sprintRepository,
+                           UserStoryRepository userStoryRepository, UserStoryService userStoryService,
+                           JiraApiService jiraApiService) {
         this.jiraRepository = jiraRepository;
         this.sprintRepository = sprintRepository;
         this.userStoryRepository = userStoryRepository;
@@ -84,14 +84,14 @@ public class UpdateUserStoryService {
         log.info("UserStory - End cleaning user stories");
     }
 
-    public void cleanUserStoriesNotLongerExists(String urlIssues) throws Exception {
+    public void cleanUserStoriesNotLongerExists(String urlAllUserStories) throws Exception {
         List<Issue> issueList = new ArrayList<>();
         int maxResults = 100;
         int startAt = 0;
         int totalValues = 0;
         int i = 1;
         while (totalValues >= startAt) {
-            String url = String.format(urlIssues, maxResults, startAt);
+            String url = String.format(urlAllUserStories, maxResults, startAt);
             ResponseEntity<Issues> result = (ResponseEntity<Issues>) jiraApiService.callJira(url, Issues.class.getName());
             if (result.getStatusCode().is2xxSuccessful()) {
                 totalValues = result.getBody().getTotal();
