@@ -29,8 +29,8 @@ import static javax.management.timer.Timer.*;
 @EnableScheduling
 @Service
 @Transactional
-public class UpdateSprintService {
-    Logger log = LoggerFactory.getLogger(UpdateSprintService.class);
+public class UpdateSprint {
+    Logger log = LoggerFactory.getLogger(UpdateSprint.class);
     private List<Sprint> sprintsToRemove = new ArrayList<>();
     private final SprintRepository sprintRepository;
     private final UserStoryRepository userStoryRepository;
@@ -39,9 +39,9 @@ public class UpdateSprintService {
     final UserStoryService userStoryService;
 
     @Autowired
-    public UpdateSprintService(JiraRepository jiraRepository, SprintRepository sprintRepository,
-                               UserStoryRepository userStoryRepository,
-                               UserStoryService userStoryService, JiraApiService configurationJiraAPIs) {
+    public UpdateSprint(JiraRepository jiraRepository, SprintRepository sprintRepository,
+                        UserStoryRepository userStoryRepository,
+                        UserStoryService userStoryService, JiraApiService configurationJiraAPIs) {
         this.jiraRepository = jiraRepository;
         this.userStoryRepository = userStoryRepository;
         this.sprintRepository = sprintRepository;
@@ -53,7 +53,7 @@ public class UpdateSprintService {
     private String urlSprints;
 
     @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = ONE_HOUR)
-    public void updateSprintsFromJira() {
+    public void updateSprintsForEachProject() {
         log.info("Sprint - Start update sprints");
         try {
             List<Jira> jiraList = jiraRepository.findAllByOrderById();
@@ -129,7 +129,7 @@ public class UpdateSprintService {
             sprintNumber++;
         }
         getSprintsToRemove(sprintJiraList, sprints);
-        cleanWrongSprintFromJira(sprintsToRemove);
+        cleanNotExistingSprintsFromJira(sprintsToRemove);
     }
 
     public Sprint setNewSprint(Sprint sprintExist, SprintJira sprintJira, Jira jira, int sprintNumber) {
@@ -160,10 +160,9 @@ public class UpdateSprintService {
     }
 
 
-    public void cleanWrongSprintFromJira(List<Sprint> sprints) {
+    public void cleanNotExistingSprintsFromJira(List<Sprint> sprints) {
         if (sprints != null && !sprints.isEmpty()) {
             for (Sprint sprint : sprints) {
-
                 sprintRepository.delete(sprint);
             }
             sprints.clear();

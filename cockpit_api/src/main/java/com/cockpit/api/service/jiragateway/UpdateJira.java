@@ -24,16 +24,16 @@ import com.cockpit.api.service.UserStoryService;
 @EnableScheduling
 @Service
 @Transactional
-public class UpdateJiraService {
-    Logger log = LoggerFactory.getLogger(UpdateJiraService.class);
+public class UpdateJira {
+    Logger log = LoggerFactory.getLogger(UpdateJira.class);
 
     private final JiraRepository jiraRepository;
     private final JiraApiService jiraApiService;
     final UserStoryService userStoryService;
 
     @Autowired
-    public UpdateJiraService(JiraRepository jiraRepository, JiraApiService jiraApiService,
-                             UserStoryService userStoryService) {
+    public UpdateJira(JiraRepository jiraRepository, JiraApiService jiraApiService,
+                      UserStoryService userStoryService) {
         this.jiraRepository = jiraRepository;
         this.jiraApiService = jiraApiService;
         this.userStoryService = userStoryService;
@@ -45,15 +45,14 @@ public class UpdateJiraService {
     private String urlBoards;
 
     @Scheduled(initialDelay = 5 * ONE_SECOND, fixedDelay = ONE_HOUR)
-    public void updateProjectId() throws Exception {
+    public void updateProjectIdInJira() throws Exception {
         log.info("Jira - Start update jira project id");
         ResponseEntity<Project[]> response = (ResponseEntity<Project[]>) jiraApiService.callJira(urlProjects,
                 Project[].class.getName());
         List<Project> jiraProjectsList = Arrays.asList(response.getBody());
         List<Jira> jiraList = jiraRepository.findAllByOrderById();
         for (Jira jira : jiraList) {
-            if (jiraProjectsList.stream().filter(projet -> projet.getKey().equals(jira.getJiraProjectKey())).findFirst()
-                    .isPresent()) {
+            if (jiraProjectsList.stream().anyMatch(projet -> projet.getKey().equals(jira.getJiraProjectKey()))) {
                 Project jiraProjectToUpdate = jiraProjectsList.stream()
                         .filter(projet -> projet.getKey().equals(jira.getJiraProjectKey())).findFirst().get();
                 jira.setJiraProjectId(Integer.parseInt(jiraProjectToUpdate.getId()));
@@ -94,16 +93,16 @@ public class UpdateJiraService {
                 numberOfBoardIdReceived = startAt + maxResults;
 
                 boardList = result.getBody().getValues();
-                updateBoard(boardList);
+                updateBoardId(boardList);
             } else {
-                throw new Exception("Failed to update board for the jira");
+                throw new Exception("Failed to update board id for the jira");
             }
             startAt = startAt + maxResults;
             foundJiraBoards.addAll(boardList);
         } while (numberOfBoardIdReceived < totalBoardId);
     }
 
-    private void updateBoard(List<JiraBoard> boardList) throws Exception {
+    private void updateBoardId(List<JiraBoard> boardList) throws Exception {
         for (JiraBoard board : boardList) {
             try {
                 if (board.getLocation() != null && board.getLocation().getProjectId() != null) {
