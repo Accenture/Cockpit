@@ -27,12 +27,12 @@ import { mvpSelector } from '../../redux/selector';
 import MvpService from '../../services/apiService';
 import { getOneMvp } from '../../redux/ormSlice';
 import { fetchBurnUpData } from '../BurnUpChart/BurnUpChartSlice';
-
+import ObeyaForm from '../ObeyaForm/ObeyaForm'
 import useStyles from './styles';
 
 export default function EditMvpSMForm() {
   const [value, setValue] = useState(0);
-
+  const [sprint, setSprint] = useState(null);
   const classes = useStyles();
   const dispatch = useDispatch();
   const open = useSelector(editSMFormState);
@@ -93,6 +93,9 @@ export default function EditMvpSMForm() {
       }
     }
   }
+  const handleButtonClick = (number) => {
+    setSprint(number);
+  };
   const body = (
     <div>
       <DialogContent>
@@ -102,7 +105,7 @@ export default function EditMvpSMForm() {
             orientation="vertical"
             className={classes.ButtonGroup}
           >
-            <Button className={classes.buttonStyle} variant="contained">
+            <Button className={classes.buttonStyle} variant="contained"  onClick={() => setSprint(null)}>
               Overview
             </Button>
             {sprints.map((number) => (
@@ -110,27 +113,45 @@ export default function EditMvpSMForm() {
                 key={number}
                 className={classes.buttonStyle}
                 disabled={number > mvpInfo.jira.currentSprint}
+                onClick={() => handleButtonClick(number)}
               >
                 Sprint {number}
               </Button>
             ))}
           </ButtonGroup>
-          <div>
+          {!sprint && (
+            <div>
+              <Tabs
+                indicatorColor="primary"
+                textColor="primary"
+                centered
+                value={value}
+                onChange={handleChange}
+              >
+                <Tab label="Information" />
+                <Tab label="Team" />
+                <Tab label="Technologies" />
+              </Tabs>
+              {value === 0 && <InformationForm />}
+              {value === 1 && <TeamManagementForm />}
+              {value === 2 && <div>Technologies</div>}
+            </div>
+          )}
+          {sprint && <div>
             <Tabs
-              indicatorColor="primary"
-              textColor="primary"
-              centered
-              value={value}
-              onChange={handleChange}
-            >
-              <Tab label="Information" />
-              <Tab label="Team" />
-              <Tab label="Technologies" />
-            </Tabs>
-            {value === 0 && <InformationForm />}
-            {value === 1 && <TeamManagementForm />}
-            {value === 2 && <div>Technologies</div>}
-          </div>
+                indicatorColor="primary"
+                textColor="primary"
+                centered
+                value={value}
+                onChange={handleChange}
+              >
+                <Tab label="OBEYA" />
+                <Tab label="Co-construction game" />
+              </Tabs>
+              {value === 0 && <ObeyaForm sprintNumber={sprint} />}
+              {value === 1 && <div>Co-construction game</div>}
+            </div>
+            }
         </div>
       </DialogContent>
       <DialogActions>

@@ -1,6 +1,6 @@
 package com.cockpit.api.controller;
 
-import com.cockpit.api.service.AuthService;
+import com.cockpit.api.model.dto.ObeyaDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -117,6 +117,21 @@ public class SprintController {
             }
         } else {
             return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
+        }
+    }
+    // UPDATE team health in sprint
+    @PutMapping(
+            value = "/api/v1/sprint/{jiraId}/updateTeamHealth/{sprintNumber}"
+    )
+    public  ResponseEntity updateTeamHealth(@RequestBody ObeyaDTO obeya, @PathVariable Long jiraId, @PathVariable int sprintNumber)
+    {
+        try {
+            JiraDTO jira = jiraService.findJiraById(jiraId);
+            Sprint sprintFound = sprintService.findByMvpAndSprintNumber(modelMapper.map(jira, Jira.class), sprintNumber);
+            sprintService.setTeamHealth(obeya, sprintFound);
+            return ResponseEntity.ok().body(sprintFound);
+        } catch (com.cockpit.api.exception.ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }

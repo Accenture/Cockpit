@@ -148,7 +148,7 @@ export default function BurnUpChart() {
         }
 
         if (itemId.datasetIndex === 3) {
-          setText('reflects the sum of Users stories in backlog');
+          setText('reflects the sum of users stories in backlog');
         }
         if (itemId.datasetIndex === 4) {
           setText(
