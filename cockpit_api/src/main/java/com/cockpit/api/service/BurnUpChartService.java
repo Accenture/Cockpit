@@ -54,7 +54,7 @@ public class BurnUpChartService {
 		int iteration = 1;
 		double projection = 0;
 		int totalUSNumber = 0;
-		int maxSprintNumber = 8;
+		int maxSprintNumber = 12;
 		if (mvp.getSprintNumber() != null) {
 			maxSprintNumber = mvp.getSprintNumber();
 		}
