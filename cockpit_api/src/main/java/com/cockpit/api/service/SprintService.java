@@ -3,6 +3,7 @@ package com.cockpit.api.service;
 import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Sprint;
+import com.cockpit.api.model.dto.ObeyaDTO;
 import com.cockpit.api.model.dto.SprintDTO;
 import com.cockpit.api.repository.SprintRepository;
 import org.modelmapper.ModelMapper;
@@ -73,6 +74,12 @@ public class SprintService {
     {
     	return sprintRepository.findByJiraAndSprintNumber(jira, sprintNumber);
     }
+public SprintDTO setTeamHealth(ObeyaDTO obeya, Sprint sprint)
+{
+    sprint.setTeamMood(obeya.getTeamMood());
+    sprint.setTeamMotivation(obeya.getTeamMotivation());
+    sprint.setTeamConfidence(obeya.getTeamConfidence());
+    return modelMapper.map(sprintRepository.save(sprint), SprintDTO.class);
 
-
+}
 }
