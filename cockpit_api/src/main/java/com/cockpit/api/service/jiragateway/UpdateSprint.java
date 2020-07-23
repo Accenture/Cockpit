@@ -119,13 +119,7 @@ public class UpdateSprint {
         List<Sprint> sprints = sprintRepository.findByJiraOrderBySprintNumber(jira);
         for (SprintJira sprintJira : Optional.ofNullable(sprintJiraList).orElse(Collections.emptyList())) {
             Sprint sprintExist = sprintRepository.findByJiraSprintId(sprintJira.getId());
-
-            if (sprintJira.getOriginBoardId().equals(jira.getBoardId())) {
-                sprintRepository.save(setNewSprint(sprintExist, sprintJira, jira, sprintNumber));
-            } else if (sprintExist != null && sprintJira.getId() == sprintExist.getJiraSprintId()
-                    && !sprintJira.getOriginBoardId().equals(jira.getBoardId())) {
-                    sprintsToRemove.add(sprintExist);
-            }
+            sprintRepository.save(setNewSprint(sprintExist, sprintJira, jira, sprintNumber));
             sprintNumber++;
         }
         getSprintsToRemove(sprintJiraList, sprints);
@@ -169,8 +163,8 @@ public class UpdateSprint {
         }
     }
 
-    public void getSprintsToRemove(List<SprintJira> sprintListJira, List<Sprint> sprintList) {
-        for (Sprint sprint : sprintList) {
+    public void getSprintsToRemove(List<SprintJira> sprintListJira, List<Sprint> sprintListDb) {
+        for (Sprint sprint : sprintListDb) {
             if (sprintListJira.stream().filter(sprintJira -> sprint.getJiraSprintId() == sprintJira.getId()).count() == 0) {
                 sprintsToRemove.add(sprint);
             }
