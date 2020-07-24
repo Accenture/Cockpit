@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import MvpService from '../../services/apiService';
-import { mvpSelector } from '../../redux/selector';
 import useStyles from './styles';
 import {
   setMood,
@@ -15,18 +13,16 @@ import {
   motivationState,
   moodState,
 } from './ObeyaSlice';
+import { selectedTabState } from '../MvpInfoPage/MvpInfoPageSlice';
 
 export default function Obeya(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { mvp } = props;
-  /* const [mood, setMood] = useState(0);
-  const [motivation, setMotivation] = useState(0);
-  const [confidence, setConfidence] = useState(0); */
+  const selectedTab = useSelector(selectedTabState);
   const mood = useSelector(moodState);
   const motivation = useSelector(motivationState);
   const confidence = useSelector(confidenceState);
-
   useEffect(() => {
     async function getObeya() {
       const sprint = await MvpService.getSprint(
@@ -34,13 +30,30 @@ export default function Obeya(props) {
         mvp.jira.currentSprint,
       );
       if (sprint.data) {
-        dispatch(setMood(sprint.data.teamMood));
-        dispatch(setMotivation(sprint.data.teamMotivation));
-        dispatch(setConfidence(sprint.data.teamConfidence));
+        if (
+          (sprint.data.teamMood &&
+            sprint.data.teamMotivation &&
+            sprint.data.teamConfidence) ||
+          selectedTab === 'sprint'
+        ) {
+          dispatch(setMood(sprint.data.teamMood));
+          dispatch(setMotivation(sprint.data.teamMotivation));
+          dispatch(setConfidence(sprint.data.teamConfidence));
+        } else if (!selectedTab || selectedTab === 'overview') {
+          const previousSprint = await MvpService.getSprint(
+            mvp.jira.id,
+            mvp.jira.currentSprint - 1,
+          );
+          if (previousSprint.data) {
+            dispatch(setMood(previousSprint.data.teamMood));
+            dispatch(setMotivation(previousSprint.data.teamMotivation));
+            dispatch(setConfidence(previousSprint.data.teamConfidence));
+          }
+        }
       }
     }
     getObeya();
-  }, [dispatch, mvp]);
+  }, [dispatch, mvp, selectedTab]);
   return (
     <Grid container spacing={3}>
       <Grid item xs={4}>
@@ -54,7 +67,7 @@ export default function Obeya(props) {
             value={mood * 25}
           />
           <span className={classes.progressBarTxt} style={{ left: '5%' }}>
-            {mood}
+            {mood || 0}
           </span>
         </div>
       </Grid>
@@ -69,7 +82,7 @@ export default function Obeya(props) {
             value={motivation * 25}
           />
           <span className={classes.progressBarTxt} style={{ left: '5%' }}>
-            {motivation}
+            {motivation || 0}
           </span>
         </div>
       </Grid>
@@ -84,7 +97,7 @@ export default function Obeya(props) {
             value={confidence * 25}
           />
           <span className={classes.progressBarTxt} style={{ left: '5%' }}>
-            {confidence}
+            {confidence || 0}
           </span>
         </div>
       </Grid>

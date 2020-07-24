@@ -28,7 +28,7 @@ import MvpService from '../../services/apiService';
 import { getOneMvp } from '../../redux/ormSlice';
 import { fetchBurnUpData } from '../BurnUpChart/BurnUpChartSlice';
 import ObeyaForm from '../ObeyaForm/ObeyaForm';
-
+import { setMood, setMotivation, setConfidence } from '../Obeya/ObeyaSlice';
 import useStyles from './styles';
 
 export default function EditMvpSMForm() {
@@ -109,14 +109,20 @@ export default function EditMvpSMForm() {
     setSprint(number);
   };
   async function submitSprintInfo(e) {
-    debugger
     e.preventDefault();
     const obeya = {
       teamMood: mood,
       teamMotivation: motivation,
       teamConfidence: confidence,
     };
-    await MvpService.addObeya(obeya, mvpInfo.jira.id, sprint);
+    if (mood !== 0 && motivation !== 0 && confidence !== 0) {
+      const result = await MvpService.addObeya(obeya, mvpInfo.jira.id, sprint);
+      if (sprint === mvpInfo.jira.currentSprint) {
+        dispatch(setMood(result.data.teamMood));
+        dispatch(setMotivation(result.data.teamMotivation));
+        dispatch(setConfidence(result.data.teamConfidence));
+      }
+    }
     dispatch(closeEditMvpSMForm());
   }
   const body = (
