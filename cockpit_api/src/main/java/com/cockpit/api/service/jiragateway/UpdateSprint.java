@@ -130,6 +130,9 @@ public class UpdateSprint {
         Sprint newSprint = new Sprint();
         if (sprintExist != null) {
             newSprint.setId(sprintExist.getId());
+            if (sprintExist.getTotalNbUs() != null) {
+                newSprint.setTotalNbUs(sprintExist.getTotalNbUs());
+            }
         }
         newSprint.setJiraSprintId(sprintJira.getId());
         newSprint.setState(sprintJira.getState());
