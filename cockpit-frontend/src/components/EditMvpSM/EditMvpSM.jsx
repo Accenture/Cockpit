@@ -117,11 +117,9 @@ export default function EditMvpSMForm() {
     };
     if (mood !== 0 && motivation !== 0 && confidence !== 0) {
       const result = await MvpService.addObeya(obeya, mvpInfo.jira.id, sprint);
-      if (sprint === mvpInfo.jira.currentSprint) {
-        dispatch(setMood(result.data.teamMood));
-        dispatch(setMotivation(result.data.teamMotivation));
-        dispatch(setConfidence(result.data.teamConfidence));
-      }
+      dispatch(setMood(result.data.teamMood));
+      dispatch(setMotivation(result.data.teamMotivation));
+      dispatch(setConfidence(result.data.teamConfidence));
     }
     dispatch(closeEditMvpSMForm());
   }
