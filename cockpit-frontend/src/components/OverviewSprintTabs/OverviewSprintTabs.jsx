@@ -10,6 +10,8 @@ import BurnUpChart from '../BurnUpChart/BurnUpChart';
 import MvpService from '../../services/apiService';
 import { mvpSelector } from '../../redux/selector';
 import { setMood, setMotivation, setConfidence } from '../Obeya/ObeyaSlice';
+import { selectedTabState } from '../MvpInfoPage/MvpInfoPageSlice';
+
 // styles
 import useStyles from './styles';
 
@@ -22,16 +24,16 @@ function TabPanel(props) {
     </div>
   );
 }
-export default function OverviewSprintTabs(props) {
+export default function OverviewSprintTabs() {
   const mvpId = useParams().id;
   const mvp = useSelector((state) => mvpSelector(state, mvpId));
   const [sprints, setSprints] = useState([]);
-  const [selectedSprint, setSelectedSprint] = useState({});
+  const [selectedSprint, setSelectedSprint] = useState(0);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const classes = useStyles();
-  const { selectedTab } = props;
   const dispatch = useDispatch();
+  const selectedTab = useSelector(selectedTabState);
 
   useEffect(() => {
     async function getSprint() {
@@ -56,7 +58,7 @@ export default function OverviewSprintTabs(props) {
       }
       setSprints(list);
     }
-  }, [mvp]);
+  }, [mvp, selectedTab]);
   async function handleChange(event) {
     setSelectedSprint(event.target.value);
     const sprint = await MvpService.getSprint(mvp.jira.id, event.target.value);
@@ -73,9 +75,6 @@ export default function OverviewSprintTabs(props) {
     } else {
       setStartDate(null);
       setEndDate(null);
-      dispatch(setMood(0));
-      dispatch(setMotivation(0));
-      dispatch(setConfidence(0));
     }
   }
   return (
