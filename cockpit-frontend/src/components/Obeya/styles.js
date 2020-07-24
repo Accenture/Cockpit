@@ -18,4 +18,8 @@ export default makeStyles(() => ({
   greyTitles: {
     color: 'grey',
   },
+  subTitle: {
+    fontSize: 14,
+    textAlign: 'center',
+  },
 }));
