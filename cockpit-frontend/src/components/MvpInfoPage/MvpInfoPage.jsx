@@ -51,11 +51,9 @@ function MvpInfoPage() {
                   Sprint
                 </Button>
               </ButtonGroup>
-
-          
             </Grid>
             <Grid item xs={4}>
-              <Obeya />
+              <Obeya mvp={mvp} />
             </Grid>
             <OverviewSprintTabs selectedTab={selectedTab} />
           </Grid>

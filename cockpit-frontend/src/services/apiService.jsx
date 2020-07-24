@@ -110,6 +110,18 @@ function getSprint(jiraId, sprintNumber) {
     return e;
   }
 }
+function addObeya(obeya, jiraId, sprintNumber) {
+  try {
+    return API.put(
+      `${sprintUrl}/${jiraId}/updateTeamHealth/${sprintNumber}`,
+      obeya,
+      headers,
+    );
+  } catch (e) {
+    console.log(`Error when getting Sprint: ${e}`);
+    return e;
+  }
+}
 const MvpService = {
   getAllMvp,
   createNewJiraProject,
@@ -123,6 +135,7 @@ const MvpService = {
   createNewTeamMember,
   deleteTeamMember,
   getSprint,
+  addObeya,
 };
 
 export default MvpService;

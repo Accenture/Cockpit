@@ -13,6 +13,7 @@ import smFormReducer from '../components/ScrumMasterForm/ScrumMasterFormSlice';
 import editMvpFormReducer from '../components/InformationForm/InformationFormSlice';
 import teamManagementFormReducer from '../components/TeamManagementForm/TeamManagementFormSlice';
 import burnUpChartReducer from '../components/BurnUpChart/BurnUpChartSlice';
+import obeyaReducer from '../components/Obeya/ObeyaSlice';
 
 const persistConfig = {
   key: 'reduxStates',
@@ -27,6 +28,7 @@ const reducers = combineReducers({
   InformationForm: editMvpFormReducer,
   TeamManagementForm: teamManagementFormReducer,
   BurnUpChart: burnUpChartReducer,
+  Obeya: obeyaReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

@@ -27,7 +27,8 @@ import { mvpSelector } from '../../redux/selector';
 import MvpService from '../../services/apiService';
 import { getOneMvp } from '../../redux/ormSlice';
 import { fetchBurnUpData } from '../BurnUpChart/BurnUpChartSlice';
-import ObeyaForm from '../ObeyaForm/ObeyaForm'
+import ObeyaForm from '../ObeyaForm/ObeyaForm';
+
 import useStyles from './styles';
 
 export default function EditMvpSMForm() {
@@ -49,7 +50,9 @@ export default function EditMvpSMForm() {
   const urlMvpAvatar = useSelector(imageUrlState);
   const mvpStartDate = useSelector(mvpStartDateState);
   const mvpEndDate = useSelector(mvpEndDateState);
-
+  let mood = 0;
+  let motivation = 0;
+  let confidence = 0;
   useEffect(() => {
     const list = [];
     for (let i = 1; i <= mvpInfo.sprintNumber; i += 1) {
@@ -60,10 +63,10 @@ export default function EditMvpSMForm() {
   const handleClose = () => {
     dispatch(closeEditMvpSMForm());
   };
-  const handleChange = (event, valeur) => {
+  const handleChange = (valeur) => {
     setValue(valeur);
   };
-  async function submit(e) {
+  async function submitMvpInfo(e) {
     e.preventDefault();
     if (sprintNumber <= 12 && sprintNumber >= mvpInfo.jira.currentSprint) {
       const newJira = {
@@ -93,9 +96,29 @@ export default function EditMvpSMForm() {
       }
     }
   }
+  function getTeamMood(val) {
+    mood = val;
+  }
+  function getTeamMotivation(val) {
+    motivation = val;
+  }
+  function getTeamConfidence(val) {
+    confidence = val;
+  }
   const handleButtonClick = (number) => {
     setSprint(number);
   };
+  async function submitSprintInfo(e) {
+    debugger
+    e.preventDefault();
+    const obeya = {
+      teamMood: mood,
+      teamMotivation: motivation,
+      teamConfidence: confidence,
+    };
+    await MvpService.addObeya(obeya, mvpInfo.jira.id, sprint);
+    dispatch(closeEditMvpSMForm());
+  }
   const body = (
     <div>
       <DialogContent>
@@ -105,7 +128,11 @@ export default function EditMvpSMForm() {
             orientation="vertical"
             className={classes.ButtonGroup}
           >
-            <Button className={classes.buttonStyle} variant="contained"  onClick={() => setSprint(null)}>
+            <Button
+              className={classes.buttonStyle}
+              variant={!sprint ? 'contained' : 'outlined'}
+              onClick={() => setSprint(null)}
+            >
               Overview
             </Button>
             {sprints.map((number) => (
@@ -114,6 +141,7 @@ export default function EditMvpSMForm() {
                 className={classes.buttonStyle}
                 disabled={number > mvpInfo.jira.currentSprint}
                 onClick={() => handleButtonClick(number)}
+                variant={sprint === number ? 'contained' : 'outlined'}
               >
                 Sprint {number}
               </Button>
@@ -137,8 +165,9 @@ export default function EditMvpSMForm() {
               {value === 2 && <div>Technologies</div>}
             </div>
           )}
-          {sprint && <div>
-            <Tabs
+          {sprint && (
+            <div>
+              <Tabs
                 indicatorColor="primary"
                 textColor="primary"
                 centered
@@ -148,10 +177,17 @@ export default function EditMvpSMForm() {
                 <Tab label="OBEYA" />
                 <Tab label="Co-construction game" />
               </Tabs>
-              {value === 0 && <ObeyaForm sprintNumber={sprint} />}
+              {value === 0 && (
+                <ObeyaForm
+                  sprintNumber={sprint}
+                  sendTeamMood={getTeamMood}
+                  sendTeamMotivation={getTeamMotivation}
+                  sendTeamConfidence={getTeamConfidence}
+                />
+              )}
               {value === 1 && <div>Co-construction game</div>}
             </div>
-            }
+          )}
         </div>
       </DialogContent>
       <DialogActions>
@@ -160,7 +196,7 @@ export default function EditMvpSMForm() {
         </Button>
         {value === 0 && (
           <Button
-            onClick={submit}
+            onClick={sprint ? submitSprintInfo : submitMvpInfo}
             color="primary"
             variant="contained"
             style={{ borderRadius: 20 }}
