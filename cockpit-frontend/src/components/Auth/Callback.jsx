@@ -1,22 +1,26 @@
 import React, { useEffect } from 'react';
+import axios from 'axios';
 import { AuthConsumer } from '../../services/authProvider';
 
 export function Callback() {
   function setUserToSessionStorage() {
     const hash = window.location.href.split('#');
+    // Parse access token and id token form redirect url
     if (hash.length > 1) {
-      const param = hash[1].split('&');
-      if (param.length > 0) {
-        const idTokenParam = param.find((x) => x.startsWith('id_token'));
-        if (idTokenParam != null && idTokenParam.length > 0) {
-          const idToken = idTokenParam.split('=');
-          if (
-            idToken.length > 1 &&
-            idToken[1] != null &&
-            idToken[1].length > 0
-          ) {
-            window.sessionStorage.setItem('id_token', idToken[1]);
-          }
+      const params = hash[1].split('&');
+      if (params.length > 0) {
+        const idTokenParam = params.find((x) => x.startsWith('id_token'));
+        const accessTokenParam = params.find((x) =>
+          x.startsWith('access_token'),
+        );
+        const idToken = idTokenParam.split('=')[1];
+        const accessToken = accessTokenParam.split('=')[1];
+        // Set default headers for axiois requests with acess token and id token
+        axios.defaults.headers.accessToken = accessToken;
+        axios.defaults.headers.idToken = idToken;
+        // Store id token in session storage
+        if (idToken != null && idToken.length > 0) {
+          window.sessionStorage.setItem('id_token', idToken);
         }
       }
     }
