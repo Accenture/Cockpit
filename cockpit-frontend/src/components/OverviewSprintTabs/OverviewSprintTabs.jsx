@@ -3,14 +3,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Box from '@material-ui/core/Box';
 import moment from 'moment/moment';
 import BurnUpChart from '../BurnUpChart/BurnUpChart';
 import MvpService from '../../services/apiService';
-
 import { mvpSelector } from '../../redux/selector';
-
+import { setMood, setMotivation, setConfidence } from '../Obeya/ObeyaSlice';
 // styles
 import useStyles from './styles';
 
@@ -32,6 +31,7 @@ export default function OverviewSprintTabs(props) {
   const [endDate, setEndDate] = useState('');
   const classes = useStyles();
   const { selectedTab } = props;
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function getSprint() {
@@ -59,7 +59,6 @@ export default function OverviewSprintTabs(props) {
   }, [mvp]);
   async function handleChange(event) {
     setSelectedSprint(event.target.value);
-
     const sprint = await MvpService.getSprint(mvp.jira.id, event.target.value);
     if (sprint.data) {
       setStartDate(sprint.data.sprintStartDate);
@@ -68,9 +67,15 @@ export default function OverviewSprintTabs(props) {
       } else {
         setEndDate(sprint.data.sprintEndDate);
       }
+      dispatch(setMood(sprint.data.teamMood));
+      dispatch(setMotivation(sprint.data.teamMotivation));
+      dispatch(setConfidence(sprint.data.teamConfidence));
     } else {
       setStartDate(null);
       setEndDate(null);
+      dispatch(setMood(0));
+      dispatch(setMotivation(0));
+      dispatch(setConfidence(0));
     }
   }
   return (

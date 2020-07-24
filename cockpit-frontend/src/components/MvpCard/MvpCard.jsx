@@ -90,7 +90,7 @@ export default function MvpCard(props) {
             </Grid>
           </Grid>
         )}
-        {isHomePage && <Obeya />}
+        {isHomePage && <Obeya mvp={mvpInfo} />}
       </CardContent>
     </Card>
   );
