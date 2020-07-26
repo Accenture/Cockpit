@@ -58,7 +58,8 @@ public class MvpControllerTest {
 
 		// when
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/mvp/unassignTeam/{id}", mockMvp.getId())
-				.accept(MediaType.APPLICATION_JSON).header("Authorization", "Bearer token")).andExpect(status().isOk()).andReturn();
+				.accept(MediaType.APPLICATION_JSON).header("Authorization", "Bearer token")
+				.header("Authorization", "Bearer token")).andExpect(status().isOk()).andReturn();
 
 		MockHttpServletResponse response = result.getResponse();
 
