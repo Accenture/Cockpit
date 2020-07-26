@@ -27,6 +27,14 @@ const ormSlice = createSlice({
     // Put async reducers here
     [fetchAllMvps.fulfilled]: withSession((session, action) => {
       // Add mvp to the state array
+      Array.prototype.forEach.call(action.payload, (mvp) => {
+        if (session.Mvp.withId(mvp.id) == null) {
+          session.Mvp.create(mvp);
+        } else {
+          session.Mvp.withId(mvp.id).update(mvp);
+        }
+      });
+      /*
       action.payload.forEach((mvp) => {
         if (session.Mvp.withId(mvp.id) == null) {
           session.Mvp.create(mvp);
@@ -34,6 +42,7 @@ const ormSlice = createSlice({
           session.Mvp.withId(mvp.id).update(mvp);
         }
       });
+      */
     }),
     [getOneMvp.fulfilled]: withSession((session, action) => {
       // Add mvp to the state array
