@@ -21,7 +21,7 @@ spring:
     urlIssues: ${JIRA_HOST_URL}/rest/api/2/search?jql=
     urlAllUserStories: ${JIRA_HOST_URL}/rest/api/2/search?maxResults=%s&startAt=%s&jql=issuetype=Story
   digitalpass:
-    isEnabled: true
+    isEnabled: false
     userInfoEndpoint: ${DIGITAL_PASS_USER_INFO_ENDPOINT}
 springdoc:
   api-docs:
