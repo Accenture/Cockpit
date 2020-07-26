@@ -3,6 +3,7 @@ package com.cockpit.api.controller;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.cockpit.api.service.AuthService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -37,6 +38,9 @@ public class JiraControllerTest {
 	@MockBean
 	private JiraService jiraService;
 
+	@MockBean
+	private AuthService authService;
+
 	@Test
 	public void whenAddJiraThenReturn200() throws Exception {
 
@@ -49,7 +53,8 @@ public class JiraControllerTest {
 	
 		// when
 		MvcResult result = mockMvc
-				.perform(MockMvcRequestBuilders.post("/api/v1/jira/create" )
+				.perform(MockMvcRequestBuilders.post("/api/v1/jira/create")
+						.header("Authorization", "Bearer token")
 				.content(new ObjectMapper().writeValueAsString(jiraDto))
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON))

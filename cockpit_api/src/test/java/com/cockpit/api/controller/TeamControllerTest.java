@@ -3,6 +3,7 @@ package com.cockpit.api.controller;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.cockpit.api.service.AuthService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -39,6 +40,9 @@ public class TeamControllerTest {
 	@MockBean
 	private TeamService teamService;
 
+	@MockBean
+	private AuthService authService;
+
 	@Test
 	public void whenAddTeamMemberThenReturn200() throws Exception {
 
@@ -55,7 +59,8 @@ public class TeamControllerTest {
 		MvcResult result = mockMvc
 				.perform(MockMvcRequestBuilders.put("/api/v1/team/addTeamMember/{id}", mockTeam.getId())
 						.content(new ObjectMapper().writeValueAsString(mockTeamMember))
-						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
+						.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+						.header("Authorization", "Bearer token"))
 				.andExpect(status().isOk()).andReturn();
 
 		MockHttpServletResponse response = result.getResponse();
@@ -82,7 +87,8 @@ public class TeamControllerTest {
 		// when
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
 				.put("/api/v1/team/{id}/deleteTeamMember/{teamMeberId}", mockTeam.getId(), mockTeamMember.getId())
-				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer token")).andExpect(status().isOk())
 				.andReturn();
 
 		MockHttpServletResponse response = result.getResponse();
