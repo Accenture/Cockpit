@@ -16,8 +16,13 @@ switch (env) {
   default:
     backendUrl = 'http://localhost:8085';
 }
-
-export default axios.create({
+const API = axios.create({
   baseURL: `${backendUrl}/api/v1`,
   responseType: 'json',
 });
+
+API.defaults.headers.common.Authorization = `Bearer ${window.sessionStorage.getItem(
+  'access_token',
+)}`;
+
+export default API;
