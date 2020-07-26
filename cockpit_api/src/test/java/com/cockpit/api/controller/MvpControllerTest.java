@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cockpit.api.service.AuthService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -39,6 +40,9 @@ public class MvpControllerTest {
 	@MockBean
 	private MvpService mvpService;
 
+	@MockBean
+	private AuthService authService;
+
 	@Test
 	public void whenUnassignTeamOfMvpThenReturn200() throws Exception {
 		Mvp mockMvp = new Mvp();
@@ -54,7 +58,7 @@ public class MvpControllerTest {
 
 		// when
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/mvp/unassignTeam/{id}", mockMvp.getId())
-				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andReturn();
+				.accept(MediaType.APPLICATION_JSON).header("Authorization", "Bearer token")).andExpect(status().isOk()).andReturn();
 
 		MockHttpServletResponse response = result.getResponse();
 
@@ -76,7 +80,7 @@ public class MvpControllerTest {
 
 		// when
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/mvp/{id}/assignTeam/{teamId}", mockMvp.getId(),mockTeam.getId())
-				.accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andReturn();
+				.accept(MediaType.APPLICATION_JSON).header("Authorization", "Bearer token")).andExpect(status().isOk()).andReturn();
 
 		MockHttpServletResponse response = result.getResponse();
 
@@ -100,7 +104,8 @@ public class MvpControllerTest {
 		
 		// when
 		MvcResult result = mockMvc
-				.perform(MockMvcRequestBuilders.get("/api/v1/mvp/all").accept(MediaType.APPLICATION_JSON))
+				.perform(MockMvcRequestBuilders.get("/api/v1/mvp/all").accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer token"))
 				.andExpect(status().isOk()).andReturn();
 		MockHttpServletResponse response = result.getResponse();
 
