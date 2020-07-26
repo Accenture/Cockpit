@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import axios from 'axios';
 import { AuthConsumer } from '../../services/authProvider';
 
 export function Callback() {
@@ -15,12 +14,13 @@ export function Callback() {
         );
         const idToken = idTokenParam.split('=')[1];
         const accessToken = accessTokenParam.split('=')[1];
-        // Set default headers for axiois requests with acess token and id token
-        axios.defaults.headers.accessToken = accessToken;
-        axios.defaults.headers.idToken = idToken;
         // Store id token in session storage
-        if (idToken != null && idToken.length > 0) {
+        if (idToken != null) {
           window.sessionStorage.setItem('id_token', idToken);
+        }
+        // Store access token in session storage
+        if (accessToken != null) {
+          window.sessionStorage.setItem('access_token', accessToken);
         }
       }
     }
