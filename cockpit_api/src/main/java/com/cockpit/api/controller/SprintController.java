@@ -23,10 +23,10 @@ public class SprintController {
     private final JiraService jiraService;
     private final AuthService authService;
     private ModelMapper modelMapper = new ModelMapper();
-	
+
     @Autowired
     public SprintController(
-            SprintService sprintService,  JiraService jiraService, AuthService authService
+            SprintService sprintService, JiraService jiraService, AuthService authService
     ) {
         this.sprintService = sprintService;
         this.jiraService = jiraService;
@@ -38,7 +38,7 @@ public class SprintController {
             value = "/api/v1/sprint/create"
     )
     public ResponseEntity createSprint(@RequestBody SprintDTO sprintDTO,
-                                                  @RequestHeader("Authorization") String authHeader) {
+                                       @RequestHeader("Authorization") String authHeader) {
         if (authService.isUserAuthorized(authHeader)) {
             SprintDTO newSprint = sprintService.createNewSprint(sprintDTO);
             return ResponseEntity.ok(newSprint);
@@ -89,7 +89,7 @@ public class SprintController {
             value = "/api/v1/sprint/delete/{id}"
     )
     public ResponseEntity deleteSprint(@PathVariable Long id,
-                                               @RequestHeader("Authorization") String authHeader) {
+                                       @RequestHeader("Authorization") String authHeader) {
         if (authService.isUserAuthorized(authHeader)) {
             try {
                 sprintService.deleteSprint(id);
@@ -101,6 +101,7 @@ public class SprintController {
             return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
         }
     }
+
     // GET Sprint BY Sprint Number And Jira
     @GetMapping(
             value = "/api/v1/sprint/{jiraId}/{sprintNumber}"
@@ -120,19 +121,25 @@ public class SprintController {
             return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
         }
     }
+
     // UPDATE team health in sprint
     @PutMapping(
             value = "/api/v1/sprint/{jiraId}/updateTeamHealth/{sprintNumber}"
     )
-    public  ResponseEntity updateTeamHealth(@RequestBody ObeyaDTO obeya, @PathVariable Long jiraId, @PathVariable int sprintNumber)
-    {
-        try {
-            JiraDTO jira = jiraService.findJiraById(jiraId);
-            Sprint sprintFound = sprintService.findByMvpAndSprintNumber(modelMapper.map(jira, Jira.class), sprintNumber);
-            sprintService.setTeamHealth(obeya, sprintFound);
-            return ResponseEntity.ok().body(sprintFound);
-        } catch (com.cockpit.api.exception.ResourceNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    public ResponseEntity updateTeamHealth(@RequestBody ObeyaDTO obeya, @PathVariable Long jiraId, @PathVariable int sprintNumber, @RequestHeader("Authorization") String authHeader) {
+
+            if (authService.isUserAuthorized(authHeader)) {
+                try {
+                    JiraDTO jira = jiraService.findJiraById(jiraId);
+                    Sprint sprintFound = sprintService.findByMvpAndSprintNumber(modelMapper.map(jira, Jira.class), sprintNumber);
+                    sprintService.setTeamHealth(obeya, sprintFound);
+                    return ResponseEntity.ok().body(sprintFound);
+                } catch (com.cockpit.api.exception.ResourceNotFoundException e) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+                }
+            }
+            else {
+                return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
+            }
         }
     }
-}
