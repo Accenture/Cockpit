@@ -130,8 +130,14 @@ public class UpdateSprint {
         Sprint newSprint = new Sprint();
         if (sprintExist != null) {
             newSprint.setId(sprintExist.getId());
-            if (sprintExist.getTotalNbUs() != null) {
-                newSprint.setTotalNbUs(sprintExist.getTotalNbUs());
+            if (sprintExist.getTeamMood() != null) {
+                newSprint.setTeamMood(sprintExist.getTeamMood());
+            }
+            if (sprintExist.getTeamMotivation() != null) {
+                newSprint.setTeamMotivation(sprintExist.getTeamMotivation());
+            }
+            if (sprintExist.getTeamConfidence() != null) {
+                newSprint.setTeamConfidence(sprintExist.getTeamConfidence());
             }
         }
         newSprint.setJiraSprintId(sprintJira.getId());
