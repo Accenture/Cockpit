@@ -63,8 +63,8 @@ export default function EditMvpSMForm() {
   const handleClose = () => {
     dispatch(closeEditMvpSMForm());
   };
-  const handleChange = (valeur) => {
-    setValue(valeur);
+  const handleChange = (event, value) => {
+    setValue(value);
   };
   async function submitMvpInfo(e) {
     e.preventDefault();

@@ -1,6 +1,7 @@
 package com.cockpit.api.controller;
 
 import com.cockpit.api.model.dto.ObeyaDTO;
+import com.cockpit.api.service.AuthService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -130,7 +130,7 @@ export default function ObeyaForm(props) {
           </FormControl>
         </Grid>
         <Grid item xs={4}>
-          <FormLabel className={classes.formLabel}>Confidence</FormLabel>
+          <FormLabel className={classes.formLabel}> Confidence</FormLabel>
           <FormControl
             className={classes.textField}
             required
