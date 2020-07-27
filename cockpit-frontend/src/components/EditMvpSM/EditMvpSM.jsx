@@ -28,7 +28,14 @@ import MvpService from '../../services/apiService';
 import { getOneMvp } from '../../redux/ormSlice';
 import { fetchBurnUpData } from '../BurnUpChart/BurnUpChartSlice';
 import ObeyaForm from '../ObeyaForm/ObeyaForm';
-import { setMood, setMotivation, setConfidence } from '../Obeya/ObeyaSlice';
+import {
+  moodState,
+  motivationState,
+  confidenceState,
+  setMood,
+  setMotivation,
+  setConfidence,
+} from '../Obeya/ObeyaSlice';
 import useStyles from './styles';
 
 export default function EditMvpSMForm() {
@@ -50,6 +57,10 @@ export default function EditMvpSMForm() {
   const urlMvpAvatar = useSelector(imageUrlState);
   const mvpStartDate = useSelector(mvpStartDateState);
   const mvpEndDate = useSelector(mvpEndDateState);
+  const lastMood = useSelector(moodState);
+  const lastMotivation = useSelector(motivationState);
+  const lastConfidence = useSelector(confidenceState);
+
   let mood = 0;
   let motivation = 0;
   let confidence = 0;
@@ -109,7 +120,11 @@ export default function EditMvpSMForm() {
     setSprint(number);
   };
   async function submitSprintInfo(e) {
+    debugger;
     e.preventDefault();
+    if (mood === 0) mood = lastMood;
+    if (motivation === 0) motivation = lastMotivation;
+    if (confidence === 0) confidence = lastConfidence;
     const obeya = {
       teamMood: mood,
       teamMotivation: motivation,
