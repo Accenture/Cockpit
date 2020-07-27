@@ -41,26 +41,26 @@ const AUTH_CONFIG = {
         'https://pp-api-digitalpassport.hubtotal.net/sso/oauth2/total/connect/jwk_uri',
     },
   },
+  // Prod config to be updated by Digital Pass Prod
   prod: {
-    // Prod config to be updated by Digital Pass Prod
-    client_id: 'cockpit-qa',
-    redirect_uri: 'https://azwbqcokp01.azurewebsites.net/authentication',
+    client_id: 'cockpit-prod',
+    redirect_uri: 'https://azwbpcokp01.azurewebsites.net/authentication',
     response_type: 'id_token token',
     scope: 'openid email',
     load_user_info: false,
-    authority: 'https://pp-sso-digitalpassport.hubtotal.net/sso/oauth2/total',
+    authority: 'https://sso-digitalpassport.hubtotal.net/sso/oauth2/total',
     metadata: {
-      issuer: 'https://pp-sso-digitalpassport.hubtotal.net/sso',
+      issuer: 'https://sso-digitalpassport.hubtotal.net/sso',
       end_session_endpoint:
-        'https://pp-sso-digitalpassport.hubtotal.net/sso/oauth2/total/connect/endSession',
+        'https://sso-digitalpassport.hubtotal.net/sso/oauth2/total/connect/endSession',
       check_session_iframe:
-        'https://pp-sso-digitalpassport.hubtotal.net/sso/oauth2/total/connect/checkSession',
+        'https://sso-digitalpassport.hubtotal.net/sso/oauth2/total/connect/checkSession',
       authorization_endpoint:
-        'https://pp-sso-digitalpassport.hubtotal.net/sso/oauth2/total/authorize?usesso=true',
+        'https://sso-digitalpassport.hubtotal.net/sso/oauth2/total/authorize?usesso=true',
       userinfo_endpoint:
-        'https://pp-api-digitalpassport.hubtotal.net/sso/oauth2/total/userinfo',
+        'https://api-digitalpassport.hubtotal.net/sso/oauth2/total/userinfo',
       jwks_uri:
-        'https://pp-api-digitalpassport.hubtotal.net/sso/oauth2/total/connect/jwk_uri',
+        'https://api-digitalpassport.hubtotal.net/sso/oauth2/total/connect/jwk_uri',
     },
   },
 };
