@@ -120,7 +120,6 @@ export default function EditMvpSMForm() {
     setSprint(number);
   };
   async function submitSprintInfo(e) {
-    debugger;
     e.preventDefault();
     if (mood === 0) mood = lastMood;
     if (motivation === 0) motivation = lastMotivation;
