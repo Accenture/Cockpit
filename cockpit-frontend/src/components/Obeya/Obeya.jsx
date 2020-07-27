@@ -25,7 +25,7 @@ export default function Obeya(props) {
   const mood = useSelector(moodState);
   const motivation = useSelector(motivationState);
   const confidence = useSelector(confidenceState);
-  const [display, setDisplay] = useState(true);
+  const [display, setDisplay] = useState(false);
 
   useEffect(() => {
     async function getObeya() {
@@ -35,11 +35,10 @@ export default function Obeya(props) {
       );
       if (sprint.data) {
         if (
-          (sprint.data.teamMood &&
-            sprint.data.teamMotivation &&
-            sprint.data.teamConfidence) 
+          sprint.data.teamMood &&
+          sprint.data.teamMotivation &&
+          sprint.data.teamConfidence
         ) {
-          setDisplay(false);
           dispatch(setMood(sprint.data.teamMood));
           dispatch(setMotivation(sprint.data.teamMotivation));
           dispatch(setConfidence(sprint.data.teamConfidence));
@@ -49,6 +48,7 @@ export default function Obeya(props) {
             mvp.jira.currentSprint - 1,
           );
           if (previousSprint.data) {
+            setDisplay(true);
             dispatch(setMood(previousSprint.data.teamMood));
             dispatch(setMotivation(previousSprint.data.teamMotivation));
             dispatch(setConfidence(previousSprint.data.teamConfidence));
