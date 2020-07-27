@@ -13,6 +13,9 @@ switch (env) {
   case 'qa':
     backendUrl = 'https://azwbqcokp02.azurewebsites.net';
     break;
+  case 'prod':
+    backendUrl = 'https://azwbpcokp02.azurewebsites.net';
+    break;
   default:
     backendUrl = 'http://localhost:8085';
 }
