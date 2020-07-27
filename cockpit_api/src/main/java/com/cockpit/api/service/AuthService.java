@@ -1,7 +1,5 @@
 package com.cockpit.api.service;
 
-import com.cockpit.api.exception.ResourceNotFoundException;
-import com.cockpit.api.model.dto.JiraDTO;
 import com.cockpit.api.model.dto.UserInfoDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
