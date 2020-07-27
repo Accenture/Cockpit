@@ -88,7 +88,14 @@ export default function ObeyaForm(props) {
             fullWidth
             variant="outlined"
           >
-            <Select value={selectedMood || '4'} onChange={handleSelectMood}>
+            <Select
+              displayEmpty
+              value={selectedMood || ''}
+              onChange={handleSelectMood}
+            >
+              <MenuItem value="" disabled>
+                Mood
+              </MenuItem>
               {teamMood.map((item) => (
                 <MenuItem value={item.value} key={item.value}>
                   {item.label} - {item.value}
@@ -107,9 +114,13 @@ export default function ObeyaForm(props) {
             variant="outlined"
           >
             <Select
-              value={selectedMotivation || '4'}
+              displayEmpty
+              value={selectedMotivation || ''}
               onChange={handleSelectMotivation}
             >
+              <MenuItem value="" disabled>
+                Motivation
+              </MenuItem>
               {teamMotivation.map((item) => (
                 <MenuItem value={item.value} key={item.value}>
                   {item.label} - {item.value}
@@ -128,9 +139,13 @@ export default function ObeyaForm(props) {
             variant="outlined"
           >
             <Select
-              value={selectedConfidence || '4'}
+              displayEmpty
+              value={selectedConfidence || ''}
               onChange={handleSelectConfidence}
             >
+              <MenuItem value="" disabled>
+                Confidence
+              </MenuItem>
               {teamConfidence.map((item) => (
                 <MenuItem value={item.value} key={item.value}>
                   {item.label} - {item.value}

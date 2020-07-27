@@ -117,9 +117,14 @@ export default function EditMvpSMForm() {
     };
     if (mood !== 0 && motivation !== 0 && confidence !== 0) {
       const result = await MvpService.addObeya(obeya, mvpInfo.jira.id, sprint);
-      dispatch(setMood(result.data.teamMood));
-      dispatch(setMotivation(result.data.teamMotivation));
-      dispatch(setConfidence(result.data.teamConfidence));
+      if (
+        mvpInfo.jira.currentSprint === sprint ||
+        mvpInfo.jira.currentSprint - 1 === sprint
+      ) {
+        dispatch(setMood(result.data.teamMood));
+        dispatch(setMotivation(result.data.teamMotivation));
+        dispatch(setConfidence(result.data.teamConfidence));
+      }
     }
     dispatch(closeEditMvpSMForm());
   }
@@ -179,7 +184,6 @@ export default function EditMvpSMForm() {
                 onChange={handleChange}
               >
                 <Tab label="OBEYA" />
-                <Tab label="Co-construction game" />
               </Tabs>
               {value === 0 && (
                 <ObeyaForm
@@ -189,7 +193,6 @@ export default function EditMvpSMForm() {
                   sendTeamConfidence={getTeamConfidence}
                 />
               )}
-              {value === 1 && <div>Co-construction game</div>}
             </div>
           )}
         </div>
