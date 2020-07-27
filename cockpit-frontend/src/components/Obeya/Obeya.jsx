@@ -26,6 +26,7 @@ export default function Obeya(props) {
   const motivation = useSelector(motivationState);
   const confidence = useSelector(confidenceState);
   const [display, setDisplay] = useState(true);
+
   useEffect(() => {
     async function getObeya() {
       const sprint = await MvpService.getSprint(
@@ -36,14 +37,13 @@ export default function Obeya(props) {
         if (
           (sprint.data.teamMood &&
             sprint.data.teamMotivation &&
-            sprint.data.teamConfidence) ||
-          selectedTab === 'sprint'
+            sprint.data.teamConfidence) 
         ) {
           setDisplay(false);
           dispatch(setMood(sprint.data.teamMood));
           dispatch(setMotivation(sprint.data.teamMotivation));
           dispatch(setConfidence(sprint.data.teamConfidence));
-        } else if (!selectedTab || selectedTab === 'overview') {
+        } else if (isHomePage || selectedTab === 'overview') {
           const previousSprint = await MvpService.getSprint(
             mvp.jira.id,
             mvp.jira.currentSprint - 1,
@@ -57,7 +57,7 @@ export default function Obeya(props) {
       }
     }
     getObeya();
-  }, [dispatch, mvp, selectedTab]);
+  }, [dispatch, mvp, selectedTab, isHomePage]);
   return (
     <div>
       <Grid container spacing={3}>
