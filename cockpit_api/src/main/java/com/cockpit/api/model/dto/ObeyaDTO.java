@@ -22,23 +22,13 @@ public class ObeyaDTO {
 		return teamMotivation;
 	}
 
-	public void setTeamMotivation(Integer teamMotivation) {
-		this.teamMotivation = teamMotivation;
-	}
-
 	public Integer getTeamMood() {
 		return teamMood;
-	}
-
-	public void setTeamMood(Integer teamMood) {
-		this.teamMood = teamMood;
 	}
 
 	public Integer getTeamConfidence() {
 		return teamConfidence;
 	}
 
-	public void setTeamConfidence(Integer teamConfidence) {
-		this.teamConfidence = teamConfidence;
-	}
+
 }

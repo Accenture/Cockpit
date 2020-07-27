@@ -21,6 +21,7 @@ function MvpInfoPage() {
   const mvpId = useParams().id;
   const mvp = useSelector((state) => mvpSelector(state, mvpId));
   const dispatch = useDispatch();
+  dispatch(setSelectedTab('overview'));
   return (
     <div>
       <Header />
