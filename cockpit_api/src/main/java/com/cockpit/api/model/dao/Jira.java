@@ -4,8 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 
 
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "jira")
@@ -29,7 +28,6 @@ public class Jira{
     private Integer boardId;
 
     @OneToMany(mappedBy = "jira", cascade=CascadeType.ALL)
-    @JsonIgnore
     private Set<Sprint> sprints;
 
     @OneToMany(mappedBy = "jira", cascade=CascadeType.PERSIST)
