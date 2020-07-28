@@ -80,7 +80,6 @@ export default function ObeyaForm(props) {
     <Paper className={classes.paper}>
       <Grid container className={classes.grid} spacing={1}>
         <Grid item xs={4}>
-          <FormLabel className={classes.formLabel}>Mood</FormLabel>
           <FormControl
             className={classes.textField}
             required
@@ -105,7 +104,6 @@ export default function ObeyaForm(props) {
           </FormControl>
         </Grid>
         <Grid item xs={4}>
-          <FormLabel className={classes.formLabel}>Motivation</FormLabel>
           <FormControl
             className={classes.textField}
             required
@@ -130,7 +128,6 @@ export default function ObeyaForm(props) {
           </FormControl>
         </Grid>
         <Grid item xs={4}>
-          <FormLabel className={classes.formLabel}> Confidence</FormLabel>
           <FormControl
             className={classes.textField}
             required
