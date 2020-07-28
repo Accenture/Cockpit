@@ -1,6 +1,7 @@
 package com.cockpit.api.model.dao;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 
@@ -8,7 +9,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "jira")
-public class Jira{
+public class Jira {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +17,7 @@ public class Jira{
 
     @Column(unique = true)
     private String jiraProjectKey;
-    
+
     private Integer currentSprint;
 
     private Integer jiraProjectId;
@@ -24,19 +25,19 @@ public class Jira{
     private Date mvpStartDate;
 
     private Date mvpEndDate;
-    
+
     private Integer boardId;
 
-    @OneToMany(mappedBy = "jira", cascade=CascadeType.ALL)
-    private Set<Sprint> sprints;
+    @OneToMany(mappedBy = "jira", cascade = CascadeType.ALL)
+    private List<Sprint> sprints;
 
-    @OneToMany(mappedBy = "jira", cascade=CascadeType.PERSIST)
+    @OneToMany(mappedBy = "jira", cascade = CascadeType.PERSIST)
     @JsonIgnore
     private Set<UserStory> userStories;
 
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="id_mvp", nullable=false)
+    @JoinColumn(name = "id_mvp", nullable = false)
     @JsonIgnore
     private Mvp mvp;
 
@@ -88,11 +89,14 @@ public class Jira{
         this.mvp = mvp;
     }
 
-    public Set<Sprint> getSprints() {
+    public List<Sprint> getSprints() {
+        orderSprints();
         return sprints;
     }
 
-    public void setSprints(Set<Sprint> sprint) { this.sprints = sprint; }
+    public void setSprints(List<Sprint> sprint) {
+        this.sprints = sprint;
+    }
 
     public Set<UserStory> getUserStories() {
         return userStories;
@@ -102,20 +106,28 @@ public class Jira{
         this.userStories = userStories;
     }
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Integer getBoardId() {
-		return boardId;
-	}
+    public Integer getBoardId() {
+        return boardId;
+    }
 
-	public void setBoardId(Integer boardId) {
-		this.boardId = boardId;
-	}
-	
+    public void setBoardId(Integer boardId) {
+        this.boardId = boardId;
+    }
+
+    public void orderSprints() {
+        Collections.sort(sprints, new Comparator<Sprint>() {
+            @Override
+            public int compare(Sprint p1, Sprint p2) {
+                return p1.getSprintNumber() - p2.getSprintNumber();
+            }
+        });
+    }
 }

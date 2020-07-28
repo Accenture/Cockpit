@@ -28,14 +28,7 @@ import MvpService from '../../services/apiService';
 import { getOneMvp } from '../../redux/ormSlice';
 import { fetchBurnUpData } from '../BurnUpChart/BurnUpChartSlice';
 import ObeyaForm from '../ObeyaForm/ObeyaForm';
-import {
-  moodState,
-  motivationState,
-  confidenceState,
-  setMood,
-  setMotivation,
-  setConfidence,
-} from '../Obeya/ObeyaSlice';
+
 import useStyles from './styles';
 
 export default function EditMvpSMForm() {
@@ -57,13 +50,8 @@ export default function EditMvpSMForm() {
   const urlMvpAvatar = useSelector(imageUrlState);
   const mvpStartDate = useSelector(mvpStartDateState);
   const mvpEndDate = useSelector(mvpEndDateState);
-  const lastMood = useSelector(moodState);
-  const lastMotivation = useSelector(motivationState);
-  const lastConfidence = useSelector(confidenceState);
 
-  let mood = 0;
-  let motivation = 0;
-  let confidence = 0;
+  let sprintToUpdate = {};
   useEffect(() => {
     const list = [];
     for (let i = 1; i <= mvpInfo.sprintNumber; i += 1) {
@@ -107,39 +95,26 @@ export default function EditMvpSMForm() {
       }
     }
   }
-  function getTeamMood(val) {
-    mood = val;
+  function getSprint(val) {
+    sprintToUpdate = val;
   }
-  function getTeamMotivation(val) {
-    motivation = val;
-  }
-  function getTeamConfidence(val) {
-    confidence = val;
-  }
+
   const handleButtonClick = (number) => {
     setSprint(number);
   };
   async function submitSprintInfo(e) {
     e.preventDefault();
-    if (mood === 0) mood = lastMood;
-    if (motivation === 0) motivation = lastMotivation;
-    if (confidence === 0) confidence = lastConfidence;
+
     const obeya = {
-      teamMood: mood,
-      teamMotivation: motivation,
-      teamConfidence: confidence,
+      teamMood: sprintToUpdate.teamMood,
+      teamMotivation: sprintToUpdate.teamMotivation,
+      teamConfidence: sprintToUpdate.teamConfidence,
     };
-    if (mood !== 0 && motivation !== 0 && confidence !== 0) {
-      const result = await MvpService.addObeya(obeya, mvpInfo.jira.id, sprint);
-      if (
-        mvpInfo.jira.currentSprint === sprint ||
-        mvpInfo.jira.currentSprint - 1 === sprint
-      ) {
-        dispatch(setMood(result.data.teamMood));
-        dispatch(setMotivation(result.data.teamMotivation));
-        dispatch(setConfidence(result.data.teamConfidence));
-      }
-    }
+
+    await MvpService.addObeya(obeya, mvpInfo.jira.id, sprint);
+
+    dispatch(getOneMvp(mvpInfo.id));
+
     dispatch(closeEditMvpSMForm());
   }
   const body = (
@@ -200,12 +175,7 @@ export default function EditMvpSMForm() {
                 <Tab label="OBEYA" />
               </Tabs>
               {value === 0 && (
-                <ObeyaForm
-                  sprintNumber={sprint}
-                  sendTeamMood={getTeamMood}
-                  sendTeamMotivation={getTeamMotivation}
-                  sendTeamConfidence={getTeamConfidence}
-                />
+                <ObeyaForm sprintNumber={sprint} sendSprint={getSprint} />
               )}
             </div>
           )}

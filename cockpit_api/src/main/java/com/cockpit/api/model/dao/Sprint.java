@@ -34,7 +34,7 @@ public class Sprint {
     private String state;
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name="id_jira", nullable=false)
+    @JoinColumn(name = "id_jira", nullable = false)
     @JsonIgnore
     private Jira jira;
 
@@ -119,7 +119,7 @@ public class Sprint {
         return totalNbUs;
     }
 
-  
+
     public void setTotalNbUs(Integer totalNbUs) {
         this.totalNbUs = totalNbUs;
     }
@@ -147,4 +147,13 @@ public class Sprint {
     public void setUserStories(Set<UserStory> userStories) {
         this.userStories = userStories;
     }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "id='" + id + '\'' +
+                ", sprintNumber=" + sprintNumber +
+                '}';
+    }
+
 }

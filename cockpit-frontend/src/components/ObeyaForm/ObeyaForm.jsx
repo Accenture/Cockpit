@@ -3,23 +3,15 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import FormLabel from '@material-ui/core/FormLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
 import useStyles from './styles';
-import MvpService from '../../services/apiService';
 import { mvpSelector } from '../../redux/selector';
 
 export default function ObeyaForm(props) {
   const classes = useStyles();
   const { sprintNumber } = props;
-
-  const [selectedMood, setSelectedMood] = useState(0);
-
-  const [selectedMotivation, setSelectedMotivation] = useState(0);
-
-  const [selectedConfidence, setSelectedConfidence] = useState(0);
 
   const teamMood = [
     { value: 4, label: 'Awesome' },
@@ -47,33 +39,38 @@ export default function ObeyaForm(props) {
   ];
   const mvpId = useParams().id;
   const mvp = useSelector((state) => mvpSelector(state, mvpId));
+
+  const [selectedSprint, setSelectedSprint] = useState({});
+
   useEffect(() => {
-    async function getObeya() {
-      const sprint = await MvpService.getSprint(mvp.jira.id, sprintNumber);
-      if (sprint.data) {
-        setSelectedMood(sprint.data.teamMood);
-        setSelectedMotivation(sprint.data.teamMotivation);
-        setSelectedConfidence(sprint.data.teamConfidence);
-      } else {
-        setSelectedMood(null);
-        setSelectedMotivation(null);
-        setSelectedConfidence(null);
-      }
-    }
-    getObeya();
-  }, [mvp, sprintNumber]);
+    const sp = mvp.jira.sprints.find(
+      (sprint) => sprint.sprintNumber === sprintNumber,
+    );
+    setSelectedSprint(sp);
+  }, [sprintNumber]);
+
+  useEffect(() => {
+    props.sendSprint(selectedSprint);
+  }, [selectedSprint]);
+
   const handleSelectMood = (event) => {
-    setSelectedMood(event.target.value);
-    props.sendTeamMood(event.target.value);
+    setSelectedSprint((prevState) => ({
+      ...prevState,
+      teamMood: event.target.value,
+    }));
   };
   const handleSelectMotivation = (event) => {
-    setSelectedMotivation(event.target.value);
-    props.sendTeamMotivation(event.target.value);
+    setSelectedSprint((prevState) => ({
+      ...prevState,
+      teamMotivation: event.target.value,
+    }));
   };
 
   const handleSelectConfidence = (event) => {
-    setSelectedConfidence(event.target.value);
-    props.sendTeamConfidence(event.target.value);
+    setSelectedSprint((prevState) => ({
+      ...prevState,
+      teamConfidence: event.target.value,
+    }));
   };
 
   return (
@@ -89,7 +86,7 @@ export default function ObeyaForm(props) {
           >
             <Select
               displayEmpty
-              value={selectedMood || ''}
+              value={selectedSprint.teamMood || ''}
               onChange={handleSelectMood}
             >
               <MenuItem value="" disabled>
@@ -113,7 +110,7 @@ export default function ObeyaForm(props) {
           >
             <Select
               displayEmpty
-              value={selectedMotivation || ''}
+              value={selectedSprint.teamMotivation || ''}
               onChange={handleSelectMotivation}
             >
               <MenuItem value="" disabled>
@@ -137,7 +134,7 @@ export default function ObeyaForm(props) {
           >
             <Select
               displayEmpty
-              value={selectedConfidence || ''}
+              value={selectedSprint.teamConfidence || ''}
               onChange={handleSelectConfidence}
             >
               <MenuItem value="" disabled>
