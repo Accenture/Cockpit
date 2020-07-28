@@ -57,7 +57,7 @@ public class SprintControllerTest {
 
         // Given
         Mockito.when(jiraService.findJiraById(jira.getId())).thenReturn(modelMapper.map(jira, JiraDTO.class));
-        Mockito.when(sprintService.findByMvpAndSprintNumber(jira, sprint.getSprintNumber())).thenReturn(sprint);
+        Mockito.when(sprintService.findByJiraAndSprintNumber(jira, sprint.getSprintNumber())).thenReturn(sprint);
 
         // When
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/sprint/{jiraId}/updateTeamHealth/{sprintNumber}", jira.getId(), sprint.getSprintNumber())

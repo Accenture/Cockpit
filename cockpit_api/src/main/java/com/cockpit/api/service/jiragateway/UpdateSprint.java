@@ -118,7 +118,13 @@ public class UpdateSprint {
         int sprintNumber = 1;
         List<Sprint> sprints = sprintRepository.findByJiraOrderBySprintNumber(jira);
         for (SprintJira sprintJira : Optional.ofNullable(sprintJiraList).orElse(Collections.emptyList())) {
-            Sprint sprintExist = sprintRepository.findByJiraSprintId(sprintJira.getId());
+            Sprint sprintExist = new Sprint();
+            if (!sprints.isEmpty()) {
+                sprintExist = sprints.stream().filter(
+                        sprint ->
+                            sprint.getJira().getJiraProjectKey() == jira.getJiraProjectKey() &&
+                                    sprint.getJiraSprintId() == sprintJira.getId()).findAny().get();
+            }
             sprintRepository.save(setNewSprint(sprintExist, sprintJira, jira, sprintNumber));
             sprintNumber++;
         }

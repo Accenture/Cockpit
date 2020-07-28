@@ -97,14 +97,14 @@ public class BurnUpChartService {
 
 	private void setTotalStories(BurnUpChartDTO chart, int sprintNumber, Jira jira) {
 
-		Sprint currentSprint = sprintService.findByMvpAndSprintNumber(jira, sprintNumber);
+		Sprint currentSprint = sprintService.findByJiraAndSprintNumber(jira, sprintNumber);
 		if (currentSprint != null) {
 			chart.setTotalStories(currentSprint.getTotalNbUs());
 		}
 	}
 
 	private int calculateActualSprintStories(int sprintNumber, Jira jira) {
-		Sprint sprint = sprintService.findByMvpAndSprintNumber(jira, sprintNumber);
+		Sprint sprint = sprintService.findByJiraAndSprintNumber(jira, sprintNumber);
 		return userStoryService.getMaxNumberOfStoriesForADateOfAnMvp(sprint, jira);
 
 	}
