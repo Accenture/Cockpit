@@ -24,11 +24,6 @@ public class JiraService {
         this.jiraRepository = jiraRepository;
     }
 
-    public List<JiraDTO> findAllJira(){
-        List<Jira> jiraList = jiraRepository.findAllByOrderById();
-        return jiraList.stream().map(jira -> modelMapper.map(jira, JiraDTO.class)).collect(Collectors.toList());
-    }
-
     public JiraDTO createNewJiraProject(JiraDTO jiraDTO){
         Jira jiraCreated = jiraRepository.save(modelMapper.map(jiraDTO, Jira.class));
         return modelMapper.map(jiraCreated, JiraDTO.class);

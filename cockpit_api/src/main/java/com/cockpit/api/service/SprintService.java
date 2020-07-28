@@ -10,9 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class SprintService {
@@ -23,11 +21,6 @@ public class SprintService {
     @Autowired
     public SprintService(SprintRepository sprintRepository) {
         this.sprintRepository = sprintRepository;
-    }
-
-    public List<SprintDTO> getAllSprints(){
-        List<Sprint> sprints = sprintRepository.findAll();
-        return sprints.stream().map(sprint -> modelMapper.map(sprint, SprintDTO.class)).collect(Collectors.toList());
     }
 
     public SprintDTO createNewSprint(SprintDTO sprintDTO){

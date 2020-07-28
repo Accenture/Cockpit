@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class UserStoryService {
@@ -22,11 +21,6 @@ public class UserStoryService {
     @Autowired
     public UserStoryService(UserStoryRepository userStoryRepository) {
         this.userStoryRepository = userStoryRepository;
-    }
-
-    public List<UserStoryDTO> getAllUserStories(){
-        List<UserStory> userStories = userStoryRepository.findAll();
-        return userStories.stream().map(userStory -> modelMapper.map(userStory, UserStoryDTO.class)).collect(Collectors.toList());
     }
 
     public UserStoryDTO createNewUserStory(UserStoryDTO userStoryDTO){
@@ -64,10 +58,10 @@ public class UserStoryService {
 
         return userStoryRepository.countNumberOfClosedUsPerSprint(jira, sprintNumber);
     }
-    public int getMaxNumberOfStoriesForADateOfAnMvp(Sprint sprint, Jira jira) {
+    public int getNumberOfStoriesInOneSprint(Sprint sprint, Jira jira) {
         int totalStories = 0;
         if (jira != null && sprint != null) {
-            List<UserStory> userStoriesList = userStoryRepository.findMyUserStories(jira, sprint.getSprintNumber());
+            List<UserStory> userStoriesList = userStoryRepository.findUserStoriesByJiraAndSprintNumber(jira, sprint.getSprintNumber());
 
             if(userStoriesList != null && !userStoriesList.isEmpty())
             {
@@ -76,9 +70,4 @@ public class UserStoryService {
         }
         return totalStories;
     }
-
-    UserStory findByIssueKey(String issueKey){
-        return userStoryRepository.findByIssueKey(issueKey);
-    }
-
 }
