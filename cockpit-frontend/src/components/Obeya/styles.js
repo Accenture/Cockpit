@@ -4,6 +4,7 @@ export default makeStyles(() => ({
   progress: {
     height: '15px!important',
     borderRadius: '20px',
+    backgroundColor: 'lightgrey',
     '& div': {
       borderRadius: '20px',
     },
@@ -21,5 +22,41 @@ export default makeStyles(() => ({
   subTitle: {
     fontSize: 14,
     textAlign: 'center',
+  },
+  redProgress: {
+    height: '15px!important',
+    borderRadius: '20px',
+    backgroundColor: 'lightgrey',
+    '& div': {
+      borderRadius: '20px',
+      backgroundColor: 'red',
+    },
+  },
+  greenProgress: {
+    height: '15px!important',
+    borderRadius: '20px',
+    backgroundColor: 'lightgrey',
+    '& div': {
+      borderRadius: '20px',
+      backgroundColor: '#32CD32',
+    },
+  },
+  orangeProgress: {
+    height: '15px!important',
+    borderRadius: '20px',
+    backgroundColor: 'lightgrey',
+    '& div': {
+      borderRadius: '20px',
+      backgroundColor: 'orange',
+    },
+  },
+  darGreenProgress: {
+    height: '15px!important',
+    borderRadius: '20px',
+    backgroundColor: 'lightgrey',
+    '& div': {
+      borderRadius: '20px',
+      backgroundColor: '#006400',
+    },
   },
 }));
