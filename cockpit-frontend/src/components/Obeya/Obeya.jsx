@@ -10,14 +10,16 @@ export default function Obeya(props) {
   const [sprint, setSprint] = useState({});
   let sp = {};
   useEffect(() => {
-    sp = mvp.jira.sprints[mvp.jira.sprints.length - 1];
-    if (sp.teamMood && sp.teamMotivation && sp.teamConfidence) {
-      setSprint(sp);
-    } else {
-      sp = mvp.jira.sprints[mvp.jira.sprints.length - 2];
-      setSprint(sp);
+    if (mvp.jira.sprints) {
+      sp = mvp.jira.sprints[mvp.jira.sprints.length - 1];
+      if (sp && sp.teamMood && sp.teamMotivation && sp.teamConfidence) {
+        setSprint(sp);
+      } else if (mvp.jira.sprints && mvp.jira.sprints.length > 1) {
+        sp = mvp.jira.sprints[mvp.jira.sprints.length - 2];
+        setSprint(sp);
+      }
     }
-  }, []);
+  }, [mvp]);
   return (
     <div>
       <Grid container spacing={3}>
@@ -27,12 +29,22 @@ export default function Obeya(props) {
           </Typography>
           <div>
             <LinearProgress
-              className={classes.progress}
+              className={
+                sprint.teamMood === 1
+                  ? classes.redProgress
+                  : sprint.teamMood === 2
+                  ? classes.orangeProgress
+                  : sprint.teamMood === 3
+                  ? classes.greenProgress
+                  : sprint.teamMood === 4
+                  ? classes.darGreenProgress
+                  : classes.progress
+              }
               variant="determinate"
-              value={sprint.teamMood * 25}
+              value={sprint.teamMood * 25 || 0}
             />
             <span className={classes.progressBarTxt} style={{ left: '5%' }}>
-              {sprint.teamMood}
+              {sprint.teamMood || 0}
             </span>
           </div>
         </Grid>
@@ -42,12 +54,22 @@ export default function Obeya(props) {
           </Typography>
           <div>
             <LinearProgress
-              className={classes.progress}
+              className={
+                sprint.teamConfidence === 1
+                  ? classes.redProgress
+                  : sprint.teamConfidence === 2
+                  ? classes.orangeProgress
+                  : sprint.teamConfidence === 3
+                  ? classes.greenProgress
+                  : sprint.teamConfidence === 4
+                  ? classes.darGreenProgress
+                  : classes.progress
+              }
               variant="determinate"
-              value={sprint.teamConfidence * 25}
+              value={sprint.teamConfidence * 25 || 0}
             />
             <span className={classes.progressBarTxt} style={{ left: '5%' }}>
-              {sprint.teamConfidence}
+              {sprint.teamConfidence || 0}
             </span>
           </div>
         </Grid>
@@ -57,12 +79,22 @@ export default function Obeya(props) {
           </Typography>
           <div>
             <LinearProgress
-              className={classes.progress}
+              className={
+                sprint.teamMotivation === 1
+                  ? classes.redProgress
+                  : sprint.teamMotivation === 2
+                  ? classes.orangeProgress
+                  : sprint.teamMotivation === 3
+                  ? classes.greenProgress
+                  : sprint.teamMotivation === 4
+                  ? classes.darGreenProgress
+                  : classes.progress
+              }
               variant="determinate"
-              value={sprint.teamMotivation * 25}
+              value={sprint.teamMotivation * 25 || 0}
             />
             <span className={classes.progressBarTxt} style={{ left: '5%' }}>
-              {sprint.teamMotivation}
+              {sprint.teamMotivation || 0}
             </span>
           </div>
         </Grid>
