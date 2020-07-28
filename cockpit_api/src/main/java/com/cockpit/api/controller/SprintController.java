@@ -112,7 +112,7 @@ public class SprintController {
         if (authService.isUserAuthorized(authHeader)) {
             try {
                 JiraDTO jira = jiraService.findJiraById(jiraId);
-                Sprint sprintFound = sprintService.findByMvpAndSprintNumber(modelMapper.map(jira, Jira.class), sprintNumber);
+                Sprint sprintFound = sprintService.findByJiraAndSprintNumber(modelMapper.map(jira, Jira.class), sprintNumber);
                 return ResponseEntity.ok().body(sprintFound);
             } catch (com.cockpit.api.exception.ResourceNotFoundException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -131,7 +131,7 @@ public class SprintController {
             if (authService.isUserAuthorized(authHeader)) {
                 try {
                     JiraDTO jira = jiraService.findJiraById(jiraId);
-                    Sprint sprintFound = sprintService.findByMvpAndSprintNumber(modelMapper.map(jira, Jira.class), sprintNumber);
+                    Sprint sprintFound = sprintService.findByJiraAndSprintNumber(modelMapper.map(jira, Jira.class), sprintNumber);
                     sprintService.setTeamHealth(obeya, sprintFound);
                     return ResponseEntity.ok().body(sprintFound);
                 } catch (com.cockpit.api.exception.ResourceNotFoundException e) {

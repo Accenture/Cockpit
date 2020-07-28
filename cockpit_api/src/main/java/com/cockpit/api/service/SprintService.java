@@ -70,7 +70,7 @@ public class SprintService {
         }
         return sprintId;
     }
-   public Sprint findByMvpAndSprintNumber(Jira jira, int sprintNumber)
+   public Sprint findByJiraAndSprintNumber(Jira jira, int sprintNumber)
     {
     	return sprintRepository.findByJiraAndSprintNumber(jira, sprintNumber);
     }
