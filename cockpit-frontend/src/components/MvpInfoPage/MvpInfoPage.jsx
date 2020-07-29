@@ -46,7 +46,10 @@ function MvpInfoPage() {
                   onClick={() => {
                     dispatch(setSelectedTab('sprint'));
                   }}
-                  disabled={mvp.jira.currentSprint === 0}
+                  disabled={
+                    mvp.jira.currentSprint === 0 ||
+                    mvp.jira.currentSprint == null
+                  }
                 >
                   Sprint
                 </Button>

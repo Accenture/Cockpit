@@ -10,7 +10,7 @@ export default function Obeya(props) {
   const [sprint, setSprint] = useState({});
 
   useEffect(() => {
-    if (mvp.jira.sprints) {
+    if (mvp.jira.sprints && mvp.jira.currentSprint) {
       const currentSprint = mvp.jira.sprints[mvp.jira.currentSprint - 1];
       if (
         currentSprint &&
