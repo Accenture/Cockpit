@@ -11,7 +11,10 @@ export default makeStyles(() => ({
   },
   listItem: {
     marginTop: 16,
-    color: 'grey',
+    color: 'gray',
     fontWeight: 'bold',
+  },
+  noImpediment: {
+    color: 'gray',
   },
 }));
