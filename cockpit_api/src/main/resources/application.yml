@@ -8,9 +8,9 @@ spring:
     show-sql: false
     hibernate:
       ddl-auto: update
-    event:
-      merge:
-        entity_copy_observer: allow
+      event:
+        merge:
+          entity_copy_observer: allow
   flyway:
     locations: classpath:db/migration
     baseline-on-migrate: true

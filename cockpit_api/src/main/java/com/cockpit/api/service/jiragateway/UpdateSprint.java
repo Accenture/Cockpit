@@ -78,7 +78,7 @@ public class UpdateSprint {
         for (Jira jira : jiraProjectList) {
             List<Sprint> sprintList = sprintRepository.findByJiraOrderBySprintNumber(jira);
             int totalNumberOfUserStoriesUntilCurrentSprint = 0;
-            if (!sprintList.isEmpty()) {
+            if (!sprintList.isEmpty() && sprintList.get(0).getSprintStartDate() != null) {
                 totalNumberOfUserStoriesUntilCurrentSprint = userStoryRepository
                         .countUserStoriesByJiraAndCreationDateBefore(jira,
                                 sprintList.get(0).getSprintStartDate());
