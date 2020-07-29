@@ -23,6 +23,7 @@ spring:
     urlSprints: ${JIRA_HOST_URL}/rest/agile/1.0/board/
     urlIssues: ${JIRA_HOST_URL}/rest/api/2/search?jql=
     urlAllUserStories: ${JIRA_HOST_URL}/rest/api/2/search?maxResults=%s&startAt=%s&jql=issuetype=Story
+    urlSprintReport: ${JIRA_HOST_URL}/rest/greenhopper/1.0/rapid/charts/sprintreport?
   digitalpass:
     isEnabled: false
     userInfoEndpoint: ${DIGITAL_PASS_USER_INFO_ENDPOINT}

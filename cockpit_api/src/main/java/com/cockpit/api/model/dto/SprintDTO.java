@@ -29,9 +29,16 @@ public class SprintDTO {
     private int sprintNumber;
 
     private Jira jira;
+    private Integer notCompletedUsNumber;
 
     private Set<UserStory> userStories;
+    public Integer getNotCompletedUsNumber() {
+        return notCompletedUsNumber;
+    }
 
+    public void setNotCompletedUsNumber(Integer notCompletedUsNumber) {
+        this.notCompletedUsNumber = notCompletedUsNumber;
+    }
     private Set<Impediment> impediments;
 
     public Long getId() {
