@@ -17,9 +17,9 @@ export default function Impediment(props) {
     setImpediments(sp.impediments);
   }, [mvp, sprintNumber]);
   return (
-    <div>
+    <div className={classes.root}>
       {impediments.length > 0 && (
-        <div className={classes.root}>
+        <div>
           <div className={classes.title}>Main impediments</div>
           <List>
             {impediments.map((impediment) => (
@@ -31,6 +31,11 @@ export default function Impediment(props) {
               </div>
             ))}
           </List>
+        </div>
+      )}
+      {impediments.length === 0 && (
+        <div className={classes.noImpediment}>
+          No impediments has been declared for this sprint
         </div>
       )}
     </div>
