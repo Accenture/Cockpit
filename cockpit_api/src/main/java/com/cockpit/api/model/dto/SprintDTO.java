@@ -45,6 +45,8 @@ public class SprintDTO {
     }
     private Set<Impediment> impediments;
 
+    private Set<Impediment> impediments;
+
     public Long getId() {
         return id;
     }
