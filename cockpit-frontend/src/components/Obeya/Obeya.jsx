@@ -7,7 +7,11 @@ import useStyles from './styles';
 export default function Obeya(props) {
   const classes = useStyles();
   const { mvp } = props;
-  const [sprint, setSprint] = useState({});
+  const [sprint, setSprint] = useState({
+    teamMood: 0,
+    teamMotivation: 0,
+    teamCofidence: 0,
+  });
 
   useEffect(() => {
     if (mvp.jira.sprints && mvp.jira.currentSprint) {
@@ -19,9 +23,9 @@ export default function Obeya(props) {
         currentSprint.teamConfidence
       ) {
         setSprint(currentSprint);
-      } else if (mvp.jira.sprints && mvp.jira.sprints.length > 1) {
+      } else if (mvp.jira.sprints.length > 1) {
         const latestSprint = mvp.jira.sprints[mvp.jira.currentSprint - 2];
-        setSprint(latestSprint);
+        if (latestSprint) setSprint(latestSprint);
       }
     }
   }, [mvp]);
