@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import FormControl from '@material-ui/core/FormControl';
@@ -74,81 +73,79 @@ export default function ObeyaForm(props) {
   };
 
   return (
-    <Paper className={classes.paper}>
-      <Grid container className={classes.grid} spacing={1}>
-        <Grid item xs={4}>
-          <FormControl
-            className={classes.textField}
-            required
-            size="small"
-            fullWidth
-            variant="outlined"
+    <Grid container className={classes.grid} spacing={1}>
+      <Grid item xs={4}>
+        <FormControl
+          className={classes.textField}
+          required
+          size="small"
+          fullWidth
+          variant="outlined"
+        >
+          <Select
+            displayEmpty
+            value={selectedSprint.teamMood || ''}
+            onChange={handleSelectMood}
           >
-            <Select
-              displayEmpty
-              value={selectedSprint.teamMood || ''}
-              onChange={handleSelectMood}
-            >
-              <MenuItem value="" disabled>
-                Mood
+            <MenuItem value="" disabled>
+              Mood
+            </MenuItem>
+            {teamMood.map((item) => (
+              <MenuItem value={item.value} key={item.value}>
+                {item.label} - {item.value}
               </MenuItem>
-              {teamMood.map((item) => (
-                <MenuItem value={item.value} key={item.value}>
-                  {item.label} - {item.value}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={4}>
-          <FormControl
-            className={classes.textField}
-            required
-            size="small"
-            fullWidth
-            variant="outlined"
-          >
-            <Select
-              displayEmpty
-              value={selectedSprint.teamMotivation || ''}
-              onChange={handleSelectMotivation}
-            >
-              <MenuItem value="" disabled>
-                Motivation
-              </MenuItem>
-              {teamMotivation.map((item) => (
-                <MenuItem value={item.value} key={item.value}>
-                  {item.label} - {item.value}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={4}>
-          <FormControl
-            className={classes.textField}
-            required
-            size="small"
-            fullWidth
-            variant="outlined"
-          >
-            <Select
-              displayEmpty
-              value={selectedSprint.teamConfidence || ''}
-              onChange={handleSelectConfidence}
-            >
-              <MenuItem value="" disabled>
-                Confidence
-              </MenuItem>
-              {teamConfidence.map((item) => (
-                <MenuItem value={item.value} key={item.value}>
-                  {item.label} - {item.value}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
+            ))}
+          </Select>
+        </FormControl>
       </Grid>
-    </Paper>
+      <Grid item xs={4}>
+        <FormControl
+          className={classes.textField}
+          required
+          size="small"
+          fullWidth
+          variant="outlined"
+        >
+          <Select
+            displayEmpty
+            value={selectedSprint.teamMotivation || ''}
+            onChange={handleSelectMotivation}
+          >
+            <MenuItem value="" disabled>
+              Motivation
+            </MenuItem>
+            {teamMotivation.map((item) => (
+              <MenuItem value={item.value} key={item.value}>
+                {item.label} - {item.value}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
+      <Grid item xs={4}>
+        <FormControl
+          className={classes.textField}
+          required
+          size="small"
+          fullWidth
+          variant="outlined"
+        >
+          <Select
+            displayEmpty
+            value={selectedSprint.teamConfidence || ''}
+            onChange={handleSelectConfidence}
+          >
+            <MenuItem value="" disabled>
+              Confidence
+            </MenuItem>
+            {teamConfidence.map((item) => (
+              <MenuItem value={item.value} key={item.value}>
+                {item.label} - {item.value}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Grid>
+    </Grid>
   );
 }

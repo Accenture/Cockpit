@@ -8,6 +8,7 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Paper from '@material-ui/core/Paper';
 import InformationForm from '../InformationForm/InformationForm';
 import TeamManagementForm from '../TeamManagementForm/TeamManagementForm';
 import {
@@ -28,6 +29,7 @@ import MvpService from '../../services/apiService';
 import { getOneMvp } from '../../redux/ormSlice';
 import { fetchBurnUpData } from '../BurnUpChart/BurnUpChartSlice';
 import ObeyaForm from '../ObeyaForm/ObeyaForm';
+import Impediment from '../Impediment/Impediment';
 
 import useStyles from './styles';
 
@@ -101,6 +103,7 @@ export default function EditMvpSMForm() {
 
   const handleButtonClick = (number) => {
     setSprint(number);
+    setValue(0);
   };
   async function submitSprintInfo(e) {
     e.preventDefault();
@@ -175,7 +178,10 @@ export default function EditMvpSMForm() {
                 <Tab label="OBEYA" />
               </Tabs>
               {value === 0 && (
-                <ObeyaForm sprintNumber={sprint} sendSprint={getSprint} />
+                <Paper className={classes.paper}>
+                  <ObeyaForm sprintNumber={sprint} sendSprint={getSprint} />
+                  <Impediment sprintNumber={sprint} mvp={mvpInfo} />
+                </Paper>
               )}
             </div>
           )}
