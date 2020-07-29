@@ -42,6 +42,9 @@ public class Sprint {
     @JsonIgnore
     private Set<UserStory> userStories;
 
+    @OneToMany(mappedBy = "sprint", cascade = CascadeType.ALL)
+    private Set<Impediment> impediments;
+
     public Long getId() {
         return id;
     }
@@ -146,6 +149,14 @@ public class Sprint {
 
     public void setUserStories(Set<UserStory> userStories) {
         this.userStories = userStories;
+    }
+
+    public Set<Impediment> getImpediments() {
+        return impediments;
+    }
+
+    public void setImpediments(Set<Impediment> impediments) {
+        this.impediments = impediments;
     }
 
     @Override

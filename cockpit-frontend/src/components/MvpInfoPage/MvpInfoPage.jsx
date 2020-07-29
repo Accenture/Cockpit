@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Grid from '@material-ui/core/Grid';
+
 import { useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Obeya from '../Obeya/Obeya';
 import Header from '../Header/Header';
 import { mvpSelector } from '../../redux/selector';
@@ -13,14 +14,13 @@ import TechnologyCard from '../TechnologyCard/TechnologyCard';
 import OverviewSprintTabs from '../OverviewSprintTabs/OverviewSprintTabs';
 import useStyles from './styles';
 import EditMvpSMForm from '../EditMvpSM/EditMvpSM';
-import { setSelectedTab } from './MvpInfoPageSlice';
 
 function MvpInfoPage() {
   const classes = useStyles();
   const mvpId = useParams().id;
   const mvp = useSelector((state) => mvpSelector(state, mvpId));
-  const dispatch = useDispatch();
-  dispatch(setSelectedTab('overview'));
+  const [selectedTab, setSelectedTab] = useState('overview');
+
   return (
     <div>
       <Header />
@@ -37,14 +37,14 @@ function MvpInfoPage() {
               <ButtonGroup color="primary">
                 <Button
                   onClick={() => {
-                    dispatch(setSelectedTab('overview'));
+                    setSelectedTab('overview');
                   }}
                 >
                   Overview
                 </Button>
                 <Button
                   onClick={() => {
-                    dispatch(setSelectedTab('sprint'));
+                    setSelectedTab('sprint');
                   }}
                   disabled={
                     mvp.jira.currentSprint === 0 ||
@@ -58,7 +58,7 @@ function MvpInfoPage() {
             <Grid item xs={4}>
               <Obeya mvp={mvp} />
             </Grid>
-            <OverviewSprintTabs />
+            <OverviewSprintTabs selectedTab={selectedTab} />
           </Grid>
         </Grid>
       </Grid>
