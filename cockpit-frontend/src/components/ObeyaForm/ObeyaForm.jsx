@@ -47,11 +47,11 @@ export default function ObeyaForm(props) {
       (sprint) => sprint.sprintNumber === sprintNumber,
     );
     setSelectedSprint(sp);
-  }, [sprintNumber]);
+  }, [mvp, sprintNumber]);
 
   useEffect(() => {
     props.sendSprint(selectedSprint);
-  }, [selectedSprint]);
+  }, [props, selectedSprint]);
 
   const handleSelectMood = (event) => {
     setSelectedSprint((prevState) => ({
