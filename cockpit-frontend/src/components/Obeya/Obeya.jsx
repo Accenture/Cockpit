@@ -46,7 +46,7 @@ export default function Obeya(props) {
                   : sprint.teamMood === 3
                   ? classes.greenProgress
                   : sprint.teamMood === 4
-                  ? classes.darGreenProgress
+                  ? classes.darkGreenProgress
                   : classes.progress
               }
               variant="determinate"
@@ -71,7 +71,7 @@ export default function Obeya(props) {
                   : sprint.teamConfidence === 3
                   ? classes.greenProgress
                   : sprint.teamConfidence === 4
-                  ? classes.darGreenProgress
+                  ? classes.darkGreenProgress
                   : classes.progress
               }
               variant="determinate"
@@ -96,7 +96,7 @@ export default function Obeya(props) {
                   : sprint.teamMotivation === 3
                   ? classes.greenProgress
                   : sprint.teamMotivation === 4
-                  ? classes.darGreenProgress
+                  ? classes.darkGreenProgress
                   : classes.progress
               }
               variant="determinate"

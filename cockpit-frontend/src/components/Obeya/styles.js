@@ -50,7 +50,7 @@ export default makeStyles(() => ({
       backgroundColor: 'orange',
     },
   },
-  darGreenProgress: {
+  darkGreenProgress: {
     height: '15px!important',
     borderRadius: '20px',
     backgroundColor: 'lightgrey',
