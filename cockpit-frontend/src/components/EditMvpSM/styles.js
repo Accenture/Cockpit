@@ -16,4 +16,10 @@ export default makeStyles(() => ({
   ButtonGroup: {
     marginTop: -2.5,
   },
+  paper: {
+    maxHeight: 400,
+    overflow: 'auto',
+    width: 600,
+    borderRadius: 0,
+  },
 }));

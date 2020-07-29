@@ -48,7 +48,7 @@ function MvpInfoPage() {
                   }}
                   disabled={
                     mvp.jira.currentSprint === 0 ||
-                    mvp.jira.currentSprint == null
+                    mvp.jira.currentSprint === null
                   }
                 >
                   Sprint
