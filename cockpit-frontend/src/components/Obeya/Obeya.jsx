@@ -11,7 +11,7 @@ export default function Obeya(props) {
 
   useEffect(() => {
     if (mvp.jira.sprints) {
-      const currentSprint = mvp.jira.sprints[mvp.jira.sprints.length - 1];
+      const currentSprint = mvp.jira.sprints[mvp.jira.currentSprint - 1];
       if (
         currentSprint &&
         currentSprint.teamMood &&
@@ -20,7 +20,7 @@ export default function Obeya(props) {
       ) {
         setSprint(currentSprint);
       } else if (mvp.jira.sprints && mvp.jira.sprints.length > 1) {
-        const latestSprint = mvp.jira.sprints[mvp.jira.sprints.length - 2];
+        const latestSprint = mvp.jira.sprints[mvp.jira.currentSprint - 2];
         setSprint(latestSprint);
       }
     }
