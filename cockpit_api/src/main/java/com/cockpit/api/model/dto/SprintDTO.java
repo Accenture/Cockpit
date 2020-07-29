@@ -1,5 +1,6 @@
 package com.cockpit.api.model.dto;
 
+import com.cockpit.api.model.dao.Impediment;
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.UserStory;
 import java.util.Date;
@@ -30,6 +31,8 @@ public class SprintDTO {
     private Jira jira;
 
     private Set<UserStory> userStories;
+
+    private Set<Impediment> impediments;
 
     public Long getId() {
         return id;
@@ -129,4 +132,11 @@ public class SprintDTO {
         this.userStories = userStories;
     }
 
+    public Set<Impediment> getImpediments() {
+        return impediments;
+    }
+
+    public void setImpediments(Set<Impediment> impediments) {
+        this.impediments = impediments;
+    }
 }

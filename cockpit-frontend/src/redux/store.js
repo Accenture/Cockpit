@@ -13,7 +13,7 @@ import smFormReducer from '../components/ScrumMasterForm/ScrumMasterFormSlice';
 import editMvpFormReducer from '../components/InformationForm/InformationFormSlice';
 import teamManagementFormReducer from '../components/TeamManagementForm/TeamManagementFormSlice';
 import burnUpChartReducer from '../components/BurnUpChart/BurnUpChartSlice';
-import obeyaReducer from '../components/Obeya/ObeyaSlice';
+// import obeyaReducer from '../components/Obeya/ObeyaSlice';
 import mvpInfoReducer from '../components/MvpInfoPage/MvpInfoPageSlice';
 
 const persistConfig = {
@@ -29,7 +29,7 @@ const reducers = combineReducers({
   InformationForm: editMvpFormReducer,
   TeamManagementForm: teamManagementFormReducer,
   BurnUpChart: burnUpChartReducer,
-  Obeya: obeyaReducer,
+  // Obeya: obeyaReducer,
   MvpInfoPage: mvpInfoReducer,
 });
 
