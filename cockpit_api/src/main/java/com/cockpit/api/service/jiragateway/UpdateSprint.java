@@ -4,6 +4,8 @@ import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Sprint;
 import com.cockpit.api.model.dto.jira.SprintHeaders;
 import com.cockpit.api.model.dto.jira.SprintJira;
+import com.cockpit.api.model.dto.jira.SprintReport;
+import com.cockpit.api.model.dto.jira.SprintReportIssue;
 import com.cockpit.api.repository.JiraRepository;
 import com.cockpit.api.repository.SprintRepository;
 import com.cockpit.api.repository.UserStoryRepository;
@@ -51,6 +53,9 @@ public class UpdateSprint {
 
     @Value("${spring.jira.urlSprints}")
     private String urlSprints;
+
+    @Value("${spring.jira.urlSprintReport}")
+    private String urlSprintReport;
 
     @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = ONE_HOUR)
     public void updateSprintsForEachProject() {
@@ -103,6 +108,36 @@ public class UpdateSprint {
         log.info("Sprint - End update TotalNbUserStory for each sprint");
     }
 
+    @Scheduled(initialDelay = 5 * ONE_SECOND, fixedDelay = ONE_HOUR)
+    public void updateNotCompletedUsNumberInSprint() throws Exception {
+        log.info("Sprint - Start update nbUsNotCompleted for each sprint");
+        List<Jira> jiraProjectList = jiraRepository.findAllByOrderById();
+        for (Jira jira : jiraProjectList) {
+            List<Sprint> sprintList = sprintRepository.findByJiraOrderBySprintNumber(jira);
+            for (Sprint sprint : sprintList) {
+                List<SprintReportIssue> sprintReportIssues = getSprintReport(jira.getBoardId(), sprint.getJiraSprintId());
+                int nbNotCompletedUserStories = (int) sprintReportIssues.stream().filter(sprintReportIssue -> sprintReportIssue.getTypeName().equals("Story")).count();
+                sprint.setNotCompletedUsNumber(nbNotCompletedUserStories);
+                try {
+                    sprintRepository.save(sprint);
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                }
+            }
+        }
+        log.info("Sprint - End update nbUsNotCompleted for each sprint");
+
+    }
+
+    public List<SprintReportIssue> getSprintReport(int jiraBoardId, int sprint) throws Exception {
+        ResponseEntity<SprintReport> result = (ResponseEntity<SprintReport>) configurationJiraAPIs.callJira(
+                urlSprintReport + "rapidViewId=" + jiraBoardId + "&sprintId=" + sprint, SprintReport.class.getName());
+        List<SprintReportIssue> sprintReportIssues = null;
+        if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
+            sprintReportIssues = (result.getBody().getContents().getIssuesNotCompletedInCurrentSprint());
+        }
+        return sprintReportIssues;
+    }
 
     public List<SprintJira> getSprintsFromJira(int boardId, String urlSprints) throws Exception {
         ResponseEntity<SprintHeaders> result = (ResponseEntity<SprintHeaders>) configurationJiraAPIs.callJira(
@@ -122,8 +157,8 @@ public class UpdateSprint {
             if (!sprints.isEmpty()) {
                 sprintExist = sprints.stream().filter(
                         sprint ->
-                            sprint.getJira().getJiraProjectKey() == jira.getJiraProjectKey() &&
-                                    sprint.getJiraSprintId() == sprintJira.getId()).findAny().get();
+                                sprint.getJira().getJiraProjectKey() == jira.getJiraProjectKey() &&
+                                        sprint.getJiraSprintId() == sprintJira.getId()).findAny().get();
             }
             sprintRepository.save(setNewSprint(sprintExist, sprintJira, jira, sprintNumber));
             sprintNumber++;
@@ -144,6 +179,9 @@ public class UpdateSprint {
             }
             if (sprintExist.getTeamConfidence() != null) {
                 newSprint.setTeamConfidence(sprintExist.getTeamConfidence());
+            }
+            if (sprintExist.getNotCompletedUsNumber() != null) {
+                newSprint.setNotCompletedUsNumber(sprintExist.getNotCompletedUsNumber());
             }
         }
         newSprint.setJiraSprintId(sprintJira.getId());
@@ -185,4 +223,5 @@ public class UpdateSprint {
             }
         }
     }
+
 }
