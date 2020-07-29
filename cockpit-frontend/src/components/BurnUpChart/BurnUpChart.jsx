@@ -142,13 +142,13 @@ export default function BurnUpChart() {
           );
         }
         if (itemId.datasetIndex === 2) {
-          setText(
-            'reflects the total of [the US done in the previous sprints + the average]',
-          );
+          setText('reflects the sum of users stories in backlog');
         }
 
         if (itemId.datasetIndex === 3) {
-          setText('reflects the sum of users stories in backlog');
+          setText(
+            'reflects the total of [the US done in the previous sprints + the average]',
+          );
         }
         if (itemId.datasetIndex === 4) {
           setText(

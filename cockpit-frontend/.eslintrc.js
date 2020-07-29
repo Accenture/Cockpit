@@ -28,7 +28,7 @@ module.exports = {
     'import/no-named-as-default': 0,
     'import/prefer-default-export': 0,
     'no-param-reassign':0,
-    'no-nested-ternary': [4, {allowParensWrapped: true}]
+    'no-nested-ternary': 0
   },
   env: {
     jest: true,
