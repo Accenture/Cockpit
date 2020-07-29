@@ -13,5 +13,5 @@ public interface SprintRepository extends CrudRepository<Sprint, Long> {
 	Sprint findTopBySprintStartDateLessThanEqualAndJiraEqualsOrderBySprintNumberDesc(Date date, Jira jira);
     Sprint findByJiraAndSprintNumber(Jira jira, int sprintNumber);
     List<Sprint> findByJiraOrderBySprintNumber(Jira jira);
-    List<Sprint> findAll();
+    List<Sprint> findAllByOrderById();
 }

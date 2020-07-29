@@ -1,5 +1,6 @@
 package com.cockpit.api.service.jiragateway;
 
+import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Sprint;
 import com.cockpit.api.model.dao.UserStory;
 import com.cockpit.api.model.dto.jira.*;
@@ -57,14 +58,16 @@ public class UpdateUserStory {
     @Scheduled(initialDelay = 15 * ONE_SECOND, fixedDelay = ONE_HOUR)
     public void updateUserStoryInDBFromJira() {
         log.info("UserStory - Start update user stories");
-        List<Sprint> sprintList;
         try {
-            sprintList = sprintRepository.findAll();
+            List<Sprint> sprintList = sprintRepository.findAllByOrderById();
+            List<Jira>  jiraList = jiraRepository.findAllByOrderById();
             for (Sprint sprint : Optional.ofNullable(sprintList).orElse(Collections.emptyList())) {
                 updateUserStoryInDBForASprintFromJira(sprint, urlIssues);
             }
-            if (!sprintList.isEmpty()) {
-                updateUserStoryInDBForBakclogFromJira(sprintList.get(0).getJira().getJiraProjectKey(), urlIssues);
+            for (Jira jira: jiraList) {
+                if (jira != null && jira.getJiraProjectKey() != null) {
+                    updateUserStoryInDBForBakclogFromJira(jira.getJiraProjectKey(), urlIssues);
+                }
             }
         } catch (Exception e) {
             log.error(e.getMessage());

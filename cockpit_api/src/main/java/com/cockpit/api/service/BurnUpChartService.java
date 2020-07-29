@@ -67,7 +67,7 @@ public class BurnUpChartService {
 			int actualSprintStories = calculateActualSprintStories(sprintNumber, jira);
 			Integer numberOfUsClosed = userStoryService.findSumOfUsClosedForSprint(jira, sprintNumber);
 			totalUSNumber = totalUSNumber + actualSprintStories;
-			setExpected(chart, totalUSNumber);
+			setExpected(chart, totalUSNumber, actualSprintStories, sprintNumber, jira);
 			if (chart.getUsClosed() != null) {
 				rate = ((double) numberOfUsClosed / (sprintNumber + 1));
 				lastNbUsClosed = numberOfUsClosed;
@@ -108,7 +108,15 @@ public class BurnUpChartService {
 		return userStoryService.getNumberOfStoriesInOneSprint(sprint, jira);
 	}
 
-	private void setExpected(BurnUpChartDTO chart, int totalUSNumber) {
-		chart.setExpectedUsClosed(totalUSNumber);
+	private void setExpected(BurnUpChartDTO chart, int totalUSNumber,
+							 int actualSprintStories, int sprintNumber,
+							 Jira jira) {
+		if (actualSprintStories != 0) {
+			chart.setExpectedUsClosed(totalUSNumber);
+		} else if (jira.getCurrentSprint() != null && sprintNumber <= jira.getCurrentSprint()) {
+			chart.setExpectedUsClosed(totalUSNumber);
+		} else {
+			chart.setExpectedUsClosed(null);
+		}
 	}
 }
