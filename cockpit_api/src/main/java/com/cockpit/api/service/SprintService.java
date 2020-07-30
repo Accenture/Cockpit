@@ -56,12 +56,11 @@ public class SprintService {
 
     public int findSprintNumberForADate(Jira jira, Date date) {
         Sprint sprint = sprintRepository.findTopBySprintStartDateLessThanEqualAndJiraEqualsOrderBySprintNumberDesc(date, jira);
-        int sprintId = 0;
+        int sprintNumber = 0;
         if (sprint != null) {
-            sprintId = sprint.getSprintNumber();
-
+            sprintNumber = sprint.getSprintNumber();
         }
-        return sprintId;
+        return sprintNumber;
     }
    public Sprint findByJiraAndSprintNumber(Jira jira, int sprintNumber)
     {

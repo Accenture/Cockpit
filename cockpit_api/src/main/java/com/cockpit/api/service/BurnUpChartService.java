@@ -49,7 +49,7 @@ public class BurnUpChartService {
 		MvpDTO mvpDto = mvpService.findMvpById(id);
 		Mvp mvp = modelMapper.map(mvpDto, Mvp.class);
 		Jira jira = jiraService.findByMvp(mvp);
-		double rate = 0.0;
+		double rate = 0;
 		long lastNbUsClosed = 0;
 		int iteration = 1;
 		double projection = 0;
@@ -62,17 +62,20 @@ public class BurnUpChartService {
 			BurnUpChartDTO chart = new BurnUpChartDTO();
 
 			chart.setSprintId(sprintNumber);
-			setTotalStories(chart, sprintNumber, jira);
-			setUsClosed(chart, sprintNumber, jira);
-			int actualSprintStories = calculateActualSprintStories(sprintNumber, jira);
+			Sprint thisSprint = sprintService.findByJiraAndSprintNumber(jira, sprintNumber);
+			int actualSprintStories = userStoryService.getNumberOfStoriesInOneSprint(thisSprint, jira);
 			Integer numberOfUsClosed = userStoryService.findSumOfUsClosedForSprint(jira, sprintNumber);
 			totalUSNumber = totalUSNumber + actualSprintStories;
-			setExpected(chart, totalUSNumber, actualSprintStories, sprintNumber, jira);
+
+			setTotalStories(chart, sprintNumber, jira);
+			setUsClosed(chart, sprintNumber, jira, numberOfUsClosed);
+			setExpected(chart, totalUSNumber, sprintNumber, jira, numberOfUsClosed, thisSprint);
+
+			// Set projection
 			if (chart.getUsClosed() != null) {
 				rate = ((double) numberOfUsClosed / (sprintNumber + 1));
 				lastNbUsClosed = numberOfUsClosed;
-			}
-			if (chart.getUsClosed() == null) {
+			} else {
 				projection = lastNbUsClosed + iteration * rate;
 				chart.setProjectionUsClosed(projection);
 				iteration++;
@@ -80,14 +83,14 @@ public class BurnUpChartService {
 			if (sprintNumber == sprintService.findSprintNumberForADate(jira, Calendar.getInstance().getTime())) {
 				chart.setProjectionUsClosed((double) lastNbUsClosed);
 			}
+
 			chartDataList.add(chart);
 		}
 		return chartDataList;
 
 	}
 
-	private void setUsClosed(BurnUpChartDTO chart, int sprintNumber, Jira jira) {
-		Integer numberOfUsClosed = userStoryService.findSumOfUsClosedForSprint(jira, sprintNumber);
+	private void setUsClosed(BurnUpChartDTO chart, int sprintNumber, Jira jira, int numberOfUsClosed) {
 		int sprintN = sprintService.findSprintNumberForADate(jira, Calendar.getInstance().getTime());
 		if (sprintNumber <= sprintN) {
 			chart.setUsClosed(numberOfUsClosed);
@@ -103,17 +106,11 @@ public class BurnUpChartService {
 		}
 	}
 
-	private int calculateActualSprintStories(int sprintNumber, Jira jira) {
-		Sprint sprint = sprintService.findByJiraAndSprintNumber(jira, sprintNumber);
-		return userStoryService.getNumberOfStoriesInOneSprint(sprint, jira);
-	}
-
-	private void setExpected(BurnUpChartDTO chart, int totalUSNumber,
-							 int actualSprintStories, int sprintNumber,
-							 Jira jira) {
-		if (actualSprintStories != 0) {
-			chart.setExpectedUsClosed(totalUSNumber);
-		} else if (jira.getCurrentSprint() != null && sprintNumber <= jira.getCurrentSprint()) {
+	private void setExpected(BurnUpChartDTO chart, int totalUSNumber, int sprintNumber,
+							 Jira jira, int numberOfUsClosed, Sprint sprint) {
+		if (jira.getCurrentSprint() != null && sprintNumber <= jira.getCurrentSprint()) {
+			chart.setExpectedUsClosed(numberOfUsClosed + sprint.getNotCompletedUsNumber());
+		} else if (sprint != null) {
 			chart.setExpectedUsClosed(totalUSNumber);
 		} else {
 			chart.setExpectedUsClosed(null);
