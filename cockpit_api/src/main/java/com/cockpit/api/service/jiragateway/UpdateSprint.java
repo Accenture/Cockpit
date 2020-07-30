@@ -180,6 +180,9 @@ public class UpdateSprint {
             if (sprintExist.getTeamConfidence() != null) {
                 newSprint.setTeamConfidence(sprintExist.getTeamConfidence());
             }
+            if (sprintExist.getTotalNbUs() != null) {
+                newSprint.setTotalNbUs(sprintExist.getTotalNbUs());
+            }
             if (sprintExist.getNotCompletedUsNumber() != null) {
                 newSprint.setNotCompletedUsNumber(sprintExist.getNotCompletedUsNumber());
             }
