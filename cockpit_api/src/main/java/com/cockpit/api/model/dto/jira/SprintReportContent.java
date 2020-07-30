@@ -8,9 +8,13 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+        "completedIssues",
         "issuesNotCompletedInCurrentSprint"
 })
 public class SprintReportContent {
+
+    @JsonProperty("completedIssues")
+    private List<SprintReportIssue> completedIssues;
 
     @JsonProperty("issuesNotCompletedInCurrentSprint")
     private List<SprintReportIssue> issuesNotCompletedInCurrentSprint;
@@ -26,6 +30,16 @@ public class SprintReportContent {
     @JsonProperty("issuesNotCompletedInCurrentSprint")
     public void setIssuesNotCompletedInCurrentSprint(List<SprintReportIssue> issuesNotCompletedInCurrentSprint) {
         this.issuesNotCompletedInCurrentSprint = issuesNotCompletedInCurrentSprint;
+    }
+
+    @JsonProperty("completedIssues")
+    public List<SprintReportIssue> getCompletedIssues() {
+        return completedIssues;
+    }
+
+    @JsonProperty("completedIssues")
+    public void setCompletedIssues(List<SprintReportIssue> completedIssues) {
+        this.completedIssues = completedIssues;
     }
 
     @JsonAnyGetter

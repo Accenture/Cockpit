@@ -2,10 +2,7 @@ package com.cockpit.api.service.jiragateway;
 
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Sprint;
-import com.cockpit.api.model.dto.jira.SprintHeaders;
-import com.cockpit.api.model.dto.jira.SprintJira;
-import com.cockpit.api.model.dto.jira.SprintReport;
-import com.cockpit.api.model.dto.jira.SprintReportIssue;
+import com.cockpit.api.model.dto.jira.*;
 import com.cockpit.api.repository.JiraRepository;
 import com.cockpit.api.repository.SprintRepository;
 import com.cockpit.api.repository.UserStoryRepository;
@@ -109,15 +106,17 @@ public class UpdateSprint {
     }
 
     @Scheduled(initialDelay = 90 * ONE_SECOND, fixedDelay = ONE_HOUR)
-    public void updateNotCompletedUsNumberInSprint() throws Exception {
-        log.info("Sprint - Start update nbUsNotCompleted for each sprint");
+    public void updateSumForCompletedIssuesAndSumForNotCompletedIssuesInSprint() throws Exception {
+        log.info("Sprint - Start update nb of completed/not completed for each sprint");
         List<Jira> jiraProjectList = jiraRepository.findAllByOrderById();
         for (Jira jira : jiraProjectList) {
             List<Sprint> sprintList = sprintRepository.findByJiraOrderBySprintNumber(jira);
             for (Sprint sprint : sprintList) {
-                List<SprintReportIssue> sprintReportIssues = getSprintReport(jira.getBoardId(), sprint.getJiraSprintId());
-                int nbNotCompletedUserStories = (int) sprintReportIssues.stream().filter(sprintReportIssue -> sprintReportIssue.getTypeName().equals("Story")).count();
+                SprintReportContent sprintReportContent = getSprintReport(jira.getBoardId(), sprint.getJiraSprintId());
+                int nbNotCompletedUserStories = (int) sprintReportContent.getIssuesNotCompletedInCurrentSprint().stream().filter(sprintReportIssue -> sprintReportIssue.getTypeName().equals("Story")).count();
+                int nbCompletedUserStories = (int) sprintReportContent.getCompletedIssues().stream().filter(sprintReportIssue -> sprintReportIssue.getTypeName().equals("Story")).count();
                 sprint.setNotCompletedUsNumber(nbNotCompletedUserStories);
+                sprint.setCompletedUsNumber(nbCompletedUserStories);
                 try {
                     sprintRepository.save(sprint);
                 } catch (Exception e) {
@@ -125,16 +124,16 @@ public class UpdateSprint {
                 }
             }
         }
-        log.info("Sprint - End update nbUsNotCompleted for each sprint");
+        log.info("Sprint - End update nb of completed/not completed for each sprint");
 
     }
 
-    public List<SprintReportIssue> getSprintReport(int jiraBoardId, int sprint) throws Exception {
+    public SprintReportContent getSprintReport(int jiraBoardId, int sprint) throws Exception {
         ResponseEntity<SprintReport> result = (ResponseEntity<SprintReport>) configurationJiraAPIs.callJira(
                 urlSprintReport + "rapidViewId=" + jiraBoardId + "&sprintId=" + sprint, SprintReport.class.getName());
-        List<SprintReportIssue> sprintReportIssues = null;
+        SprintReportContent sprintReportIssues = null;
         if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
-            sprintReportIssues = (result.getBody().getContents().getIssuesNotCompletedInCurrentSprint());
+            sprintReportIssues = (result.getBody().getContents());
         }
         return sprintReportIssues;
     }
@@ -185,6 +184,9 @@ public class UpdateSprint {
             }
             if (sprintExist.getNotCompletedUsNumber() != null) {
                 newSprint.setNotCompletedUsNumber(sprintExist.getNotCompletedUsNumber());
+            }
+            if (sprintExist.getCompletedUsNumber() != null) {
+                newSprint.setCompletedUsNumber(sprintExist.getCompletedUsNumber());
             }
         }
         newSprint.setJiraSprintId(sprintJira.getId());

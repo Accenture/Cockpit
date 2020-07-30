@@ -54,10 +54,6 @@ public class UserStoryService {
         userStoryRepository.delete(userStoryToDelete.get());
     }
 
-    public Integer findSumOfUsClosedForSprint(Jira jira, int sprintNumber) {
-
-        return userStoryRepository.countNumberOfClosedUsPerSprint(jira, sprintNumber);
-    }
     public int getNumberOfStoriesInOneSprint(Sprint sprint, Jira jira) {
         int totalStories = 0;
         if (jira != null && sprint != null) {
