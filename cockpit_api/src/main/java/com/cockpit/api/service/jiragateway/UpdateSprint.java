@@ -108,7 +108,7 @@ public class UpdateSprint {
         log.info("Sprint - End update TotalNbUserStory for each sprint");
     }
 
-    @Scheduled(initialDelay = 5 * ONE_SECOND, fixedDelay = ONE_HOUR)
+    @Scheduled(initialDelay = 90 * ONE_SECOND, fixedDelay = ONE_HOUR)
     public void updateNotCompletedUsNumberInSprint() throws Exception {
         log.info("Sprint - Start update nbUsNotCompleted for each sprint");
         List<Jira> jiraProjectList = jiraRepository.findAllByOrderById();
