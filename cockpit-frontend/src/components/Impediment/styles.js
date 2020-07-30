@@ -17,4 +17,16 @@ export default makeStyles(() => ({
   noImpediment: {
     color: 'gray',
   },
+  addButton: {
+    borderRadius: 20,
+    textTransform: 'capitalize',
+    margin: '32px 0',
+  },
+  formLabel: {
+    fontWeight: 'bold',
+  },
+  textField: {
+    marginTop: 8,
+    marginBottom: 8,
+  },
 }));
