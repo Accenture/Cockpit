@@ -55,6 +55,7 @@ public class BurnUpChartService {
 		double projection = 0;
 		int totalUSNumber = 0;
 		int maxSprintNumber = 12;
+		Integer numberOfUsClosed = 0;
 		if (mvp.getSprintNumber() != null) {
 			maxSprintNumber = mvp.getSprintNumber();
 		}
@@ -64,7 +65,7 @@ public class BurnUpChartService {
 			chart.setSprintId(sprintNumber);
 			Sprint thisSprint = sprintService.findByJiraAndSprintNumber(jira, sprintNumber);
 			int actualSprintStories = userStoryService.getNumberOfStoriesInOneSprint(thisSprint, jira);
-			Integer numberOfUsClosed = userStoryService.findSumOfUsClosedForSprint(jira, sprintNumber);
+			numberOfUsClosed = numberOfUsClosed + thisSprint.getCompletedUsNumber();
 			totalUSNumber = totalUSNumber + actualSprintStories;
 
 			setTotalStories(chart, sprintNumber, jira);

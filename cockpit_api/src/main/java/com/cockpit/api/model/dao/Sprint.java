@@ -32,7 +32,10 @@ public class Sprint {
     private int sprintNumber;
 
     private String state;
+
     private Integer notCompletedUsNumber;
+
+    private Integer completedUsNumber;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "id_jira", nullable = false)
@@ -168,6 +171,13 @@ public class Sprint {
         this.notCompletedUsNumber = notCompletedUsNumber;
     }
 
+    public Integer getCompletedUsNumber() {
+        return completedUsNumber;
+    }
+
+    public void setCompletedUsNumber(Integer completedUsNumber) {
+        this.completedUsNumber = completedUsNumber;
+    }
     @Override
     public String toString() {
         return "{" +
