@@ -8,7 +8,6 @@ import Box from '@material-ui/core/Box';
 import moment from 'moment/moment';
 import BurnUpChart from '../BurnUpChart/BurnUpChart';
 import MvpService from '../../services/apiService';
-
 import { mvpSelector } from '../../redux/selector';
 
 // styles
@@ -62,6 +61,7 @@ export default function OverviewSprintTabs(props) {
 
     const sprint = await MvpService.getSprint(mvp.jira.id, event.target.value);
     if (sprint.data) {
+      props.sendSprint(sprint.data);
       setStartDate(sprint.data.sprintStartDate);
       if (event.target.value !== mvp.jira.currentSprint) {
         setEndDate(sprint.data.sprintCompleteDate);

@@ -28,7 +28,11 @@ export default function Obeya(props) {
         if (latestSprint) setSprint(latestSprint);
       }
     }
-  }, [mvp]);
+    const sp = props.sprint;
+    if (sp) {
+      setSprint(sp);
+    }
+  }, [props, mvp]);
   return (
     <div>
       <Grid container spacing={3}>

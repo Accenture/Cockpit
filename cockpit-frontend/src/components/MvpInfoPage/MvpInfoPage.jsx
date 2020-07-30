@@ -20,7 +20,10 @@ function MvpInfoPage() {
   const mvpId = useParams().id;
   const mvp = useSelector((state) => mvpSelector(state, mvpId));
   const [selectedTab, setSelectedTab] = useState('overview');
-
+  const [selectedSprint, setSelectedSprint] = useState(null);
+  function getSprint(sprint) {
+    setSelectedSprint(sprint);
+  }
   return (
     <div>
       <Header />
@@ -38,6 +41,7 @@ function MvpInfoPage() {
                 <Button
                   onClick={() => {
                     setSelectedTab('overview');
+                    setSelectedSprint(null);
                   }}
                 >
                   Overview
@@ -56,9 +60,12 @@ function MvpInfoPage() {
               </ButtonGroup>
             </Grid>
             <Grid item xs={4}>
-              <Obeya mvp={mvp} />
+              <Obeya mvp={mvp} sprint={selectedSprint} />
             </Grid>
-            <OverviewSprintTabs selectedTab={selectedTab} />
+            <OverviewSprintTabs
+              selectedTab={selectedTab}
+              sendSprint={getSprint}
+            />
           </Grid>
         </Grid>
       </Grid>
