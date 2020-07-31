@@ -1,16 +1,20 @@
 package com.cockpit.api.service;
 
 import com.cockpit.api.exception.ResourceNotFoundException;
+import com.cockpit.api.model.dao.Impediment;
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Sprint;
+import com.cockpit.api.model.dto.ImpedimentDTO;
 import com.cockpit.api.model.dto.ObeyaDTO;
 import com.cockpit.api.model.dto.SprintDTO;
 import com.cockpit.api.repository.SprintRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.Date;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class SprintService {
@@ -23,7 +27,7 @@ public class SprintService {
         this.sprintRepository = sprintRepository;
     }
 
-    public SprintDTO createNewSprint(SprintDTO sprintDTO){
+    public SprintDTO createNewSprint(SprintDTO sprintDTO) {
         Sprint sprintCreated = sprintRepository.save(modelMapper.map(sprintDTO, Sprint.class));
         return modelMapper.map(sprintCreated, SprintDTO.class);
     }
@@ -62,16 +66,23 @@ public class SprintService {
         }
         return sprintNumber;
     }
-   public Sprint findByJiraAndSprintNumber(Jira jira, int sprintNumber)
-    {
-    	return sprintRepository.findByJiraAndSprintNumber(jira, sprintNumber);
-    }
-public SprintDTO setTeamHealth(ObeyaDTO obeya, Sprint sprint)
-{
-    sprint.setTeamMood(obeya.getTeamMood());
-    sprint.setTeamMotivation(obeya.getTeamMotivation());
-    sprint.setTeamConfidence(obeya.getTeamConfidence());
-    return modelMapper.map(sprintRepository.save(sprint), SprintDTO.class);
 
-}
+    public Sprint findByJiraAndSprintNumber(Jira jira, int sprintNumber) {
+        return sprintRepository.findByJiraAndSprintNumber(jira, sprintNumber);
+    }
+
+    public SprintDTO setTeamHealth(ObeyaDTO obeya, Sprint sprint) {
+        sprint.setTeamMood(obeya.getTeamMood());
+        sprint.setTeamMotivation(obeya.getTeamMotivation());
+        sprint.setTeamConfidence(obeya.getTeamConfidence());
+        return modelMapper.map(sprintRepository.save(sprint), SprintDTO.class);
+
+    }
+
+    public SprintDTO addImpediment(ImpedimentDTO impediment, Sprint sprint) {
+        Set<Impediment> impediments=sprint.getImpediments();
+        impediments.add(modelMapper.map(impediment, Impediment.class));
+        sprint.setImpediments(impediments);
+        return modelMapper.map(sprintRepository.save(sprint), SprintDTO.class);
+    }
 }

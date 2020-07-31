@@ -1,5 +1,5 @@
 package com.cockpit.api.controller;
-
+import com.cockpit.api.model.dto.ImpedimentDTO;
 import com.cockpit.api.model.dto.ObeyaDTO;
 import com.cockpit.api.service.AuthService;
 import org.modelmapper.ModelMapper;
@@ -128,18 +128,37 @@ public class SprintController {
     )
     public ResponseEntity updateTeamHealth(@RequestBody ObeyaDTO obeya, @PathVariable Long jiraId, @PathVariable int sprintNumber, @RequestHeader("Authorization") String authHeader) {
 
-            if (authService.isUserAuthorized(authHeader)) {
-                try {
-                    JiraDTO jira = jiraService.findJiraById(jiraId);
-                    Sprint sprintFound = sprintService.findByJiraAndSprintNumber(modelMapper.map(jira, Jira.class), sprintNumber);
-                    sprintService.setTeamHealth(obeya, sprintFound);
-                    return ResponseEntity.ok().body(sprintFound);
-                } catch (com.cockpit.api.exception.ResourceNotFoundException e) {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-                }
+        if (authService.isUserAuthorized(authHeader)) {
+            try {
+                JiraDTO jira = jiraService.findJiraById(jiraId);
+                Sprint sprintFound = sprintService.findByJiraAndSprintNumber(modelMapper.map(jira, Jira.class), sprintNumber);
+                sprintService.setTeamHealth(obeya, sprintFound);
+                return ResponseEntity.ok().body(sprintFound);
+            } catch (com.cockpit.api.exception.ResourceNotFoundException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
             }
-            else {
-                return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
-            }
+        } else {
+            return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
         }
     }
+
+    // ADD impediment to sprint
+    @PutMapping(
+            value = "/api/v1/sprint/{jiraId}/addImpediment/{sprintNumber}"
+    )
+    public ResponseEntity addImpediment(@RequestBody ImpedimentDTO impediment, @PathVariable Long jiraId, @PathVariable int sprintNumber, @RequestHeader("Authorization") String authHeader) {
+
+        if (authService.isUserAuthorized(authHeader)) {
+            try {
+                JiraDTO jira = jiraService.findJiraById(jiraId);
+                Sprint sprintFound = sprintService.findByJiraAndSprintNumber(modelMapper.map(jira, Jira.class), sprintNumber);
+                SprintDTO sprint = sprintService.addImpediment(impediment, sprintFound);
+                return ResponseEntity.ok().body(sprint);
+            } catch (com.cockpit.api.exception.ResourceNotFoundException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            }
+        } else {
+            return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
+        }
+    }
+}
