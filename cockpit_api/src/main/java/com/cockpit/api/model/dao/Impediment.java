@@ -14,10 +14,18 @@ public class Impediment {
     private String name;
     private String description;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_sprint", nullable = false)
     @JsonIgnore
     private Sprint sprint;
+
+    public Impediment(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public Impediment() {
+    }
 
     public Long getId() {
         return id;

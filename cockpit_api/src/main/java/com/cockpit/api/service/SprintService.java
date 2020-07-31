@@ -83,7 +83,7 @@ public class SprintService {
 
     public SprintDTO addImpediment(Impediment impediment, Sprint sprint) {
         impediment.setSprint(sprint);
-        modelMapper.map(impedimentRepository.save(impediment), ImpedimentDTO.class);
-        return modelMapper.map(sprintRepository.save(sprint), SprintDTO.class);
+        impedimentRepository.save(impediment);
+        return modelMapper.map(sprint, SprintDTO.class);
     }
 }

@@ -3,9 +3,13 @@ package com.cockpit.api.controller;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.cockpit.api.model.dao.Impediment;
+import com.cockpit.api.model.dto.ImpedimentDTO;
+import com.cockpit.api.model.dto.SprintDTO;
 import com.cockpit.api.service.AuthService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,10 +62,39 @@ public class SprintControllerTest {
         // Given
         Mockito.when(jiraService.findJiraById(jira.getId())).thenReturn(modelMapper.map(jira, JiraDTO.class));
         Mockito.when(sprintService.findByJiraAndSprintNumber(jira, sprint.getSprintNumber())).thenReturn(sprint);
+        Mockito.when(sprintService.setTeamHealth(obeya, sprint)).thenReturn(modelMapper.map(sprint, SprintDTO.class));
 
         // When
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/sprint/{jiraId}/updateTeamHealth/{sprintNumber}", jira.getId(), sprint.getSprintNumber())
                 .content(new ObjectMapper().writeValueAsString(obeya))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON).header("Authorization", "Bearer token"))
+                .andExpect(status().isOk()).andReturn();
+
+        MockHttpServletResponse response = result.getResponse();
+
+        // then
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+
+
+    }
+    @Test
+    public void whenAddImpedimentThenReturn200() throws Exception {
+        Jira jira = new Jira();
+        jira.setId(1L);
+        Sprint sprint = new Sprint();
+        sprint.setSprintNumber(1);
+        Impediment impediment = new Impediment("impediment name", "impediment description");
+        ImpedimentDTO impedimentDTO = modelMapper.map(impediment, ImpedimentDTO.class);
+
+        // Given
+        Mockito.when(jiraService.findJiraById(jira.getId())).thenReturn(modelMapper.map(jira, JiraDTO.class));
+        Mockito.when(sprintService.findByJiraAndSprintNumber(jira, sprint.getSprintNumber())).thenReturn(sprint);
+        Mockito.when(sprintService.addImpediment(impediment, sprint)).thenReturn(modelMapper.map(sprint, SprintDTO.class));
+
+        // When
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/sprint/{jiraId}/addImpediment/{sprintNumber}", jira.getId(), sprint.getSprintNumber())
+                .content(new ObjectMapper().writeValueAsString(impedimentDTO))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON).header("Authorization", "Bearer token"))
                 .andExpect(status().isOk()).andReturn();
