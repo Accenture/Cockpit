@@ -35,6 +35,7 @@ public class SprintDTO {
     private Integer completedUsNumber;
 
     private Set<UserStory> userStories;
+
     public Integer getNotCompletedUsNumber() {
         return notCompletedUsNumber;
     }
@@ -42,8 +43,6 @@ public class SprintDTO {
     public void setNotCompletedUsNumber(Integer notCompletedUsNumber) {
         this.notCompletedUsNumber = notCompletedUsNumber;
     }
-    private Set<Impediment> impediments;
-
     private Set<Impediment> impediments;
 
     public Long getId() {
