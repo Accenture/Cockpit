@@ -46,7 +46,7 @@ public class Sprint {
     @JsonIgnore
     private Set<UserStory> userStories;
 
-    @OneToMany(mappedBy = "sprint", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "sprint")
     private Set<Impediment> impediments;
 
     public Long getId() {

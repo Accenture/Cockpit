@@ -7,6 +7,7 @@ import com.cockpit.api.model.dao.Sprint;
 import com.cockpit.api.model.dto.ImpedimentDTO;
 import com.cockpit.api.model.dto.ObeyaDTO;
 import com.cockpit.api.model.dto.SprintDTO;
+import com.cockpit.api.repository.ImpedimentRepository;
 import com.cockpit.api.repository.SprintRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +20,13 @@ import java.util.Set;
 @Service
 public class SprintService {
     private final SprintRepository sprintRepository;
-
+    private final ImpedimentRepository impedimentRepository;
     private final ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
-    public SprintService(SprintRepository sprintRepository) {
+    public SprintService(SprintRepository sprintRepository, ImpedimentRepository impedimentRepository) {
         this.sprintRepository = sprintRepository;
+        this.impedimentRepository = impedimentRepository;
     }
 
     public SprintDTO createNewSprint(SprintDTO sprintDTO) {
@@ -79,10 +81,9 @@ public class SprintService {
 
     }
 
-    public SprintDTO addImpediment(ImpedimentDTO impediment, Sprint sprint) {
-        Set<Impediment> impediments=sprint.getImpediments();
-        impediments.add(modelMapper.map(impediment, Impediment.class));
-        sprint.setImpediments(impediments);
+    public SprintDTO addImpediment(Impediment impediment, Sprint sprint) {
+        impediment.setSprint(sprint);
+        modelMapper.map(impedimentRepository.save(impediment), ImpedimentDTO.class);
         return modelMapper.map(sprintRepository.save(sprint), SprintDTO.class);
     }
 }

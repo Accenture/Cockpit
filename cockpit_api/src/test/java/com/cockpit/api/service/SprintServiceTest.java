@@ -1,5 +1,7 @@
 package com.cockpit.api.service;
 
+import com.cockpit.api.model.dao.Impediment;
+import com.cockpit.api.repository.ImpedimentRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,10 +20,12 @@ public class SprintServiceTest {
 	private SprintService sprintService;
 	@MockBean
 	private SprintRepository sprintRepository;
+	@MockBean
+	private ImpedimentRepository impedimentRepository;
 
 	@Before
 	public void setUp() {
-		this.sprintService = new SprintService(sprintRepository);
+		this.sprintService = new SprintService(sprintRepository, impedimentRepository);
 	}
 
 	@Test

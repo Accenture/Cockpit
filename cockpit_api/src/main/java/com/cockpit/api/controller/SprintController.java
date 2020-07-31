@@ -1,4 +1,6 @@
 package com.cockpit.api.controller;
+
+import com.cockpit.api.model.dao.Impediment;
 import com.cockpit.api.model.dto.ImpedimentDTO;
 import com.cockpit.api.model.dto.ObeyaDTO;
 import com.cockpit.api.service.AuthService;
@@ -152,7 +154,7 @@ public class SprintController {
             try {
                 JiraDTO jira = jiraService.findJiraById(jiraId);
                 Sprint sprintFound = sprintService.findByJiraAndSprintNumber(modelMapper.map(jira, Jira.class), sprintNumber);
-                SprintDTO sprint = sprintService.addImpediment(impediment, sprintFound);
+                SprintDTO sprint = sprintService.addImpediment(modelMapper.map(impediment, Impediment.class), sprintFound);
                 return ResponseEntity.ok().body(sprint);
             } catch (com.cockpit.api.exception.ResourceNotFoundException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

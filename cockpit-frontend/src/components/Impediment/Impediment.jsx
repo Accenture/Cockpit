@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import List from '@material-ui/core/List';
+import { useDispatch } from 'react-redux';
 import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
@@ -7,6 +8,9 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import FormLabel from '@material-ui/core/FormLabel';
 import AddIcon from '@material-ui/icons/Add';
+import MvpService from '../../services/apiService';
+import { getOneMvp } from '../../redux/ormSlice';
+
 import useStyles from './styles';
 
 export default function Impediment(props) {
@@ -16,6 +20,7 @@ export default function Impediment(props) {
   const { mvp } = props;
   const [name, setName] = React.useState('');
   const [explanation, setExplanation] = React.useState('');
+  const dispatch = useDispatch();
 
   const classes = useStyles();
 
@@ -28,8 +33,16 @@ export default function Impediment(props) {
   function displayForm() {
     setOpen(true);
   }
-  function submit(e) {
+  async function submit(e) {
     e.preventDefault();
+    const impediment = {
+      name,
+      description: explanation,
+    };
+    await MvpService.addImpediment(impediment, mvp.jira.id, sprintNumber);
+    dispatch(getOneMvp(mvp.id));
+    setName('');
+    setExplanation('');
   }
   function fieldsValidator() {
     if (name.length === 0 || explanation.length === 0) return true;

@@ -118,7 +118,19 @@ function addObeya(obeya, jiraId, sprintNumber) {
       headers,
     );
   } catch (e) {
-    console.log(`Error when getting Sprint: ${e}`);
+    console.log(`Error when adding obeya: ${e}`);
+    return e;
+  }
+}
+function addImpediment(impediment, jiraId, sprintNumber) {
+  try {
+    return API.put(
+      `${sprintUrl}/${jiraId}/addImpediment/${sprintNumber}`,
+      impediment,
+      headers,
+    );
+  } catch (e) {
+    console.log(`Error when adding impediment: ${e}`);
     return e;
   }
 }
@@ -136,6 +148,7 @@ const MvpService = {
   deleteTeamMember,
   getSprint,
   addObeya,
+  addImpediment,
 };
 
 export default MvpService;
