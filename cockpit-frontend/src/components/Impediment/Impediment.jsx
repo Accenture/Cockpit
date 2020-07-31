@@ -21,28 +21,37 @@ export default function Impediment(props) {
   const [name, setName] = React.useState('');
   const [explanation, setExplanation] = React.useState('');
   const dispatch = useDispatch();
-
+  const [number, setNumber] = React.useState(0);
   const classes = useStyles();
+
+  useEffect(() => {
+    setOpen(false);
+  }, [sprintNumber]);
 
   useEffect(() => {
     const sp = mvp.jira.sprints.find(
       (sprint) => sprint.sprintNumber === sprintNumber,
     );
     setImpediments(sp.impediments);
+    setNumber(sp.impediments.length);
   }, [mvp, sprintNumber]);
   function displayForm() {
     setOpen(true);
   }
   async function submit(e) {
+    debugger
     e.preventDefault();
     const impediment = {
       name,
       description: explanation,
     };
+
     await MvpService.addImpediment(impediment, mvp.jira.id, sprintNumber);
     dispatch(getOneMvp(mvp.id));
     setName('');
     setExplanation('');
+    setNumber(number + 1);
+    if (number === 4) setOpen(false);
   }
   function fieldsValidator() {
     if (name.length === 0 || explanation.length === 0) return true;
@@ -75,6 +84,7 @@ export default function Impediment(props) {
       )}
       <Button
         className={classes.addButton}
+        disabled={number >= 5}
         variant="outlined"
         color="primary"
         startIcon={<AddIcon />}
@@ -92,7 +102,7 @@ export default function Impediment(props) {
                 required
                 fullWidth
                 variant="outlined"
-                placeholder="Impediment Name"
+                placeholder="Enter Impediment Name"
                 size="small"
                 inputProps={{ maxLength: 35 }}
                 onChange={(event) => setName(event.target.value)}
@@ -106,7 +116,7 @@ export default function Impediment(props) {
                 required
                 fullWidth
                 variant="outlined"
-                placeholder="Impediment Explanation"
+                placeholder="Enter Impediment Explanation"
                 size="small"
                 inputProps={{ maxLength: 250 }}
                 onChange={(event) => setExplanation(event.target.value)}
