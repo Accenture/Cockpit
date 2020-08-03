@@ -206,6 +206,9 @@ export default function InformationForm() {
                 <FormLabel className={classes.formLabel}>
                   MVP photo URL
                 </FormLabel>
+                <FormLabel className={classes.subFormLabel}>
+                  (2000 characters max)
+                </FormLabel>
                 <TextField
                   className={classes.textField}
                   value={urlMvpAvatar}
@@ -214,8 +217,11 @@ export default function InformationForm() {
                   variant="outlined"
                   id="mvpPhoto"
                   name="mvpPhoto"
-                  placeholder="http://"
+                  placeholder="https://..."
                   size="small"
+                  inputProps={{
+                    maxlength: 2000,
+                  }}
                   onChange={handleImageChange}
                 />
               </div>
