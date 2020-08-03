@@ -95,11 +95,7 @@ export default function InformationForm() {
     dispatch(setEntity(event.target.value));
   }
   function handleImageChange(event) {
-    if (isImageUrlValid(event.target.value)) {
-      dispatch(setImageUrl(event.target.value));
-    } else {
-      dispatch(setImageUrl(null));
-    }
+    dispatch(setImageUrl(event.target.value));
   }
   const handleStartDateChange = (date) => {
     dispatch(setMvpStartDate(date));
