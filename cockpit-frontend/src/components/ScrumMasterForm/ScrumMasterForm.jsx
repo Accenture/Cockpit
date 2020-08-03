@@ -53,11 +53,21 @@ export default function ScrumMasterForm() {
   function closeDialog() {
     setIsOpened(false);
   }
+  function isImageUrlValid(urlImage) {
+    return (
+      urlImage !== null &&
+      (urlImage === '' ||
+        urlImage.startsWith('http://') ||
+        urlImage.startsWith('https://'))
+    );
+  }
   function confirmImageUrl() {
     if (url !== '') {
       dispatch(setImageUrl(url));
-      dispatch(setFormIsValid());
-      closeDialog();
+      if (isImageUrlValid(url)) {
+        dispatch(setFormIsValid());
+        closeDialog();
+      }
     }
   }
   function removeImageUrl() {
@@ -107,13 +117,11 @@ export default function ScrumMasterForm() {
                 placeholder="https://..."
                 autoComplete="imageUrl"
                 size="small"
-                inputProps={{
-                  maxlength: 2000,
-                }}
+                error={!isImageUrlValid(url)}
+                helperText={
+                  isImageUrlValid(url) ? '' : 'Url starts with http(s)://'
+                }
               />
-              <FormLabel className={classes.subFormLabel}>
-                (2000 characters max)
-              </FormLabel>
             </div>
           )}
           {!imageUrl && (

@@ -28,11 +28,14 @@ export const ScrumMasterFormSlice = createSlice({
     },
     setFormIsValid: (state) => {
       if (
-        state.mvp != null &&
-        state.entity != null &&
-        state.cycle != null &&
-        state.jiraProjectKey != null &&
-        state.imageUrl != null
+        state.mvp !== null &&
+        state.entity !== null &&
+        state.entity !== '' &&
+        state.cycle !== null &&
+        state.jiraProjectKey !== null &&
+        state.jiraProjectKey !== '' &&
+        state.imageUrl !== null &&
+        state.imageUrl !== ''
       )
         state.formIsValid = true;
     },

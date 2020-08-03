@@ -67,6 +67,12 @@ export default function InformationForm() {
     dispatch(setMvpStartDate(mvpInfo.jira.mvpStartDate));
     dispatch(setMvpEndDate(mvpInfo.jira.mvpEndDate));
   }, [dispatch, mvpInfo]);
+  function isImageUrlValid(urlImage) {
+    return (
+      urlImage !== null &&
+      (urlImage.startsWith('http://') || urlImage.startsWith('https://'))
+    );
+  }
   function handleNameChange(event) {
     dispatch(setName(event.target.value));
   }
@@ -89,7 +95,11 @@ export default function InformationForm() {
     dispatch(setEntity(event.target.value));
   }
   function handleImageChange(event) {
-    dispatch(setImageUrl(event.target.value));
+    if (isImageUrlValid(event.target.value)) {
+      dispatch(setImageUrl(event.target.value));
+    } else {
+      dispatch(setImageUrl(null));
+    }
   }
   const handleStartDateChange = (date) => {
     dispatch(setMvpStartDate(date));
@@ -206,9 +216,6 @@ export default function InformationForm() {
                 <FormLabel className={classes.formLabel}>
                   MVP photo URL
                 </FormLabel>
-                <FormLabel className={classes.subFormLabel}>
-                  (2000 characters max)
-                </FormLabel>
                 <TextField
                   className={classes.textField}
                   value={urlMvpAvatar}
@@ -219,10 +226,13 @@ export default function InformationForm() {
                   name="mvpPhoto"
                   placeholder="https://..."
                   size="small"
-                  inputProps={{
-                    maxlength: 2000,
-                  }}
                   onChange={handleImageChange}
+                  error={!isImageUrlValid(urlMvpAvatar)}
+                  helperText={
+                    isImageUrlValid(urlMvpAvatar)
+                      ? ''
+                      : 'Url starts with http(s)://'
+                  }
                 />
               </div>
               <img className={classes.imgStyle} src={urlMvpAvatar} alt="img" />
