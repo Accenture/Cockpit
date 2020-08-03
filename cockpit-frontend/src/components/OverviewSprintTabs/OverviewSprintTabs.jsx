@@ -6,10 +6,13 @@ import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Box from '@material-ui/core/Box';
 import moment from 'moment/moment';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import Card from '@material-ui/core/Card';
+import Grid from '@material-ui/core/Grid';
 import BurnUpChart from '../BurnUpChart/BurnUpChart';
 import MvpService from '../../services/apiService';
 import { mvpSelector } from '../../redux/selector';
-
 // styles
 import useStyles from './styles';
 
@@ -31,6 +34,7 @@ export default function OverviewSprintTabs(props) {
   const [endDate, setEndDate] = useState('');
   const classes = useStyles();
   const { selectedTab } = props;
+  const [impediments, setImpediments] = React.useState([]);
 
   useEffect(() => {
     async function getSprint() {
@@ -41,6 +45,7 @@ export default function OverviewSprintTabs(props) {
       if (sprint.data) {
         setStartDate(sprint.data.sprintStartDate);
         setEndDate(sprint.data.sprintEndDate);
+        setImpediments(sprint.data.impediments);
       } else {
         setStartDate(null);
         setEndDate(null);
@@ -62,6 +67,7 @@ export default function OverviewSprintTabs(props) {
     const sprint = await MvpService.getSprint(mvp.jira.id, event.target.value);
     if (sprint.data) {
       props.sendSprint(sprint.data);
+      setImpediments(sprint.data.impediments);
       setStartDate(sprint.data.sprintStartDate);
       if (event.target.value !== mvp.jira.currentSprint) {
         setEndDate(sprint.data.sprintCompleteDate);
@@ -107,6 +113,36 @@ export default function OverviewSprintTabs(props) {
               : moment(new Date()).format('MMMM Do')}
           </div>
         </div>
+
+        <Card className={classes.impCard}>
+          <CardContent>
+            <Grid container alignItems="center">
+              <Grid item xs={12}>
+                <Typography variant="h6" color="textSecondary">
+                  MAIN IMPEDIMENTS
+                </Typography>
+                {impediments.length > 0 && (
+                  <div>
+                    {' '}
+                    {impediments.map((impediment) => (
+                      <Grid item xs={12} key={impediment.name}>
+                        <Typography variant="h6">{impediment.name}</Typography>
+                        <Typography
+                          variant="body1"
+                          color="textSecondary"
+                          gutterBottom
+                        >
+                          {' '}
+                          {impediment.description}
+                        </Typography>
+                      </Grid>
+                    ))}{' '}
+                  </div>
+                )}
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
       </TabPanel>
     </div>
   );
