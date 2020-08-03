@@ -104,10 +104,16 @@ export default function ScrumMasterForm() {
                 type="url"
                 id="imageUrl"
                 name="imageUrl"
-                placeholder="http://"
+                placeholder="http://..."
                 autoComplete="imageUrl"
                 size="small"
+                inputProps={{
+                  maxlength: 2000,
+                }}
               />
+              <FormLabel className={classes.subLabel}>
+                (2000 characters max)
+              </FormLabel>
             </div>
           )}
           {!imageUrl && (

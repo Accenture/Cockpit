@@ -80,7 +80,7 @@ export default makeStyles((theme) => ({
     right: 0,
     margin: 'auto',
     textAlign: 'start',
-    marginTop: 25,
+    marginTop: 10,
     top: 0,
   },
   test: {
@@ -90,5 +90,9 @@ export default makeStyles((theme) => ({
     height: '100%',
     width: '100%',
     objectFit: 'cover',
+  },
+  subLabel: {
+    fontSize: 'small',
+    fontWeight: 'bold',
   },
 }));
