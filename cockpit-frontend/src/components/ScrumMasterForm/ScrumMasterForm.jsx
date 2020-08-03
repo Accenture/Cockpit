@@ -111,7 +111,7 @@ export default function ScrumMasterForm() {
                   maxlength: 2000,
                 }}
               />
-              <FormLabel className={classes.subLabel}>
+              <FormLabel className={classes.subFormLabel}>
                 (2000 characters max)
               </FormLabel>
             </div>
