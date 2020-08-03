@@ -7,6 +7,7 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import FormLabel from '@material-ui/core/FormLabel';
+import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import MvpService from '../../services/apiService';
 import { getOneMvp } from '../../redux/ormSlice';
@@ -61,6 +62,10 @@ export default function Impediment(props) {
     setExplanation('');
     setOpen(false);
   }
+  async function deleteImpediment(impediment) {
+    await MvpService.deleteImpediment(impediment.id);
+    dispatch(getOneMvp(mvp.id));
+  }
   return (
     <div className={classes.root}>
       {impediments.length > 0 && (
@@ -68,12 +73,28 @@ export default function Impediment(props) {
           <div className={classes.title}>Main impediments</div>
           <List>
             {impediments.map((impediment) => (
-              <div key={impediment.id}>
-                <ListItem className={classes.listItem}>
-                  {impediment.name}
-                </ListItem>
-                <Divider component="li" />
-              </div>
+              <Grid container alignItems="center" key={impediment.id}>
+                <Grid item xs={8}>
+                  <ListItem className={classes.listItem}>
+                    {impediment.name}
+                  </ListItem>
+                </Grid>{' '}
+                <Grid item xs={4} className={classes.alignment}>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    className={classes.deleteButton}
+                    startIcon={<DeleteIcon />}
+                    onClick={() => deleteImpediment(impediment)}
+                  >
+                    Delete
+                  </Button>
+                </Grid>
+                <Grid item xs={12}>
+                  {' '}
+                  <Divider component="li" />
+                </Grid>
+              </Grid>
             ))}
           </List>
         </div>
