@@ -35,7 +35,9 @@ export const ScrumMasterFormSlice = createSlice({
         state.jiraProjectKey !== null &&
         state.jiraProjectKey !== '' &&
         state.imageUrl !== null &&
-        state.imageUrl !== ''
+        state.imageUrl !== '' &&
+        (state.imageUrl.startsWith('http://') ||
+          state.imageUrl.startsWith('https://'))
       )
         state.formIsValid = true;
     },
