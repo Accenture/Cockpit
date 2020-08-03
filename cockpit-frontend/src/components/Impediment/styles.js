@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 export default makeStyles(() => ({
   root: {
     padding: 32,
-    width: '50%',
   },
   title: {
     fontWeight: 'bold',
@@ -28,5 +27,12 @@ export default makeStyles(() => ({
   textField: {
     marginTop: 8,
     marginBottom: 8,
+  },
+  deleteButton: {
+    borderRadius: 20,
+    textTransform: 'capitalize',
+  },
+  alignment: {
+    textAlign: 'right',
   },
 }));

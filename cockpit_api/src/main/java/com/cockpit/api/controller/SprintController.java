@@ -134,7 +134,7 @@ public class SprintController {
             try {
                 JiraDTO jira = jiraService.findJiraById(jiraId);
                 Sprint sprintFound = sprintService.findByJiraAndSprintNumber(modelMapper.map(jira, Jira.class), sprintNumber);
-                SprintDTO sprint= sprintService.setTeamHealth(obeya, sprintFound);
+                SprintDTO sprint = sprintService.setTeamHealth(obeya, sprintFound);
                 return ResponseEntity.ok().body(sprint);
             } catch (com.cockpit.api.exception.ResourceNotFoundException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -163,4 +163,5 @@ public class SprintController {
             return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
         }
     }
+
 }

@@ -5,6 +5,7 @@ const jiraUrl = 'jira';
 const burnUpChartUrl = 'burnUpChart';
 const teamUrl = 'team';
 const sprintUrl = 'sprint';
+const impedimentUrl = 'impediment';
 const headers = {
   headers: {
     'Content-Type': 'application/json',
@@ -134,6 +135,14 @@ function addImpediment(impediment, jiraId, sprintNumber) {
     return e;
   }
 }
+function deleteImpediment(id) {
+  try {
+    return API.delete(`${impedimentUrl}/delete/${id}`, headers);
+  } catch (e) {
+    console.log(`Error when deleting impediment: ${e}`);
+    return e;
+  }
+}
 const MvpService = {
   getAllMvp,
   createNewJiraProject,
@@ -149,6 +158,7 @@ const MvpService = {
   getSprint,
   addObeya,
   addImpediment,
+  deleteImpediment,
 };
 
 export default MvpService;
