@@ -57,6 +57,8 @@ export default function Impediment(props) {
     return false;
   }
   function closeForm() {
+    setName('');
+    setExplanation('');
     setOpen(false);
   }
   return (
