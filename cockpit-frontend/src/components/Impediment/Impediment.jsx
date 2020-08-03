@@ -39,7 +39,6 @@ export default function Impediment(props) {
     setOpen(true);
   }
   async function submit(e) {
-    debugger
     e.preventDefault();
     const impediment = {
       name,
