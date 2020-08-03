@@ -8,6 +8,10 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import FormLabel from '@material-ui/core/FormLabel';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 import AddIcon from '@material-ui/icons/Add';
 import MvpService from '../../services/apiService';
 import { getOneMvp } from '../../redux/ormSlice';
@@ -18,11 +22,13 @@ export default function Impediment(props) {
   const [impediments, setImpediments] = useState([]);
   const { sprintNumber } = props;
   const [open, setOpen] = React.useState(false);
+  const [openDialog, setOpenDialog] = React.useState(false);
   const { mvp } = props;
   const [name, setName] = React.useState('');
   const [explanation, setExplanation] = React.useState('');
   const dispatch = useDispatch();
   const [number, setNumber] = React.useState(0);
+  const [selectedImpediment, setSelectedImpediment] = React.useState(0);
   const classes = useStyles();
 
   useEffect(() => {
@@ -62,9 +68,19 @@ export default function Impediment(props) {
     setExplanation('');
     setOpen(false);
   }
-  async function deleteImpediment(impediment) {
-    await MvpService.deleteImpediment(impediment.id);
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+  async function deleteImpediment() {
+    await MvpService.deleteImpediment(selectedImpediment);
     dispatch(getOneMvp(mvp.id));
+    handleCloseDialog();
+    setOpen(false);
+  }
+
+  function openDeleteDialog(impediment) {
+    setOpenDialog(true);
+    setSelectedImpediment(impediment.id);
   }
   return (
     <div className={classes.root}>
@@ -85,7 +101,7 @@ export default function Impediment(props) {
                     color="secondary"
                     className={classes.deleteButton}
                     startIcon={<DeleteIcon />}
-                    onClick={() => deleteImpediment(impediment)}
+                    onClick={() => openDeleteDialog(impediment)}
                   >
                     Delete
                   </Button>
@@ -165,6 +181,21 @@ export default function Impediment(props) {
           </Grid>
         </form>
       )}
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete the selected impediment?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={deleteImpediment} color="primary">
+            Yes
+          </Button>
+          <Button onClick={handleCloseDialog} color="primary">
+            No
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
