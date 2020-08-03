@@ -104,7 +104,7 @@ export default function ScrumMasterForm() {
                 type="url"
                 id="imageUrl"
                 name="imageUrl"
-                placeholder="http://..."
+                placeholder="https://..."
                 autoComplete="imageUrl"
                 size="small"
                 inputProps={{
