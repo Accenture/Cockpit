@@ -21,4 +21,9 @@ export default makeStyles((theme) => ({
     marginTop: 8,
   },
   sprintNumber: { fontWeight: 'bold' },
+  impCard: {
+    marginTop: '20px',
+    backgroundColor: '#F5F5F9',
+    textAlign: 'cetnter',
+  },
 }));
