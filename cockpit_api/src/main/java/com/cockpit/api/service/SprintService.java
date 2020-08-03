@@ -4,7 +4,6 @@ import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dao.Impediment;
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Sprint;
-import com.cockpit.api.model.dto.ImpedimentDTO;
 import com.cockpit.api.model.dto.ObeyaDTO;
 import com.cockpit.api.model.dto.SprintDTO;
 import com.cockpit.api.repository.ImpedimentRepository;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class SprintService {

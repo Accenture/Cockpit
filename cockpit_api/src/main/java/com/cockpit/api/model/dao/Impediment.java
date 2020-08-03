@@ -14,7 +14,7 @@ public class Impediment {
     private String name;
     private String description;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "id_sprint", nullable = false)
     @JsonIgnore
     private Sprint sprint;
