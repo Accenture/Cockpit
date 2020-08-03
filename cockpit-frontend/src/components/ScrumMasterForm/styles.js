@@ -91,8 +91,4 @@ export default makeStyles((theme) => ({
     width: '100%',
     objectFit: 'cover',
   },
-  subFormLabel: {
-    fontSize: 'small',
-    fontWeight: 'bold',
-  },
 }));

@@ -15,10 +15,6 @@ export default makeStyles((theme) => ({
   formLabel: {
     fontWeight: 'bold',
   },
-  subFormLabel: {
-    fontSize: 'small',
-    fontWeight: 'bold',
-  },
   textField: {
     marginTop: 8,
     'margin-bottom': 8,
