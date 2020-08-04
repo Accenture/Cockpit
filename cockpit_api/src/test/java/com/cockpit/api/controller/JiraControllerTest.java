@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.cockpit.api.service.AuthService;
+import com.cockpit.api.service.jiragateway.JiraApiService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -26,45 +27,48 @@ import com.cockpit.api.service.JiraService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = { JiraController.class })
+@ContextConfiguration(classes = {JiraController.class})
 @WebMvcTest
 public class JiraControllerTest {
 
-	private ModelMapper modelMapper = new ModelMapper();
+    private ModelMapper modelMapper = new ModelMapper();
 
-	@Autowired
-	private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-	@MockBean
-	private JiraService jiraService;
+    @MockBean
+    private JiraService jiraService;
 
-	@MockBean
-	private AuthService authService;
+    @MockBean
+    private JiraApiService jiraApiService;
 
-	@Test
-	public void whenAddJiraThenReturn200() throws Exception {
+    @MockBean
+    private AuthService authService;
 
-		Jira mockJira = new Jira();
+    @Test
+    public void whenAddJiraThenReturn200() throws Exception {
 
-		JiraDTO jiraDto = modelMapper.map(mockJira, JiraDTO.class);
+        Jira mockJira = new Jira();
 
-		// given
-		Mockito.when(jiraService.createNewJiraProject(jiraDto)).thenReturn(jiraDto);
-	
-		// when
-		MvcResult result = mockMvc
-				.perform(MockMvcRequestBuilders.post("/api/v1/jira/create")
-						.header("Authorization", "Bearer token")
-				.content(new ObjectMapper().writeValueAsString(jiraDto))
-				.contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk()).andReturn();
+        JiraDTO jiraDto = modelMapper.map(mockJira, JiraDTO.class);
 
-		MockHttpServletResponse response = result.getResponse();
+        // given
+        Mockito.when(jiraService.createNewJiraProject(jiraDto)).thenReturn(jiraDto);
 
-		// then
-		assertEquals(HttpStatus.OK.value(), response.getStatus());
+        // when
+        MvcResult result = mockMvc
+                .perform(MockMvcRequestBuilders.post("/api/v1/jira/create")
+                        .header("Authorization", "Bearer token")
+                        .content(new ObjectMapper().writeValueAsString(jiraDto))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
 
-	}
+        MockHttpServletResponse response = result.getResponse();
+
+        // then
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+
+    }
 
 }
