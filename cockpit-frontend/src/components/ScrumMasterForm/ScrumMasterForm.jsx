@@ -45,6 +45,8 @@ export default function ScrumMasterForm() {
   const cycleNumber = useSelector(cycleState);
   const isFormValid = useSelector(SMFormState);
   const open = useSelector(showSMFormState);
+  const [error, setError] = React.useState(false);
+
   const dispatch = useDispatch();
 
   function openDialog() {
@@ -89,10 +91,14 @@ export default function ScrumMasterForm() {
         sprintNumber: 8,
       },
     };
-    await MvpService.createNewJiraProject(newJira);
-    dispatch(close());
-    dispatch(fetchAllMvps());
-    dispatch(setAlltoNull());
+    const jira = await MvpService.createNewJiraProject(newJira);
+    if (jira.data) {
+      dispatch(close());
+      dispatch(fetchAllMvps());
+      dispatch(setAlltoNull());
+    } else {
+      setError(true);
+    }
   }
 
   const body = (
@@ -190,6 +196,8 @@ export default function ScrumMasterForm() {
               placeholder="Jira Key"
               autoComplete="jiraPeojectKey"
               size="small"
+              error={error}
+              helperText={error ? 'Jira Project Key is wrong!' : ' '}
             />
           </Grid>
           <Grid item xs={5}>
@@ -275,6 +283,7 @@ export default function ScrumMasterForm() {
         removeImageUrl();
         dispatch(setAlltoNull());
         closeDialog();
+        setError(false);
       }}
       aria-labelledby="simple-modal-title"
       aria-describedby="simple-modal-description"

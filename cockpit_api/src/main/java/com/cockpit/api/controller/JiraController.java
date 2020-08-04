@@ -2,11 +2,14 @@ package com.cockpit.api.controller;
 
 import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dto.JiraDTO;
+import com.cockpit.api.model.dto.jira.Project;
 import com.cockpit.api.service.AuthService;
 import com.cockpit.api.service.JiraService;
+import com.cockpit.api.service.jiragateway.JiraApiService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,11 +22,16 @@ public class JiraController {
 
     private final JiraService jiraService;
     private final AuthService authService;
+    private final JiraApiService jiraApiService;
+
+    @Value("${spring.jira.urlVerifyValidProjectKey}")
+    private String urlVerifyJiraKey;
 
     @Autowired
-    public JiraController(JiraService jiraService, AuthService authService) {
+    public JiraController(JiraService jiraService, AuthService authService, JiraApiService jiraApiService) {
         this.jiraService = jiraService;
         this.authService = authService;
+        this.jiraApiService = jiraApiService;
     }
 
     // CREATE new JIRA
@@ -31,13 +39,20 @@ public class JiraController {
             value = "/api/v1/jira/create"
     )
     public ResponseEntity createJira(@RequestBody JiraDTO jiraDTO,
-                                     @RequestHeader("Authorization") String authHeader) {
+                                     @RequestHeader("Authorization") String authHeader) throws Exception {
         if (authService.isUserAuthorized(authHeader)) {
-            JiraDTO newJira = jiraService.createNewJiraProject(jiraDTO);
-            return ResponseEntity.ok().body(newJira);
+            String url = urlVerifyJiraKey + jiraDTO.getJiraProjectKey();
+            try {
+                jiraApiService.callJira(url, Project.class.getName());
+                JiraDTO newJira = jiraService.createNewJiraProject(jiraDTO);
+                return ResponseEntity.ok().body(newJira);
+            } catch (Exception e) {
+                return ResponseEntity.ok().body(null);
+            }
         } else {
             return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
         }
+
     }
 
     // GET JIRA BY ID
@@ -67,7 +82,7 @@ public class JiraController {
         if (authService.isUserAuthorized(authHeader)) {
             try {
                 JiraDTO jiraUpdated = jiraService.updateJira(jiraDTO);
-                return  ResponseEntity.ok().body(jiraUpdated);
+                return ResponseEntity.ok().body(jiraUpdated);
             } catch (ResourceNotFoundException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
             }
@@ -81,7 +96,7 @@ public class JiraController {
             value = "/api/v1/jira/delete/{id}"
     )
     public ResponseEntity deleteJira(@PathVariable Long id,
-                                             @RequestHeader("Authorization") String authHeader) {
+                                     @RequestHeader("Authorization") String authHeader) {
         if (authService.isUserAuthorized(authHeader)) {
             try {
                 jiraService.deleteJira(id);
