@@ -78,6 +78,7 @@ CREATE TABLE public.sprint(
     team_confidence     INTEGER,
     total_nb_us         INTEGER,
     sprint_number       INTEGER,
+    state               VARCHAR(50),
     id_jira             INT,
     CONSTRAINT sprint_PK PRIMARY KEY (id),
     CONSTRAINT sprint_jira_FK FOREIGN KEY (id_jira) REFERENCES public.jira(id)
