@@ -4,17 +4,18 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import { useHistory, useLocation } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import MvpMenu from '../MvpMenu/MvpMenu';
 import { showScrumMasterForm, showEditMvpSMForm } from './HeaderSlice';
 // styles
 import useStyles from './styles';
 import 'font-awesome/css/font-awesome.min.css';
+import { isScrumMasterState } from '../HomePage/HomePageSlice';
 
 export default function Header() {
   const classes = useStyles();
   const dispatch = useDispatch();
-
+  const isScrumMaster = useSelector(isScrumMasterState);
   const history = useHistory();
   const returnToHomePage = () => {
     const path = '/';
@@ -36,7 +37,7 @@ export default function Header() {
           </IconButton>
           {isHomePage && <MvpMenu />}
           <div className={classes.growArea} />
-          {isHomePage && (
+          {isHomePage && isScrumMaster && (
             <Button
               variant="outlined"
               color="primary"
@@ -48,7 +49,7 @@ export default function Header() {
               + New MVP
             </Button>
           )}
-          {!isHomePage && (
+          {!isHomePage && isScrumMaster && (
             <Button
               variant="outlined"
               color="primary"

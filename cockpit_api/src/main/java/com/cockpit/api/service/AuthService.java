@@ -18,7 +18,7 @@ public class AuthService {
     public boolean isUserAuthorized(String authHeader) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = addAuthorizationToHeaders(authHeader);
-        HttpEntity<String> request = new HttpEntity<>(headers) ;
+        HttpEntity<String> request = new HttpEntity<>(headers);
         if (isAuthEnabled.equals("false")) {
             return true;
         } else {
@@ -36,4 +36,21 @@ public class AuthService {
         headers.add("Authorization", authHeader);
         return headers;
     }
+
+    public boolean isScrumMaster(String authHeader) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = addAuthorizationToHeaders(authHeader);
+        HttpEntity<String> request = new HttpEntity<>(headers);
+        if (isAuthEnabled.equals("false")) {
+            return true;
+        } else {
+            try {
+                ResponseEntity<UserInfoDTO> responseEntity = restTemplate.exchange(userInfoEndpoint, HttpMethod.POST, request, UserInfoDTO.class);
+                return responseEntity.getBody().getGroups().contains("TDF_SCRUM_MASTERS");
+            } catch (HttpClientErrorException e) {
+                return false;
+            }
+        }
+    }
+
 }
