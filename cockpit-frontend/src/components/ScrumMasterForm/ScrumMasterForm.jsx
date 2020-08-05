@@ -187,6 +187,7 @@ export default function ScrumMasterForm() {
               onChange={(e) => {
                 dispatch(setJiraProjectKey(e.target.value));
                 dispatch(setFormIsValid());
+                setError(false);
               }}
               required
               fullWidth
@@ -197,7 +198,7 @@ export default function ScrumMasterForm() {
               autoComplete="jiraPeojectKey"
               size="small"
               error={error}
-              helperText={error ? 'Jira Project Key is wrong!' : ' '}
+              helperText={error ? 'Jira Project Key is invalid!' : ' '}
             />
           </Grid>
           <Grid item xs={5}>
