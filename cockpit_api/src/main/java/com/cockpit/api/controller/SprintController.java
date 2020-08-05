@@ -41,7 +41,7 @@ public class SprintController {
     )
     public ResponseEntity createSprint(@RequestBody SprintDTO sprintDTO,
                                        @RequestHeader("Authorization") String authHeader) {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             SprintDTO newSprint = sprintService.createNewSprint(sprintDTO);
             return ResponseEntity.ok(newSprint);
         } else {
@@ -74,7 +74,7 @@ public class SprintController {
     public ResponseEntity updateSprint(@RequestBody SprintDTO sprintDTO,
                                        @RequestParam Long id,
                                        @RequestHeader("Authorization") String authHeader) {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             try {
                 SprintDTO sprintUpdated = sprintService.updateSprint(sprintDTO, id);
                 return ResponseEntity.ok().body(sprintUpdated);
@@ -92,7 +92,7 @@ public class SprintController {
     )
     public ResponseEntity deleteSprint(@PathVariable Long id,
                                        @RequestHeader("Authorization") String authHeader) {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             try {
                 sprintService.deleteSprint(id);
                 return ResponseEntity.ok("One Sprint has been deleted");
@@ -130,7 +130,7 @@ public class SprintController {
     )
     public ResponseEntity updateTeamHealth(@RequestBody ObeyaDTO obeya, @PathVariable Long jiraId, @PathVariable int sprintNumber, @RequestHeader("Authorization") String authHeader) {
 
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             try {
                 JiraDTO jira = jiraService.findJiraById(jiraId);
                 Sprint sprintFound = sprintService.findByJiraAndSprintNumber(modelMapper.map(jira, Jira.class), sprintNumber);
@@ -150,7 +150,7 @@ public class SprintController {
     )
     public ResponseEntity addImpediment(@RequestBody ImpedimentDTO impediment, @PathVariable Long jiraId, @PathVariable int sprintNumber, @RequestHeader("Authorization") String authHeader) {
 
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             try {
                 JiraDTO jira = jiraService.findJiraById(jiraId);
                 Sprint sprintFound = sprintService.findByJiraAndSprintNumber(modelMapper.map(jira, Jira.class), sprintNumber);
