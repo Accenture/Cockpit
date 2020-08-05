@@ -13,8 +13,7 @@ spring:
           entity_copy_observer: allow
   flyway:
     locations: classpath:db/migration
-    baseline-on-migrate: false
-    clean-on-validation-error: true
+    baseline-on-migrate: true
   jira:
     username: ${JIRA_USER_NAME}
     jiraUrl: ${JIRA_HOST_URL}
