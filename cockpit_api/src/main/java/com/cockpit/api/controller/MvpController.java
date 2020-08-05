@@ -34,7 +34,7 @@ public class MvpController {
     @PostMapping(value = "/api/v1/mvp/create")
     public ResponseEntity createMvp(@RequestHeader("Authorization") String authHeader,
                                     @RequestBody MvpDTO mvpDTO) {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             MvpDTO newMvp = mvpService.createNewMvp(mvpDTO);
             return ResponseEntity.ok().body(newMvp);
         } else {
@@ -71,7 +71,7 @@ public class MvpController {
     // UPDATE
     @PutMapping(value = "/api/v1/mvp/update")
     public ResponseEntity updateMvp(@RequestBody MvpDTO mvpDTO, @RequestHeader("Authorization") String authHeader) {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             try {
                 MvpDTO mvpUpdated = mvpService.updateMvp(mvpDTO);
                 return ResponseEntity.ok().body(mvpUpdated);
@@ -86,7 +86,7 @@ public class MvpController {
     // DELETE
     @DeleteMapping(value = "/api/v1/mvp/delete/{id}")
     public ResponseEntity deleteMvp(@PathVariable Long id, @RequestHeader("Authorization") String authHeader) {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             try {
                 mvpService.deleteMvp(id);
                 return ResponseEntity.ok("One Mvp has been deleted");
@@ -102,7 +102,7 @@ public class MvpController {
     @PutMapping(value = "/api/v1/mvp/{id}/assignTeam/{teamId}")
     public ResponseEntity assignTeamToMvp(@PathVariable("id") Long id, @PathVariable("teamId") Long teamId,
                                           @RequestHeader("Authorization") String authHeader) {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             try {
                 MvpDTO mvp = mvpService.assignTeamOfMvp(id, teamId);
                 return ResponseEntity.ok().body(mvp);

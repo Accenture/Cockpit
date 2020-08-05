@@ -30,7 +30,7 @@ public class UserStoryController {
     )
     public ResponseEntity createUserStory(@RequestBody UserStoryDTO userStoryDTO,
                                           @RequestHeader("Authorization") String authHeader) {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             UserStoryDTO newUserStory = userStoryService.createNewUserStory(userStoryDTO);
             return ResponseEntity.ok(newUserStory);
         } else {
@@ -63,7 +63,7 @@ public class UserStoryController {
     public ResponseEntity updateUserStory(@RequestBody UserStoryDTO userStoryDTO,
                                           @PathVariable Long id,
                                           @RequestHeader("Authorization") String authHeader) {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             try {
                 UserStoryDTO userStoryUpdated = userStoryService.updateUserStory(userStoryDTO, id);
                 return ResponseEntity.ok().body(userStoryUpdated);
@@ -81,7 +81,7 @@ public class UserStoryController {
     )
     public ResponseEntity deleteUserStory(@PathVariable Long id,
                                           @RequestHeader("Authorization") String authHeader) {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             try {
                 userStoryService.deleteUserStory(id);
                 return ResponseEntity.ok("One User Story has been deleted");

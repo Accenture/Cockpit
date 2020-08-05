@@ -28,7 +28,7 @@ public class ImpedimentController {
     )
     public ResponseEntity deleteImpediment(@PathVariable Long id,
                                            @RequestHeader("Authorization") String authHeader) {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             try {
                 impedimentService.deleteImpediment(id);
                 return ResponseEntity.ok("One Impediment has been deleted");

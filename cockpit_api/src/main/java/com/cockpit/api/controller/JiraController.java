@@ -40,7 +40,7 @@ public class JiraController {
     )
     public ResponseEntity createJira(@RequestBody JiraDTO jiraDTO,
                                      @RequestHeader("Authorization") String authHeader) throws Exception {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             String url = urlVerifyJiraKey + jiraDTO.getJiraProjectKey();
             try {
                 jiraApiService.callJira(url, Project.class.getName());
@@ -79,7 +79,7 @@ public class JiraController {
     )
     public ResponseEntity updateJira(@RequestBody JiraDTO jiraDTO,
                                      @RequestHeader("Authorization") String authHeader) {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             try {
                 JiraDTO jiraUpdated = jiraService.updateJira(jiraDTO);
                 return ResponseEntity.ok().body(jiraUpdated);
@@ -97,7 +97,7 @@ public class JiraController {
     )
     public ResponseEntity deleteJira(@PathVariable Long id,
                                      @RequestHeader("Authorization") String authHeader) {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             try {
                 JiraDTO deletedJira =  jiraService.deleteJira(id);
                 return ResponseEntity.ok().body(deletedJira);

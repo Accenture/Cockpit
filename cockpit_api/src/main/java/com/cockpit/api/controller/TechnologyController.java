@@ -28,7 +28,7 @@ public class TechnologyController {
     )
     public ResponseEntity createTechnology(@RequestBody TechnologyDTO technologyDTO,
                                                           @RequestHeader("Authorization") String authHeader) {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             TechnologyDTO newTechnology = technologyService.createNewTechnology(technologyDTO);
             return ResponseEntity.ok(newTechnology);
         } else {
@@ -74,7 +74,7 @@ public class TechnologyController {
     public ResponseEntity updateTechnology(@RequestBody TechnologyDTO technologyDTO,
                                            @PathVariable Long id,
                                            @RequestHeader("Authorization") String authHeader) {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             try {
                 TechnologyDTO technologyUpdated = technologyService.updateTechnology(technologyDTO, id);
                 return ResponseEntity.ok().body(technologyUpdated);
@@ -92,7 +92,7 @@ public class TechnologyController {
     )
     public ResponseEntity deleteTechnology(@PathVariable Long id,
                                            @RequestHeader("Authorization") String authHeader) {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             try {
                 technologyService.deleteTechnology(id);
                 return ResponseEntity.ok("One Technology has been deleted");
