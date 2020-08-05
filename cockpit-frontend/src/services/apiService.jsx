@@ -6,6 +6,8 @@ const burnUpChartUrl = 'burnUpChart';
 const teamUrl = 'team';
 const sprintUrl = 'sprint';
 const impedimentUrl = 'impediment';
+const userUrl = 'user';
+
 const headers = {
   headers: {
     'Content-Type': 'application/json',
@@ -159,6 +161,14 @@ function updateImpediment(impediment, id) {
     return e;
   }
 }
+function isUserScrumMaster() {
+  try {
+    return API.get(`${userUrl}/isScrumMaster`, headers);
+  } catch (e) {
+    console.log(`Error when verifying if user is scrum master: ${e}`);
+    return e;
+  }
+}
 function unassignTeamMember(teamId, teamMemberId) {
   try {
     return API.delete(
@@ -189,6 +199,7 @@ const MvpService = {
   deleteMvp,
   updateImpediment,
   unassignTeamMember,
+  isUserScrumMaster,
 };
 
 export default MvpService;

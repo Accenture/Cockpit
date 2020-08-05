@@ -13,6 +13,7 @@ import smFormReducer from '../components/ScrumMasterForm/ScrumMasterFormSlice';
 import editMvpFormReducer from '../components/InformationForm/InformationFormSlice';
 import teamManagementFormReducer from '../components/TeamManagementForm/TeamManagementFormSlice';
 import burnUpChartReducer from '../components/BurnUpChart/BurnUpChartSlice';
+import homePageReducer from '../components/HomePage/HomePageSlice';
 
 const persistConfig = {
   key: 'reduxStates',
@@ -27,6 +28,7 @@ const reducers = combineReducers({
   InformationForm: editMvpFormReducer,
   TeamManagementForm: teamManagementFormReducer,
   BurnUpChart: burnUpChartReducer,
+  home: homePageReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);

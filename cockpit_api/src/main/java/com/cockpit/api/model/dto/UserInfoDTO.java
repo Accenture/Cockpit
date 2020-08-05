@@ -1,10 +1,14 @@
 package com.cockpit.api.model.dto;
 
+import java.util.List;
+
 public class UserInfoDTO {
 
     private String sub;
 
     private String email;
+
+    private List<String> groups;
 
     public String getSub() {
         return sub;
@@ -20,5 +24,13 @@ public class UserInfoDTO {
 
     public void setSub(String sub) {
         this.sub = sub;
+    }
+
+    public List<String> getGroups() {
+        return groups;
+    }
+
+    public void setGroups(List<String> groups) {
+        this.groups = groups;
     }
 }
