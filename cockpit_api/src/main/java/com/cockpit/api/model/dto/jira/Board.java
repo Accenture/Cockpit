@@ -26,7 +26,7 @@ public class Board {
     @JsonProperty("values")
     private List<JiraBoard> values = null;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("maxResults")
     public Integer getMaxResults() {

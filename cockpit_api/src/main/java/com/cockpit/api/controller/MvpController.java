@@ -1,25 +1,19 @@
 package com.cockpit.api.controller;
 
 import com.cockpit.api.exception.ResourceNotFoundException;
-import com.cockpit.api.model.dao.Sprint;
 import com.cockpit.api.model.dto.MvpDTO;
 import com.cockpit.api.service.AuthService;
 import com.cockpit.api.service.MvpService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @CrossOrigin
 public class MvpController {
-
-    Logger log = LoggerFactory.getLogger(MvpController.class);
 
     private final MvpService mvpService;
     private final AuthService authService;

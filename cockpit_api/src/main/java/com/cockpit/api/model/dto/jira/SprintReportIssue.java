@@ -19,7 +19,7 @@ public class SprintReportIssue {
     private String typeName;
 
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("id")
     public Long getId() {

@@ -23,7 +23,7 @@ public class SprintHeaders {
     @JsonProperty("values")
     private List<SprintJira> values = null;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("maxResults")
     public Integer getMaxResults() {

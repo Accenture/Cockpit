@@ -20,7 +20,7 @@ public class Changelog {
     @JsonProperty("total")
     private Integer total;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("startAt")
     public Integer getStartAt() {

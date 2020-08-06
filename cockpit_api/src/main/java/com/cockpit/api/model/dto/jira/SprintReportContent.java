@@ -20,7 +20,7 @@ public class SprintReportContent {
     private List<SprintReportIssue> issuesNotCompletedInCurrentSprint;
 
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("issuesNotCompletedInCurrentSprint")
     public List<SprintReportIssue> getIssuesNotCompletedInCurrentSprint() {

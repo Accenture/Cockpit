@@ -27,7 +27,7 @@ public class Status {
     @JsonProperty("id")
     private String id;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("self")
     public String getSelf() {

@@ -178,12 +178,5 @@ public class Sprint {
     public void setCompletedUsNumber(Integer completedUsNumber) {
         this.completedUsNumber = completedUsNumber;
     }
-    @Override
-    public String toString() {
-        return "{" +
-                "id='" + id + '\'' +
-                ", sprintNumber=" + sprintNumber +
-                '}';
-    }
 
 }
