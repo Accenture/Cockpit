@@ -18,7 +18,6 @@ import {
   setName,
   setPitch,
   setEntity,
-  setCycle,
   setScopeCommitment,
   setStatus,
   setImageUrl,
@@ -27,7 +26,6 @@ import {
   nameState,
   pitchState,
   entityState,
-  cycleState,
   scopeCommitmentState,
   sprintNumberState,
   statusState,
@@ -46,7 +44,6 @@ export default function InformationForm() {
 
   const name = useSelector(nameState);
   const pitch = useSelector(pitchState);
-  const cycle = useSelector(cycleState);
   const scopeCommitment = useSelector(scopeCommitmentState);
   const nbSprint = useSelector(sprintNumberState);
   const entity = useSelector(entityState);
@@ -58,7 +55,6 @@ export default function InformationForm() {
   useEffect(() => {
     dispatch(setName(mvpInfo.name));
     dispatch(setPitch(mvpInfo.mvpDescription));
-    dispatch(setCycle(mvpInfo.cycle));
     dispatch(setStatus(mvpInfo.status));
     dispatch(setEntity(mvpInfo.entity));
     dispatch(setScopeCommitment(mvpInfo.scopeCommitment));
@@ -78,9 +74,6 @@ export default function InformationForm() {
   }
   function handlePitchChange(event) {
     dispatch(setPitch(event.target.value));
-  }
-  function handleCycleChange(event) {
-    dispatch(setCycle(event.target.value));
   }
   function handleScopeCommitmentChange(event) {
     dispatch(setScopeCommitment(event.target.value));
@@ -125,23 +118,7 @@ export default function InformationForm() {
               inputProps={{ maxLength: 50 }}
             />
           </Grid>
-          <Grid item xs={12}>
-            <FormLabel className={classes.formLabel}>Cycle</FormLabel>
-            <TextField
-              className={classes.textField}
-              value={cycle}
-              required
-              fullWidth
-              variant="outlined"
-              id="cycle"
-              name="cycle"
-              placeholder="Cycle"
-              size="small"
-              type="number"
-              inputProps={{ min: '1', step: '1' }}
-              onChange={handleCycleChange}
-            />
-          </Grid>
+
           <Grid item xs={12}>
             <FormLabel className={classes.formLabel}>
               Scope commitment
