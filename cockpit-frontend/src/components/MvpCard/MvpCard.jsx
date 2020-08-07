@@ -14,6 +14,7 @@ export default function MvpCard(props) {
   const { mvpInfo } = props;
   const isHomePage = useLocation().pathname === '/';
   let status;
+  const mvpNameGridValue = isHomePage ? 12 : 7;
   if (mvpInfo.status === 'inprogress') status = 'In Progress';
   else if (mvpInfo.status === 'transferred') status = 'Transferred';
   else status = 'Unknown status';
@@ -26,7 +27,7 @@ export default function MvpCard(props) {
       />
       <CardContent>
         <Grid container spacing={1}>
-          <Grid item xs={7}>
+          <Grid item xs={mvpNameGridValue}>
             <Typography className={classes.title} gutterBottom>
               {mvpInfo.name ? mvpInfo.name : 'Unnamed Mvp'}
             </Typography>
