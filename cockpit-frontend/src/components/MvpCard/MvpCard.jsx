@@ -47,19 +47,7 @@ export default function MvpCard(props) {
           </Grid>
         )}
         <Grid container spacing={3}>
-          <Grid item xs={6}>
-            <Typography gutterBottom>
-              {mvpInfo.cycle ? mvpInfo.cycle : 'Unknown'}
-            </Typography>
-            <Typography
-              className={classes.subTitle}
-              color="textSecondary"
-              gutterBottom
-            >
-              Cycle
-            </Typography>
-          </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <Typography gutterBottom>
               {mvpInfo.jira.currentSprint
                 ? mvpInfo.jira.currentSprint

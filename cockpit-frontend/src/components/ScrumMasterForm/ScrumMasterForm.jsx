@@ -16,7 +16,6 @@ import {
   setMvpName,
   setJiraProjectKey,
   setEntity,
-  setCycle,
   setFormIsValid,
   setImageUrl,
   setAlltoNull,
@@ -201,7 +200,7 @@ export default function ScrumMasterForm() {
               helperText={error ? 'Jira Project Key is invalid!' : ' '}
             />
           </Grid>
-          <Grid item xs={5}>
+          <Grid item xs={12}>
             <FormLabel className={classes.formLabel}>
               Choose an entity
             </FormLabel>
@@ -231,28 +230,6 @@ export default function ScrumMasterForm() {
                 <MenuItem value="STELA">STELA</MenuItem>
               </Select>
             </FormControl>
-          </Grid>
-          <Grid item xs={2} />
-          <Grid item xs={5}>
-            <FormLabel className={classes.formLabel}>Enter a cycle</FormLabel>
-
-            <TextField
-              className={classes.textField}
-              required
-              onChange={(e) => {
-                dispatch(setCycle(e.target.value));
-                dispatch(setFormIsValid());
-              }}
-              fullWidth
-              variant="outlined"
-              id="cycleID"
-              name="cycleID"
-              placeholder="Cycle"
-              type="number"
-              inputProps={{ min: '1', step: '1' }}
-              autoComplete="cycleID"
-              size="small"
-            />
           </Grid>
           <Grid item xs={12} className={classes.center}>
             <FormLabel>

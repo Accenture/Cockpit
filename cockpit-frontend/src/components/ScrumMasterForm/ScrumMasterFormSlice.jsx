@@ -6,7 +6,7 @@ export const ScrumMasterFormSlice = createSlice({
     mvp: null,
     jiraProjectKey: null,
     entity: null,
-    cycle: null,
+    cycle: 1,
     imageUrl: null,
     formIsValid: false,
   },

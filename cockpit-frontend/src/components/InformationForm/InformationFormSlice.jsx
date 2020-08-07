@@ -5,7 +5,7 @@ export const InformationFormSlice = createSlice({
   initialState: {
     name: '',
     pitch: '',
-    cycle: 0,
+    cycle: 1,
     scopeCommitment: 0,
     sprintNumber: 0,
     status: '',
