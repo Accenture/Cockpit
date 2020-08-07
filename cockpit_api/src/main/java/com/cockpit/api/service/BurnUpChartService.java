@@ -69,12 +69,11 @@ public class BurnUpChartService {
 
             if (thisSprint!=null  && thisSprint.getCompletedUsNumber() != null) {
                 numberOfUsClosed = numberOfUsClosed + thisSprint.getCompletedUsNumber();
-
+                setExpected(chart, totalUSNumber, sprintNumber, jira, numberOfUsClosed, thisSprint);
             }
 
             setTotalStories(chart, sprintNumber, jira);
             setUsClosed(chart, sprintNumber, jira, numberOfUsClosed);
-            setExpected(chart, totalUSNumber, sprintNumber, jira, numberOfUsClosed, thisSprint);
 
             // Set projection
             if (chart.getUsClosed() != null) {
