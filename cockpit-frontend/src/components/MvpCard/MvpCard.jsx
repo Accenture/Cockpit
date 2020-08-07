@@ -47,7 +47,7 @@ export default function MvpCard(props) {
           </Grid>
         )}
         <Grid container spacing={3}>
-          <Grid item xs={12}>
+          <Grid item xs={6}>
             <Typography gutterBottom>
               {mvpInfo.jira.currentSprint
                 ? mvpInfo.jira.currentSprint
@@ -61,9 +61,7 @@ export default function MvpCard(props) {
               Current Sprint
             </Typography>
           </Grid>
-        </Grid>
-        {!isHomePage && (
-          <Grid container spacing={3}>
+          {!isHomePage && (
             <Grid item xs={6}>
               <Typography gutterBottom>
                 {mvpInfo.entity ? mvpInfo.entity : 'Unknown'}
@@ -76,8 +74,8 @@ export default function MvpCard(props) {
                 Entity
               </Typography>
             </Grid>
-          </Grid>
-        )}
+          )}
+        </Grid>
         {isHomePage && <Obeya mvp={mvpInfo} />}
       </CardContent>
     </Card>
