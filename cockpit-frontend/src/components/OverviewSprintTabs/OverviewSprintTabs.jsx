@@ -90,7 +90,7 @@ export default function OverviewSprintTabs(props) {
             displayEmpty
             value={selectedSprint}
             onChange={handleChange}
-            className={classes.sprintNumber}
+            className={classes.boldText}
           >
             {sprints.map((sprint) => (
               <MenuItem key={sprint} value={sprint}>
@@ -100,7 +100,7 @@ export default function OverviewSprintTabs(props) {
           </Select>{' '}
         </FormControl>
         <div className={classes.parent}>
-          <div className={classes.sprintNumber}> SPRINT {selectedSprint} </div>
+          <div className={classes.boldText}> SPRINT {selectedSprint} </div>
           <div className={classes.dateStyle}>
             {' '}
             From{' '}
@@ -118,7 +118,11 @@ export default function OverviewSprintTabs(props) {
           <CardContent>
             <Grid container alignItems="center">
               <Grid item xs={12}>
-                <Typography variant="subtitle1" color="textSecondary">
+                <Typography
+                  variant="subtitle1"
+                  color="textSecondary"
+                  className={classes.boldText}
+                >
                   Main Impediments
                 </Typography>
                 {impediments.length > 0 && (
@@ -126,7 +130,9 @@ export default function OverviewSprintTabs(props) {
                     {' '}
                     {impediments.map((impediment) => (
                       <Grid item xs={12} key={impediment.name}>
-                        <Typography variant="subtitle2">{impediment.name}</Typography>
+                        <Typography variant="subtitle2">
+                          {impediment.name}
+                        </Typography>
                         <Typography
                           variant="body2"
                           color="textSecondary"
