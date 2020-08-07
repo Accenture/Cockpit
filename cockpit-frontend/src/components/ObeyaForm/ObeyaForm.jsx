@@ -46,7 +46,8 @@ export default function ObeyaForm(props) {
       (sprint) => sprint.sprintNumber === sprintNumber,
     );
     setSelectedSprint(sp);
-  }, [mvp, sprintNumber]);
+    // eslint-disable-next-line
+  }, [sprintNumber]);
 
   useEffect(() => {
     props.sendSprint(selectedSprint);
