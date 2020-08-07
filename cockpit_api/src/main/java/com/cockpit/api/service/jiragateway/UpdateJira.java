@@ -53,10 +53,12 @@ public class UpdateJira {
         List<Jira> jiraList = jiraRepository.findAllByOrderById();
         for (Jira jira : jiraList) {
             if (jiraProjectsList.stream().anyMatch(projet -> projet.getKey().equals(jira.getJiraProjectKey()))) {
-                Project jiraProjectToUpdate = jiraProjectsList.stream()
-                        .filter(projet -> projet.getKey().equals(jira.getJiraProjectKey())).findFirst().get();
-                jira.setJiraProjectId(Integer.parseInt(jiraProjectToUpdate.getId()));
-                jiraRepository.save(jira);
+                Optional<Project> jiraProjectToUpdate = jiraProjectsList.stream()
+                        .filter(projet -> projet.getKey().equals(jira.getJiraProjectKey())).findFirst();
+                if (jiraProjectToUpdate.isPresent()) {
+                    jira.setJiraProjectId(Integer.parseInt(jiraProjectToUpdate.get().getId()));
+                    jiraRepository.save(jira);
+                }
             }
         }
         log.info("Jira - End update jira project id");
