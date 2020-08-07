@@ -44,7 +44,6 @@ export const ScrumMasterFormSlice = createSlice({
     setAlltoNull: (state) => {
       state.mvp = null;
       state.entity = null;
-      state.cycle = null;
       state.jiraProjectKey = null;
       state.imageUrl = null;
       state.formIsValid = false;
