@@ -20,7 +20,7 @@ export default makeStyles((theme) => ({
     color: 'rgba(0, 0, 0, 0.54)',
     marginTop: 8,
   },
-  sprintNumber: { fontWeight: 'bold' },
+  boldText: { fontWeight: 'bold' },
   impCard: {
     marginTop: '20px',
     backgroundColor: '#F5F5F9',
