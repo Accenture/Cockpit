@@ -159,7 +159,7 @@ export default function EditMvpSMForm() {
               >
                 <Tab label="Information" />
                 <Tab label="Team" />
-                <Tab label="Technologies" />
+                <Tab label="Technologies" disabled />
               </Tabs>
               {value === 0 && <InformationForm />}
               {value === 1 && <TeamManagementForm />}

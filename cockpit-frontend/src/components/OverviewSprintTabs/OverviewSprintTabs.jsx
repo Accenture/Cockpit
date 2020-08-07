@@ -118,17 +118,17 @@ export default function OverviewSprintTabs(props) {
           <CardContent>
             <Grid container alignItems="center">
               <Grid item xs={12}>
-                <Typography variant="h6" color="textSecondary">
-                  MAIN IMPEDIMENTS
+                <Typography variant="subtitle1" color="textSecondary">
+                  Main Impediments
                 </Typography>
                 {impediments.length > 0 && (
                   <div>
                     {' '}
                     {impediments.map((impediment) => (
                       <Grid item xs={12} key={impediment.name}>
-                        <Typography variant="h6">{impediment.name}</Typography>
+                        <Typography variant="subtitle2">{impediment.name}</Typography>
                         <Typography
-                          variant="body1"
+                          variant="body2"
                           color="textSecondary"
                           gutterBottom
                         >
