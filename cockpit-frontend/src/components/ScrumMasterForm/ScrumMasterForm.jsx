@@ -178,6 +178,30 @@ export default function ScrumMasterForm() {
           </Grid>
           <Grid item xs={12}>
             <FormLabel className={classes.formLabel}>
+              Enter your Jira Project Key
+            </FormLabel>
+
+            <TextField
+              className={classes.textField}
+              onChange={(e) => {
+                dispatch(setJiraProjectKey(e.target.value));
+                dispatch(setFormIsValid());
+                setError(false);
+              }}
+              required
+              fullWidth
+              variant="outlined"
+              id="jiraProjectKey"
+              name="jiraProjectKey"
+              placeholder="Jira Key"
+              autoComplete="jiraPeojectKey"
+              size="small"
+              error={error}
+              helperText={error ? 'Jira Project Key is invalid!' : ' '}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <FormLabel className={classes.formLabel}>
               Choose an entity
             </FormLabel>
             <FormControl
@@ -206,30 +230,6 @@ export default function ScrumMasterForm() {
                 <MenuItem value="STELA">STELA</MenuItem>
               </Select>
             </FormControl>
-          </Grid>
-          <Grid item xs={12}>
-            <FormLabel className={classes.formLabel}>
-              Enter your Jira Project Key
-            </FormLabel>
-
-            <TextField
-              className={classes.textField}
-              onChange={(e) => {
-                dispatch(setJiraProjectKey(e.target.value));
-                dispatch(setFormIsValid());
-                setError(false);
-              }}
-              required
-              fullWidth
-              variant="outlined"
-              id="jiraProjectKey"
-              name="jiraProjectKey"
-              placeholder="Jira Key"
-              autoComplete="jiraPeojectKey"
-              size="small"
-              error={error}
-              helperText={error ? 'Jira Project Key is invalid!' : ' '}
-            />
           </Grid>
           <Grid item xs={12} className={classes.center}>
             <FormLabel>
