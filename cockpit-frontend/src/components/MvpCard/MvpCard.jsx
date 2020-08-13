@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import { useLocation } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
 import logo from '../../common/media/logo-total.webp';
 import useStyles from './styles';
 import Obeya from '../Obeya/Obeya';
@@ -12,12 +13,31 @@ import Obeya from '../Obeya/Obeya';
 export default function MvpCard(props) {
   const classes = useStyles();
   const { mvpInfo } = props;
+  const [pitch, setPitch] = useState('');
+  const [readMore, setReadMore] = useState(false);
   const isHomePage = useLocation().pathname === '/';
   let status;
   const mvpNameGridValue = isHomePage ? 12 : 7;
   if (mvpInfo.status === 'inprogress') status = 'In Progress';
   else if (mvpInfo.status === 'transferred') status = 'Transferred';
   else status = 'Unknown status';
+  const seeMore = (event) => {
+    event.preventDefault();
+    setPitch(mvpInfo.mvpDescription);
+    setReadMore(false);
+  };
+  useEffect(() => {
+    if (mvpInfo.mvpDescription && mvpInfo.mvpDescription.length > 220) {
+      setPitch(mvpInfo.mvpDescription.substring(0, 220));
+      setReadMore(true);
+    } else {
+      setPitch(mvpInfo.mvpDescription);
+    }
+  }, [mvpInfo.mvpDescription]);
+  const seeLess = () => {
+    setReadMore(true);
+    setPitch(mvpInfo.mvpDescription.substring(0, 220));
+  };
   return (
     <Card className={isHomePage ? classes.dashboardCard : classes.mvpInfoCard}>
       <CardMedia
@@ -42,7 +62,13 @@ export default function MvpCard(props) {
           <Grid container spacing={1}>
             <Grid item xs={12}>
               <Typography className={classes.mvpDescription}>
-                {mvpInfo.mvpDescription}
+                <span onClick={seeLess}>{pitch}</span>
+                {readMore && <span>... </span>}
+                {readMore && (
+                  <Link href="#" onClick={seeMore}>
+                    See more
+                  </Link>
+                )}
               </Typography>
             </Grid>
           </Grid>
