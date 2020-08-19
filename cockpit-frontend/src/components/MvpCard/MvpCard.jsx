@@ -63,7 +63,8 @@ export default function MvpCard(props) {
             <Grid item xs={12}>
               <Typography className={classes.mvpDescription}>
                 <span // eslint-disable-line jsx-a11y/no-static-element-interactions
-                  onKeyPress={seeLess}
+                  onClick={seeLess}
+                  onKeyDown={seeLess}
                 >
                   {pitch}
                 </span>
