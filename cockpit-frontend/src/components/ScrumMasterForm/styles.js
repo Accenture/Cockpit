@@ -66,6 +66,7 @@ export default makeStyles((theme) => ({
     marginTop: 120,
     top: 0,
     color: 'grey',
+    width: 40,
   },
   bubbleBox: {
     width: 200,
