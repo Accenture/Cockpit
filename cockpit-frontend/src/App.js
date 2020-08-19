@@ -7,7 +7,7 @@ import { AuthProvider } from './services/authProvider';
 function App() {
   return (
     <AuthProvider>
-      <Routes />;
+      <Routes />
     </AuthProvider>
   );
 }
