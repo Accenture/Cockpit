@@ -62,9 +62,14 @@ export default function MvpCard(props) {
           <Grid container spacing={1}>
             <Grid item xs={12}>
               <Typography className={classes.mvpDescription}>
-                <span onClick={seeLess}>{pitch}</span>
+                <span // eslint-disable-line jsx-a11y/no-static-element-interactions
+                  onKeyPress={seeLess}
+                >
+                  {pitch}
+                </span>
                 {readMore && <span>... </span>}
                 {readMore && (
+                  // eslint-disable-next-line jsx-a11y/anchor-is-valid
                   <Link href="#" onClick={seeMore}>
                     See more
                   </Link>
