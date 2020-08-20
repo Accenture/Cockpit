@@ -46,12 +46,13 @@ public class JiraService {
         return modelMapper.map(jiraCreated, JiraDTO.class);
     }
 
-    public void deleteJira(Long id) throws ResourceNotFoundException {
+    public JiraDTO deleteJira(Long id) throws ResourceNotFoundException {
         Optional<Jira> jiraToDelete = jiraRepository.findById(id);
         if (!jiraToDelete.isPresent()) {
             throw new ResourceNotFoundException("Jira to delete not found");
         }
         jiraRepository.delete(jiraToDelete.get());
+        return modelMapper.map(jiraToDelete.get(), JiraDTO.class);
     }
     Jira findByMvp(Mvp mvp)
     {

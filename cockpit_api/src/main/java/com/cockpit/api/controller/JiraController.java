@@ -99,8 +99,8 @@ public class JiraController {
                                      @RequestHeader("Authorization") String authHeader) {
         if (authService.isUserAuthorized(authHeader)) {
             try {
-                jiraService.deleteJira(id);
-                return ResponseEntity.ok("One Jira Project has been deleted");
+                JiraDTO deletedJira =  jiraService.deleteJira(id);
+                return ResponseEntity.ok().body(deletedJira);
             } catch (ResourceNotFoundException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
             }

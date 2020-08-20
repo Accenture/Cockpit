@@ -10,4 +10,12 @@ export default makeStyles(() => ({
   cardRouterLink: {
     textDecoration: 'none',
   },
+  deleteButton: {
+    top: '210px',
+    left: '260px',
+    position: 'absolute',
+  },
+  parent: {
+    position: 'relative',
+  },
 }));

@@ -36,7 +36,7 @@ public class Mvp {
 
     private String status;
 
-    @ManyToOne(cascade=CascadeType.ALL)
+    @ManyToOne(cascade=CascadeType.MERGE)
     @JoinColumn(name = "id_team")
     private Team team;
 
