@@ -143,6 +143,14 @@ function deleteImpediment(id) {
     return e;
   }
 }
+function deleteMvp(id) {
+  try {
+    return API.delete(`${jiraUrl}/delete/${id}`, headers);
+  } catch (e) {
+    console.log(`Error when deleting Mvp: ${e}`);
+    return e;
+  }
+}
 const MvpService = {
   getAllMvp,
   createNewJiraProject,
@@ -159,6 +167,7 @@ const MvpService = {
   addObeya,
   addImpediment,
   deleteImpediment,
+  deleteMvp,
 };
 
 export default MvpService;

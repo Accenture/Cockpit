@@ -16,7 +16,10 @@ export const getOneMvp = createAsyncThunk('mvps/getOneMvp', async (id) => {
   const mvp = await MvpService.getOneMvp(id);
   return mvp.data;
 });
-
+export const deleteMvp = createAsyncThunk('mvps/deleteMvp', async (id) => {
+  const mvp = await MvpService.deleteMvp(id);
+  return mvp.data;
+});
 const ormSlice = createSlice({
   name: 'mvps',
   initialState: orm.getEmptyState(),
@@ -52,6 +55,12 @@ const ormSlice = createSlice({
       } else {
         session.Mvp.withId(mvp.id).update(mvp);
       }
+    }),
+
+    [deleteMvp.fulfilled]: withSession((session, action) => {
+      // delete mvp from the state array
+      const mvp = action.payload;
+      session.Mvp.withId(mvp.id).delete();
     }),
   },
 });
