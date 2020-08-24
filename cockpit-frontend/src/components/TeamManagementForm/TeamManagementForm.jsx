@@ -26,6 +26,7 @@ export default function TeamManagementForm() {
   const dispatch = useDispatch();
   const mvpId = useParams().id;
   const mvpInfo = useSelector((state) => mvpSelector(state, mvpId));
+  const [error, setError] = React.useState(false);
 
   useEffect(() => {
     setMvpTeam(mvpInfo.team);
@@ -39,14 +40,19 @@ export default function TeamManagementForm() {
     const team = {
       name: teamName,
     };
-    await MvpService.createNewTeam(team, mvpId);
-    setOpen(true);
-    setTeamName('');
-    dispatch(getOneMvp(mvpId));
-    setValue(0);
+    const result = await MvpService.createNewTeam(team, mvpId);
+    if (result.data) {
+      setOpen(true);
+      setTeamName('');
+      dispatch(getOneMvp(mvpId));
+      setValue(0);
+    } else {
+      setError(true);
+    }
   }
   function handleNameChange(event) {
     setTeamName(event.target.value);
+    setError(false);
   }
   function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -101,6 +107,8 @@ export default function TeamManagementForm() {
                   size="small"
                   value={teamName || ''}
                   onChange={handleNameChange}
+                  error={error}
+                  helperText={error ? 'Duplicate Team Name' : ' '}
                 />{' '}
               </Grid>
               <Grid item xs={4}>
