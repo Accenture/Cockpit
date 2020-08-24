@@ -108,7 +108,7 @@ export default function TeamManagementForm() {
                   value={teamName || ''}
                   onChange={handleNameChange}
                   error={error}
-                  helperText={error ? 'Duplicate Team Name' : ' '}
+                  helperText={error ? 'This name already exists' : ' '}
                 />{' '}
               </Grid>
               <Grid item xs={4}>
