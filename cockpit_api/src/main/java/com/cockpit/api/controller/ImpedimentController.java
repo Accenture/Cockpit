@@ -1,6 +1,7 @@
 package com.cockpit.api.controller;
 
 import com.cockpit.api.exception.ResourceNotFoundException;
+import com.cockpit.api.model.dto.ImpedimentDTO;
 import com.cockpit.api.service.AuthService;
 import com.cockpit.api.service.ImpedimentService;
 import org.modelmapper.ModelMapper;
@@ -33,6 +34,25 @@ public class ImpedimentController {
             try {
                 impedimentService.deleteImpediment(id);
                 return ResponseEntity.ok("One Impediment has been deleted");
+            } catch (ResourceNotFoundException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            }
+        } else {
+            return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    // UPDATE an Impediment
+    @PutMapping(
+            value = "/api/v1/impediment/update/{id}"
+    )
+    public ResponseEntity updateImpediment(@RequestBody ImpedimentDTO impedimentDTO,
+                                           @PathVariable Long id,
+                                           @RequestHeader("Authorization") String authHeader) {
+        if (authService.isUserAuthorized(authHeader)) {
+            try {
+                ImpedimentDTO impediment = impedimentService.updateImpediment(impedimentDTO, id);
+                return ResponseEntity.ok().body(impediment);
             } catch (ResourceNotFoundException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
             }

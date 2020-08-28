@@ -151,6 +151,14 @@ function deleteMvp(id) {
     return e;
   }
 }
+function updateImpediment(impediment, id) {
+  try {
+    return API.put(`${impedimentUrl}/update/${id}`, impediment, headers);
+  } catch (e) {
+    console.log(`Error when updating impediment: ${e}`);
+    return e;
+  }
+}
 const MvpService = {
   getAllMvp,
   createNewJiraProject,
@@ -168,6 +176,7 @@ const MvpService = {
   addImpediment,
   deleteImpediment,
   deleteMvp,
+  updateImpediment,
 };
 
 export default MvpService;

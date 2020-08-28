@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import FormLabel from '@material-ui/core/FormLabel';
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -27,6 +28,7 @@ export default function Impediment(props) {
   const [name, setName] = React.useState('');
   const [explanation, setExplanation] = React.useState('');
   const dispatch = useDispatch();
+  const [update, setUpdate] = React.useState(false);
   const [number, setNumber] = React.useState(0);
   const [selectedImpediment, setSelectedImpediment] = React.useState(0);
   const classes = useStyles();
@@ -51,13 +53,21 @@ export default function Impediment(props) {
       name,
       description: explanation,
     };
-
-    await MvpService.addImpediment(impediment, mvp.jira.id, sprintNumber);
-    dispatch(getOneMvp(mvp.id));
-    setName('');
-    setExplanation('');
-    setNumber(number + 1);
-    if (number === 4) setOpen(false);
+    if (!update) {
+      await MvpService.addImpediment(impediment, mvp.jira.id, sprintNumber);
+      dispatch(getOneMvp(mvp.id));
+      setName('');
+      setExplanation('');
+      setNumber(number + 1);
+      if (number === 4) setOpen(false);
+    } else {
+      await MvpService.updateImpediment(impediment, selectedImpediment);
+      setOpen(false);
+      dispatch(getOneMvp(mvp.id));
+      setName('');
+      setExplanation('');
+      setUpdate(false);
+    }
   }
   function fieldsValidator() {
     if (name.length === 0 || explanation.length === 0) return true;
@@ -82,6 +92,13 @@ export default function Impediment(props) {
     setOpenDialog(true);
     setSelectedImpediment(impediment.id);
   }
+  function handleEditClick(impediment) {
+    setName(impediment.name);
+    setExplanation(impediment.description);
+    setOpen(true);
+    setUpdate(true);
+    setSelectedImpediment(impediment.id);
+  }
   return (
     <div className={classes.root}>
       {impediments.length > 0 && (
@@ -90,12 +107,23 @@ export default function Impediment(props) {
           <List>
             {impediments.map((impediment) => (
               <Grid container alignItems="center" key={impediment.id}>
-                <Grid item xs={8}>
+                <Grid item xs={7}>
                   <ListItem className={classes.listItem}>
                     {impediment.name}
                   </ListItem>
                 </Grid>{' '}
-                <Grid item xs={4} className={classes.alignment}>
+                <Grid item xs={2} className={classes.alignment}>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    className={classes.deleteButton}
+                    startIcon={<EditIcon />}
+                    onClick={() => handleEditClick(impediment)}
+                  >
+                    Edit
+                  </Button>{' '}
+                </Grid>{' '}
+                <Grid item xs={3} className={classes.alignment}>
                   <Button
                     variant="outlined"
                     color="secondary"
