@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles((theme) => ({
   dashboardCard: {
-    margin: 'auto',
+    marginTop: '-48px',
     padding: theme.spacing(2),
   },
   mvpInfoCard: {
