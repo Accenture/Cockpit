@@ -46,23 +46,6 @@ public class MvpService {
 		return mvpList.stream().map(mvp -> modelMapper.map(mvp, MvpDTO.class)).collect(Collectors.toList());
 	}
 
-	public MvpDTO updateMvp(MvpDTO mvpDTO) throws ResourceNotFoundException {
-		Optional<Mvp> mvpToUpdate = mvpRepository.findById(mvpDTO.getId());
-		if (!mvpToUpdate.isPresent()) {
-			throw new ResourceNotFoundException("Mvp to update not found");
-		}
-		Mvp mvpCreated = mvpRepository.save(modelMapper.map(mvpDTO, Mvp.class));
-		return modelMapper.map(mvpCreated, MvpDTO.class);
-	}
-
-	public void deleteMvp(Long id) throws ResourceNotFoundException {
-		Optional<Mvp> mvpToDelete = mvpRepository.findById(id);
-		if (!mvpToDelete.isPresent()) {
-			throw new ResourceNotFoundException("Mvp to delete not found");
-		}
-		mvpRepository.delete(mvpToDelete.get());
-	}
-
 	public MvpDTO assignTeamOfMvp(Long id, Long teamId) throws ResourceNotFoundException {
 		Optional<Mvp> mvpToAssignedTo = mvpRepository.findById(id);
 		if (!mvpToAssignedTo.isPresent()) {
