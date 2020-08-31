@@ -4,8 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.cockpit.api.model.dao.Impediment;
-import com.cockpit.api.model.dto.ImpedimentDTO;
-import com.cockpit.api.model.dto.SprintDTO;
+import com.cockpit.api.model.dto.*;
 import com.cockpit.api.service.AuthService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,11 +25,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Sprint;
-import com.cockpit.api.model.dto.JiraDTO;
-import com.cockpit.api.model.dto.ObeyaDTO;
 import com.cockpit.api.service.JiraService;
 import com.cockpit.api.service.SprintService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = {SprintController.class})
@@ -106,6 +106,27 @@ public class SprintControllerTest {
         // then
         assertEquals(HttpStatus.OK.value(), response.getStatus());
 
+    }
 
+    @Test
+    public void whenGetSprintBySprintNumberAndJiraThenReturn200() throws Exception {
+        Sprint mockSprint = new Sprint();
+        mockSprint.setId(1l);
+        Jira mockJira = new Jira();
+        JiraDTO jiraDto = modelMapper.map(mockJira, JiraDTO.class);
+
+        // given
+        Mockito.when(jiraService.findJiraById(Mockito.anyLong())).thenReturn(jiraDto);
+        Mockito.when(sprintService.findByJiraAndSprintNumber(Mockito.any(), Mockito.anyInt()))
+                .thenReturn(mockSprint);
+        Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
+
+        // when
+        MvcResult resultGetTeamById = mockMvc
+                .perform(MockMvcRequestBuilders.get("/api/v1/sprint/1/1").accept(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer token"))
+                .andExpect(status().isOk()).andReturn();
+        // then
+        assertEquals(HttpStatus.OK.value(), resultGetTeamById.getResponse().getStatus());
     }
 }

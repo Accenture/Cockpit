@@ -95,7 +95,7 @@ public class MvpControllerTest {
 	}
 
 	@Test
-	public void whenGetMvpByIdOrGetAllMvpsThenReturn200() throws Exception {
+	public void whenGetTeamByIdOrGetAllTeamsThenReturn200() throws Exception {
 		MvpDTO mockMvp = new MvpDTO();
 		mockMvp.setId(1l);
 		List<MvpDTO> mockMvpList = new ArrayList<>();

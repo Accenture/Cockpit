@@ -2,7 +2,6 @@ package com.cockpit.api.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import com.cockpit.api.service.AuthService;
 import com.cockpit.api.service.jiragateway.JiraApiService;
 import org.junit.Test;
@@ -20,7 +19,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dto.JiraDTO;
 import com.cockpit.api.service.JiraService;

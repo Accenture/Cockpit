@@ -7,10 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dto.BurnUpChartDTO;
-
 import com.cockpit.api.service.BurnUpChartService;
 
 @RestController
@@ -30,7 +28,7 @@ public class BurnUpChartController {
     @GetMapping(
             value = "/api/v1/burnUpChart/{id}"
     )
-    public ResponseEntity getMvp(@PathVariable Long id,
+    public ResponseEntity getBurnUpChart(@PathVariable Long id,
                                  @RequestHeader("Authorization") String authHeader) {
         if (authService.isUserAuthorized(authHeader)) {
             try {

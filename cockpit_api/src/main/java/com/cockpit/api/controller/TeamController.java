@@ -124,7 +124,7 @@ public class TeamController {
             try {
                 TeamDTO teamUpdated = teamService.createTeamMember(id, teamMemberDTO);
                 return ResponseEntity.ok().body(teamUpdated);
-            } catch (com.cockpit.api.exception.ResourceNotFoundException e) {
+            } catch (ResourceNotFoundException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
             }
         } else {
@@ -158,7 +158,7 @@ public class TeamController {
             try {
                 TeamDTO teamUpdated = teamService.deleteTeamMember(id, teamMemberId);
                 return ResponseEntity.ok().body(teamUpdated);
-            } catch (com.cockpit.api.exception.ResourceNotFoundException e) {
+            } catch (ResourceNotFoundException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
             }
         } else {
