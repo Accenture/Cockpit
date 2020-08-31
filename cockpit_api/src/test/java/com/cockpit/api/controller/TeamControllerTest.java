@@ -87,22 +87,81 @@ public class TeamControllerTest {
 
         TeamDTO teamDto = modelMapper.map(mockTeam, TeamDTO.class);
 
-        // given
-        Mockito.when(teamService.deleteTeamMember(mockTeam.getId(), mockTeamMember.getId())).thenReturn(teamDto);
+		// given
+		Mockito.when(teamService.deleteTeamMember(mockTeam.getId(), mockTeamMember.getId())).thenReturn(teamDto);
+		Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
 
-        // when
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                .delete("/api/v1/team/{id}/deleteTeamMember/{teamMeberId}", mockTeam.getId(), mockTeamMember.getId())
-                .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
-                .header("Authorization", "Bearer token")).andExpect(status().isOk())
-                .andReturn();
+		// when
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+				.delete("/api/v1/team/{id}/deleteTeamMember/{teamMeberId}", mockTeam.getId(), mockTeamMember.getId())
+				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer token")).andExpect(status().isOk())
+				.delete("/api/v1/team/{id}/deleteTeamMember/{teamMemberId}", mockTeam.getId(), mockTeamMember.getId())
+				.header("Authorization", "Bearer token")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andReturn();
 
         MockHttpServletResponse response = result.getResponse();
 
         // then
         assertEquals(HttpStatus.OK.value(), response.getStatus());
 
-    }
+	}
+
+	@Test
+	public void whenCreateTeamThenReturn200() throws Exception {
+		Team mockTeam = new Team();
+
+		TeamDTO teamDto = modelMapper.map(mockTeam, TeamDTO.class);
+
+		// given
+		Mockito.when(teamService.createNewTeam(teamDto, 1l)).thenReturn(teamDto);
+		Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
+
+		// when
+		MvcResult result = mockMvc
+				.perform(MockMvcRequestBuilders.post("/api/v1/team/create/1")
+						.header("Authorization", "Bearer token")
+						.content(new ObjectMapper().writeValueAsString(teamDto))
+						.contentType(MediaType.APPLICATION_JSON)
+						.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk()).andReturn();
+
+		MockHttpServletResponse response = result.getResponse();
+
+		// then
+		assertEquals(HttpStatus.OK.value(), response.getStatus());
+	}
+
+	@Test
+	public void whenGetTeamByIdOrGetAllMvpsThenReturn200() throws Exception {
+		TeamDTO mockTeam = new TeamDTO();
+		mockTeam.setId(1l);
+		List<TeamDTO> mockTeamList = new ArrayList<>();
+		mockTeamList.add(mockTeam);
+
+		// given
+		Mockito.when(teamService.findTeamById(Mockito.anyLong())).thenReturn(mockTeam);
+		Mockito.when(teamService.findAll()).thenReturn(mockTeamList);
+		Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
+
+		// when
+		MvcResult resultGetTeamById = mockMvc
+				.perform(MockMvcRequestBuilders.get("/api/v1/team/1").accept(MediaType.APPLICATION_JSON)
+						.header("Authorization", "Bearer token"))
+				.andExpect(status().isOk()).andReturn();
+		MvcResult resultGetAllTeams = mockMvc
+				.perform(MockMvcRequestBuilders.get("/api/v1/team/all").accept(MediaType.APPLICATION_JSON)
+						.header("Authorization", "Bearer token"))
+				.andExpect(status().isOk()).andReturn();
+		// then
+		assertEquals(HttpStatus.OK.value(), resultGetTeamById.getResponse().getStatus());
+		assertEquals(HttpStatus.OK.value(), resultGetAllTeams.getResponse().getStatus());
+	}
+	@Test
+	public void whenUnassignTeamMemberThenReturn200() throws Exception {
 
     @Test
     public void whenUnassignTeamMemberThenReturn200() throws Exception {
