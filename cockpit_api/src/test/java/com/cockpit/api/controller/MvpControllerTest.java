@@ -6,7 +6,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cockpit.api.model.dao.*;
+import com.cockpit.api.model.dto.ImpedimentDTO;
+import com.cockpit.api.model.dto.JiraDTO;
+import com.cockpit.api.model.dto.SprintDTO;
 import com.cockpit.api.service.AuthService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -22,8 +27,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import com.cockpit.api.model.dao.Mvp;
-import com.cockpit.api.model.dao.Team;
 import com.cockpit.api.model.dto.MvpDTO;
 
 import com.cockpit.api.service.MvpService;
@@ -55,6 +58,7 @@ public class MvpControllerTest {
 
 		// given
 		Mockito.when(mvpService.unassignTeamOfMvp(mockMvp.getId())).thenReturn(mvpDto);
+		Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
 
 		// when
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/mvp/unassignTeam/{id}", mockMvp.getId())
@@ -78,6 +82,7 @@ public class MvpControllerTest {
 
 		// given
 		Mockito.when(mvpService.assignTeamOfMvp(mockMvp.getId(),mockTeam.getId())).thenReturn(mvpDto);
+		Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
 
 		// when
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/mvp/{id}/assignTeam/{teamId}", mockMvp.getId(),mockTeam.getId())
@@ -90,28 +95,52 @@ public class MvpControllerTest {
 	}
 
 	@Test
-	public void whenGetAllMvpThenReturn200() throws Exception {
+	public void whenGetMvpByIdOrGetAllMvpsThenReturn200() throws Exception {
 		MvpDTO mockMvp = new MvpDTO();
 		mockMvp.setId(1l);
-		mockMvp.setName("cockpit");
-		mockMvp.setEntity("RC");
-		mockMvp.setCycle(1);
-		mockMvp.setUrlMvpAvatar("http://hulza.files.wordpress.com/2012/07/brave_still_3.jpg");
 		List<MvpDTO> mockMvpList = new ArrayList<>();
 		mockMvpList.add(mockMvp);
 		
 		// given
+		Mockito.when(mvpService.findMvpById(Mockito.anyLong())).thenReturn(mockMvp);
 		Mockito.when(mvpService.findAllMvp()).thenReturn(mockMvpList);
-		
+		Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
+
 		// when
-		MvcResult result = mockMvc
-				.perform(MockMvcRequestBuilders.get("/api/v1/mvp/all").accept(MediaType.APPLICATION_JSON)
-				.header("Authorization", "Bearer token"))
+		MvcResult resultGetMvpById = mockMvc
+				.perform(MockMvcRequestBuilders.get("/api/v1/mvp/1").accept(MediaType.APPLICATION_JSON)
+						.header("Authorization", "Bearer token"))
 				.andExpect(status().isOk()).andReturn();
+		MvcResult resultGetAllMvps = mockMvc
+				.perform(MockMvcRequestBuilders.get("/api/v1/mvp/all").accept(MediaType.APPLICATION_JSON)
+						.header("Authorization", "Bearer token"))
+				.andExpect(status().isOk()).andReturn();
+		// then
+		assertEquals(HttpStatus.OK.value(), resultGetMvpById.getResponse().getStatus());
+		assertEquals(HttpStatus.OK.value(), resultGetAllMvps.getResponse().getStatus());
+	}
+
+	@Test
+	public void whenCreateMvpThenReturn200() throws Exception {
+		MvpDTO mockMvp = new MvpDTO();
+		mockMvp.setId(1l);
+
+		// Given
+		Mockito.when(mvpService.createNewMvp(mockMvp)).thenReturn(modelMapper.map(mockMvp, MvpDTO.class));
+		Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
+
+		// When
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/mvp/create")
+				.content(new ObjectMapper().writeValueAsString(mockMvp))
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON).header("Authorization", "Bearer token"))
+				.andExpect(status().isOk()).andReturn();
+
 		MockHttpServletResponse response = result.getResponse();
 
 		// then
 		assertEquals(HttpStatus.OK.value(), response.getStatus());
+
 	}
 
 }

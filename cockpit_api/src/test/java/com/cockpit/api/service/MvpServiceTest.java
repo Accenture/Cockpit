@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.cockpit.api.exception.ResourceNotFoundException;
@@ -20,6 +21,8 @@ import com.cockpit.api.repository.TeamRepository;
 
 @RunWith(SpringRunner.class)
 public class MvpServiceTest {
+
+	private ModelMapper modelMapper = new ModelMapper();
 
 	private MvpService mvpService;
 
@@ -97,5 +100,37 @@ public class MvpServiceTest {
 
 		// then
 		Assert.assertEquals(1, mvpList.size());
+	}
+
+	@Test
+	public void whenGetMvpByIdThenReturnMvp() throws ResourceNotFoundException {
+		Mvp mockMvp = new Mvp();
+		mockMvp.setId(1l);
+		mockMvp.setName("cockpit");
+
+		// given
+		Mockito.when(mvpRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(mockMvp));
+
+		// when
+		MvpDTO mvp = mvpService.findMvpById(1l);
+
+		// then
+		Assert.assertEquals("cockpit", mvp.getName());
+	}
+
+	@Test
+	public void whenCreateThenReturnMvp() {
+		Mvp mockMvp = new Mvp();
+		mockMvp.setId(1l);
+		mockMvp.setName("cockpit");
+
+		// given
+		Mockito.when(mvpRepository.save(Mockito.any())).thenReturn(mockMvp);
+
+		// when
+		MvpDTO mvp = mvpService.createNewMvp(modelMapper.map(mockMvp, MvpDTO.class));
+
+		// then
+		Assert.assertEquals("cockpit", mvp.getName());
 	}
 }

@@ -46,7 +46,7 @@ public class JiraControllerTest {
     private AuthService authService;
 
     @Test
-    public void whenAddJiraThenReturn200() throws Exception {
+    public void whenCreateJiraThenReturn200() throws Exception {
 
         Jira mockJira = new Jira();
 
@@ -54,6 +54,7 @@ public class JiraControllerTest {
 
         // given
         Mockito.when(jiraService.createNewJiraProject(jiraDto)).thenReturn(jiraDto);
+        Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
 
         // when
         MvcResult result = mockMvc
@@ -71,4 +72,87 @@ public class JiraControllerTest {
 
     }
 
+    @Test
+    public void whenGetJiraByIdThenReturn200() throws Exception {
+
+        Jira mockJira = new Jira();
+        mockJira.setId(1L);
+
+        JiraDTO jiraDto = modelMapper.map(mockJira, JiraDTO.class);
+
+        // given
+        Mockito.when(jiraService.findJiraById(Mockito.anyLong())).thenReturn(jiraDto);
+        Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
+
+        // when
+        MvcResult result = mockMvc
+                .perform(MockMvcRequestBuilders.get("/api/v1/jira/1")
+                        .header("Authorization", "Bearer token")
+                        .content(new ObjectMapper().writeValueAsString(jiraDto))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+
+        MockHttpServletResponse response = result.getResponse();
+
+        // then
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+
+    }
+
+    @Test
+    public void whenUpdateJiraThenReturn200() throws Exception {
+
+        Jira mockJira = new Jira();
+        mockJira.setId(1L);
+
+        JiraDTO jiraDto = modelMapper.map(mockJira, JiraDTO.class);
+
+        // given
+        Mockito.when(jiraService.updateJira(Mockito.any())).thenReturn(jiraDto);
+        Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
+
+        // when
+        MvcResult result = mockMvc
+                .perform(MockMvcRequestBuilders.put("/api/v1/jira/update")
+                        .header("Authorization", "Bearer token")
+                        .content(new ObjectMapper().writeValueAsString(jiraDto))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+
+        MockHttpServletResponse response = result.getResponse();
+
+        // then
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+
+    }
+
+    @Test
+    public void whenDeleteJiraThenReturn200() throws Exception {
+
+        Jira mockJira = new Jira();
+        mockJira.setId(1L);
+
+        JiraDTO jiraDto = modelMapper.map(mockJira, JiraDTO.class);
+
+        // given
+        Mockito.when(jiraService.deleteJira(Mockito.any())).thenReturn(jiraDto);
+        Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
+
+        // when
+        MvcResult result = mockMvc
+                .perform(MockMvcRequestBuilders.delete("/api/v1/jira/delete/1")
+                        .header("Authorization", "Bearer token")
+                        .content(new ObjectMapper().writeValueAsString(jiraDto))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+
+        MockHttpServletResponse response = result.getResponse();
+
+        // then
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+
+    }
 }

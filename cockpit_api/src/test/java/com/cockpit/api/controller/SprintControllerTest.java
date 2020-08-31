@@ -63,6 +63,7 @@ public class SprintControllerTest {
         Mockito.when(jiraService.findJiraById(jira.getId())).thenReturn(modelMapper.map(jira, JiraDTO.class));
         Mockito.when(sprintService.findByJiraAndSprintNumber(jira, sprint.getSprintNumber())).thenReturn(sprint);
         Mockito.when(sprintService.setTeamHealth(obeya, sprint)).thenReturn(modelMapper.map(sprint, SprintDTO.class));
+        Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
 
         // When
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/sprint/{jiraId}/updateTeamHealth/{sprintNumber}", jira.getId(), sprint.getSprintNumber())
@@ -91,6 +92,7 @@ public class SprintControllerTest {
         Mockito.when(jiraService.findJiraById(jira.getId())).thenReturn(modelMapper.map(jira, JiraDTO.class));
         Mockito.when(sprintService.findByJiraAndSprintNumber(jira, sprint.getSprintNumber())).thenReturn(sprint);
         Mockito.when(sprintService.addImpediment(impediment, sprint)).thenReturn(modelMapper.map(sprint, SprintDTO.class));
+        Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
 
         // When
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/sprint/{jiraId}/addImpediment/{sprintNumber}", jira.getId(), sprint.getSprintNumber())

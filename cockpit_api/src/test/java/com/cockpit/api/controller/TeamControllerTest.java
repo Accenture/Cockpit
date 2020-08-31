@@ -57,8 +57,9 @@ public class TeamControllerTest {
         mockTeam.setId(1l);
         TeamDTO teamDto = modelMapper.map(mockTeam, TeamDTO.class);
 
-        // given
-        Mockito.when(teamService.createTeamMember(mockTeam.getId(), mockTeamMember)).thenReturn(teamDto);
+		// given
+		Mockito.when(teamService.createTeamMember(mockTeam.getId(), mockTeamMember)).thenReturn(teamDto);
+		Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
 
         // when
         MvcResult result = mockMvc
