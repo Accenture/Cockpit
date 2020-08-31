@@ -48,7 +48,13 @@ export default function MvpCardList(props) {
       <Grid item xs={12}>
         <Grid container spacing={5} className={classes.gridList}>
           {mvpList.map((mvp) => (
-            <Grid item key={mvp.id} className={classes.parent}>
+            <Grid item key={mvp.id}>
+              <Link
+                to={`/mvp-info/${mvp.id}`}
+                className={classes.cardRouterLink}
+              >
+                <MvpCard mvpInfo={mvp} />
+              </Link>
               <IconButton
                 className={classes.deleteButton}
                 aria-label="delete"
@@ -57,12 +63,6 @@ export default function MvpCardList(props) {
               >
                 <DeleteIcon />
               </IconButton>
-              <Link
-                to={`/mvp-info/${mvp.id}`}
-                className={classes.cardRouterLink}
-              >
-                <MvpCard mvpInfo={mvp} />
-              </Link>
             </Grid>
           ))}
         </Grid>
