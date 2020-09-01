@@ -20,93 +20,107 @@ import com.cockpit.api.repository.TeamRepository;
 
 @Service
 public class TeamService {
-	private final TeamMemberRepository teamMemberRepository;
-	private final TeamRepository teamRepository;
-	private final MvpRepository mvpRepository;
+    private final TeamMemberRepository teamMemberRepository;
+    private final TeamRepository teamRepository;
+    private final MvpRepository mvpRepository;
 
-	private ModelMapper modelMapper = new ModelMapper();
+    private ModelMapper modelMapper = new ModelMapper();
 
-	@Autowired
-	public TeamService(TeamRepository teamRepository, MvpRepository mvpRepository,
-			TeamMemberRepository teamMemberRepository) {
-		this.teamRepository = teamRepository;
-		this.mvpRepository = mvpRepository;
-		this.teamMemberRepository = teamMemberRepository;
-	}
+    @Autowired
+    public TeamService(TeamRepository teamRepository, MvpRepository mvpRepository,
+                       TeamMemberRepository teamMemberRepository) {
+        this.teamRepository = teamRepository;
+        this.mvpRepository = mvpRepository;
+        this.teamMemberRepository = teamMemberRepository;
+    }
 
-	public TeamDTO createNewTeam(TeamDTO teamDTO, Long mvpId) throws ResourceNotFoundException {
-		Team teamCreated = teamRepository.save(modelMapper.map(teamDTO, Team.class));
-		Optional<Mvp> mvp = mvpRepository.findById(mvpId);
-		if (!mvp.isPresent()) {
-			throw new ResourceNotFoundException("mvp not found");
-		}
-		mvp.get().setTeam(teamCreated);
-		mvpRepository.save(mvp.get());
-		return modelMapper.map(teamCreated, TeamDTO.class);
-	}
+    public TeamDTO createNewTeam(TeamDTO teamDTO, Long mvpId) throws ResourceNotFoundException {
+        if (verifyUniqueName(teamDTO)) {
+            Team teamCreated = teamRepository.save(modelMapper.map(teamDTO, Team.class));
+            Optional<Mvp> mvp = mvpRepository.findById(mvpId);
+            if (!mvp.isPresent()) {
+                throw new ResourceNotFoundException("mvp not found");
+            }
+            mvp.get().setTeam(teamCreated);
+            mvpRepository.save(mvp.get());
+            return modelMapper.map(teamCreated, TeamDTO.class);
+        }
+        return null;
 
-	public TeamDTO findTeamById(Long id) throws ResourceNotFoundException {
-		Optional<Team> teamRes = teamRepository.findById(id);
-		if (!teamRes.isPresent()) {
-			throw new ResourceNotFoundException("Team can not be found");
-		}
-		return modelMapper.map(teamRes.get(), TeamDTO.class);
-	}
+    }
 
-	public TeamDTO updateTeam(TeamDTO teamDTO, Long id) throws ResourceNotFoundException {
-		Optional<Team> teamToUpdate = teamRepository.findById(id);
-		if (!teamToUpdate.isPresent()) {
-			throw new ResourceNotFoundException("The team to be updated does not exist in database");
-		}
-		teamDTO.setId(teamToUpdate.get().getId());
-		Team teamCreated = teamRepository.save(modelMapper.map(teamDTO, Team.class));
-		return modelMapper.map(teamCreated, TeamDTO.class);
-	}
+    public TeamDTO findTeamById(Long id) throws ResourceNotFoundException {
+        Optional<Team> teamRes = teamRepository.findById(id);
+        if (!teamRes.isPresent()) {
+            throw new ResourceNotFoundException("Team can not be found");
+        }
+        return modelMapper.map(teamRes.get(), TeamDTO.class);
+    }
 
-	public void deleteTeam(Long id) throws ResourceNotFoundException {
-		Optional<Team> teamToDelete = teamRepository.findById(id);
-		if (!teamToDelete.isPresent()) {
-			throw new ResourceNotFoundException("The team to be deleted does not exist in database");
-		}
-		teamRepository.delete(teamToDelete.get());
-	}
+    public TeamDTO updateTeam(TeamDTO teamDTO, Long id) throws ResourceNotFoundException {
+        Optional<Team> teamToUpdate = teamRepository.findById(id);
+        if (!teamToUpdate.isPresent()) {
+            throw new ResourceNotFoundException("The team to be updated does not exist in database");
+        }
+        teamDTO.setId(teamToUpdate.get().getId());
+        Team teamCreated = teamRepository.save(modelMapper.map(teamDTO, Team.class));
+        return modelMapper.map(teamCreated, TeamDTO.class);
+    }
 
-	public List<TeamDTO> findAll() {
-		List<Team> teamList = teamRepository.findAllByOrderByName();
-		return teamList.stream().map(team -> modelMapper.map(team, TeamDTO.class)).collect(Collectors.toList());
+    public void deleteTeam(Long id) throws ResourceNotFoundException {
+        Optional<Team> teamToDelete = teamRepository.findById(id);
+        if (!teamToDelete.isPresent()) {
+            throw new ResourceNotFoundException("The team to be deleted does not exist in database");
+        }
+        teamRepository.delete(teamToDelete.get());
+    }
 
-	}
+    public List<TeamDTO> findAll() {
+        List<Team> teamList = teamRepository.findAllByOrderByName();
+        return teamList.stream().map(team -> modelMapper.map(team, TeamDTO.class)).collect(Collectors.toList());
 
-	public TeamDTO createTeamMember(Long idTeam, TeamMemberDTO member) throws ResourceNotFoundException {
+    }
 
-		Optional<Team> teamToUpdate = teamRepository.findById(idTeam);
-		if (!teamToUpdate.isPresent()) {
-			throw new ResourceNotFoundException("Team not found");
-		}
+    public TeamDTO createTeamMember(Long idTeam, TeamMemberDTO member) throws ResourceNotFoundException {
 
-		teamToUpdate.get().getTeamMembers().add(modelMapper.map(member, TeamMember.class));
-		Team team = teamRepository.save(teamToUpdate.get());
+        Optional<Team> teamToUpdate = teamRepository.findById(idTeam);
+        if (!teamToUpdate.isPresent()) {
+            throw new ResourceNotFoundException("Team not found");
+        }
 
-		return modelMapper.map(team, TeamDTO.class);
-	}
+        teamToUpdate.get().getTeamMembers().add(modelMapper.map(member, TeamMember.class));
+        Team team = teamRepository.save(teamToUpdate.get());
 
-	public TeamDTO deleteTeamMember(Long idTeam, Long teamMeberId) throws ResourceNotFoundException {
+        return modelMapper.map(team, TeamDTO.class);
+    }
 
-		Optional<Team> teamToUpdate = teamRepository.findById(idTeam);
-		if (!teamToUpdate.isPresent()) {
-			throw new ResourceNotFoundException("Team not found");
-		}
-		Optional<TeamMember> existingMember = teamMemberRepository.findById(teamMeberId);
-		if (!existingMember.isPresent()) {
-			throw new ResourceNotFoundException("Team member not found");
-		}
+    public TeamDTO deleteTeamMember(Long idTeam, Long teamMeberId) throws ResourceNotFoundException {
 
-		teamToUpdate.get().getTeamMembers().remove(existingMember.get());
-		existingMember.get().getTeams().remove(teamToUpdate.get());
-		teamMemberRepository.delete(existingMember.get());
-		Team team = teamRepository.save(teamToUpdate.get());
+        Optional<Team> teamToUpdate = teamRepository.findById(idTeam);
+        if (!teamToUpdate.isPresent()) {
+            throw new ResourceNotFoundException("Team not found");
+        }
+        Optional<TeamMember> existingMember = teamMemberRepository.findById(teamMeberId);
+        if (!existingMember.isPresent()) {
+            throw new ResourceNotFoundException("Team member not found");
+        }
 
-		return modelMapper.map(team, TeamDTO.class);
-	}
+        teamToUpdate.get().getTeamMembers().remove(existingMember.get());
+        existingMember.get().getTeams().remove(teamToUpdate.get());
+        teamMemberRepository.delete(existingMember.get());
+        Team team = teamRepository.save(teamToUpdate.get());
 
+        return modelMapper.map(team, TeamDTO.class);
+    }
+
+    boolean verifyUniqueName(TeamDTO teamDTO) {
+        List<Team> teams = teamRepository.findAllByOrderByName();
+        for (Team team : teams) {
+            if (team.getName().toLowerCase().equals(teamDTO.getName().toLowerCase())) {
+                return false;
+            }
+        }
+        return true;
+
+    }
 }
