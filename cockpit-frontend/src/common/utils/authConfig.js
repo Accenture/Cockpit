@@ -3,7 +3,7 @@ const AUTH_CONFIG = {
     client_id: 'cockpit-dev',
     redirect_uri: 'https://azwbdcokp01.azurewebsites.net/authentication',
     response_type: 'id_token token',
-    scope: 'openid email',
+    scope: 'openid email groups',
     load_user_info: false,
     authority: 'https://pp-sso-digitalpassport.hubtotal.net/sso/oauth2/total',
     metadata: {
@@ -24,7 +24,7 @@ const AUTH_CONFIG = {
     client_id: 'cockpit-qa',
     redirect_uri: 'https://azwbqcokp01.azurewebsites.net/authentication',
     response_type: 'id_token token',
-    scope: 'openid email',
+    scope: 'openid email groups',
     load_user_info: false,
     authority: 'https://pp-sso-digitalpassport.hubtotal.net/sso/oauth2/total',
     metadata: {
@@ -46,7 +46,7 @@ const AUTH_CONFIG = {
     client_id: 'cockpit-prod',
     redirect_uri: 'https://azwbpcokp01.azurewebsites.net/authentication',
     response_type: 'id_token token',
-    scope: 'openid email',
+    scope: 'openid email groups',
     load_user_info: false,
     authority: 'https://sso-digitalpassport.hubtotal.net/sso/oauth2/total',
     metadata: {
