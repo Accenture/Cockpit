@@ -12,12 +12,15 @@ import Button from '@material-ui/core/Button';
 import MvpCard from '../MvpCard/MvpCard';
 import { fetchAllMvps, deleteMvp } from '../../redux/ormSlice';
 import { mvpSelector } from '../../redux/selector';
+import { isScrumMasterState } from '../HomePage/HomePageSlice';
+
 // styles
 import useStyles from './styles';
 
 export default function MvpCardList(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const isScrumMaster = useSelector(isScrumMasterState);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [selectedMvp, setSelectedMvp] = React.useState({});
 
@@ -49,14 +52,16 @@ export default function MvpCardList(props) {
         <Grid container spacing={5} className={classes.gridList}>
           {mvpList.map((mvp) => (
             <Grid item key={mvp.id}>
-              <IconButton
-                className={classes.deleteButton}
-                aria-label="delete"
-                color="secondary"
-                onClick={() => handleClickOpen(mvp)}
-              >
-                <DeleteIcon />
-              </IconButton>
+              {isScrumMaster && (
+                <IconButton
+                  className={classes.deleteButton}
+                  aria-label="delete"
+                  color="secondary"
+                  onClick={() => handleClickOpen(mvp)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              )}
               <Link
                 to={`/mvp-info/${mvp.id}`}
                 className={classes.cardRouterLink}
