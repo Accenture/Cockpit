@@ -39,7 +39,7 @@ public class JiraController {
             value = "/api/v1/jira/create"
     )
     public ResponseEntity createJira(@RequestBody JiraDTO jiraDTO,
-                                     @RequestHeader("Authorization") String authHeader) throws Exception {
+                                     @RequestHeader("Authorization") String authHeader) {
         if (authService.isScrumMaster(authHeader)) {
             String url = urlVerifyJiraKey + jiraDTO.getJiraProjectKey();
             try {
