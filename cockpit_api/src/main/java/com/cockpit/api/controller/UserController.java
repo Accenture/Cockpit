@@ -20,8 +20,8 @@ public class UserController {
     public ResponseEntity<Boolean> isScrumMaster(@RequestHeader("Authorization") String authHeader) {
 
         try {
-            boolean result= authService.isScrumMaster(authHeader);
-            return ResponseEntity.ok().body(authService.isScrumMaster(authHeader));
+            boolean isScrumMaster= authService.isScrumMaster(authHeader);
+            return ResponseEntity.ok().body(isScrumMaster);
         } catch (Exception e) {
             return ResponseEntity.ok().body(false);
         }
