@@ -17,6 +17,7 @@ export default makeStyles(() => ({
     color: 'white',
   },
   greyTitles: {
+    fontSize: '15px !important',
     color: 'grey',
   },
   subTitle: {

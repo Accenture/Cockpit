@@ -115,7 +115,7 @@ export default function InformationForm() {
               placeholder="MVP Name"
               size="small"
               onChange={handleNameChange}
-              inputProps={{ maxLength: 50 }}
+              inputProps={{ maxLength: 30 }}
             />
           </Grid>
 

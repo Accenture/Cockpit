@@ -173,7 +173,7 @@ export default function ScrumMasterForm() {
               placeholder="MVP Name"
               autoComplete="mvpName"
               size="small"
-              inputProps={{ maxLength: 50 }}
+              inputProps={{ maxLength: 30 }}
             />
           </Grid>
           <Grid item xs={12}>
