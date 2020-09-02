@@ -32,11 +32,14 @@ export default function MvpCard(props) {
       setReadMore(true);
     } else {
       setPitch(mvpInfo.mvpDescription);
+      setReadMore(false);
     }
   }, [mvpInfo.mvpDescription]);
   const seeLess = () => {
-    setReadMore(true);
-    setPitch(mvpInfo.mvpDescription.substring(0, 220));
+    if (mvpInfo.mvpDescription && mvpInfo.mvpDescription.length > 220) {
+      setReadMore(true);
+      setPitch(mvpInfo.mvpDescription.substring(0, 220));
+    }
   };
   return (
     <Card className={isHomePage ? classes.dashboardCard : classes.mvpInfoCard}>
