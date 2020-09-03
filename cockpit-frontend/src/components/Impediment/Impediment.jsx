@@ -34,10 +34,14 @@ export default function Impediment(props) {
   const classes = useStyles();
   const myRef = useRef();
 
-  useEffect(() => {
-    setOpen(false);
+  function initState() {
     setName('');
     setExplanation('');
+    setOpen(false);
+  }
+  useEffect(() => {
+    setOpen(false);
+    initState();
     setUpdate(false);
   }, [sprintNumber]);
 
@@ -56,8 +60,7 @@ export default function Impediment(props) {
   }
 
   function displayForm() {
-    setName('');
-    setExplanation('');
+    initState();
     setUpdate(false);
     setOpen(true);
     scrollToEndOfForm();
@@ -71,26 +74,22 @@ export default function Impediment(props) {
     if (!update) {
       await MvpService.addImpediment(impediment, mvp.jira.id, sprintNumber);
       dispatch(getOneMvp(mvp.id));
-      setName('');
-      setExplanation('');
       setNumber(number + 1);
       setOpen(false);
     } else {
       await MvpService.updateImpediment(impediment, selectedImpediment);
       setOpen(false);
       dispatch(getOneMvp(mvp.id));
-      setName('');
-      setExplanation('');
       setUpdate(false);
     }
+    initState();
   }
   function fieldsValidator() {
     if (name.length === 0 || explanation.length === 0) return true;
     return false;
   }
   function closeForm() {
-    setName('');
-    setExplanation('');
+    initState();
     setOpen(false);
   }
   const handleCloseDialog = () => {
@@ -115,6 +114,7 @@ export default function Impediment(props) {
     setSelectedImpediment(impediment.id);
     scrollToEndOfForm();
   }
+
   return (
     <div ref={myRef} className={classes.root}>
       {impediments.length > 0 && (
