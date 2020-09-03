@@ -4,7 +4,6 @@ import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dto.ImpedimentDTO;
 import com.cockpit.api.service.AuthService;
 import com.cockpit.api.service.ImpedimentService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,6 @@ public class ImpedimentController {
 
     public final ImpedimentService impedimentService;
     private final AuthService authService;
-    private ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     public ImpedimentController(ImpedimentService impedimentService, AuthService authService) {
