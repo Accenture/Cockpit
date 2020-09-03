@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import List from '@material-ui/core/List';
 import { useDispatch } from 'react-redux';
 import ListItem from '@material-ui/core/ListItem';
@@ -32,6 +32,7 @@ export default function Impediment(props) {
   const [number, setNumber] = React.useState(0);
   const [selectedImpediment, setSelectedImpediment] = React.useState(0);
   const classes = useStyles();
+  const myRef = useRef();
 
   useEffect(() => {
     setOpen(false);
@@ -47,11 +48,19 @@ export default function Impediment(props) {
     setImpediments(sp.impediments);
     setNumber(sp.impediments.length);
   }, [mvp, sprintNumber]);
+
+  function scrollToEndOfForm() {
+    setTimeout(() => {
+      myRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }, 100);
+  }
+
   function displayForm() {
     setName('');
     setExplanation('');
     setUpdate(false);
     setOpen(true);
+    scrollToEndOfForm();
   }
   async function submit(e) {
     e.preventDefault();
@@ -104,9 +113,10 @@ export default function Impediment(props) {
     setOpen(true);
     setUpdate(true);
     setSelectedImpediment(impediment.id);
+    scrollToEndOfForm();
   }
   return (
-    <div className={classes.root}>
+    <div ref={myRef} className={classes.root}>
       {impediments.length > 0 && (
         <div>
           <div className={classes.title}>Main impediments</div>
@@ -197,11 +207,7 @@ export default function Impediment(props) {
             </Grid>
             <Grid item xs={6} />
             <Grid item xs={3}>
-              <Button
-                className={classes.addButton}
-                onClick={closeForm}
-                autoFocus
-              >
+              <Button className={classes.addButton} onClick={closeForm}>
                 Cancel
               </Button>
             </Grid>
