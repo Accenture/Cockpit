@@ -6,6 +6,7 @@ import com.cockpit.api.model.dto.ImpedimentDTO;
 import com.cockpit.api.repository.ImpedimentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.modelmapper.ModelMapper;
 
 import java.util.Optional;
 

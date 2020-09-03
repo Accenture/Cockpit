@@ -49,7 +49,13 @@ public class TeamService {
 
     }
 
-
+    public TeamDTO findTeamById(Long id) throws ResourceNotFoundException {
+        Optional<Team> teamRes = teamRepository.findById(id);
+        if (!teamRes.isPresent()) {
+            throw new ResourceNotFoundException("Team can not be found");
+        }
+        return modelMapper.map(teamRes.get(), TeamDTO.class);
+    }
 
     public void deleteTeam(Long id) throws ResourceNotFoundException {
         Optional<Team> teamToDelete = teamRepository.findById(id);
