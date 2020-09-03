@@ -35,6 +35,9 @@ export default function Impediment(props) {
 
   useEffect(() => {
     setOpen(false);
+    setName('');
+    setExplanation('');
+    setUpdate(false);
   }, [sprintNumber]);
 
   useEffect(() => {
@@ -45,6 +48,9 @@ export default function Impediment(props) {
     setNumber(sp.impediments.length);
   }, [mvp, sprintNumber]);
   function displayForm() {
+    setName('');
+    setExplanation('');
+    setUpdate(false);
     setOpen(true);
   }
   async function submit(e) {
@@ -59,7 +65,7 @@ export default function Impediment(props) {
       setName('');
       setExplanation('');
       setNumber(number + 1);
-      if (number === 4) setOpen(false);
+      setOpen(false);
     } else {
       await MvpService.updateImpediment(impediment, selectedImpediment);
       setOpen(false);
@@ -191,7 +197,11 @@ export default function Impediment(props) {
             </Grid>
             <Grid item xs={6} />
             <Grid item xs={3}>
-              <Button className={classes.addButton} onClick={closeForm}>
+              <Button
+                className={classes.addButton}
+                onClick={closeForm}
+                autoFocus
+              >
                 Cancel
               </Button>
             </Grid>
@@ -203,7 +213,7 @@ export default function Impediment(props) {
                 variant="outlined"
                 className={classes.addButton}
               >
-                Save
+                {update ? 'Update' : 'Add'}
               </Button>
             </Grid>
           </Grid>
