@@ -22,7 +22,7 @@ public class Location {
     @JsonProperty("avatarURI")
     private String avatarURI;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("projectId")
     public Integer getProjectId() {

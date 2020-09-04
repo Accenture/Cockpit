@@ -5,6 +5,7 @@ import static javax.management.timer.Timer.ONE_SECOND;
 
 import java.util.*;
 
+import com.cockpit.api.exception.JiraException;
 import com.cockpit.api.model.dto.jira.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,7 +76,7 @@ public class UpdateJira {
         log.info("Jira - End update jira board id");
     }
 
-    public void updateBoardIdInJira(String urlBoards) throws Exception {
+    public void updateBoardIdInJira(String urlBoards) throws JiraException {
         List<JiraBoard> foundJiraBoards = new ArrayList<>();
         List<JiraBoard> boardList;
 
@@ -97,14 +98,14 @@ public class UpdateJira {
                 boardList = result.getBody().getValues();
                 updateBoardId(boardList);
             } else {
-                throw new Exception("Failed to update board id for the jira");
+                throw new JiraException("Failed to update board id for the jira");
             }
             startAt = startAt + maxResults;
             foundJiraBoards.addAll(boardList);
         } while (numberOfBoardIdReceived < totalBoardId);
     }
 
-    private void updateBoardId(List<JiraBoard> boardList) throws Exception {
+    private void updateBoardId(List<JiraBoard> boardList) throws JiraException {
         for (JiraBoard board : boardList) {
             try {
                 if (board.getLocation() != null && board.getLocation().getProjectId() != null) {
@@ -116,7 +117,7 @@ public class UpdateJira {
                 }
             } catch (Exception e) {
                 String message = "Jira - Unable to find Jira: " + board.getLocation().getProjectId();
-                throw new Exception(message, e);
+                throw new JiraException(message);
             }
         }
     }

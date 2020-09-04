@@ -1,6 +1,6 @@
 package com.cockpit.api.service.jiragateway;
 
-import com.cockpit.api.exception.JiraRequestException;
+import com.cockpit.api.exception.JiraException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -27,7 +27,7 @@ public class JiraApiService {
     @Value("${spring.jira.token}")
     private String token;
 
-    public ResponseEntity<?> callJira(String url, String className) throws JiraRequestException {
+    public ResponseEntity<?> callJira(String url, String className) throws JiraException {
 
         headers = this.addAuthorizationToHeaders();
         request = new HttpEntity<>(headers);
@@ -36,7 +36,7 @@ public class JiraApiService {
         try {
             responseEntity = restTemplate.exchange(url, HttpMethod.GET, request, Class.forName(className));
         } catch (Exception e) {
-            throw new JiraRequestException("Exception Call jira for url" + url);
+            throw new JiraException("Exception Call jira for url" + url);
         }
         return responseEntity;
     }

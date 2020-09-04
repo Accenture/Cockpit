@@ -3,8 +3,6 @@ package com.cockpit.api.model.dao;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.annotations.ColumnDefault;
-
 import java.util.Set;
 
 @Entity

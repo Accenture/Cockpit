@@ -123,7 +123,7 @@ public class Jira {
     }
 
     public void orderSprints() {
-        Collections.sort(sprints, new Comparator<Sprint>() {
+        Collections.sort(sprints,new Comparator<Sprint>() {
             @Override
             public int compare(Sprint p1, Sprint p2) {
                 return p1.getSprintNumber() - p2.getSprintNumber();

@@ -37,7 +37,7 @@ public class SprintJira {
     @JsonProperty("goal")
     private String goal;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("id")
     public Integer getId() {
