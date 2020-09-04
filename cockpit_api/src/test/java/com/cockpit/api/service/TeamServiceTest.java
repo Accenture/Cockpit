@@ -86,4 +86,31 @@ public class TeamServiceTest {
 		Assert.assertTrue(mockTeam.getTeamMembers().isEmpty());
 	
 	}
+	@Test
+	public void whenUnassignTeamMemberThenReturnUpdatedTeam() throws ResourceNotFoundException {
+
+		Team mockTeam = new Team();
+		mockTeam.setId(1l);
+		mockTeam.setTeamMembers(new HashSet<>());
+		TeamMember mockTeamMember = new TeamMember();
+		mockTeamMember.setId(1l);
+		mockTeamMember.setTeams(new HashSet<>());
+		mockTeamMember.getTeams().add(mockTeam);
+
+		mockTeam.getTeamMembers().add(mockTeamMember);
+		Optional<Team> team = Optional.ofNullable(mockTeam);
+		Optional<TeamMember> teamMember = Optional.ofNullable(mockTeamMember);
+
+		// given
+		Mockito.when(teamRepository.findById(mockTeam.getId())).thenReturn(team);
+		Mockito.when(teamMemberRepository.findById(mockTeamMember.getId())).thenReturn(teamMember);
+		Mockito.when(teamRepository.save(mockTeam)).thenReturn(mockTeam);
+
+		// when
+		teamService.unassignTeamMember(mockTeam.getId(), mockTeamMember.getId());
+
+		// then
+		Assert.assertTrue(mockTeam.getTeamMembers().isEmpty());
+
+	}
 }
