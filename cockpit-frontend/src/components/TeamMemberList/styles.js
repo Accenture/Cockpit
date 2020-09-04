@@ -23,7 +23,7 @@ export default makeStyles((theme) => ({
   addButton: {
     borderRadius: 20,
     textTransform: 'capitalize',
-    margin: '32px 0 0 0',
+    margin: '32px 0',
   },
   grid: {
     padding: theme.spacing(2, 4, 1),
