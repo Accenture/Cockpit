@@ -26,7 +26,7 @@ public class ImpedimentController {
     @DeleteMapping(
             value = "/api/v1/impediment/delete/{id}"
     )
-    public ResponseEntity deleteImpediment(@PathVariable Long id,
+    public ResponseEntity<Object>deleteImpediment(@PathVariable Long id,
                                            @RequestHeader("Authorization") String authHeader) {
         if (authService.isScrumMaster(authHeader)) {
             try {
@@ -44,7 +44,7 @@ public class ImpedimentController {
     @PutMapping(
             value = "/api/v1/impediment/update/{id}"
     )
-    public ResponseEntity updateImpediment(@RequestBody ImpedimentDTO impedimentDTO,
+    public ResponseEntity<Object> updateImpediment(@RequestBody ImpedimentDTO impedimentDTO,
                                            @PathVariable Long id,
                                            @RequestHeader("Authorization") String authHeader) {
         if (authService.isScrumMaster(authHeader)) {

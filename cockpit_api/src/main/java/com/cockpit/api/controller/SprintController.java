@@ -107,7 +107,7 @@ public class SprintController {
     @GetMapping(
             value = "/api/v1/sprint/{jiraId}/{sprintNumber}"
     )
-    public ResponseEntity getSprintBySprintNumberAndJira(@PathVariable Long jiraId,
+    public ResponseEntity<Object> getSprintBySprintNumberAndJira(@PathVariable Long jiraId,
                                                          @PathVariable int sprintNumber,
                                                          @RequestHeader("Authorization") String authHeader) {
         if (authService.isUserAuthorized(authHeader)) {
@@ -127,7 +127,7 @@ public class SprintController {
     @PutMapping(
             value = "/api/v1/sprint/{jiraId}/updateTeamHealth/{sprintNumber}"
     )
-    public ResponseEntity updateTeamHealth(@RequestBody ObeyaDTO obeya, @PathVariable Long jiraId, @PathVariable int sprintNumber, @RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<Object> updateTeamHealth(@RequestBody ObeyaDTO obeya, @PathVariable Long jiraId, @PathVariable int sprintNumber, @RequestHeader("Authorization") String authHeader) {
 
         if (authService.isScrumMaster(authHeader)) {
             try {
@@ -147,7 +147,7 @@ public class SprintController {
     @PutMapping(
             value = "/api/v1/sprint/{jiraId}/addImpediment/{sprintNumber}"
     )
-    public ResponseEntity addImpediment(@RequestBody ImpedimentDTO impediment, @PathVariable Long jiraId, @PathVariable int sprintNumber, @RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<Object> addImpediment(@RequestBody ImpedimentDTO impediment, @PathVariable Long jiraId, @PathVariable int sprintNumber, @RequestHeader("Authorization") String authHeader) {
 
         if (authService.isScrumMaster(authHeader)) {
             try {

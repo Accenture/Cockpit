@@ -23,7 +23,7 @@ public class AuthService {
             return true;
         } else {
             try {
-                ResponseEntity responseEntity = restTemplate.exchange(userInfoEndpoint, HttpMethod.POST, request, UserInfoDTO.class);
+                ResponseEntity<UserInfoDTO> responseEntity = restTemplate.exchange(userInfoEndpoint, HttpMethod.POST, request, UserInfoDTO.class);
                 return responseEntity.getStatusCode().is2xxSuccessful();
             } catch (HttpClientErrorException e) {
                 return false;

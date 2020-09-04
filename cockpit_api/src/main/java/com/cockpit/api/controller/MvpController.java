@@ -30,7 +30,7 @@ public class MvpController {
 
     // CREATE new MVP
     @PostMapping(value = "/api/v1/mvp/create")
-    public ResponseEntity createMvp(@RequestHeader("Authorization") String authHeader,
+    public ResponseEntity<Object> createMvp(@RequestHeader("Authorization") String authHeader,
                                     @RequestBody MvpDTO mvpDTO) {
         if (authService.isScrumMaster(authHeader)) {
             MvpDTO newMvp = mvpService.createNewMvp(mvpDTO);
@@ -42,7 +42,7 @@ public class MvpController {
 
     // GET MVP BY ID
     @GetMapping(value = "/api/v1/mvp/{id}")
-    public ResponseEntity getMvp(@PathVariable Long id, @RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<Object> getMvp(@PathVariable Long id, @RequestHeader("Authorization") String authHeader) {
         if (authService.isUserAuthorized(authHeader)) {
             try {
                 MvpDTO mvpDTO = mvpService.findMvpById(id);
@@ -57,7 +57,7 @@ public class MvpController {
 
     // GET ALL MVP
     @GetMapping(value = "/api/v1/mvp/all")
-    public ResponseEntity findAllMvps(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<Object> findAllMvps(@RequestHeader("Authorization") String authHeader) {
         if (authService.isUserAuthorized(authHeader)) {
             List<MvpDTO> mvpList = mvpService.findAllMvp();
             return ResponseEntity.ok(mvpList);
@@ -98,7 +98,7 @@ public class MvpController {
 
     // ASSIGN TEAM
     @PutMapping(value = "/api/v1/mvp/{id}/assignTeam/{teamId}")
-    public ResponseEntity assignTeamToMvp(@PathVariable("id") Long id, @PathVariable("teamId") Long teamId,
+    public ResponseEntity<Object> assignTeamToMvp(@PathVariable("id") Long id, @PathVariable("teamId") Long teamId,
                                           @RequestHeader("Authorization") String authHeader) {
         if (authService.isScrumMaster(authHeader)) {
             try {
