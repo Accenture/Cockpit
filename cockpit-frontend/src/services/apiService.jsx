@@ -94,7 +94,7 @@ function createNewTeamMember(teamMember, teamId) {
 }
 function deleteTeamMember(teamId, teamMemberId) {
   try {
-    return API.put(
+    return API.delete(
       `${teamUrl}/${teamId}/deleteTeamMember/${teamMemberId}`,
       headers,
     );
@@ -159,6 +159,17 @@ function updateImpediment(impediment, id) {
     return e;
   }
 }
+function unassignTeamMember(teamId, teamMemberId) {
+  try {
+    return API.delete(
+      `${teamUrl}/${teamId}/unassignTeamMember/${teamMemberId}`,
+      headers,
+    );
+  } catch (e) {
+    console.log(`Error when unassigning team member: ${e}`);
+    return e;
+  }
+}
 const MvpService = {
   getAllMvp,
   createNewJiraProject,
@@ -177,6 +188,7 @@ const MvpService = {
   deleteImpediment,
   deleteMvp,
   updateImpediment,
+  unassignTeamMember,
 };
 
 export default MvpService;
