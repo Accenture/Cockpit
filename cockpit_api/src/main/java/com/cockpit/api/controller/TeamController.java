@@ -140,9 +140,9 @@ public class TeamController {
             return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
         }
     }
-    // DELETE a Team member
+    // UNASSIGN a Team member
     @DeleteMapping(value = "/api/v1/team/{id}/unassignTeamMember/{teamMemberId}")
-    public ResponseEntity unassignTeamMember(@PathVariable("id") Long id,
+    public ResponseEntity<Object> unassignTeamMember(@PathVariable("id") Long id,
                                            @PathVariable("teamMemberId") Long teamMemberId,
                                            @RequestHeader("Authorization") String authHeader) {
         if (authService.isUserAuthorized(authHeader)) {
