@@ -281,9 +281,8 @@ export default function TeamMemberList() {
                     />
                   </Grid>
 
-                  <Grid item xs={5}>
-                    {' '}
-                    {update && (
+                  {update && (
+                    <Grid item xs={5}>
                       <Button
                         variant="outlined"
                         color="secondary"
@@ -292,30 +291,21 @@ export default function TeamMemberList() {
                       >
                         Delete
                       </Button>
-                    )}
-                  </Grid>
+                    </Grid>
+                  )}
                   <Grid item xs={3}>
                     <Button
-                      className={classes.addButton}
+                      className={classes.deleteButton}
                       onClick={closeForm}
                       variant="outlined"
                     >
                       Discard
                     </Button>
                   </Grid>
-                  <Grid item xs={1} />
-                  <Grid item xs={12}>
-                    <Button
-                      variant="outlined"
-                      color="primary"
-                      className={classes.unassignButton}
-                      onClick={handleUnassignClick}
-                    >
-                      Unassign from Team
-                    </Button>
-                  </Grid>
+                  <Grid item xs={4} />
+
                   {!update && (
-                    <Grid item xs={3}>
+                    <Grid item xs={5}>
                       <Button
                         disabled={fieldsValidator()}
                         type="submit"
@@ -324,6 +314,18 @@ export default function TeamMemberList() {
                         className={classes.addButton}
                       >
                         Add
+                      </Button>
+                    </Grid>
+                  )}
+                  {update && (
+                    <Grid item xs={12}>
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        className={classes.unassignButton}
+                        onClick={handleUnassignClick}
+                      >
+                        Unassign from Team
                       </Button>
                     </Grid>
                   )}
