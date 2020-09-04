@@ -39,24 +39,31 @@ export default function TeamMemberList() {
   const [update, setUpdate] = React.useState(false);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [selectedMember, setSelectedMember] = React.useState({});
+  const [unassign, setUnassign] = React.useState(false);
+
   const classes = useStyles();
   const dispatch = useDispatch();
   const mvpId = useParams().id;
   const mvpInfo = useSelector((state) => mvpSelector(state, mvpId));
-  function closeForm() {
-    setOpen(false);
-    setUpdate(false);
+  function initState() {
     setFirstName('');
     setLastName('');
     setAvatarUrl('');
     setRole('');
     setEmail('');
   }
+  function closeForm() {
+    initState();
+    setOpen(false);
+    setUpdate(false);
+    setUnassign(false);
+  }
   useEffect(() => {
     if (mvpInfo.team) {
       setTeamMembers(mvpInfo.team.teamMembers);
     }
     closeForm();
+    // eslint-disable-next-line
   }, [mvpInfo]);
 
   function displayForm() {
@@ -82,11 +89,7 @@ export default function TeamMemberList() {
     };
     await MvpService.createNewTeamMember(teamMember, mvpInfo.team.id);
     dispatch(getOneMvp(mvpId));
-    setFirstName('');
-    setLastName('');
-    setAvatarUrl('');
-    setRole('');
-    setEmail('');
+    initState();
     setSnackBar(true);
   }
   function Alert(prop) {
@@ -122,48 +125,68 @@ export default function TeamMemberList() {
     dispatch(getOneMvp(mvpId));
     handleCloseDialog();
   }
+  async function unassignTeamMember() {
+    await MvpService.unassignTeamMember(mvpInfo.team.id, selectedMember.id);
+    dispatch(getOneMvp(mvpId));
+    handleCloseDialog();
+  }
+  function handleUnssignClick() {
+    setUnassign(true);
+    handleClickOpen();
+  }
   return (
     <div>
       <Grid container spacing={1} className={classes.grid}>
         <Grid item xs={6}>
           {mvpInfo.team && teamMembers.length > 0 && (
-            <List className={classes.root}>
-              {teamMembers.map((member) => (
-                <div key={member.id}>
-                  <ListItem
-                    alignItems="flex-start"
-                    onClick={() => handleClick(member)}
-                    className={classes.item}
-                  >
-                    <ListItemAvatar>
-                      <Avatar
-                        alt="team member"
-                        src={member.urlTeamMemberAvatar}
-                      />
-                    </ListItemAvatar>
-                    <ListItemText
-                      className={classes.capitalizedText}
-                      primary={`${member.firstName} ${member.lastName}`}
-                      secondary={
-                        <>
-                          {/*  <span className={classes.emailText}>{member.email}</span>
+            <div>
+              <List className={classes.root}>
+                {teamMembers.map((member) => (
+                  <div key={member.id}>
+                    <ListItem
+                      alignItems="flex-start"
+                      onClick={() => handleClick(member)}
+                      className={classes.item}
+                    >
+                      <ListItemAvatar>
+                        <Avatar
+                          alt="team member"
+                          src={member.urlTeamMemberAvatar}
+                        />
+                      </ListItemAvatar>
+                      <ListItemText
+                        className={classes.capitalizedText}
+                        primary={`${member.firstName} ${member.lastName}`}
+                        secondary={
+                          <>
+                            {/*  <span className={classes.emailText}>{member.email}</span>
                       <br /> */}
-                          <Typography
-                            component="span"
-                            variant="body2"
-                            className={classes.inline}
-                            color="textPrimary"
-                          >
-                            {member.role}
-                          </Typography>
-                        </>
-                      }
-                    />
-                  </ListItem>
-                  <Divider component="li" />
-                </div>
-              ))}
-            </List>
+                            <Typography
+                              component="span"
+                              variant="body2"
+                              className={classes.inline}
+                              color="textPrimary"
+                            >
+                              {member.role}
+                            </Typography>
+                          </>
+                        }
+                      />
+                    </ListItem>
+                    <Divider component="li" />
+                  </div>
+                ))}
+              </List>
+              {update && (
+                <Button
+                  color="primary"
+                  className={classes.deleteButton}
+                  onClick={handleUnssignClick}
+                >
+                  Unassign from Team
+                </Button>
+              )}
+            </div>
           )}
           {mvpInfo.team && teamMembers.length === 0 && (
             <div className={classes.noMembers}>No Team members yet</div>
@@ -312,12 +335,16 @@ export default function TeamMemberList() {
         <Dialog open={openDialog} onClose={handleCloseDialog}>
           <DialogContent>
             <DialogContentText>
-              Are you sure you want to delete the selected Team Member
-              definitely?
+              {unassign
+                ? 'Are you sure you want to unassign the selected Team Member from this team ?'
+                : 'Are you sure you want to delete the selected Team Member definitely ?'}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={deleteTeamMember} color="primary">
+            <Button
+              onClick={unassign ? unassignTeamMember : deleteTeamMember}
+              color="primary"
+            >
               Yes
             </Button>
             <Button onClick={handleCloseDialog} color="primary">

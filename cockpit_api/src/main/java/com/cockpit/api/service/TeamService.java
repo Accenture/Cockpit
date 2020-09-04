@@ -112,11 +112,27 @@ public class TeamService {
 
         return modelMapper.map(team, TeamDTO.class);
     }
+    public TeamDTO unassignTeamMember(Long idTeam, Long teamMeberId) throws ResourceNotFoundException {
 
+        Optional<Team> teamToUpdate = teamRepository.findById(idTeam);
+        if (!teamToUpdate.isPresent()) {
+            throw new ResourceNotFoundException("Team to update not found");
+        }
+        Optional<TeamMember> existingMember = teamMemberRepository.findById(teamMeberId);
+        if (!existingMember.isPresent()) {
+            throw new ResourceNotFoundException("Team member not found");
+        }
+
+        teamToUpdate.get().getTeamMembers().remove(existingMember.get());
+        existingMember.get().getTeams().remove(teamToUpdate.get());
+        Team team = teamRepository.save(teamToUpdate.get());
+
+        return modelMapper.map(team, TeamDTO.class);
+    }
     boolean verifyUniqueName(TeamDTO teamDTO) {
         List<Team> teams = teamRepository.findAllByOrderByName();
         for (Team team : teams) {
-            if (team.getName().toLowerCase().equals(teamDTO.getName().toLowerCase())) {
+            if (team.getName().equalsIgnoreCase(teamDTO.getName())) {
                 return false;
             }
         }
