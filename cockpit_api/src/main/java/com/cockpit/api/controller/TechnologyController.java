@@ -26,7 +26,7 @@ public class TechnologyController {
     @PostMapping(
             value = "/api/v1/technology/create"
     )
-    public ResponseEntity createTechnology(@RequestBody TechnologyDTO technologyDTO,
+    public ResponseEntity<Object> createTechnology(@RequestBody TechnologyDTO technologyDTO,
                                                           @RequestHeader("Authorization") String authHeader) {
         if (authService.isScrumMaster(authHeader)) {
             TechnologyDTO newTechnology = technologyService.createNewTechnology(technologyDTO);
@@ -40,7 +40,7 @@ public class TechnologyController {
     @GetMapping(
             value = "/api/v1/technology/{id}"
     )
-    public ResponseEntity getTechnology(@PathVariable Long id,
+    public ResponseEntity<Object> getTechnology(@PathVariable Long id,
                                         @RequestHeader("Authorization") String authHeader) {
         if (authService.isUserAuthorized(authHeader)) {
             try {
@@ -58,7 +58,7 @@ public class TechnologyController {
     @GetMapping(
             value = "/api/v1/technology/all"
     )
-    public ResponseEntity findAllTechnologies(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<Object> findAllTechnologies(@RequestHeader("Authorization") String authHeader) {
         if (authService.isUserAuthorized(authHeader)) {
             List<TechnologyDTO> technologyList = technologyService.findAllTechnology();
             return ResponseEntity.ok(technologyList);
@@ -71,7 +71,7 @@ public class TechnologyController {
     @PutMapping(
             value = "/api/v1/technology/update/{id}"
     )
-    public ResponseEntity updateTechnology(@RequestBody TechnologyDTO technologyDTO,
+    public ResponseEntity<Object> updateTechnology(@RequestBody TechnologyDTO technologyDTO,
                                            @PathVariable Long id,
                                            @RequestHeader("Authorization") String authHeader) {
         if (authService.isScrumMaster(authHeader)) {
@@ -90,7 +90,7 @@ public class TechnologyController {
     @DeleteMapping(
             value = "/api/v1/technology/delete/{id}"
     )
-    public ResponseEntity deleteTechnology(@PathVariable Long id,
+    public ResponseEntity<Object> deleteTechnology(@PathVariable Long id,
                                            @RequestHeader("Authorization") String authHeader) {
         if (authService.isScrumMaster(authHeader)) {
             try {

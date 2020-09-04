@@ -59,7 +59,7 @@ public class JiraController {
     @GetMapping(
             value = "/api/v1/jira/{id}"
     )
-    public ResponseEntity getJira(@PathVariable Long id,
+    public ResponseEntity<Object> getJira(@PathVariable Long id,
                                   @RequestHeader("Authorization") String authHeader) {
         if (authService.isUserAuthorized(authHeader)) {
             try {
@@ -77,7 +77,7 @@ public class JiraController {
     @PutMapping(
             value = "/api/v1/jira/update"
     )
-    public ResponseEntity updateJira(@RequestBody JiraDTO jiraDTO,
+    public ResponseEntity<Object> updateJira(@RequestBody JiraDTO jiraDTO,
                                      @RequestHeader("Authorization") String authHeader) {
         if (authService.isScrumMaster(authHeader)) {
             try {
@@ -95,7 +95,7 @@ public class JiraController {
     @DeleteMapping(
             value = "/api/v1/jira/delete/{id}"
     )
-    public ResponseEntity deleteJira(@PathVariable Long id,
+    public ResponseEntity<Object> deleteJira(@PathVariable Long id,
                                      @RequestHeader("Authorization") String authHeader) {
         if (authService.isScrumMaster(authHeader)) {
             try {

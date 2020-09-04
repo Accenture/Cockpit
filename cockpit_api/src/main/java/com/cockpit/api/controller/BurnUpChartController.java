@@ -28,7 +28,7 @@ public class BurnUpChartController {
     @GetMapping(
             value = "/api/v1/burnUpChart/{id}"
     )
-    public ResponseEntity getBurnUpChart(@PathVariable Long id,
+    public ResponseEntity<Object> getBurnUpChart(@PathVariable Long id,
                                  @RequestHeader("Authorization") String authHeader) {
         if (authService.isUserAuthorized(authHeader)) {
             try {

@@ -27,7 +27,7 @@ public class TeamController {
 
     // CREATE a new Team and assign it to an MVP
     @PostMapping(value = "/api/v1/team/create/{mvpId}")
-    public ResponseEntity createTeam(@PathVariable Long mvpId,
+    public ResponseEntity<Object> createTeam(@PathVariable Long mvpId,
                                      @RequestBody TeamDTO teamDTO,
                                      @RequestHeader("Authorization") String authHeader)
             throws ResourceNotFoundException {
@@ -46,7 +46,7 @@ public class TeamController {
 
     // GET ALL
     @GetMapping(value = "/api/v1/team/all")
-    public ResponseEntity getTeams(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<Object> getTeams(@RequestHeader("Authorization") String authHeader) {
         if (authService.isUserAuthorized(authHeader)) {
             List<TeamDTO> teamList = teamService.findAll();
             return ResponseEntity.ok(teamList);
@@ -68,7 +68,7 @@ public class TeamController {
 
     // GET Team BY ID
     @GetMapping(value = "/api/v1/team/{id}")
-    public ResponseEntity getTeamById(@PathVariable Long id,
+    public ResponseEntity<Object> getTeamById(@PathVariable Long id,
                                       @RequestHeader("Authorization") String authHeader) {
         if (authService.isUserAuthorized(authHeader)) {
             try {
@@ -117,7 +117,7 @@ public class TeamController {
 
     // ADD a Team member
     @PutMapping(value = "/api/v1/team/addTeamMember/{id}")
-    public ResponseEntity addTeamMember(@RequestBody TeamMemberDTO teamMemberDTO,
+    public ResponseEntity<Object> addTeamMember(@RequestBody TeamMemberDTO teamMemberDTO,
                                         @PathVariable Long id,
                                         @RequestHeader("Authorization") String authHeader) {
         if (authService.isScrumMaster(authHeader)) {
@@ -151,7 +151,7 @@ public class TeamController {
 
     // DELETE a Team member
     @DeleteMapping(value = "/api/v1/team/{id}/deleteTeamMember/{teamMemberId}")
-    public ResponseEntity deleteTeamMember(@PathVariable("id") Long id,
+    public ResponseEntity<Object> deleteTeamMember(@PathVariable("id") Long id,
                                            @PathVariable("teamMemberId") Long teamMemberId,
                                            @RequestHeader("Authorization") String authHeader) {
         if (authService.isScrumMaster(authHeader)) {
