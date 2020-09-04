@@ -177,15 +177,6 @@ export default function TeamMemberList() {
                   </div>
                 ))}
               </List>
-              {update && (
-                <Button
-                  color="primary"
-                  className={classes.deleteButton}
-                  onClick={handleUnassignClick}
-                >
-                  Unassign from Team
-                </Button>
-              )}
             </div>
           )}
           {mvpInfo.team && teamMembers.length === 0 && (
@@ -294,6 +285,7 @@ export default function TeamMemberList() {
                     {' '}
                     {update && (
                       <Button
+                        variant="outlined"
                         color="secondary"
                         className={classes.deleteButton}
                         onClick={handleClickOpen}
@@ -303,11 +295,25 @@ export default function TeamMemberList() {
                     )}
                   </Grid>
                   <Grid item xs={3}>
-                    <Button className={classes.addButton} onClick={closeForm}>
+                    <Button
+                      className={classes.addButton}
+                      onClick={closeForm}
+                      variant="outlined"
+                    >
                       Discard
                     </Button>
                   </Grid>
                   <Grid item xs={1} />
+                  <Grid item xs={12}>
+                    <Button
+                      variant="outlined"
+                      color="primary"
+                      className={classes.unassignButton}
+                      onClick={handleUnassignClick}
+                    >
+                      Unassign from Team
+                    </Button>
+                  </Grid>
                   {!update && (
                     <Grid item xs={3}>
                       <Button
