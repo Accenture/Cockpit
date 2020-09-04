@@ -1,5 +1,6 @@
 package com.cockpit.api.service.jiragateway;
 
+import com.cockpit.api.exception.JiraException;
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Sprint;
 import com.cockpit.api.model.dao.UserStory;
@@ -87,7 +88,7 @@ public class UpdateUserStory {
         log.info("UserStory - End cleaning user stories");
     }
 
-    public void cleanUserStoriesNotLongerExists(String urlAllUserStories) throws Exception {
+    public void cleanUserStoriesNotLongerExists(String urlAllUserStories) throws JiraException {
         List<Issue> issueList = new ArrayList<>();
         int maxResults = 100;
         int startAt = 0;
@@ -99,10 +100,10 @@ public class UpdateUserStory {
             if (result.getStatusCode().is2xxSuccessful()) {
                 totalValues = result.getBody().getTotal();
                 startAt = (maxResults * i);
-                issueList.addAll(result.getBody().getIssues());
+                issueList.addAll(result.getBody().getJiraIssues());
                 i++;
             } else {
-                throw new Exception("Unable to get Issues From Jira");
+                throw new JiraException("Unable to get Issues From Jira");
             }
         }
         try {
@@ -134,7 +135,7 @@ public class UpdateUserStory {
         String urlBacklogUS = urlIssues + jqlBacklogUS;
         ResponseEntity<Issues> resultBacklogUS = (ResponseEntity<Issues>) jiraApiService.callJira(urlBacklogUS, Issues.class.getName());
 
-        List<Issue> issueListBacklogUS = (resultBacklogUS.getBody().getIssues());
+        List<Issue> issueListBacklogUS = (resultBacklogUS.getBody().getJiraIssues());
         if (resultBacklogUS.getStatusCode().is2xxSuccessful()) {
             return getUserStories(null, issueListBacklogUS);
         }
@@ -148,7 +149,7 @@ public class UpdateUserStory {
         String urlSprintUS = urlIssues + jqlSprintUS;
 
         ResponseEntity<Issues> resultSprintUS = (ResponseEntity<Issues>) jiraApiService.callJira(urlSprintUS, Issues.class.getName());
-        List<Issue> issueListSprintUS = (resultSprintUS.getBody().getIssues());
+        List<Issue> issueListSprintUS = (resultSprintUS.getBody().getJiraIssues());
         if (resultSprintUS.getStatusCode().is2xxSuccessful()) {
             return getUserStories(sprint, issueListSprintUS);
         }

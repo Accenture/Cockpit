@@ -25,9 +25,9 @@ public class Issues {
     @JsonProperty("total")
     private Integer total;
     @JsonProperty("issues")
-    private List<Issue> issues = null;
+    private List<Issue> jiraIssues = null;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("expand")
     public String getExpand() {
@@ -70,13 +70,13 @@ public class Issues {
     }
 
     @JsonProperty("issues")
-    public List<Issue> getIssues() {
-        return issues;
+    public List<Issue> getJiraIssues() {
+        return jiraIssues;
     }
 
     @JsonProperty("issues")
-    public void setIssues(List<Issue> issues) {
-        this.issues = issues;
+    public void setJiraIssues(List<Issue> jiraIssues) {
+        this.jiraIssues = jiraIssues;
     }
 
     @JsonAnyGetter

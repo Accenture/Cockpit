@@ -33,7 +33,7 @@ public class Project {
     @JsonProperty("simplified")
     private Boolean simplified;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("expand")
     public String getExpand() {

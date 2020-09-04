@@ -15,7 +15,7 @@ public class SprintReport {
     private SprintReportContent contents;
 
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("contents")
     public SprintReportContent getContents() {

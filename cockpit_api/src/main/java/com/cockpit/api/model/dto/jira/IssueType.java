@@ -29,7 +29,7 @@ public class IssueType {
     @JsonProperty("subtask")
     private Boolean subtask;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("self")
     public String getSelf() {

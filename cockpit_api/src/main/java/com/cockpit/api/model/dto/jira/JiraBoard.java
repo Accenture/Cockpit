@@ -25,7 +25,7 @@ public class JiraBoard {
     @JsonProperty("location")
     private Location location;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("id")
     public Integer getId() {
