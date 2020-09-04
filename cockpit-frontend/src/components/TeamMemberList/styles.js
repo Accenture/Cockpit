@@ -23,7 +23,7 @@ export default makeStyles((theme) => ({
   addButton: {
     borderRadius: 20,
     textTransform: 'capitalize',
-    margin: '32px 0',
+    margin: '32px 0 0 0',
   },
   grid: {
     padding: theme.spacing(2, 4, 1),
@@ -40,7 +40,12 @@ export default makeStyles((theme) => ({
     cursor: 'pointer',
   },
   deleteButton: {
-    textDecoration: 'underline',
+    //  textDecoration: 'underline',
+    borderRadius: 20,
+    textTransform: 'capitalize',
+    margin: '32px 0 0 0',
+  },
+  unassignButton: {
     borderRadius: 20,
     textTransform: 'capitalize',
     margin: '32px 0',
