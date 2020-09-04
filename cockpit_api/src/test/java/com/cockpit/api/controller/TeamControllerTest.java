@@ -86,7 +86,34 @@ public class TeamControllerTest {
 
 		// when
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-				.put("/api/v1/team/{id}/deleteTeamMember/{teamMeberId}", mockTeam.getId(), mockTeamMember.getId())
+				.delete("/api/v1/team/{id}/deleteTeamMember/{teamMeberId}", mockTeam.getId(), mockTeamMember.getId())
+				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+				.header("Authorization", "Bearer token")).andExpect(status().isOk())
+				.andReturn();
+
+		MockHttpServletResponse response = result.getResponse();
+
+		// then
+		assertEquals(HttpStatus.OK.value(), response.getStatus());
+
+	}
+	@Test
+	public void whenUnassignTeamMemberThenReturn200() throws Exception {
+
+		Team mockTeam = new Team();
+		mockTeam.setId(1l);
+
+		TeamMember mockTeamMember = new TeamMember();
+		mockTeamMember.setId(1l);
+
+		TeamDTO teamDto = modelMapper.map(mockTeam, TeamDTO.class);
+
+		// given
+		Mockito.when(teamService.unassignTeamMember(mockTeam.getId(), mockTeamMember.getId())).thenReturn(teamDto);
+
+		// when
+		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+				.delete("/api/v1/team/{id}/unassignTeamMember/{teamMeberId}", mockTeam.getId(), mockTeamMember.getId())
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", "Bearer token")).andExpect(status().isOk())
 				.andReturn();
