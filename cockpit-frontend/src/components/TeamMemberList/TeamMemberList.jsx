@@ -130,7 +130,7 @@ export default function TeamMemberList() {
     dispatch(getOneMvp(mvpId));
     handleCloseDialog();
   }
-  function handleUnssignClick() {
+  function handleUnassignClick() {
     setUnassign(true);
     handleClickOpen();
   }
@@ -181,7 +181,7 @@ export default function TeamMemberList() {
                 <Button
                   color="primary"
                   className={classes.deleteButton}
-                  onClick={handleUnssignClick}
+                  onClick={handleUnassignClick}
                 >
                   Unassign from Team
                 </Button>
