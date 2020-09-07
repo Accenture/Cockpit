@@ -256,42 +256,6 @@ export default function InformationForm() {
               }
             />
           </Grid>
-          <Grid item xs={6}>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <KeyboardDatePicker
-                disableToolbar
-                variant="outlined"
-                format="dd/MM/yyyy"
-                margin="normal"
-                id="mvp-start-date"
-                label="MVP Start Date"
-                value={mvpStartDate}
-                onChange={handleStartDateChange}
-                KeyboardButtonProps={{
-                  'aria-label': 'change date',
-                }}
-                inputVariant="outlined"
-              />
-            </MuiPickersUtilsProvider>
-          </Grid>
-          <Grid item xs={6}>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <KeyboardDatePicker
-                disableToolbar
-                variant="outlined"
-                format="dd/MM/yyyy"
-                margin="normal"
-                id="mvp-end-date"
-                label="MVP End Date"
-                value={mvpEndDate}
-                onChange={handleEndDateChange}
-                KeyboardButtonProps={{
-                  'aria-label': 'change date',
-                }}
-                inputVariant="outlined"
-              />
-            </MuiPickersUtilsProvider>
-          </Grid>
         </Grid>
       </form>
     </Paper>
