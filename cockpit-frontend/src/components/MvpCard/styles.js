@@ -2,6 +2,9 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles((theme) => ({
   dashboardCard: {
+    padding: theme.spacing(2),
+  },
+  dashboardCardForScrumMasters: {
     marginTop: '-48px',
     padding: theme.spacing(2),
   },

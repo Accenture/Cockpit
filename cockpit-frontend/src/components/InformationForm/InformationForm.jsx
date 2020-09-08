@@ -8,11 +8,6 @@ import Paper from '@material-ui/core/Paper';
 import FormControl from '@material-ui/core/FormControl';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  KeyboardDatePicker,
-  MuiPickersUtilsProvider,
-} from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
 import { mvpSelector } from '../../redux/selector';
 import {
   setName,
@@ -30,8 +25,6 @@ import {
   sprintNumberState,
   statusState,
   imageUrlState,
-  mvpStartDateState,
-  mvpEndDateState,
   setSprintNumber,
 } from './InformationFormSlice';
 import useStyles from './styles';
@@ -49,8 +42,6 @@ export default function InformationForm() {
   const entity = useSelector(entityState);
   const status = useSelector(statusState);
   const urlMvpAvatar = useSelector(imageUrlState);
-  const mvpStartDate = useSelector(mvpStartDateState) || new Date();
-  const mvpEndDate = useSelector(mvpEndDateState) || new Date();
 
   useEffect(() => {
     dispatch(setName(mvpInfo.name));
@@ -90,13 +81,6 @@ export default function InformationForm() {
   function handleImageChange(event) {
     dispatch(setImageUrl(event.target.value));
   }
-  const handleStartDateChange = (date) => {
-    dispatch(setMvpStartDate(date));
-  };
-
-  const handleEndDateChange = (date) => {
-    dispatch(setMvpEndDate(date));
-  };
 
   return (
     <Paper className={classes.paper}>

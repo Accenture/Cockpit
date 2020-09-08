@@ -5,10 +5,12 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Link from '@material-ui/core/Link';
 import logo from '../../common/media/logo-total.webp';
 import useStyles from './styles';
 import Obeya from '../Obeya/Obeya';
+import { isScrumMasterState } from '../HomePage/HomePageSlice';
 
 export default function MvpCard(props) {
   const classes = useStyles();
@@ -16,8 +18,9 @@ export default function MvpCard(props) {
   const [pitch, setPitch] = useState('');
   const [readMore, setReadMore] = useState(false);
   const isHomePage = useLocation().pathname === '/';
+  const isScrumMaster = useSelector(isScrumMasterState);
   let status;
-  const mvpNameGridValue = isHomePage ? 10 : 7;
+  const mvpNameGridValue = isHomePage ? (isScrumMaster ? 10 : 12) : 7;
   if (mvpInfo.status === 'inprogress') status = 'In Progress';
   else if (mvpInfo.status === 'transferred') status = 'Transferred';
   else status = 'Unknown status';
@@ -42,7 +45,15 @@ export default function MvpCard(props) {
     }
   };
   return (
-    <Card className={isHomePage ? classes.dashboardCard : classes.mvpInfoCard}>
+    <Card
+      className={
+        !isHomePage
+          ? classes.mvpInfoCard
+          : isScrumMaster
+          ? classes.dashboardCardForScrumMasters
+          : classes.dashboardCard
+      }
+    >
       <CardMedia
         className={classes.cardMedia}
         image={mvpInfo.urlMvpAvatar ? mvpInfo.urlMvpAvatar : logo}

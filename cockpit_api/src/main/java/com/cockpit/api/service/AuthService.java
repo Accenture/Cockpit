@@ -42,7 +42,7 @@ public class AuthService {
         HttpHeaders headers = addAuthorizationToHeaders(authHeader);
         HttpEntity<String> request = new HttpEntity<>(headers);
         if (isAuthEnabled.equals("false")) {
-            return true;
+            return false;
         } else {
             try {
                 ResponseEntity<UserInfoDTO> responseEntity = restTemplate.exchange(userInfoEndpoint, HttpMethod.POST, request, UserInfoDTO.class);
