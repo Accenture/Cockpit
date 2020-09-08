@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
+import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import FormLabel from '@material-ui/core/FormLabel';
@@ -26,9 +27,11 @@ import { mvpSelector } from '../../redux/selector';
 import MvpService from '../../services/apiService';
 import { getOneMvp } from '../../redux/ormSlice';
 import useStyles from './styles';
+import ExisitingTeamMmebers from '../ExistingTeamMembers/ExisitingTeamMmebers';
 
 export default function TeamMemberList() {
   const [open, setOpen] = React.useState(false);
+  const [assign, setAssign] = React.useState(false);
   const [snackBar, setSnackBar] = React.useState(false);
   const [firstName, setFirstName] = React.useState('');
   const [lastName, setLastName] = React.useState('');
@@ -68,6 +71,7 @@ export default function TeamMemberList() {
 
   function displayForm() {
     setOpen(true);
+    setAssign(false);
   }
 
   const handleClickOpen = () => {
@@ -186,16 +190,35 @@ export default function TeamMemberList() {
         {mvpInfo.team && (
           <Grid item xs={6}>
             {!update && (
-              <Button
-                className={classes.addButton}
-                variant="outlined"
-                color="primary"
-                startIcon={<AddIcon />}
-                onClick={displayForm}
-              >
-                Add A Member
-              </Button>
+              <Grid container spacing={1}>
+                <Grid item xs={6}>
+                  <Button
+                    className={classes.addButton}
+                    variant={open ? 'contained' : 'outlined'}
+                    color="primary"
+                    startIcon={<AddIcon />}
+                    onClick={displayForm}
+                  >
+                    Add New Member
+                  </Button>
+                </Grid>
+                <Grid item xs={6}>
+                  <Button
+                    className={classes.addButton}
+                    variant={assign ? 'contained' : 'outlined'}
+                    color="primary"
+                    startIcon={<AssignmentIndIcon />}
+                    onClick={() => {
+                      setAssign(true);
+                      setOpen(false);
+                    }}
+                  >
+                    Assign A Member
+                  </Button>
+                </Grid>
+              </Grid>
             )}
+            {assign && <ExisitingTeamMmebers />}
             {open && (
               <form onSubmit={submit}>
                 <Grid container spacing={1}>
