@@ -80,7 +80,11 @@ public class TeamService {
         return teamList.stream().map(team -> modelMapper.map(team, TeamDTO.class)).collect(Collectors.toList());
 
     }
+    public List<TeamMemberDTO> findAllMembers() {
+        List<TeamMember> teamMemberList = teamMemberRepository.findAllByOrderById();
+        return teamMemberList.stream().map(member -> modelMapper.map(member, TeamMemberDTO.class)).collect(Collectors.toList());
 
+    }
     public TeamDTO createTeamMember(Long idTeam, TeamMemberDTO member) throws ResourceNotFoundException {
 
         Optional<Team> teamToUpdate = teamRepository.findById(idTeam);

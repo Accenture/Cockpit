@@ -6,6 +6,7 @@ const burnUpChartUrl = 'burnUpChart';
 const teamUrl = 'team';
 const sprintUrl = 'sprint';
 const impedimentUrl = 'impediment';
+const teamMemberUrl = 'teamMember';
 const userUrl = 'user';
 
 const headers = {
@@ -180,6 +181,14 @@ function unassignTeamMember(teamId, teamMemberId) {
     return e;
   }
 }
+function getMembers() {
+  try {
+    return API.get(`${teamMemberUrl}/all`, headers);
+  } catch (e) {
+    console.log(`Error when getting members : ${e}`);
+    return e;
+  }
+}
 const MvpService = {
   getAllMvp,
   createNewJiraProject,
@@ -198,6 +207,7 @@ const MvpService = {
   deleteImpediment,
   deleteMvp,
   updateImpediment,
+  getMembers,
   unassignTeamMember,
   isUserScrumMaster,
 };

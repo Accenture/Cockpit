@@ -51,8 +51,18 @@ public class TeamController {
     @GetMapping(value = "/api/v1/team/all")
     public ResponseEntity getTeams(@RequestHeader("Authorization") String authHeader) {
         if (authService.isUserAuthorized(authHeader)) {
-            List<TeamDTO> mvpList = teamService.findAll();
-            return ResponseEntity.ok(mvpList);
+            List<TeamDTO> teamList = teamService.findAll();
+            return ResponseEntity.ok(teamList);
+        } else {
+            return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
+        }
+    }
+    // GET ALL MEMBERS
+    @GetMapping(value = "/api/v1/teamMember/all")
+    public ResponseEntity getAllMembers(@RequestHeader("Authorization") String authHeader) {
+        if (authService.isUserAuthorized(authHeader)) {
+            List<TeamMemberDTO> memberList = teamService.findAllMembers();
+            return ResponseEntity.ok(memberList);
         } else {
             return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
         }
