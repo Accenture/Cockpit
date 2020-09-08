@@ -124,6 +124,7 @@ export default function TeamMemberList() {
     setRole(member.role);
     setEmail(member.email);
     setSelectedMember(member);
+    setAssign(false);
   }
   async function deleteTeamMember() {
     await MvpService.deleteTeamMember(mvpInfo.team.id, selectedMember.id);
