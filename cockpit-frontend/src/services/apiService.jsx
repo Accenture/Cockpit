@@ -189,6 +189,17 @@ function getMembers() {
     return e;
   }
 }
+function assignTeamMember(teamId, teamMemberId) {
+  try {
+    return API.put(
+      `${teamUrl}/${teamId}/assignTeamMember/${teamMemberId}`,
+      headers,
+    );
+  } catch (e) {
+    console.log(`Error when assigning team member: ${e}`);
+    return e;
+  }
+}
 const MvpService = {
   getAllMvp,
   createNewJiraProject,
@@ -210,6 +221,7 @@ const MvpService = {
   getMembers,
   unassignTeamMember,
   isUserScrumMaster,
+  assignTeamMember,
 };
 
 export default MvpService;
