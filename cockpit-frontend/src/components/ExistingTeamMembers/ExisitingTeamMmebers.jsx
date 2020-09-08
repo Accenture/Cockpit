@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import { mvpSelector } from '../../redux/selector';
 import useStyles from './styles';
 import MvpService from '../../services/apiService';
+import { getOneMvp } from '../../redux/ormSlice';
 
 export default function ExisitingTeamMmebers() {
   const [members, setMembers] = React.useState([]);
@@ -17,6 +18,7 @@ export default function ExisitingTeamMmebers() {
   const mvpId = useParams().id;
   const mvpInfo = useSelector((state) => mvpSelector(state, mvpId));
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function getAllMembers() {
@@ -32,11 +34,16 @@ export default function ExisitingTeamMmebers() {
   function handleSelect(value) {
     setSelectedMember(value);
   }
-  function assign() {}
+  async function assign() {
+    await MvpService.assignTeamMember(mvpInfo.team.id, selectedMember.id);
+    dispatch(getOneMvp(mvpId));
+    setSelectedMember(null);
+  }
   return (
     <div>
       <Autocomplete
         id="members"
+        value={selectedMember}
         options={members}
         getOptionLabel={(option) => option.email}
         style={{ width: 275 }}

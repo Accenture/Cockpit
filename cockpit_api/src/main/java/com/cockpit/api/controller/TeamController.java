@@ -57,6 +57,7 @@ public class TeamController {
             return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
         }
     }
+
     // GET ALL MEMBERS
     @GetMapping(value = "/api/v1/teamMember/all")
     public ResponseEntity getAllMembers(@RequestHeader("Authorization") String authHeader) {
@@ -134,6 +135,23 @@ public class TeamController {
         }
     }
 
+    // ASSIGN a Team member
+    @PutMapping(value = "/api/v1/team/{id}/assignTeamMember/{teamMemberId}")
+    public ResponseEntity<Object> assignTeamMember(@PathVariable("id") Long id,
+                                                   @PathVariable("teamMemberId") Long teamMemberId,
+                                                   @RequestHeader("Authorization") String authHeader) {
+        if (authService.isUserAuthorized(authHeader)) {
+            try {
+                TeamDTO teamUpdated = teamService.assignTeamMember(id, teamMemberId);
+                return ResponseEntity.ok().body(teamUpdated);
+            } catch (com.cockpit.api.exception.ResourceNotFoundException e) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            }
+        } else {
+            return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
     // DELETE a Team member
     @DeleteMapping(value = "/api/v1/team/{id}/deleteTeamMember/{teamMemberId}")
     public ResponseEntity deleteTeamMember(@PathVariable("id") Long id,
@@ -150,11 +168,12 @@ public class TeamController {
             return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
         }
     }
+
     // UNASSIGN a Team member
     @DeleteMapping(value = "/api/v1/team/{id}/unassignTeamMember/{teamMemberId}")
     public ResponseEntity<Object> unassignTeamMember(@PathVariable("id") Long id,
-                                           @PathVariable("teamMemberId") Long teamMemberId,
-                                           @RequestHeader("Authorization") String authHeader) {
+                                                     @PathVariable("teamMemberId") Long teamMemberId,
+                                                     @RequestHeader("Authorization") String authHeader) {
         if (authService.isUserAuthorized(authHeader)) {
             try {
                 TeamDTO teamUpdated = teamService.unassignTeamMember(id, teamMemberId);
