@@ -48,7 +48,6 @@ export default function TeamMemberList() {
   const dispatch = useDispatch();
   const mvpId = useParams().id;
   const mvpInfo = useSelector((state) => mvpSelector(state, mvpId));
-
   function initState() {
     setFirstName('');
     setLastName('');
@@ -61,6 +60,7 @@ export default function TeamMemberList() {
     setOpen(false);
     setUpdate(false);
     setUnassign(false);
+    setAssign(false);
   }
   useEffect(() => {
     if (mvpInfo.team) {

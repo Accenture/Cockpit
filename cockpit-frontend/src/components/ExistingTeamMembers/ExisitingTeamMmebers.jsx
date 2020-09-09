@@ -43,6 +43,7 @@ export default function ExisitingTeamMmebers() {
     <div>
       <Autocomplete
         id="members"
+        size="small"
         value={selectedMember}
         options={members}
         getOptionLabel={(option) => option.email}
