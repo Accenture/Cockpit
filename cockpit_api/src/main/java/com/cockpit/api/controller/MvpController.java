@@ -66,36 +66,6 @@ public class MvpController {
         }
     }
 
-    // UPDATE
-    @PutMapping(value = "/api/v1/mvp/update")
-    public ResponseEntity updateMvp(@RequestBody MvpDTO mvpDTO, @RequestHeader("Authorization") String authHeader) {
-        if (authService.isScrumMaster(authHeader)) {
-            try {
-                MvpDTO mvpUpdated = mvpService.updateMvp(mvpDTO);
-                return ResponseEntity.ok().body(mvpUpdated);
-            } catch (ResourceNotFoundException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-            }
-        } else {
-            return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
-        }
-    }
-
-    // DELETE
-    @DeleteMapping(value = "/api/v1/mvp/delete/{id}")
-    public ResponseEntity deleteMvp(@PathVariable Long id, @RequestHeader("Authorization") String authHeader) {
-        if (authService.isScrumMaster(authHeader)) {
-            try {
-                mvpService.deleteMvp(id);
-                return ResponseEntity.ok("One Mvp has been deleted");
-            } catch (ResourceNotFoundException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-            }
-        } else {
-            return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
-        }
-    }
-
     // ASSIGN TEAM
     @PutMapping(value = "/api/v1/mvp/{id}/assignTeam/{teamId}")
     public ResponseEntity<Object> assignTeamToMvp(@PathVariable("id") Long id, @PathVariable("teamId") Long teamId,
