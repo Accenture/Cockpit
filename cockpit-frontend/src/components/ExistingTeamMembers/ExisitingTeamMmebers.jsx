@@ -50,16 +50,16 @@ export default function ExisitingTeamMmebers() {
         getOptionLabel={(option) => option.email}
         onChange={(event, value) => handleSelect(value)}
         renderInput={(params) => (
-          <TextField {...params} label="Member Email" variant="outlined" />
+          <TextField {...params} label="Email" variant="outlined" />
         )}
         getOptionSelected={(option, value) => option.email === value.email}
         renderOption={(option) => (
           <>
-            <Grid container spacing={1}>
-              <Grid item xs={6}>
+            <Grid container spacing={1} alignItems="center" justify="center">
+              <Grid item xs={3}>
                 <Avatar alt="team member" src={option.urlTeamMemberAvatar} />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={9}>
                 <Typography
                   component="span"
                   variant="body2"
