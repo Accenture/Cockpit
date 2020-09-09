@@ -124,7 +124,7 @@ public class TeamService {
         }
         Optional<TeamMember> existingMember = teamMemberRepository.findById(teamMeberId);
         if (!existingMember.isPresent()) {
-            throw new ResourceNotFoundException("Team member not found");
+            throw new ResourceNotFoundException("Team Member not found");
         }
 
         teamToUpdate.get().getTeamMembers().remove(existingMember.get());
