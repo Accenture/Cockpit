@@ -69,6 +69,11 @@ export default function TeamMemberList() {
     closeForm();
     // eslint-disable-next-line
   }, [mvpInfo]);
+  useEffect(() => {
+    if (update || open) {
+      setAssign(false);
+    }
+  }, [update, open]);
 
   function displayForm() {
     setOpen(true);
@@ -124,7 +129,6 @@ export default function TeamMemberList() {
     setRole(member.role);
     setEmail(member.email);
     setSelectedMember(member);
-    setAssign(false);
   }
   async function deleteTeamMember() {
     await MvpService.deleteTeamMember(mvpInfo.team.id, selectedMember.id);

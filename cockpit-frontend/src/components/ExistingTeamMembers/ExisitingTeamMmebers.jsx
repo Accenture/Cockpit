@@ -30,7 +30,7 @@ export default function ExisitingTeamMmebers() {
       setMembers(list);
     }
     getAllMembers();
-  });
+  }, [mvpInfo.team.teamMembers]);
   function handleSelect(value) {
     setSelectedMember(value);
   }
