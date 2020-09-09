@@ -3,7 +3,6 @@ package com.cockpit.api.controller;
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.cockpit.api.model.dto.MvpDTO;
 import com.cockpit.api.service.AuthService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
