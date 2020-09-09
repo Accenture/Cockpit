@@ -44,10 +44,10 @@ export default function ExisitingTeamMmebers() {
       <Autocomplete
         id="members"
         size="small"
+        className={classes.emailField}
         value={selectedMember}
         options={members}
         getOptionLabel={(option) => option.email}
-        style={{ width: 275 }}
         onChange={(event, value) => handleSelect(value)}
         renderInput={(params) => (
           <TextField {...params} label="Member Email" variant="outlined" />
