@@ -38,7 +38,7 @@ public class JiraController {
     @PostMapping(
             value = "/api/v1/jira/create"
     )
-    public ResponseEntity createJira(@RequestBody JiraDTO jiraDTO,
+    public ResponseEntity<Object> createJira(@RequestBody JiraDTO jiraDTO,
                                      @RequestHeader("Authorization") String authHeader) {
         if (authService.isScrumMaster(authHeader)) {
             String url = urlVerifyJiraKey + jiraDTO.getJiraProjectKey();

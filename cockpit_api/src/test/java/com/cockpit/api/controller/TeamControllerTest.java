@@ -96,10 +96,6 @@ public class TeamControllerTest {
 				.delete("/api/v1/team/{id}/deleteTeamMember/{teamMeberId}", mockTeam.getId(), mockTeamMember.getId())
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", "Bearer token")).andExpect(status().isOk())
-				.delete("/api/v1/team/{id}/deleteTeamMember/{teamMemberId}", mockTeam.getId(), mockTeamMember.getId())
-				.header("Authorization", "Bearer token")
-				.contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andReturn();
 
