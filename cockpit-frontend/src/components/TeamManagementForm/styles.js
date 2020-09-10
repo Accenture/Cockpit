@@ -9,7 +9,7 @@ export default makeStyles((theme) => ({
   },
   grid: {
     padding: theme.spacing(2, 4, 1),
-    width: 'calc(80%)',
+    width: 'calc(95%)',
     margin: 0,
   },
   formLabel: {

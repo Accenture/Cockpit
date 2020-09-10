@@ -2,9 +2,6 @@ package com.cockpit.api.controller;
 
 import java.util.List;
 
-import com.cockpit.api.model.dao.Jira;
-import com.cockpit.api.model.dao.Sprint;
-import com.cockpit.api.model.dto.JiraDTO;
 import com.cockpit.api.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -104,7 +101,7 @@ public class TeamController {
 
     // DELETE a Team
     @DeleteMapping(value = "/api/v1/team/delete/{id}")
-    public ResponseEntity deleteTeam(@PathVariable Long id,
+    public ResponseEntity<Object> deleteTeam(@PathVariable Long id,
                                      @RequestHeader("Authorization") String authHeader) {
         if (authService.isUserAuthorized(authHeader)) {
             try {
