@@ -172,7 +172,7 @@ function isUserScrumMaster() {
 }
 function unassignTeamMember(teamId, teamMemberId) {
   try {
-    return API.delete(
+    return API.put(
       `${teamUrl}/${teamId}/unassignTeamMember/${teamMemberId}`,
       headers,
     );
