@@ -47,6 +47,7 @@ export default function ExisitingTeamMmebers() {
         className={classes.emailField}
         value={selectedMember}
         options={members}
+        ListboxProps={{ style: { maxHeight: '15rem' } }}
         getOptionLabel={(option) => option.email}
         onChange={(event, value) => handleSelect(value)}
         renderInput={(params) => (
