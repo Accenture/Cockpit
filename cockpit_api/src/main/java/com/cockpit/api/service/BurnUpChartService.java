@@ -55,7 +55,7 @@ public class BurnUpChartService {
         double projection = 0;
         int totalUSNumber = 0;
         int maxSprintNumber = 12;
-        Integer numberOfUsClosed = 0;
+        Integer sumUsClosedInLastSprints = 0;
         if (mvp.getSprintNumber() != null) {
             maxSprintNumber = mvp.getSprintNumber();
         }
@@ -68,17 +68,17 @@ public class BurnUpChartService {
             totalUSNumber = totalUSNumber + actualSprintStories;
 
             if (thisSprint!=null  && thisSprint.getCompletedUsNumber() != null) {
-                numberOfUsClosed = numberOfUsClosed + thisSprint.getCompletedUsNumber();
-                setExpected(chart, totalUSNumber, sprintNumber, jira, numberOfUsClosed, thisSprint);
+                sumUsClosedInLastSprints = sumUsClosedInLastSprints + thisSprint.getCompletedUsNumber();
+                setExpected(chart, totalUSNumber, sprintNumber, sumUsClosedInLastSprints,jira, thisSprint);
             }
 
             setTotalStories(chart, sprintNumber, jira);
-            setUsClosed(chart, sprintNumber, jira, numberOfUsClosed);
+            setUsClosed(chart, sprintNumber, jira, sumUsClosedInLastSprints);
 
             // Set projection
             if (chart.getUsClosed() != null) {
-                rate = ((double) numberOfUsClosed / (sprintNumber + 1));
-                lastNbUsClosed = numberOfUsClosed;
+                rate = ((double) sumUsClosedInLastSprints / (sprintNumber + 1));
+                lastNbUsClosed = sumUsClosedInLastSprints;
             } else {
                 projection = lastNbUsClosed + iteration * rate;
                 chart.setProjectionUsClosed(projection);
@@ -110,10 +110,13 @@ public class BurnUpChartService {
         }
     }
 
-    private void setExpected(BurnUpChartDTO chart, int totalUSNumber, int sprintNumber,
-                             Jira jira, int numberOfUsClosed, Sprint sprint) {
-        if (jira.getCurrentSprint() != null && sprint.getNotCompletedUsNumber()!=null && sprintNumber <= jira.getCurrentSprint()) {
-            chart.setExpectedUsClosed(numberOfUsClosed + sprint.getNotCompletedUsNumber());
+    private void setExpected(BurnUpChartDTO chart, int totalUSNumber, int sprintNumber, int sumUsClosedInLastSprints,
+                             Jira jira, Sprint sprint) {
+        if (jira.getCurrentSprint() != null && sprintNumber <= jira.getCurrentSprint()
+                && sprint.getNotCompletedUsNumber() != null
+                && sprint.getPuntedUsNumber() != null
+        ) {
+            chart.setExpectedUsClosed(sumUsClosedInLastSprints + sprint.getNotCompletedUsNumber() + sprint.getPuntedUsNumber());
         } else if (sprint != null) {
             chart.setExpectedUsClosed(totalUSNumber);
         } else {

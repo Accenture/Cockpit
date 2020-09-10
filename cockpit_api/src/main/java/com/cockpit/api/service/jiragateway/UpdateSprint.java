@@ -112,11 +112,14 @@ public class UpdateSprint {
         for (Jira jira : jiraProjectList) {
             List<Sprint> sprintList = sprintRepository.findByJiraOrderBySprintNumber(jira);
             for (Sprint sprint : sprintList) {
-                SprintReportContent sprintReportContent = getSprintReport(jira.getBoardId(), sprint.getJiraSprintId());
+                SprintReportContent sprintReportContent = getSprintReport
+                        (jira.getBoardId(), sprint.getJiraSprintId());
                 int nbNotCompletedUserStories = (int) sprintReportContent.getIssuesNotCompletedInCurrentSprint().stream().filter(sprintReportIssue -> sprintReportIssue.getTypeName().equals("Story")).count();
                 int nbCompletedUserStories = (int) sprintReportContent.getCompletedIssues().stream().filter(sprintReportIssue -> sprintReportIssue.getTypeName().equals("Story")).count();
+                int nbPuntedUserStories = (int) sprintReportContent.getPuntedIssues().stream().filter(sprintReportIssue -> sprintReportIssue.getTypeName().equals("Story")).count();
                 sprint.setNotCompletedUsNumber(nbNotCompletedUserStories);
                 sprint.setCompletedUsNumber(nbCompletedUserStories);
+                sprint.setPuntedUsNumber(nbPuntedUserStories);
                 try {
                     sprintRepository.save(sprint);
                 } catch (Exception e) {

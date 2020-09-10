@@ -37,6 +37,8 @@ public class Sprint {
 
     private Integer completedUsNumber;
 
+    private Integer puntedUsNumber;
+
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "id_jira", nullable = false)
     @JsonIgnore
@@ -169,6 +171,14 @@ public class Sprint {
 
     public void setNotCompletedUsNumber(Integer notCompletedUsNumber) {
         this.notCompletedUsNumber = notCompletedUsNumber;
+    }
+
+    public Integer getPuntedUsNumber() {
+        return puntedUsNumber;
+    }
+
+    public void setPuntedUsNumber(Integer puntedUsNumber) {
+        this.puntedUsNumber = puntedUsNumber;
     }
 
     public Integer getCompletedUsNumber() {

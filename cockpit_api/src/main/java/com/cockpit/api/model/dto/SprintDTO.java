@@ -34,6 +34,8 @@ public class SprintDTO {
 
     private Integer completedUsNumber;
 
+    private Integer puntedUsNumber;
+
     private Set<UserStory> userStories;
 
     public Integer getNotCompletedUsNumber() {
@@ -158,5 +160,13 @@ public class SprintDTO {
 
     public void setCompletedUsNumber(Integer completedUsNumber) {
         this.completedUsNumber = completedUsNumber;
+    }
+
+    public Integer getPuntedUsNumber() {
+        return puntedUsNumber;
+    }
+
+    public void setPuntedUsNumber(Integer puntedUsNumber) {
+        this.puntedUsNumber = puntedUsNumber;
     }
 }

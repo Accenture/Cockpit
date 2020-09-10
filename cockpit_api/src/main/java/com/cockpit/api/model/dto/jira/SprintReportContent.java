@@ -9,7 +9,8 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
         "completedIssues",
-        "issuesNotCompletedInCurrentSprint"
+        "issuesNotCompletedInCurrentSprint",
+        "puntedIssues"
 })
 public class SprintReportContent {
 
@@ -18,6 +19,9 @@ public class SprintReportContent {
 
     @JsonProperty("issuesNotCompletedInCurrentSprint")
     private List<SprintReportIssue> issuesNotCompletedInCurrentSprint;
+
+    @JsonProperty("puntedIssues")
+    private List<SprintReportIssue> puntedIssues;
 
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
@@ -42,14 +46,24 @@ public class SprintReportContent {
         this.completedIssues = completedIssues;
     }
 
+    @JsonProperty("puntedIssues")
+    public List<SprintReportIssue> getPuntedIssues() {
+        return puntedIssues;
+    }
+
+    @JsonProperty("puntedIssues")
+    public void setPuntedIssues(List<SprintReportIssue> puntedIssues) {
+        this.puntedIssues = puntedIssues;
+    }
+
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {
         return additionalProperties;
     }
+
     @JsonAnySetter
     public void setAdditionalProperties(Map<String, Object> additionalProperties) {
         this.additionalProperties = additionalProperties;
     }
-
 }
 
