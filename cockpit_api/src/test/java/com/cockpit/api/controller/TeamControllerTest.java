@@ -118,7 +118,7 @@ public class TeamControllerTest {
 
 		// when
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-				.delete("/api/v1/team/{id}/unassignTeamMember/{teamMeberId}", mockTeam.getId(), mockTeamMember.getId())
+				.put("/api/v1/team/{id}/unassignTeamMember/{teamMeberId}", mockTeam.getId(), mockTeamMember.getId())
 				.contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
 				.header("Authorization", "Bearer token")).andExpect(status().isOk())
 				.andReturn();

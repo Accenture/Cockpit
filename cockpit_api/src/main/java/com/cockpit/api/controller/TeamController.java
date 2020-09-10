@@ -60,7 +60,7 @@ public class TeamController {
 
     // GET ALL MEMBERS
     @GetMapping(value = "/api/v1/teamMember/all")
-    public ResponseEntity getAllMembers(@RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity<Object> getAllMembers(@RequestHeader("Authorization") String authHeader) {
         if (authService.isUserAuthorized(authHeader)) {
             List<TeamMemberDTO> memberList = teamService.findAllMembers();
             return ResponseEntity.ok(memberList);
@@ -170,7 +170,7 @@ public class TeamController {
     }
 
     // UNASSIGN a Team member
-    @DeleteMapping(value = "/api/v1/team/{id}/unassignTeamMember/{teamMemberId}")
+    @PutMapping(value = "/api/v1/team/{id}/unassignTeamMember/{teamMemberId}")
     public ResponseEntity<Object> unassignTeamMember(@PathVariable("id") Long id,
                                                      @PathVariable("teamMemberId") Long teamMemberId,
                                                      @RequestHeader("Authorization") String authHeader) {

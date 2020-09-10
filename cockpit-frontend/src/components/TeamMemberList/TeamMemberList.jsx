@@ -169,8 +169,6 @@ export default function TeamMemberList() {
                         primary={`${member.firstName} ${member.lastName}`}
                         secondary={
                           <>
-                            {/*  <span className={classes.emailText}>{member.email}</span>
-                      <br /> */}
                             <Typography
                               component="span"
                               variant="body2"
@@ -340,7 +338,7 @@ export default function TeamMemberList() {
                         type="submit"
                         color="primary"
                         variant="outlined"
-                        className={classes.addButton}
+                        className={classes.saveButton}
                       >
                         Add
                       </Button>

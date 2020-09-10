@@ -24,6 +24,7 @@ export default makeStyles((theme) => ({
     borderRadius: 20,
     textTransform: 'capitalize',
     margin: '22px 0',
+    lineHeight: 1.45,
   },
   grid: {
     padding: theme.spacing(2, 4, 1),
@@ -45,6 +46,11 @@ export default makeStyles((theme) => ({
     margin: '22px 0 0 0',
   },
   unassignButton: {
+    borderRadius: 20,
+    textTransform: 'capitalize',
+    margin: '22px 0',
+  },
+  saveButton: {
     borderRadius: 20,
     textTransform: 'capitalize',
     margin: '22px 0',
