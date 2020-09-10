@@ -13,7 +13,7 @@ public class Team{
 
     private String name;
 
-    @ManyToMany(cascade=CascadeType.ALL)
+    @ManyToMany(cascade=CascadeType.MERGE)
     @JoinTable(name = "team_team_members",
             joinColumns = @JoinColumn(name = "id_team"),
             inverseJoinColumns = @JoinColumn(name = "id_team_member")

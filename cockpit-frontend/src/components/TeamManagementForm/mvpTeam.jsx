@@ -63,9 +63,9 @@ export default function MvpTeam(props) {
   };
 
   return (
-    <div>
+    <div style={{ width: '100%' }}>
       <Grid container className={classes.containerAssign}>
-        <Grid item xs={8}>
+        <Grid item xs={6}>
           <FormControl required size="small" fullWidth variant="outlined">
             <Select
               displayEmpty
@@ -83,7 +83,7 @@ export default function MvpTeam(props) {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <Button
             onClick={
               mvpTeam && mvpTeam.id === selectedTeam.id ? unassign : assign
@@ -97,6 +97,15 @@ export default function MvpTeam(props) {
             className={classes.buttonAssign}
           >
             {mvpTeam && mvpTeam.id === selectedTeam.id ? 'unassign' : 'assign'}
+          </Button>
+        </Grid>{' '}
+        <Grid item xs={3}>
+          <Button
+            variant="outlined"
+            color="secondary"
+            className={classes.buttonAssign}
+          >
+            delete
           </Button>
         </Grid>
       </Grid>
