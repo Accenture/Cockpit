@@ -197,14 +197,12 @@ public class TeamControllerTest {
         Team mockTeam = new Team();
         mockTeam.setId(1l);
 
-        TeamDTO teamDto = modelMapper.map(mockTeam, TeamDTO.class);
-
         // given
         Mockito.doNothing().when(teamService).deleteTeam(mockTeam.getId());
 
         // when
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
-                .delete("/api/v1/team/delete/{id}", mockTeam.getId(), mockTeam.getId())
+                .delete("/api/v1/team/delete/{id}", mockTeam.getId())
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
                 .header("Authorization", "Bearer token")).andExpect(status().isOk())
                 .andReturn();
