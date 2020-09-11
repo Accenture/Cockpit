@@ -33,4 +33,7 @@ export default makeStyles((theme) => ({
   containerAssign: {
     marginTop: 60,
   },
+  deleteButton: {
+    margin: ' -6px 25px 0 25px',
+  },
 }));
