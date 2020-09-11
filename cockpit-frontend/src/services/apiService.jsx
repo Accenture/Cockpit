@@ -200,6 +200,14 @@ function assignTeamMember(teamId, teamMemberId) {
     return e;
   }
 }
+function deleteTeam(id) {
+  try {
+    return API.delete(`${teamUrl}/delete/${id}`, headers);
+  } catch (e) {
+    console.log(`Error when deleting team: ${e}`);
+    return e;
+  }
+}
 const MvpService = {
   getAllMvp,
   createNewJiraProject,
@@ -222,6 +230,7 @@ const MvpService = {
   unassignTeamMember,
   isUserScrumMaster,
   assignTeamMember,
+  deleteTeam,
 };
 
 export default MvpService;

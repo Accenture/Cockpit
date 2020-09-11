@@ -72,6 +72,11 @@ public class TeamService {
         if (!teamToDelete.isPresent()) {
             throw new ResourceNotFoundException("The team to be deleted does not exist in database");
         }
+        for(Mvp mvp : teamToDelete.get().getMvps())
+        {
+            mvp.setTeam(null);
+            mvpRepository.save(mvp);
+        }
         teamRepository.delete(teamToDelete.get());
     }
 
@@ -80,11 +85,13 @@ public class TeamService {
         return teamList.stream().map(team -> modelMapper.map(team, TeamDTO.class)).collect(Collectors.toList());
 
     }
+
     public List<TeamMemberDTO> findAllMembers() {
         List<TeamMember> teamMemberList = teamMemberRepository.findAllByOrderById();
         return teamMemberList.stream().map(member -> modelMapper.map(member, TeamMemberDTO.class)).collect(Collectors.toList());
 
     }
+
     public TeamDTO createTeamMember(Long idTeam, TeamMemberDTO member) throws ResourceNotFoundException {
 
         Optional<Team> teamToUpdate = teamRepository.findById(idTeam);
@@ -116,6 +123,7 @@ public class TeamService {
 
         return modelMapper.map(team, TeamDTO.class);
     }
+
     public TeamDTO unassignTeamMember(Long idTeam, Long teamMeberId) throws ResourceNotFoundException {
 
         Optional<Team> teamToUpdate = teamRepository.findById(idTeam);
@@ -133,6 +141,7 @@ public class TeamService {
 
         return modelMapper.map(team, TeamDTO.class);
     }
+
     public TeamDTO assignTeamMember(Long idTeam, Long teamMeberId) throws ResourceNotFoundException {
 
         Optional<Team> teamToUpdate = teamRepository.findById(idTeam);
@@ -150,6 +159,7 @@ public class TeamService {
 
         return modelMapper.map(team, TeamDTO.class);
     }
+
     boolean verifyUniqueName(TeamDTO teamDTO) {
         List<Team> teams = teamRepository.findAllByOrderByName();
         for (Team team : teams) {
