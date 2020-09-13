@@ -1,3 +1,4 @@
+/* Disable technology controllers temporarily before adding this feature to Cockpit
 package com.cockpit.api.controller;
 
 import com.cockpit.api.exception.ResourceNotFoundException;
@@ -104,3 +105,5 @@ public class TechnologyController {
         }
     }
 }
+
+ */
