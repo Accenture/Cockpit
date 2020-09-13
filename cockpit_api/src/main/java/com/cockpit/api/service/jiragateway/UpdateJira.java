@@ -46,7 +46,7 @@ public class UpdateJira {
     private String urlBoards;
 
     @Scheduled(initialDelay = 5 * ONE_SECOND, fixedDelay = ONE_HOUR)
-    public void updateProjectIdInJira() throws Exception {
+    public void updateProjectIdInJira() throws JiraException {
         log.info("Jira - Start update jira project id");
         ResponseEntity<Project[]> response = (ResponseEntity<Project[]>) jiraApiService.callJira(urlProjects,
                 Project[].class.getName());

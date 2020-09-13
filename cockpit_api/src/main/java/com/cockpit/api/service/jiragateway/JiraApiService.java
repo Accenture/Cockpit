@@ -27,7 +27,7 @@ public class JiraApiService {
     @Value("${spring.jira.token}")
     private String token;
 
-    public ResponseEntity<?> callJira(String url, String className) throws JiraException {
+    public ResponseEntity<? > callJira(String url, String className) throws JiraException {
 
         headers = this.addAuthorizationToHeaders();
         request = new HttpEntity<>(headers);
