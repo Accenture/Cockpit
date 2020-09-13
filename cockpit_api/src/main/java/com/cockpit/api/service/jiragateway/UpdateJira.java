@@ -48,8 +48,7 @@ public class UpdateJira {
     @Scheduled(initialDelay = 5 * ONE_SECOND, fixedDelay = ONE_HOUR)
     public void updateProjectIdInJira() throws JiraException {
         log.info("Jira - Start update jira project id");
-        ResponseEntity<Project[]> response = (ResponseEntity<Project[]>) jiraApiService.callJira(urlProjects,
-                Project[].class.getName());
+        ResponseEntity<Project[]> response = jiraApiService.callJira(urlProjects, Project[].class.getName());
         List<Project> jiraProjectsList = Arrays.asList(response.getBody());
         List<Jira> jiraList = jiraRepository.findAllByOrderById();
         for (Jira jira : jiraList) {
@@ -87,7 +86,7 @@ public class UpdateJira {
 
         do {
             String url = String.format(urlBoards, maxResults, startAt);
-            ResponseEntity<Board> result = (ResponseEntity<Board>) jiraApiService.callJira(url, Board.class.getName());
+            ResponseEntity<Board> result = jiraApiService.callJira(url, Board.class.getName());
 
             if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
                 maxResults = result.getBody().getMaxResults();
