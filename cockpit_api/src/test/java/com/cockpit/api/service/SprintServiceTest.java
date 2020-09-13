@@ -1,6 +1,7 @@
 package com.cockpit.api.service;
 
 import com.cockpit.api.model.dao.Impediment;
+import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.repository.ImpedimentRepository;
 import org.junit.Assert;
 import org.junit.Before;
@@ -14,6 +15,7 @@ import com.cockpit.api.model.dao.Sprint;
 import com.cockpit.api.model.dto.ObeyaDTO;
 import com.cockpit.api.repository.SprintRepository;
 
+import java.util.Date;
 import java.util.HashSet;
 
 @RunWith(SpringRunner.class)
@@ -52,7 +54,6 @@ public class SprintServiceTest {
 
     @Test
     public void whenAddImpedimentToSprintThenReturnSprint() {
-
         Impediment impediment = new Impediment("impediment name", "impediment description");
         Sprint sprint = new Sprint();
         sprint.setId(1L);
@@ -65,8 +66,40 @@ public class SprintServiceTest {
 
         // Then
         Assert.assertEquals(impediment.getSprint(),sprint);
-
-
     }
 
+    @Test
+    public void whenFindSprintNumberForADateThenReturnSprintNumber() {
+        Sprint mockSprint = new Sprint();
+        mockSprint.setId(1L);
+        mockSprint.setSprintNumber(10);
+        Jira mockJira = new Jira();
+        Date mockDate = new Date();
+        // Given
+        Mockito.when(sprintRepository.findTopBySprintStartDateLessThanEqualAndJiraEqualsOrderBySprintNumberDesc(Mockito.any(), Mockito.any())).thenReturn(mockSprint);
+
+        // When
+        int sprintNumber = sprintService.findSprintNumberForADate(mockJira, mockDate);
+
+        // Then
+        Assert.assertEquals(10, sprintNumber);
+    }
+
+    @Test
+    public void whenFindByJiraAndSprintNumberThenReturnSprint() {
+        Sprint mockSprint = new Sprint();
+        mockSprint.setId(1L);
+        mockSprint.setSprintNumber(10);
+        Jira mockJira = new Jira();
+        mockJira.setId(1l);
+
+        // Given
+        Mockito.when(sprintRepository.findByJiraAndSprintNumber(Mockito.any(), Mockito.anyInt())).thenReturn(mockSprint);
+
+        // When
+        Sprint foundSprint = sprintService.findByJiraAndSprintNumber(mockJira, 10);
+
+        // Then
+        Assert.assertEquals(10, foundSprint.getSprintNumber());
+    }
 }
