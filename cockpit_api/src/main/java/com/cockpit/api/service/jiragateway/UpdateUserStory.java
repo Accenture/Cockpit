@@ -129,7 +129,7 @@ public class UpdateUserStory {
 
     }
 
-    public List<UserStory> updateUserStoryInDBForBakclogFromJira(String jiraProjectKey, String urlIssues) throws Exception {
+    public List<UserStory> updateUserStoryInDBForBakclogFromJira(String jiraProjectKey, String urlIssues) throws JiraException {
         String jqlBacklogUS = "project=" + jiraProjectKey + " AND Sprint=null AND issuetype=Story&expand=changelog";
 
         String urlBacklogUS = urlIssues + jqlBacklogUS;
@@ -142,7 +142,7 @@ public class UpdateUserStory {
         return stories;
     }
 
-    public List<UserStory> updateUserStoryInDBForASprintFromJira(Sprint sprint, String urlIssues) throws Exception {
+    public List<UserStory> updateUserStoryInDBForASprintFromJira(Sprint sprint, String urlIssues) throws JiraException {
 
         String sprintId = String.valueOf(sprint.getJiraSprintId());
         String jqlSprintUS = "Sprint=" + sprintId + " AND issuetype=Story&expand=changelog";
