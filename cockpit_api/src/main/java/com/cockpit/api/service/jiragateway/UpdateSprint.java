@@ -192,6 +192,9 @@ public class UpdateSprint {
             if (sprintExist.getCompletedUsNumber() != null) {
                 newSprint.setCompletedUsNumber(sprintExist.getCompletedUsNumber());
             }
+            if (sprintExist.getPuntedUsNumber() != null) {
+                newSprint.setPuntedUsNumber(sprintExist.getPuntedUsNumber());
+            }
         }
         newSprint.setJiraSprintId(sprintJira.getId());
         newSprint.setState(sprintJira.getState());
