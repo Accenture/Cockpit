@@ -114,7 +114,7 @@ public class TeamControllerTest {
 
 		// given
 		Mockito.when(teamService.createNewTeam(teamDto, 1l)).thenReturn(teamDto);
-		Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
+		Mockito.when(authService.isScrumMaster(Mockito.any())).thenReturn(true);
 
 		// when
 		MvcResult result = mockMvc
@@ -156,8 +156,6 @@ public class TeamControllerTest {
 		assertEquals(HttpStatus.OK.value(), resultGetTeamById.getResponse().getStatus());
 		assertEquals(HttpStatus.OK.value(), resultGetAllTeams.getResponse().getStatus());
 	}
-	@Test
-	public void whenUnassignTeamMemberThenReturn200() throws Exception {
 
     @Test
     public void whenUnassignTeamMemberThenReturn200() throws Exception {
@@ -255,6 +253,7 @@ public class TeamControllerTest {
 
         // given
         Mockito.doNothing().when(teamService).deleteTeam(mockTeam.getId());
+        Mockito.when(authService.isScrumMaster(Mockito.any())).thenReturn(true);
 
         // when
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders

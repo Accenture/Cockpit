@@ -69,6 +69,7 @@ public class ImpedimentControllerTest {
 
         // given
         Mockito.when(impedimentService.updateImpediment(impedimentDTO, mockImpediment.getId())).thenReturn(impedimentDTO);
+        Mockito.when(authService.isScrumMaster(Mockito.any())).thenReturn(true);
 
         // when
         MvcResult result = mockMvc
