@@ -32,7 +32,7 @@ export default function TeamManagementForm() {
     setMvpTeam(mvpInfo.team);
     setValue(0);
   }, [mvpInfo]);
-  const handleValueChange = (event, valeur) => {
+  const handleValueChange = (event, val) => {
     setOpen(false);
     setValue(valeur);
     setTeamName('');
