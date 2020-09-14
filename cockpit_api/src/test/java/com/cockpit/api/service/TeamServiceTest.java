@@ -2,6 +2,7 @@ package com.cockpit.api.service;
 
 import java.util.*;
 
+import com.cockpit.api.model.dao.Mvp;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,147 +22,174 @@ import com.cockpit.api.repository.TeamRepository;
 @RunWith(SpringRunner.class)
 public class TeamServiceTest {
 
-	private TeamService teamService;
+    private TeamService teamService;
 
-	@MockBean
-	TeamRepository teamRepository;
+    @MockBean
+    TeamRepository teamRepository;
 
-	@MockBean
-	MvpRepository mvpRepository;
+    @MockBean
+    MvpRepository mvpRepository;
 
-	@MockBean
-	TeamMemberRepository teamMemberRepository;
+    @MockBean
+    TeamMemberRepository teamMemberRepository;
 
-	@Before
-	public void setUp() {
-		this.teamService = new TeamService(teamRepository, mvpRepository, teamMemberRepository);
-	}
+    @Before
+    public void setUp() {
+        this.teamService = new TeamService(teamRepository, mvpRepository, teamMemberRepository);
+    }
 
-	@Test
-	public void whenAddTeamMemberThenReturnUpdatedTeam() throws ResourceNotFoundException {
-		TeamMemberDTO mockTeamMember = new TeamMemberDTO();
+    @Test
+    public void whenAddTeamMemberThenReturnUpdatedTeam() throws ResourceNotFoundException {
+        TeamMemberDTO mockTeamMember = new TeamMemberDTO();
 
-		Team mockTeam = new Team();
-		mockTeam.setId(1l);
-		mockTeam.setTeamMembers(new HashSet<>());
-		Optional<Team> team = Optional.ofNullable(mockTeam);
+        Team mockTeam = new Team();
+        mockTeam.setId(1l);
+        mockTeam.setTeamMembers(new HashSet<>());
+        Optional<Team> team = Optional.ofNullable(mockTeam);
 
-		// given
-		Mockito.when(teamRepository.findById(mockTeam.getId())).thenReturn(team);
-		Mockito.when(teamRepository.save(mockTeam)).thenReturn(mockTeam);
+        // given
+        Mockito.when(teamRepository.findById(mockTeam.getId())).thenReturn(team);
+        Mockito.when(teamRepository.save(mockTeam)).thenReturn(mockTeam);
 
-		// when
-		teamService.createTeamMember(mockTeam.getId(), mockTeamMember);
+        // when
+        teamService.createTeamMember(mockTeam.getId(), mockTeamMember);
 
-		// then
-		Assert.assertFalse(mockTeam.getTeamMembers().isEmpty());
+        // then
+        Assert.assertFalse(mockTeam.getTeamMembers().isEmpty());
 
-	}
+    }
 
-	@Test
-	public void whenDeleteTeamMemberThenReturnUpdatedTeam() throws ResourceNotFoundException {
+    @Test
+    public void whenDeleteTeamMemberThenReturnUpdatedTeam() throws ResourceNotFoundException {
 
-		Team mockTeam = new Team();
-		mockTeam.setId(1l);
-		mockTeam.setTeamMembers(new HashSet<>());
-		TeamMember mockTeamMember = new TeamMember();
-		mockTeamMember.setId(1l);
-		mockTeamMember.setTeams(new HashSet<>());
-		mockTeamMember.getTeams().add(mockTeam);
-		
-		mockTeam.getTeamMembers().add(mockTeamMember);
-		Optional<Team> team = Optional.ofNullable(mockTeam);
-		Optional<TeamMember> teamMember = Optional.ofNullable(mockTeamMember);
+        Team mockTeam = new Team();
+        mockTeam.setId(1l);
+        mockTeam.setTeamMembers(new HashSet<>());
+        TeamMember mockTeamMember = new TeamMember();
+        mockTeamMember.setId(1l);
+        mockTeamMember.setTeams(new HashSet<>());
+        mockTeamMember.getTeams().add(mockTeam);
 
-		// given
-		Mockito.when(teamRepository.findById(mockTeam.getId())).thenReturn(team);
-		Mockito.when(teamMemberRepository.findById(mockTeamMember.getId())).thenReturn(teamMember);
-		Mockito.when(teamRepository.save(mockTeam)).thenReturn(mockTeam);
+        mockTeam.getTeamMembers().add(mockTeamMember);
+        Optional<Team> team = Optional.ofNullable(mockTeam);
+        Optional<TeamMember> teamMember = Optional.ofNullable(mockTeamMember);
 
-		// when
-		teamService.deleteTeamMember(mockTeam.getId(), mockTeamMember.getId());
+        // given
+        Mockito.when(teamRepository.findById(mockTeam.getId())).thenReturn(team);
+        Mockito.when(teamMemberRepository.findById(mockTeamMember.getId())).thenReturn(teamMember);
+        Mockito.when(teamRepository.save(mockTeam)).thenReturn(mockTeam);
 
-		// then
-		Assert.assertTrue(mockTeam.getTeamMembers().isEmpty());
-	
-	}
-	@Test
-	public void whenUnassignTeamMemberThenReturnUpdatedTeam() throws ResourceNotFoundException {
+        // when
+        teamService.deleteTeamMember(mockTeam.getId(), mockTeamMember.getId());
 
-		Team mockTeam = new Team();
-		mockTeam.setId(1l);
-		mockTeam.setTeamMembers(new HashSet<>());
-		TeamMember mockTeamMember = new TeamMember();
-		mockTeamMember.setId(1l);
-		mockTeamMember.setTeams(new HashSet<>());
-		mockTeamMember.getTeams().add(mockTeam);
+        // then
+        Assert.assertTrue(mockTeam.getTeamMembers().isEmpty());
 
-		mockTeam.getTeamMembers().add(mockTeamMember);
-		Optional<Team> team = Optional.ofNullable(mockTeam);
-		Optional<TeamMember> teamMember = Optional.ofNullable(mockTeamMember);
+    }
 
-		// given
-		Mockito.when(teamRepository.findById(mockTeam.getId())).thenReturn(team);
-		Mockito.when(teamMemberRepository.findById(mockTeamMember.getId())).thenReturn(teamMember);
-		Mockito.when(teamRepository.save(mockTeam)).thenReturn(mockTeam);
+    @Test
+    public void whenUnassignTeamMemberThenReturnUpdatedTeam() throws ResourceNotFoundException {
 
-		// when
-		teamService.unassignTeamMember(mockTeam.getId(), mockTeamMember.getId());
+        Team mockTeam = new Team();
+        mockTeam.setId(1l);
+        mockTeam.setTeamMembers(new HashSet<>());
+        TeamMember mockTeamMember = new TeamMember();
+        mockTeamMember.setId(1l);
+        mockTeamMember.setTeams(new HashSet<>());
+        mockTeamMember.getTeams().add(mockTeam);
 
-		// then
-		Assert.assertTrue(mockTeam.getTeamMembers().isEmpty());
+        mockTeam.getTeamMembers().add(mockTeamMember);
+        Optional<Team> team = Optional.ofNullable(mockTeam);
+        Optional<TeamMember> teamMember = Optional.ofNullable(mockTeamMember);
 
-	}
-	@Test
-	public void whenAssignTeamMemberThenReturnUpdatedTeam() throws ResourceNotFoundException {
+        // given
+        Mockito.when(teamRepository.findById(mockTeam.getId())).thenReturn(team);
+        Mockito.when(teamMemberRepository.findById(mockTeamMember.getId())).thenReturn(teamMember);
+        Mockito.when(teamRepository.save(mockTeam)).thenReturn(mockTeam);
 
-		Team mockTeam = new Team();
-		mockTeam.setId(1l);
-		mockTeam.setTeamMembers(new HashSet<>());
-		TeamMember mockTeamMember = new TeamMember();
-		mockTeamMember.setId(1l);
-		mockTeamMember.setTeams(new HashSet<>());
+        // when
+        teamService.unassignTeamMember(mockTeam.getId(), mockTeamMember.getId());
 
-		Optional<Team> team = Optional.ofNullable(mockTeam);
-		Optional<TeamMember> teamMember = Optional.ofNullable(mockTeamMember);
+        // then
+        Assert.assertTrue(mockTeam.getTeamMembers().isEmpty());
 
-		// given
-		Mockito.when(teamRepository.findById(mockTeam.getId())).thenReturn(team);
-		Mockito.when(teamMemberRepository.findById(mockTeamMember.getId())).thenReturn(teamMember);
-		Mockito.when(teamRepository.save(mockTeam)).thenReturn(mockTeam);
+    }
 
-		// when
-		teamService.assignTeamMember(mockTeam.getId(), mockTeamMember.getId());
+    @Test
+    public void whenAssignTeamMemberThenReturnUpdatedTeam() throws ResourceNotFoundException {
 
-		// then
-		Assert.assertFalse(mockTeam.getTeamMembers().isEmpty());
+        Team mockTeam = new Team();
+        mockTeam.setId(1l);
+        mockTeam.setTeamMembers(new HashSet<>());
+        TeamMember mockTeamMember = new TeamMember();
+        mockTeamMember.setId(1l);
+        mockTeamMember.setTeams(new HashSet<>());
 
-	}
-	@Test
-	public void whenGetAllMembersThenReturnMemberList() {
-		TeamMember mockTeamMember = new TeamMember();
-		mockTeamMember.setId(1l);
-		mockTeamMember.setEmail("rihab@gmail.com");
-		mockTeamMember.setFirstName("Rihab");
-		mockTeamMember.setLastName("Rjab");
-		mockTeamMember.setRole("PO");
+        Optional<Team> team = Optional.ofNullable(mockTeam);
+        Optional<TeamMember> teamMember = Optional.ofNullable(mockTeamMember);
 
-		Team mockTeam = new Team();
-		mockTeam.setId(1l);
-		Set<Team> mockTeamList =  new HashSet<>();
-		mockTeamList.add(mockTeam);
-		mockTeamMember.setTeams(mockTeamList);
+        // given
+        Mockito.when(teamRepository.findById(mockTeam.getId())).thenReturn(team);
+        Mockito.when(teamMemberRepository.findById(mockTeamMember.getId())).thenReturn(teamMember);
+        Mockito.when(teamRepository.save(mockTeam)).thenReturn(mockTeam);
 
-		List<TeamMember> mockTeamMemberList =  new ArrayList<>();
-		mockTeamMemberList.add(mockTeamMember);
+        // when
+        teamService.assignTeamMember(mockTeam.getId(), mockTeamMember.getId());
 
-		// given
-		Mockito.when(teamMemberRepository.findAllByOrderById()).thenReturn(mockTeamMemberList);
+        // then
+        Assert.assertFalse(mockTeam.getTeamMembers().isEmpty());
 
-		// when
-		List<TeamMemberDTO> teamMemberList  = teamService.findAllMembers();
+    }
 
-		// then
-		Assert.assertEquals(1, teamMemberList.size());
-	}
+    @Test
+    public void whenGetAllMembersThenReturnMemberList() {
+        TeamMember mockTeamMember = new TeamMember();
+        mockTeamMember.setId(1l);
+        mockTeamMember.setEmail("rihab@gmail.com");
+        mockTeamMember.setFirstName("Rihab");
+        mockTeamMember.setLastName("Rjab");
+        mockTeamMember.setRole("PO");
+
+        Team mockTeam = new Team();
+        mockTeam.setId(1l);
+        Set<Team> mockTeamList = new HashSet<>();
+        mockTeamList.add(mockTeam);
+        mockTeamMember.setTeams(mockTeamList);
+
+        List<TeamMember> mockTeamMemberList = new ArrayList<>();
+        mockTeamMemberList.add(mockTeamMember);
+
+        // given
+        Mockito.when(teamMemberRepository.findAllByOrderById()).thenReturn(mockTeamMemberList);
+
+        // when
+        List<TeamMemberDTO> teamMemberList = teamService.findAllMembers();
+
+        // then
+        Assert.assertEquals(1, teamMemberList.size());
+    }
+
+    @Test
+    public void whenDeleteTeamThenReturnDeleteTeamFromDB() throws ResourceNotFoundException {
+        Team mockTeam = new Team();
+        mockTeam.setId(1l);
+        Set<Mvp> mvpList = new HashSet<>();
+        Mvp mockMvp = new Mvp();
+        mockMvp.setId(1l);
+        mockMvp.setName("cockpit");
+        mockMvp.setEntity("RC");
+        mockMvp.setCycle(1);
+        mvpList.add(mockMvp);
+        mockTeam.setMvps(mvpList);
+        Optional<Team> team = Optional.ofNullable(mockTeam);
+
+        // given
+        Mockito.when(teamRepository.findById(mockTeam.getId())).thenReturn(team);
+
+        // when
+        teamService.deleteTeam(mockTeam.getId());
+
+        // then
+        Assert.assertNull(mockMvp.getTeam());
+    }
 }
