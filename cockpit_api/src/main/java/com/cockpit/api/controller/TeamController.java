@@ -82,23 +82,6 @@ public class TeamController {
         }
     }
 
-    // UPDATE a Team
-    @PutMapping(value = "/api/v1/team/update/{id}")
-    public ResponseEntity updateTeam(@RequestBody TeamDTO teamDTO,
-                                     @PathVariable Long id,
-                                     @RequestHeader("Authorization") String authHeader) {
-        if (authService.isScrumMaster(authHeader)) {
-            try {
-                TeamDTO teamUpdated = teamService.updateTeam(teamDTO, id);
-                return ResponseEntity.ok().body(teamUpdated);
-            } catch (com.cockpit.api.exception.ResourceNotFoundException e) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-            }
-        } else {
-            return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
-        }
-    }
-
     // DELETE a Team
     @DeleteMapping(value = "/api/v1/team/delete/{id}")
     public ResponseEntity<Object> deleteTeam(@PathVariable Long id,

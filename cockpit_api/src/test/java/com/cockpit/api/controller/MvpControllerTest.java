@@ -7,9 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cockpit.api.model.dao.*;
-import com.cockpit.api.model.dto.ImpedimentDTO;
-import com.cockpit.api.model.dto.JiraDTO;
-import com.cockpit.api.model.dto.SprintDTO;
 import com.cockpit.api.service.AuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;
@@ -58,7 +55,7 @@ public class MvpControllerTest {
 
 		// given
 		Mockito.when(mvpService.unassignTeamOfMvp(mockMvp.getId())).thenReturn(mvpDto);
-		Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
+		Mockito.when(authService.isScrumMaster(Mockito.any())).thenReturn(true);
 
 		// when
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/mvp/unassignTeam/{id}", mockMvp.getId())
