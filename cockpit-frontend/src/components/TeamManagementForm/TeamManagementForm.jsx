@@ -30,10 +30,13 @@ export default function TeamManagementForm() {
 
   useEffect(() => {
     setMvpTeam(mvpInfo.team);
+    setValue(0);
   }, [mvpInfo]);
   const handleValueChange = (event, valeur) => {
     setOpen(false);
     setValue(valeur);
+    setTeamName('');
+    setError(false);
   };
   async function save(event) {
     event.preventDefault();
@@ -129,7 +132,7 @@ export default function TeamManagementForm() {
           )}
           <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
             <Alert onClose={handleClose} severity="success">
-              {value === 0
+              {!mvpTeam
                 ? ' Team successfully unassigned!'
                 : ' Team successfully created and assigned to this MVP!'}
             </Alert>
