@@ -71,7 +71,7 @@ export default function BurnUpChart() {
           lineTension: 0,
           data: chartData.map((sprint) => sprint.usClosed),
         },
-        {
+        /*       {
           label: 'Expected',
           fill: false,
           borderColor: darkBlue,
@@ -82,7 +82,7 @@ export default function BurnUpChart() {
           borderWidth: 2,
           data: chartData.map((sprint) => sprint.expectedUsClosed),
           hidden: true,
-        },
+        }, */
         {
           label: 'Total number of stories',
           fill: false,
@@ -136,21 +136,21 @@ export default function BurnUpChart() {
         if (itemId.datasetIndex === 0) {
           setText('represents the accumulation of US closed in each sprint');
         }
-        if (itemId.datasetIndex === 1) {
+        /*    if (itemId.datasetIndex === 1) {
           setText(
             'reflects the total of [the US done in the previous sprints + the current sprint scope]',
           );
-        }
-        if (itemId.datasetIndex === 2) {
+        } */
+        if (itemId.datasetIndex === 1) {
           setText('reflects the sum of users stories in backlog');
         }
 
-        if (itemId.datasetIndex === 3) {
+        if (itemId.datasetIndex === 2) {
           setText(
             'reflects the total of [the US done in the previous sprints + the average]',
           );
         }
-        if (itemId.datasetIndex === 4) {
+        if (itemId.datasetIndex === 3) {
           setText(
             'reflects the number of US identified by the team during the scoping phase and commits implementing them during the cycle',
           );
