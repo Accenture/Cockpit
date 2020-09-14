@@ -34,7 +34,7 @@ export default function TeamManagementForm() {
   }, [mvpInfo]);
   const handleValueChange = (event, val) => {
     setOpen(false);
-    setValue(valeur);
+    setValue(val);
     setTeamName('');
     setError(false);
   };
