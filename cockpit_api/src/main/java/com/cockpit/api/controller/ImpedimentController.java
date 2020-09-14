@@ -47,7 +47,7 @@ public class ImpedimentController {
     public ResponseEntity updateImpediment(@RequestBody ImpedimentDTO impedimentDTO,
                                            @PathVariable Long id,
                                            @RequestHeader("Authorization") String authHeader) {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             try {
                 ImpedimentDTO impediment = impedimentService.updateImpediment(impedimentDTO, id);
                 return ResponseEntity.ok().body(impediment);

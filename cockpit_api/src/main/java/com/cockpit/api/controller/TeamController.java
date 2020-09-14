@@ -31,7 +31,7 @@ public class TeamController {
                                      @RequestBody TeamDTO teamDTO,
                                      @RequestHeader("Authorization") String authHeader)
             throws ResourceNotFoundException {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             try {
                 TeamDTO newTeam = teamService.createNewTeam(teamDTO, mvpId);
                 return ResponseEntity.ok(newTeam);
@@ -87,7 +87,7 @@ public class TeamController {
     public ResponseEntity updateTeam(@RequestBody TeamDTO teamDTO,
                                      @PathVariable Long id,
                                      @RequestHeader("Authorization") String authHeader) {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             try {
                 TeamDTO teamUpdated = teamService.updateTeam(teamDTO, id);
                 return ResponseEntity.ok().body(teamUpdated);
@@ -103,7 +103,7 @@ public class TeamController {
     @DeleteMapping(value = "/api/v1/team/delete/{id}")
     public ResponseEntity<Object> deleteTeam(@PathVariable Long id,
                                      @RequestHeader("Authorization") String authHeader) {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             try {
                 teamService.deleteTeam(id);
                 return ResponseEntity.ok("One Team has been deleted");
@@ -120,7 +120,7 @@ public class TeamController {
     public ResponseEntity addTeamMember(@RequestBody TeamMemberDTO teamMemberDTO,
                                         @PathVariable Long id,
                                         @RequestHeader("Authorization") String authHeader) {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             try {
                 TeamDTO teamUpdated = teamService.createTeamMember(id, teamMemberDTO);
                 return ResponseEntity.ok().body(teamUpdated);
@@ -137,7 +137,7 @@ public class TeamController {
     public ResponseEntity<Object> assignTeamMember(@PathVariable("id") Long id,
                                                    @PathVariable("teamMemberId") Long teamMemberId,
                                                    @RequestHeader("Authorization") String authHeader) {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             try {
                 TeamDTO teamUpdated = teamService.assignTeamMember(id, teamMemberId);
                 return ResponseEntity.ok().body(teamUpdated);
@@ -154,7 +154,7 @@ public class TeamController {
     public ResponseEntity deleteTeamMember(@PathVariable("id") Long id,
                                            @PathVariable("teamMemberId") Long teamMemberId,
                                            @RequestHeader("Authorization") String authHeader) {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             try {
                 TeamDTO teamUpdated = teamService.deleteTeamMember(id, teamMemberId);
                 return ResponseEntity.ok().body(teamUpdated);
@@ -171,7 +171,7 @@ public class TeamController {
     public ResponseEntity<Object> unassignTeamMember(@PathVariable("id") Long id,
                                                      @PathVariable("teamMemberId") Long teamMemberId,
                                                      @RequestHeader("Authorization") String authHeader) {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             try {
                 TeamDTO teamUpdated = teamService.unassignTeamMember(id, teamMemberId);
                 return ResponseEntity.ok().body(teamUpdated);

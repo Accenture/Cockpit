@@ -117,7 +117,7 @@ public class MvpController {
     // UNASSIGN TEAM
     @PutMapping(value = "/api/v1/mvp/unassignTeam/{id}")
     public ResponseEntity unassignTeamToMvp(@PathVariable Long id, @RequestHeader("Authorization") String authHeader) {
-        if (authService.isUserAuthorized(authHeader)) {
+        if (authService.isScrumMaster(authHeader)) {
             try {
                 MvpDTO mvp = mvpService.unassignTeamOfMvp(id);
                 return ResponseEntity.ok().body(mvp);
