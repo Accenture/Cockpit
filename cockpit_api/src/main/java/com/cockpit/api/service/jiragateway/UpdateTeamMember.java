@@ -49,7 +49,7 @@ public class UpdateTeamMember {
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
                 List<User> userList = Arrays.asList(response.getBody());
                 if (!userList.isEmpty()) {
-                    teamMember.setUrlTeamMemberAvatar(userList.get(0).getAvatarUrls().getSmallAvatar());
+                    teamMember.setUrlTeamMemberAvatar(userList.get(0).getAvatarUrls().getBigAvatar());
                     teamMemberRepository.save(teamMember);
                 }
 
