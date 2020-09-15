@@ -281,8 +281,8 @@ export default function TeamMemberList() {
                         <MenuItem value="Technical Lead">
                           Technical Lead
                         </MenuItem>
-                        <MenuItem value="Application Developer">
-                          Application Developer
+                        <MenuItem value="Software Engineer">
+                          Software Engineer
                         </MenuItem>
                         <MenuItem value="DevOps">DevOps</MenuItem>
                         <MenuItem value="Data Scientist">
