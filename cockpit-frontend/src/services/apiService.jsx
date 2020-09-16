@@ -8,7 +8,7 @@ const sprintUrl = 'sprint';
 const impedimentUrl = 'impediment';
 const teamMemberUrl = 'teamMember';
 const userUrl = 'user';
-
+const technoUrl = 'technology';
 const headers = {
   headers: {
     'Content-Type': 'application/json',
@@ -208,6 +208,14 @@ function deleteTeam(id) {
     return e;
   }
 }
+function addTechnology(technology, id) {
+  try {
+    return API.post(`${technoUrl}/${id}/create`, technology, headers);
+  } catch (e) {
+    console.log(`Error when creating technology: ${e}`);
+    return e;
+  }
+}
 const MvpService = {
   getAllMvp,
   createNewJiraProject,
@@ -231,6 +239,7 @@ const MvpService = {
   isUserScrumMaster,
   assignTeamMember,
   deleteTeam,
+  addTechnology,
 };
 
 export default MvpService;

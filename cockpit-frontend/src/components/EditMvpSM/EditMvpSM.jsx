@@ -30,6 +30,7 @@ import { getOneMvp } from '../../redux/ormSlice';
 import { fetchBurnUpData } from '../BurnUpChart/BurnUpChartSlice';
 import ObeyaForm from '../ObeyaForm/ObeyaForm';
 import Impediment from '../Impediment/Impediment';
+import Technology from '../Technology/Technology';
 
 import useStyles from './styles';
 
@@ -160,11 +161,11 @@ export default function EditMvpSMForm() {
               >
                 <Tab label="Information" />
                 <Tab label="Team" />
-                <Tab label="Technologies" disabled />
+                <Tab label="Technologies" />
               </Tabs>
               {value === 0 && <InformationForm />}
               {value === 1 && <TeamManagementForm />}
-              {value === 2 && <div>Technologies</div>}
+              {value === 2 && <Technology />}
             </div>
           )}
           {sprint && (

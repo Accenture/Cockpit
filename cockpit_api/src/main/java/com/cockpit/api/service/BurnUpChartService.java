@@ -112,6 +112,7 @@ public class BurnUpChartService {
 
     private void setExpected(BurnUpChartDTO chart, int totalUSNumber, int sprintNumber, int sumUsClosedInLastSprints,
                              Jira jira, Sprint sprint) {
+
         if (jira.getCurrentSprint() != null && sprintNumber <= jira.getCurrentSprint()
                 && sprint.getNotCompletedUsNumber() != null
                 && sprint.getPuntedUsNumber() != null
