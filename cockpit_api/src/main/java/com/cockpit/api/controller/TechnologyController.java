@@ -1,12 +1,8 @@
 package com.cockpit.api.controller;
 
 import com.cockpit.api.exception.ResourceNotFoundException;
-import com.cockpit.api.model.dao.Mvp;
-import com.cockpit.api.model.dao.TeamMember;
-import com.cockpit.api.model.dao.Technology;
 import com.cockpit.api.model.dto.TechnologyDTO;
 import com.cockpit.api.service.AuthService;
-import com.cockpit.api.service.MvpService;
 import com.cockpit.api.service.TechnologyService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
