@@ -135,7 +135,7 @@ public class UpdateSprint {
     }
 
     public SprintReportContent getSprintReport(int jiraBoardId, int sprint) throws JiraException {
-        ResponseEntity<SprintReport> result = (ResponseEntity<SprintReport>) configurationJiraAPIs.callJira(
+        ResponseEntity<SprintReport> result = configurationJiraAPIs.callJira(
                 urlSprintReport + "rapidViewId=" + jiraBoardId + "&sprintId=" + sprint, SprintReport.class.getName());
         SprintReportContent sprintReportIssues = null;
         if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
@@ -145,7 +145,7 @@ public class UpdateSprint {
     }
 
     public List<SprintJira> getSprintsFromJira(int boardId, String urlSprints) throws JiraException {
-        ResponseEntity<SprintHeaders> result = (ResponseEntity<SprintHeaders>) configurationJiraAPIs.callJira(
+        ResponseEntity<SprintHeaders> result = configurationJiraAPIs.callJira(
                 urlSprints + boardId + "/sprint", SprintHeaders.class.getName());
         List<SprintJira> newSprintsList = null;
         if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {

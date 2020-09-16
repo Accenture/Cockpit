@@ -1,5 +1,6 @@
 package com.cockpit.api.service.jiragateway;
 
+import com.cockpit.api.exception.JiraException;
 import com.cockpit.api.model.dao.TeamMember;
 import com.cockpit.api.model.dto.jira.User;
 import com.cockpit.api.repository.TeamMemberRepository;
@@ -39,13 +40,12 @@ public class UpdateTeamMember {
     private String urlUserInformation;
 
     @Scheduled(initialDelay = 15 * ONE_SECOND, fixedDelay = ONE_HOUR)
-    public void updateTeamMembers() throws Exception {
+    public void updateTeamMembers() throws JiraException {
         log.info("Team Member - Start update team members");
         List<TeamMember> teamMemberList = teamMemberRepository.findAllByOrderById();
         for (TeamMember teamMember : teamMemberList) {
             String url = urlUserInformation + teamMember.getEmail();
-            ResponseEntity<User[]> response = (ResponseEntity<User[]>) jiraApiService.callJira(url,
-                    User[].class.getName());
+            ResponseEntity<User[]> response = jiraApiService.callJira(url, User[].class.getName());
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
                 List<User> userList = Arrays.asList(response.getBody());
                 if (!userList.isEmpty()) {
