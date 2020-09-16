@@ -1,13 +1,19 @@
 package com.cockpit.api.controller;
 
 import com.cockpit.api.exception.ResourceNotFoundException;
+import com.cockpit.api.model.dao.Mvp;
+import com.cockpit.api.model.dao.TeamMember;
+import com.cockpit.api.model.dao.Technology;
 import com.cockpit.api.model.dto.TechnologyDTO;
 import com.cockpit.api.service.AuthService;
+import com.cockpit.api.service.MvpService;
 import com.cockpit.api.service.TechnologyService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -15,6 +21,7 @@ import java.util.List;
 public class TechnologyController {
     private final TechnologyService technologyService;
     private final AuthService authService;
+    private ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     public TechnologyController(TechnologyService technologyService, AuthService authService) {
@@ -24,12 +31,12 @@ public class TechnologyController {
 
     // CREATE a new Technology
     @PostMapping(
-            value = "/api/v1/technology/create"
+            value = "/api/v1/technology/{id}/create"
     )
-    public ResponseEntity<Object> createTechnology(@RequestBody TechnologyDTO technologyDTO,
-                                                          @RequestHeader("Authorization") String authHeader) {
+    public ResponseEntity createTechnology(@RequestBody TechnologyDTO technologyDTO, @PathVariable Long id,
+                                           @RequestHeader("Authorization") String authHeader) throws ResourceNotFoundException {
         if (authService.isScrumMaster(authHeader)) {
-            TechnologyDTO newTechnology = technologyService.createNewTechnology(technologyDTO);
+            TechnologyDTO newTechnology = technologyService.createNewTechnology(technologyDTO, id);
             return ResponseEntity.ok(newTechnology);
         } else {
             return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);

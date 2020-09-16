@@ -6,4 +6,9 @@ export default makeStyles(() => ({
     backgroundColor: '#F5F5F9',
     textAlign: 'cetnter',
   },
+  img: {
+    height: '50%',
+    width: '50%',
+    objectFit: 'cover',
+  },
 }));

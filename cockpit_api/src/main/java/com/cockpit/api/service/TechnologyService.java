@@ -1,8 +1,10 @@
 package com.cockpit.api.service;
 
 import com.cockpit.api.exception.ResourceNotFoundException;
+import com.cockpit.api.model.dao.Mvp;
 import com.cockpit.api.model.dao.Technology;
 import com.cockpit.api.model.dto.TechnologyDTO;
+import com.cockpit.api.repository.MvpRepository;
 import com.cockpit.api.repository.TechnologyRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,17 +16,24 @@ import java.util.stream.Collectors;
 @Service
 public class TechnologyService {
     private final TechnologyRepository technologyRepository;
-
+    private final MvpRepository mvpRepository;
     private ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
-    public TechnologyService(TechnologyRepository technologyRepository) {
+    public TechnologyService(TechnologyRepository technologyRepository, MvpRepository mvpRepository) {
         this.technologyRepository = technologyRepository;
+        this.mvpRepository=mvpRepository;
     }
 
-    public TechnologyDTO createNewTechnology(TechnologyDTO technologyDTO){
-        Technology technologyCreated = technologyRepository.save(modelMapper.map(technologyDTO, Technology.class));
-        return modelMapper.map(technologyCreated, TechnologyDTO.class);
+    public TechnologyDTO createNewTechnology(TechnologyDTO technologyDTO, Long mvpId) throws ResourceNotFoundException {
+        Optional<Mvp> mvp = mvpRepository.findById(mvpId);
+        if (!mvp.isPresent()) {
+            throw new ResourceNotFoundException("mvp not found");
+        }
+            mvp.get().getTechnologies().add(modelMapper.map(technologyDTO, Technology.class));
+            mvpRepository.save(mvp.get());
+
+        return modelMapper.map(technologyDTO, TechnologyDTO.class);
     }
 
     public TechnologyDTO findTechnologyById(Long id) throws ResourceNotFoundException {
