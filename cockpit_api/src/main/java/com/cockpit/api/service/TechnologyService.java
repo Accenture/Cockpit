@@ -1,5 +1,3 @@
-/* Disable technology services temporarily before adding this feature to Cockpit
-
 package com.cockpit.api.service;
 
 import com.cockpit.api.exception.ResourceNotFoundException;
@@ -60,5 +58,3 @@ public class TechnologyService {
         technologyRepository.delete(technologyToDelete.get());
     }
 }
-
- */

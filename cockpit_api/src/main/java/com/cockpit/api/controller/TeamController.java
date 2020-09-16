@@ -29,8 +29,7 @@ public class TeamController {
     @PostMapping(value = "/api/v1/team/create/{mvpId}")
     public ResponseEntity<Object> createTeam(@PathVariable Long mvpId,
                                      @RequestBody TeamDTO teamDTO,
-                                     @RequestHeader("Authorization") String authHeader)
-            throws ResourceNotFoundException {
+                                     @RequestHeader("Authorization") String authHeader) {
         if (authService.isScrumMaster(authHeader)) {
             try {
                 TeamDTO newTeam = teamService.createNewTeam(teamDTO, mvpId);

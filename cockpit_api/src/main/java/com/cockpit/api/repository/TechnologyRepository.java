@@ -1,4 +1,3 @@
-/* Disable technology repository temporarily before adding this feature to Cockpit
 package com.cockpit.api.repository;
 
 import com.cockpit.api.model.dao.Technology;
@@ -11,5 +10,3 @@ import java.util.List;
 public interface TechnologyRepository extends CrudRepository<Technology, Long> {
     List<Technology> findAllByOrderByName();
 }
-
- */
