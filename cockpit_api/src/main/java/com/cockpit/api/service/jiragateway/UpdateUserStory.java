@@ -96,11 +96,11 @@ public class UpdateUserStory {
         int i = 1;
         while (totalValues >= startAt) {
             String url = String.format(urlAllUserStories, maxResults, startAt);
-            ResponseEntity<Issues> result = (ResponseEntity<Issues>) jiraApiService.callJira(url, Issues.class.getName());
+            ResponseEntity<Issues> result = jiraApiService.callJira(url, Issues.class.getName());
             if (result.getStatusCode().is2xxSuccessful()) {
                 totalValues = result.getBody().getTotal();
                 startAt = (maxResults * i);
-                issueList.addAll(result.getBody().getJiraIssues());
+                    issueList.addAll(result.getBody().getJiraIssues());
                 i++;
             } else {
                 throw new JiraException("Unable to get Issues From Jira");
@@ -133,7 +133,7 @@ public class UpdateUserStory {
         String jqlBacklogUS = "project=" + jiraProjectKey + " AND Sprint=null AND issuetype=Story&expand=changelog";
 
         String urlBacklogUS = urlIssues + jqlBacklogUS;
-        ResponseEntity<Issues> resultBacklogUS = (ResponseEntity<Issues>) jiraApiService.callJira(urlBacklogUS, Issues.class.getName());
+        ResponseEntity<Issues> resultBacklogUS = jiraApiService.callJira(urlBacklogUS, Issues.class.getName());
 
         List<Issue> issueListBacklogUS = (resultBacklogUS.getBody().getJiraIssues());
         if (resultBacklogUS.getStatusCode().is2xxSuccessful()) {
@@ -148,7 +148,7 @@ public class UpdateUserStory {
         String jqlSprintUS = "Sprint=" + sprintId + " AND issuetype=Story&expand=changelog";
         String urlSprintUS = urlIssues + jqlSprintUS;
 
-        ResponseEntity<Issues> resultSprintUS = (ResponseEntity<Issues>) jiraApiService.callJira(urlSprintUS, Issues.class.getName());
+        ResponseEntity<Issues> resultSprintUS = jiraApiService.callJira(urlSprintUS, Issues.class.getName());
         List<Issue> issueListSprintUS = (resultSprintUS.getBody().getJiraIssues());
         if (resultSprintUS.getStatusCode().is2xxSuccessful()) {
             return getUserStories(sprint, issueListSprintUS);
@@ -184,7 +184,7 @@ public class UpdateUserStory {
             // Custome field could be different for each Jira server
             userStory.setStoryPoint((issue.getFields().getCustomfield10026() == null) ? 0 : (double) issue.getFields().getCustomfield10026());
             try {
-                userStory.setCreationDate((issue.getFields().getCreated() == null) ? null : dateFormat.parse(issue.getFields().getCreated()));
+                                    userStory.setCreationDate((issue.getFields().getCreated() == null) ? null : dateFormat.parse(issue.getFields().getCreated()));
             } catch (ParseException e) {
                 log.error("Exception thrown when parsing updateDate for UserStory Status");
             }
