@@ -52,7 +52,7 @@ public class JiraControllerTest {
 
         // given
         Mockito.when(jiraService.createNewJiraProject(jiraDto)).thenReturn(jiraDto);
-        Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
+        Mockito.when(authService.isScrumMaster(Mockito.any())).thenReturn(true);
 
         // when
         MvcResult result = mockMvc
@@ -108,7 +108,7 @@ public class JiraControllerTest {
 
         // given
         Mockito.when(jiraService.updateJira(Mockito.any())).thenReturn(jiraDto);
-        Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
+        Mockito.when(authService.isScrumMaster(Mockito.any())).thenReturn(true);
 
         // when
         MvcResult result = mockMvc
@@ -136,7 +136,7 @@ public class JiraControllerTest {
 
         // given
         Mockito.when(jiraService.deleteJira(Mockito.any())).thenReturn(jiraDto);
-        Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
+        Mockito.when(authService.isScrumMaster(Mockito.any())).thenReturn(true);
 
         // when
         MvcResult result = mockMvc
