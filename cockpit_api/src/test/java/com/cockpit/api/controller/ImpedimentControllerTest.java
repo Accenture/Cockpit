@@ -46,7 +46,7 @@ public class ImpedimentControllerTest {
 
         // given
         Mockito.doNothing().when(impedimentService).deleteImpediment(mockImpediment.getId());
-        Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
+        Mockito.when(authService.isScrumMaster(Mockito.any())).thenReturn(true);
 
         // when
         MvcResult result = mockMvc

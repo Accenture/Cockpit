@@ -79,7 +79,7 @@ public class MvpControllerTest {
 
 		// given
 		Mockito.when(mvpService.assignTeamOfMvp(mockMvp.getId(),mockTeam.getId())).thenReturn(mvpDto);
-		Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
+		Mockito.when(authService.isScrumMaster(Mockito.any())).thenReturn(true);
 
 		// when
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/mvp/{id}/assignTeam/{teamId}", mockMvp.getId(),mockTeam.getId())
@@ -124,7 +124,7 @@ public class MvpControllerTest {
 
 		// Given
 		Mockito.when(mvpService.createNewMvp(mockMvp)).thenReturn(modelMapper.map(mockMvp, MvpDTO.class));
-		Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
+		Mockito.when(authService.isScrumMaster(Mockito.any())).thenReturn(true);
 
 		// When
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/mvp/create")

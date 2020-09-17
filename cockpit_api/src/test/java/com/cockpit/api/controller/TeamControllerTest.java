@@ -59,7 +59,7 @@ public class TeamControllerTest {
 
 		// given
 		Mockito.when(teamService.createTeamMember(mockTeam.getId(), mockTeamMember)).thenReturn(teamDto);
-		Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
+		Mockito.when(authService.isScrumMaster(Mockito.any())).thenReturn(true);
 
         // when
         MvcResult result = mockMvc
@@ -89,7 +89,7 @@ public class TeamControllerTest {
 
 		// given
 		Mockito.when(teamService.deleteTeamMember(mockTeam.getId(), mockTeamMember.getId())).thenReturn(teamDto);
-		Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
+		Mockito.when(authService.isScrumMaster(Mockito.any())).thenReturn(true);
 
 		// when
 		MvcResult result = mockMvc.perform(MockMvcRequestBuilders
@@ -167,9 +167,11 @@ public class TeamControllerTest {
         mockTeamMember.setId(1l);
 
         TeamDTO teamDto = modelMapper.map(mockTeam, TeamDTO.class);
+        Mockito.when(authService.isScrumMaster(Mockito.any())).thenReturn(true);
 
         // given
         Mockito.when(teamService.unassignTeamMember(mockTeam.getId(), mockTeamMember.getId())).thenReturn(teamDto);
+        Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
 
         // when
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
@@ -198,6 +200,7 @@ public class TeamControllerTest {
 
         // given
         Mockito.when(teamService.assignTeamMember(mockTeam.getId(), mockTeamMember.getId())).thenReturn(teamDto);
+        Mockito.when(authService.isScrumMaster(Mockito.any())).thenReturn(true);
 
         // when
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
@@ -233,6 +236,7 @@ public class TeamControllerTest {
 
         // given
         Mockito.when(teamService.findAllMembers()).thenReturn(mockTeamMemberList);
+        Mockito.when(authService.isUserAuthorized(Mockito.any())).thenReturn(true);
 
         // when
         MvcResult result = mockMvc

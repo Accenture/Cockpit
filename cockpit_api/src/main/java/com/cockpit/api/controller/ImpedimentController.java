@@ -26,7 +26,7 @@ public class ImpedimentController {
     @DeleteMapping(
             value = "/api/v1/impediment/delete/{id}"
     )
-    public ResponseEntity<Object>deleteImpediment(@PathVariable Long id,
+    public ResponseEntity<Object> deleteImpediment(@PathVariable Long id,
                                            @RequestHeader("Authorization") String authHeader) {
         if (authService.isScrumMaster(authHeader)) {
             try {
