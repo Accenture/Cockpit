@@ -3,6 +3,7 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import Avatar from '@material-ui/core/Avatar';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { mvpSelector } from '../../redux/selector';
@@ -28,15 +29,12 @@ export default function TecnologyCard() {
             {technologies.length === 0 && (
               <Typography variant="subtitle2">Not defined</Typography>
             )}
-            {technologies.length > 0 &&
-              technologies.map((techno) => (
-                <img
-                  key={techno.id}
-                  className={classes.img}
-                  alt="No url"
-                  src={techno.url}
-                />
-              ))}
+            <div className={classes.root}>
+              {technologies.length > 0 &&
+                technologies.map((techno) => (
+                  <Avatar key={techno.id} variant="square" src={techno.url} />
+                ))}
+            </div>
           </Grid>
         </Grid>
       </CardContent>
