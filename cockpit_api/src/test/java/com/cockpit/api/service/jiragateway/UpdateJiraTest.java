@@ -28,7 +28,7 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = {UpdateJira.class, UserStoryService.class})
 public class UpdateJiraTest {
 
     private UpdateJira updateJira;
@@ -36,7 +36,7 @@ public class UpdateJiraTest {
     @MockBean
     private JiraApiService jiraApiService;
 
-    @Autowired
+    @MockBean
     private UserStoryService userStoryService;
 
     @MockBean

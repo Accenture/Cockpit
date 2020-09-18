@@ -1,16 +1,8 @@
 spring:
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${DB_HOST}/cockpitdb
-    username: ${DB_USER_NAME}
-    password: ${DB_PASSWORD}
   jpa:
     show-sql: false
     hibernate:
       ddl-auto: update
-  flyway:
-    locations: classpath:db/migration
-    baseline-on-migrate: true
   jira:
     username: ${JIRA_USER_NAME}
     jiraUrl: ${JIRA_HOST_URL}
@@ -23,7 +15,6 @@ spring:
     urlSprintReport: ${JIRA_HOST_URL}/rest/greenhopper/1.0/rapid/charts/sprintreport?
     urlVerifyValidProjectKey: ${JIRA_HOST_URL}/rest/api/latest/project/
     urlUserInformation: ${JIRA_HOST_URL}/rest/api/3/user/search?query=
-
   digitalpass:
     isEnabled: false
     userInfoEndpoint: ${DIGITAL_PASS_USER_INFO_ENDPOINT}

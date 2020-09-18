@@ -27,7 +27,7 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = UpdateUserStory.class)
 public class UpdateUserStoryTest {
 
     private UpdateUserStory updateUserStory;

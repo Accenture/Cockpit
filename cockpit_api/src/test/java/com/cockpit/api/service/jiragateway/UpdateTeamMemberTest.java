@@ -29,7 +29,7 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = UpdateTeamMember.class)
 public class UpdateTeamMemberTest {
 
     private UpdateTeamMember updateTeamMember;

@@ -28,7 +28,7 @@ import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.verify;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = UpdateSprint.class)
 public class UpdateSprintTest {
 
     private UpdateSprint updateSprint;
