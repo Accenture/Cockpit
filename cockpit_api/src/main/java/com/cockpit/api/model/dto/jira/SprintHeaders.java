@@ -9,7 +9,6 @@ import java.util.Map;
 @JsonPropertyOrder({
     "maxResults",
     "startAt",
-    "isLast",
     "values"
 })
 public class SprintHeaders {
@@ -18,8 +17,6 @@ public class SprintHeaders {
     private Integer maxResults;
     @JsonProperty("startAt")
     private Integer startAt;
-    @JsonProperty("isLast")
-    private Boolean isLast;
     @JsonProperty("values")
     private List<SprintJira> values = null;
     @JsonIgnore
@@ -43,16 +40,6 @@ public class SprintHeaders {
     @JsonProperty("startAt")
     public void setStartAt(Integer startAt) {
         this.startAt = startAt;
-    }
-
-    @JsonProperty("isLast")
-    public Boolean getIsLast() {
-        return isLast;
-    }
-
-    @JsonProperty("isLast")
-    public void setIsLast(Boolean isLast) {
-        this.isLast = isLast;
     }
 
     @JsonProperty("values")

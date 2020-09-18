@@ -8,8 +8,6 @@ import java.util.Map;
 @JsonPropertyOrder({
     "projectId",
     "name",
-    "projectTypeKey",
-    "avatarURI"
 })
 public class Location {
 
@@ -17,10 +15,6 @@ public class Location {
     private Integer projectId;
     @JsonProperty("name")
     private String name;
-    @JsonProperty("projectTypeKey")
-    private String projectTypeKey;
-    @JsonProperty("avatarURI")
-    private String avatarURI;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -42,26 +36,6 @@ public class Location {
     @JsonProperty("name")
     public void setName(String name) {
         this.name = name;
-    }
-
-    @JsonProperty("projectTypeKey")
-    public String getProjectTypeKey() {
-        return projectTypeKey;
-    }
-
-    @JsonProperty("projectTypeKey")
-    public void setProjectTypeKey(String projectTypeKey) {
-        this.projectTypeKey = projectTypeKey;
-    }
-
-    @JsonProperty("avatarURI")
-    public String getAvatarURI() {
-        return avatarURI;
-    }
-
-    @JsonProperty("avatarURI")
-    public void setAvatarURI(String avatarURI) {
-        this.avatarURI = avatarURI;
     }
 
     @JsonAnyGetter

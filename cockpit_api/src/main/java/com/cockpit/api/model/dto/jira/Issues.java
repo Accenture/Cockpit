@@ -8,16 +8,12 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "expand",
         "startAt",
         "maxResults",
         "total",
         "issues"
 })
 public class Issues {
-
-    @JsonProperty("expand")
-    private String expand;
     @JsonProperty("startAt")
     private Integer startAt;
     @JsonProperty("maxResults")
@@ -28,16 +24,6 @@ public class Issues {
     private List<Issue> jiraIssues = null;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
-
-    @JsonProperty("expand")
-    public String getExpand() {
-        return expand;
-    }
-
-    @JsonProperty("expand")
-    public void setExpand(String expand) {
-        this.expand = expand;
-    }
 
     @JsonProperty("startAt")
     public Integer getStartAt() {
