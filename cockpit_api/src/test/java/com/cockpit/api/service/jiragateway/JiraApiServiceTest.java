@@ -26,6 +26,8 @@ public class JiraApiServiceTest {
     private String username;
     @Value("${spring.jira.token}")
     private String token;
+    @Value("${spring.jira.jiraUrl}")
+    private String jiraUrl;
     @Value("${spring.jira.urlProjects}")
     private String urlProjects;
 
@@ -34,6 +36,7 @@ public class JiraApiServiceTest {
         this.jiraApiService = new JiraApiService();
         ReflectionTestUtils.setField(jiraApiService, "username", username);
         ReflectionTestUtils.setField(jiraApiService, "token", token);
+        ReflectionTestUtils.setField(jiraApiService, "jiraUrl", jiraUrl);
     }
 
     @Test
