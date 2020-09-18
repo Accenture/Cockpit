@@ -26,15 +26,19 @@ public class JiraApiService {
     private String username;
     @Value("${spring.jira.token}")
     private String token;
+    @Value("${spring.jira.jiraUrl}")
+    private String jiraUrl;
 
     public ResponseEntity callJira(String url, String className) throws JiraException {
 
         headers = this.addAuthorizationToHeaders();
         request = new HttpEntity<>(headers);
-        ResponseEntity<?> responseEntity;
+        ResponseEntity responseEntity = null;
 
         try {
-            responseEntity = restTemplate.exchange(url, HttpMethod.GET, request, Class.forName(className));
+            if (url.startsWith(jiraUrl)) {
+                responseEntity = restTemplate.exchange(url, HttpMethod.GET, request, Class.forName(className));
+            }
         } catch (Exception e) {
             throw new JiraException("Exception Call jira for url" + url);
         }
