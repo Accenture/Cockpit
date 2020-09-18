@@ -12,6 +12,7 @@ export default makeStyles((theme) => ({
   },
   root: {
     display: 'flex',
+    flexFlow: 'wrap',
     '& > *': {
       margin: theme.spacing(1),
     },
