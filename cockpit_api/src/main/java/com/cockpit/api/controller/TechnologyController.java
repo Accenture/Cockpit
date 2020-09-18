@@ -4,7 +4,6 @@ import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dto.TechnologyDTO;
 import com.cockpit.api.service.AuthService;
 import com.cockpit.api.service.TechnologyService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin
 public class TechnologyController {
     private final TechnologyService technologyService;
     private final AuthService authService;
-    private ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     public TechnologyController(TechnologyService technologyService, AuthService authService) {

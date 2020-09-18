@@ -14,7 +14,6 @@ import com.cockpit.api.model.dto.TeamMemberDTO;
 import com.cockpit.api.service.TeamService;
 
 @RestController
-@CrossOrigin
 public class TeamController {
     private final TeamService teamService;
     private final AuthService authService;

@@ -18,7 +18,6 @@ import com.cockpit.api.service.JiraService;
 import com.cockpit.api.service.SprintService;
 
 @RestController
-@CrossOrigin
 public class SprintController {
     private final SprintService sprintService;
     private final JiraService jiraService;
