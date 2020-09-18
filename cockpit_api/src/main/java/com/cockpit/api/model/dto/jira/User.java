@@ -7,45 +7,16 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "self",
-        "accountId",
         "emailAddress",
         "avatarUrls",
-        "displayName"
 })
 public class User {
-    @JsonProperty("self")
-    private String self;
-    @JsonProperty("accountId")
-    private String accountId;
     @JsonProperty("emailAddress")
     private String emailAddress;
     @JsonProperty("avatarUrls")
     private AvatarUrls avatarUrls;
-    @JsonProperty("displayName")
-    private String displayName;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
-    @JsonProperty("self")
-    public String getSelf() {
-        return self;
-    }
-
-    @JsonProperty("self")
-    public void setSelf(String self) {
-        this.self = self;
-    }
-
-    @JsonProperty("accountId")
-    public String getAccountId() {
-        return accountId;
-    }
-
-    @JsonProperty("accountId")
-    public void setAccountId(String accountId) {
-        this.accountId = accountId;
-    }
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     @JsonProperty("emailAddress")
     public String getEmailAddress() {
@@ -65,16 +36,6 @@ public class User {
     @JsonProperty("avatarUrls")
     public void setAvatarUrls(AvatarUrls avatarUrls) {
         this.avatarUrls = avatarUrls;
-    }
-
-    @JsonProperty("displayName")
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    @JsonProperty("displayName")
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
     }
 
     @JsonAnyGetter

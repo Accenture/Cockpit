@@ -7,21 +7,15 @@ import java.util.Map;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "id",
-    "self",
     "name",
-    "type",
     "location"
 })
 public class JiraBoard {
 
     @JsonProperty("id")
     private Integer id;
-    @JsonProperty("self")
-    private String self;
     @JsonProperty("name")
     private String name;
-    @JsonProperty("type")
-    private String type;
     @JsonProperty("location")
     private Location location;
     @JsonIgnore
@@ -37,16 +31,6 @@ public class JiraBoard {
         this.id = id;
     }
 
-    @JsonProperty("self")
-    public String getSelf() {
-        return self;
-    }
-
-    @JsonProperty("self")
-    public void setSelf(String self) {
-        this.self = self;
-    }
-
     @JsonProperty("name")
     public String getName() {
         return name;
@@ -55,16 +39,6 @@ public class JiraBoard {
     @JsonProperty("name")
     public void setName(String name) {
         this.name = name;
-    }
-
-    @JsonProperty("type")
-    public String getType() {
-        return type;
-    }
-
-    @JsonProperty("type")
-    public void setType(String type) {
-        this.type = type;
     }
 
     @JsonProperty("location")

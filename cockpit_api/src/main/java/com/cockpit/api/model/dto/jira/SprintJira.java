@@ -13,8 +13,6 @@ import java.util.Map;
     "startDate",
     "endDate",
     "completeDate",
-    "originBoardId",
-    "goal"
 })
 public class SprintJira {
 
@@ -32,10 +30,6 @@ public class SprintJira {
     private String endDate;
     @JsonProperty("completeDate")
     private String completeDate;
-    @JsonProperty("originBoardId")
-    private Integer originBoardId;
-    @JsonProperty("goal")
-    private String goal;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
 
@@ -47,16 +41,6 @@ public class SprintJira {
     @JsonProperty("id")
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    @JsonProperty("self")
-    public String getSelf() {
-        return self;
-    }
-
-    @JsonProperty("self")
-    public void setSelf(String self) {
-        this.self = self;
     }
 
     @JsonProperty("state")
@@ -84,49 +68,14 @@ public class SprintJira {
         return startDate;
     }
 
-    @JsonProperty("startDate")
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
     @JsonProperty("endDate")
     public String getEndDate() {
         return endDate;
     }
 
-    @JsonProperty("endDate")
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
-
     @JsonProperty("completeDate")
     public String getCompleteDate() {
         return completeDate;
-    }
-
-    @JsonProperty("completeDate")
-    public void setCompleteDate(String completeDate) {
-        this.completeDate = completeDate;
-    }
-
-    @JsonProperty("originBoardId")
-    public Integer getOriginBoardId() {
-        return originBoardId;
-    }
-
-    @JsonProperty("originBoardId")
-    public void setOriginBoardId(Integer originBoardId) {
-        this.originBoardId = originBoardId;
-    }
-
-    @JsonProperty("goal")
-    public String getGoal() {
-        return goal;
-    }
-
-    @JsonProperty("goal")
-    public void setGoal(String goal) {
-        this.goal = goal;
     }
 
     @JsonAnyGetter
