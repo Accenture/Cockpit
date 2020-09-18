@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin
 public class MvpController {
 
     Logger log = LoggerFactory.getLogger(MvpController.class);
