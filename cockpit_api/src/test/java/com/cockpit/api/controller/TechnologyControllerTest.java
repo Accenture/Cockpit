@@ -42,18 +42,18 @@ public class TechnologyControllerTest {
     public void whenCreateTechnologyThenReturn200() throws Exception {
         Mvp mockMvp = new Mvp();
         mockMvp.setId(1l);
-        TechnologyDTO technologyDTO = new TechnologyDTO();
-        technologyDTO.setName("JAVA");
-        technologyDTO.setUrl("https://www.tc-web.it/wp-content/uploads/2019/12/java.jpg");
+        TechnologyDTO mockTechnology = new TechnologyDTO();
+        mockTechnology.setName("JAVA");
+        mockTechnology.setUrl("https://www.tc-web.it/wp-content/uploads/2019/12/java.jpg");
 
         // given
-        Mockito.when(technologyService.createNewTechnology(technologyDTO, mockMvp.getId())).thenReturn(technologyDTO);
+        Mockito.when(technologyService.createNewTechnology(mockTechnology, mockMvp.getId())).thenReturn(mockTechnology);
 
         // when
         MvcResult result = mockMvc
                 .perform(MockMvcRequestBuilders.post("/api/v1/technology/{id}/create", mockMvp.getId())
                         .header("Authorization", "Bearer token")
-                        .content(new ObjectMapper().writeValueAsString(technologyDTO))
+                        .content(new ObjectMapper().writeValueAsString(mockTechnology))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
