@@ -48,6 +48,7 @@ public class TechnologyControllerTest {
 
         // given
         Mockito.when(technologyService.createNewTechnology(mockTechnology, mockMvp.getId())).thenReturn(mockTechnology);
+        Mockito.when(authService.isScrumMaster(Mockito.any())).thenReturn(true);
 
         // when
         MvcResult result = mockMvc
