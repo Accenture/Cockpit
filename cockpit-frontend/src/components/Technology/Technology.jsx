@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -18,9 +18,13 @@ export default function Technology() {
   const [open, setOpen] = React.useState(false);
   const [technoName, setTechnoName] = React.useState('');
   const [technoLogo, setTechnoLogo] = React.useState('');
+  const [technologies, setTechnologies] = React.useState([]);
   const mvpId = useParams().id;
   const mvpInfo = useSelector((state) => mvpSelector(state, mvpId));
 
+  useEffect(() => {
+    setTechnologies(mvpInfo.technologies);
+  }, [mvpInfo]);
   function handleLogoChange(event) {
     setTechnoLogo(event.target.value);
   }
@@ -33,8 +37,6 @@ export default function Technology() {
     setTechnoName('');
   }
   async function save() {
-    const list = [];
-    list.push(mvpInfo);
     const technology = {
       name: technoName,
       url: technoLogo,
@@ -54,6 +56,15 @@ export default function Technology() {
   return (
     <div>
       <Paper className={classes.paper}>
+        <div className={classes.technoList}>
+          {technologies.length > 0 &&
+            technologies.map((techno) => (
+              <div key={techno.id}>
+                <span>{techno.name}</span>
+                <br />
+              </div>
+            ))}
+        </div>
         <Button
           onClick={() => setOpen(true)}
           variant="outlined"

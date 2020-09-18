@@ -38,9 +38,6 @@ public class JiraControllerTest {
     private JiraService jiraService;
 
     @MockBean
-    private JiraApiService jiraApiService;
-
-    @MockBean
     private AuthService authService;
 
     @Test

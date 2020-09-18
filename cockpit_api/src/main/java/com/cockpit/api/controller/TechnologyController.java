@@ -29,7 +29,7 @@ public class TechnologyController {
     @PostMapping(
             value = "/api/v1/technology/{id}/create"
     )
-    public ResponseEntity createTechnology(@RequestBody TechnologyDTO technologyDTO, @PathVariable Long id,
+    public ResponseEntity<Object> createTechnology(@RequestBody TechnologyDTO technologyDTO, @PathVariable Long id,
                                            @RequestHeader("Authorization") String authHeader) throws ResourceNotFoundException {
         if (authService.isScrumMaster(authHeader)) {
             TechnologyDTO newTechnology = technologyService.createNewTechnology(technologyDTO, id);
