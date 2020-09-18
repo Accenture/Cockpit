@@ -13,9 +13,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins(
                         "http://localhost:3000",
-                        "https://azwbdcokp01.azurewebsites.net/",
-                        "https://azwbqcokp01.azurewebsites.net/",
-                        "https://azwbpcokp01.azurewebsites.net/"
+                        "https://azwbdcokp01.azurewebsites.net",
+                        "https://azwbqcokp01.azurewebsites.net",
+                        "https://azwbpcokp01.azurewebsites.net"
                 )
                 .allowedMethods("GET", "PUT", "POST", "PATCH", "DELETE", "OPTIONS");
     }
