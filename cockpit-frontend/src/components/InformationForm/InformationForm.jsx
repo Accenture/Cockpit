@@ -118,7 +118,7 @@ export default function InformationForm() {
               placeholder="Scope commitment"
               size="small"
               type="number"
-              inputProps={{ min: '1', step: '1' }}
+              inputProps={{ min: '0', step: '1' }}
               onChange={handleScopeCommitmentChange}
             />
           </Grid>
