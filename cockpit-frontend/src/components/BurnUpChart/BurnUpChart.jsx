@@ -33,6 +33,8 @@ export default function BurnUpChart() {
   const scopeCommitmentArray = new Array(chartData.length);
   if (scopeCommitment !== 0) {
     scopeCommitmentArray.fill(scopeCommitment);
+  } else {
+    scopeCommitmentArray.fill(null);
   }
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [text, setText] = React.useState('');
