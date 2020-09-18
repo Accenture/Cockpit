@@ -26,4 +26,7 @@ export default makeStyles((theme) => ({
   containerAdd: {
     margin: 32,
   },
+  technoList: {
+    margin: '32px 0 0 32px',
+  },
 }));

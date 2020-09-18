@@ -30,7 +30,12 @@ export default function TecnologyCard() {
             )}
             {technologies.length > 0 &&
               technologies.map((techno) => (
-                <img className={classes.img} alt="No url" src={techno.url} />
+                <img
+                  key={techno.id}
+                  className={classes.img}
+                  alt="No url"
+                  src={techno.url}
+                />
               ))}
           </Grid>
         </Grid>
