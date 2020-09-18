@@ -1,14 +1,19 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export default makeStyles(() => ({
+export default makeStyles((theme) => ({
   technologyCard: {
     marginTop: '20px',
     backgroundColor: '#F5F5F9',
     textAlign: 'cetnter',
   },
   img: {
-    height: '50%',
-    width: '50%',
+    width: '30%',
     objectFit: 'cover',
+  },
+  root: {
+    display: 'flex',
+    '& > *': {
+      margin: theme.spacing(1),
+    },
   },
 }));
