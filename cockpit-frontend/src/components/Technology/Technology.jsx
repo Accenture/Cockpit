@@ -54,94 +54,92 @@ export default function Technology() {
     );
   }
   return (
-    <div>
-      <Paper className={classes.paper}>
-        <div className={classes.technoList}>
-          {technologies.length > 0 &&
-            technologies.map((techno) => (
-              <div key={techno.id}>
-                <span>{techno.name}</span>
-                <br />
-              </div>
-            ))}
-        </div>
-        <Button
-          onClick={() => setOpen(true)}
-          variant="outlined"
-          color="primary"
-          className={classes.buttonSave}
-        >
-          + add new Technology
-        </Button>
-        {open && (
-          <form>
-            <Grid container className={classes.containerAdd}>
-              <Grid item xs={8}>
-                <FormLabel className={classes.formLabel}>Name</FormLabel>
-                <TextField
-                  className={classes.textField}
-                  required
-                  fullWidth
-                  variant="outlined"
-                  name="name"
-                  placeholder="Technology Name"
-                  size="small"
-                  value={technoName || ''}
-                  onChange={handleNameChange}
-                />
-              </Grid>
-              <Grid item xs={8}>
-                <FormLabel className={classes.formLabel}>Logo</FormLabel>
-                <TextField
-                  className={classes.textField}
-                  required
-                  fullWidth
-                  variant="outlined"
-                  name="logo"
-                  size="small"
-                  value={technoLogo || ''}
-                  onChange={handleLogoChange}
-                  placeholder="https://..."
-                  error={!isImageUrlValid(technoLogo)}
-                  helperText={
-                    isImageUrlValid(technoLogo)
-                      ? ''
-                      : 'Url starts with http(s)://'
-                  }
-                />
-              </Grid>
-              <Grid item xs={4} />
-              <Grid item xs={2} />
-              <Grid item xs={3}>
-                <Button
-                  onClick={closeForm}
-                  variant="outlined"
-                  color="primary"
-                  className={classes.buttonSave}
-                >
-                  cancel
-                </Button>
-              </Grid>
-              <Grid item xs={3}>
-                <Button
-                  onClick={save}
-                  disabled={
-                    technoName === '' ||
-                    technoLogo === '' ||
-                    !isImageUrlValid(technoLogo)
-                  }
-                  variant="contained"
-                  color="primary"
-                  className={classes.buttonSave}
-                >
-                  add
-                </Button>
-              </Grid>{' '}
-              <Grid item xs={2} />
+    <Paper className={classes.paper}>
+      <div className={classes.technoList}>
+        {technologies.length > 0 &&
+          technologies.map((techno) => (
+            <div key={techno.id}>
+              <span>{techno.name}</span>
+              <br />
+            </div>
+          ))}
+      </div>
+      <Button
+        onClick={() => setOpen(true)}
+        variant="outlined"
+        color="primary"
+        className={classes.buttonSave}
+      >
+        + add new Technology
+      </Button>
+      {open && (
+        <form>
+          <Grid container className={classes.containerAdd}>
+            <Grid item xs={8}>
+              <FormLabel className={classes.formLabel}>Name</FormLabel>
+              <TextField
+                className={classes.textField}
+                required
+                fullWidth
+                variant="outlined"
+                name="name"
+                placeholder="Technology Name"
+                size="small"
+                value={technoName || ''}
+                onChange={handleNameChange}
+              />
             </Grid>
-          </form>
-        )}
-      </Paper>
-    </div>
+            <Grid item xs={8}>
+              <FormLabel className={classes.formLabel}>Logo</FormLabel>
+              <TextField
+                className={classes.textField}
+                required
+                fullWidth
+                variant="outlined"
+                name="logo"
+                size="small"
+                value={technoLogo || ''}
+                onChange={handleLogoChange}
+                placeholder="https://..."
+                error={!isImageUrlValid(technoLogo)}
+                helperText={
+                  isImageUrlValid(technoLogo)
+                    ? ''
+                    : 'Url starts with http(s)://'
+                }
+              />
+            </Grid>
+            <Grid item xs={4} />
+            <Grid item xs={2} />
+            <Grid item xs={3}>
+              <Button
+                onClick={closeForm}
+                variant="outlined"
+                color="primary"
+                className={classes.buttonSave}
+              >
+                cancel
+              </Button>
+            </Grid>
+            <Grid item xs={3}>
+              <Button
+                onClick={save}
+                disabled={
+                  technoName === '' ||
+                  technoLogo === '' ||
+                  !isImageUrlValid(technoLogo)
+                }
+                variant="contained"
+                color="primary"
+                className={classes.buttonSave}
+              >
+                add
+              </Button>
+            </Grid>{' '}
+            <Grid item xs={2} />
+          </Grid>
+        </form>
+      )}
+    </Paper>
   );
 }
