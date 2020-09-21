@@ -219,9 +219,9 @@ export default function InformationForm() {
             <TextField
               className={classes.textField}
               value={
-                nbSprint >= mvpInfo.jira.currentSprint
-                  ? nbSprint
-                  : mvpInfo.jira.currentSprint
+                nbSprint < mvpInfo.jira.currentSprint
+                  ? mvpInfo.jira.currentSprint
+                  : nbSprint
               }
               required
               fullWidth
