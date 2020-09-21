@@ -70,7 +70,7 @@ export default function EditMvpSMForm() {
   };
   async function submitMvpInfo(e) {
     e.preventDefault();
-    if (sprintNumber <= 12 && sprintNumber >= mvpInfo.jira.currentSprint) {
+    if (sprintNumber >= mvpInfo.jira.currentSprint) {
       const newJira = {
         id: mvpInfo.jira.id,
         jiraProjectKey: mvpInfo.jira.jiraProjectKey,

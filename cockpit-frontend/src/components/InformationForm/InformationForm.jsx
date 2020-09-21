@@ -218,7 +218,11 @@ export default function InformationForm() {
             <FormLabel className={classes.formLabel}>Sprint number</FormLabel>
             <TextField
               className={classes.textField}
-              value={nbSprint}
+              value={
+                nbSprint < mvpInfo.jira.currentSprint
+                  ? mvpInfo.jira.currentSprint
+                  : nbSprint
+              }
               required
               fullWidth
               variant="outlined"
@@ -227,14 +231,12 @@ export default function InformationForm() {
               placeholder="Sprint number"
               size="small"
               type="number"
-              inputProps={{ min: '1', max: '12', step: '1' }}
+              inputProps={{ min: '1', step: '1' }}
               onChange={handleSprintNumberChange}
-              error={nbSprint > 12 || nbSprint < mvpInfo.jira.currentSprint}
+              error={nbSprint < mvpInfo.jira.currentSprint}
               helperText={
                 // eslint-disable-next-line no-nested-ternary
-                nbSprint > 12
-                  ? 'Sprint Number must be less than or equal to 12'
-                  : nbSprint < mvpInfo.jira.currentSprint
+                nbSprint < mvpInfo.jira.currentSprint
                   ? 'Sprint Number must be greater than or equal to Current Sprint'
                   : ''
               }
