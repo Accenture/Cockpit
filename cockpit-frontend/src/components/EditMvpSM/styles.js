@@ -18,7 +18,6 @@ export default makeStyles(() => ({
   },
   paper: {
     height: 'calc(100% - 50px)',
-    overflow: 'auto',
     width: 600,
     borderRadius: 0,
   },
