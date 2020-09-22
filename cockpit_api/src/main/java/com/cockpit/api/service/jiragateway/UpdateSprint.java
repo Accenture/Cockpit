@@ -205,6 +205,9 @@ public class UpdateSprint {
         newSprint.setSprintNumber(sprintNumber);
         if (newSprint.getState().equals("active")) {
             jira.setCurrentSprint(sprintNumber);
+            if (jira.getMvp().getSprintNumber() < sprintNumber) {
+                jira.getMvp().setSprintNumber(sprintNumber);
+            }
         }
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         if (sprintJira.getStartDate() != null && sprintJira.getEndDate() != null) {

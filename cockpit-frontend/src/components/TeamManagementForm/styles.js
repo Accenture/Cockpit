@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 export default makeStyles((theme) => ({
   paper: {
     height: 'calc(100% - 50px)',
-    overflow: 'auto',
     width: 600,
     borderRadius: 0,
   },

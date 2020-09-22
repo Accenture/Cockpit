@@ -17,7 +17,7 @@ export default makeStyles(() => ({
     marginTop: -2.5,
   },
   paper: {
-    maxHeight: 400,
+    height: 'calc(100% - 50px)',
     overflow: 'auto',
     width: 600,
     borderRadius: 0,
