@@ -27,9 +27,22 @@ public class TechnologyController {
             value = "/api/v1/technology/{id}/create"
     )
     public ResponseEntity<Object> createTechnology(@RequestBody TechnologyDTO technologyDTO, @PathVariable Long id,
-                                           @RequestHeader("Authorization") String authHeader) throws ResourceNotFoundException {
+                                                   @RequestHeader("Authorization") String authHeader) throws ResourceNotFoundException {
         if (authService.isScrumMaster(authHeader)) {
             TechnologyDTO newTechnology = technologyService.createNewTechnology(technologyDTO, id);
+            return ResponseEntity.ok(newTechnology);
+        } else {
+            return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
+        }
+    }
+    // ASSIGN techno to MVP
+    @PutMapping(
+            value = "/api/v1/technology/{id}/assign/{technoId}"
+    )
+    public ResponseEntity<Object> createTechnology(@PathVariable("id") Long id, @PathVariable("technoId") Long technoId,
+                                                   @RequestHeader("Authorization") String authHeader) throws ResourceNotFoundException {
+        if (authService.isScrumMaster(authHeader)) {
+            TechnologyDTO newTechnology = technologyService.assignTechnology(technoId, id);
             return ResponseEntity.ok(newTechnology);
         } else {
             return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
@@ -41,7 +54,7 @@ public class TechnologyController {
             value = "/api/v1/technology/{id}"
     )
     public ResponseEntity<Object> getTechnology(@PathVariable Long id,
-                                        @RequestHeader("Authorization") String authHeader) {
+                                                @RequestHeader("Authorization") String authHeader) {
         if (authService.isUserAuthorized(authHeader)) {
             try {
                 TechnologyDTO technologyFound = technologyService.findTechnologyById(id);
@@ -72,8 +85,8 @@ public class TechnologyController {
             value = "/api/v1/technology/update/{id}"
     )
     public ResponseEntity<Object> updateTechnology(@RequestBody TechnologyDTO technologyDTO,
-                                           @PathVariable Long id,
-                                           @RequestHeader("Authorization") String authHeader) {
+                                                   @PathVariable Long id,
+                                                   @RequestHeader("Authorization") String authHeader) {
         if (authService.isScrumMaster(authHeader)) {
             try {
                 TechnologyDTO technologyUpdated = technologyService.updateTechnology(technologyDTO, id);
@@ -91,7 +104,7 @@ public class TechnologyController {
             value = "/api/v1/technology/delete/{id}"
     )
     public ResponseEntity<Object> deleteTechnology(@PathVariable Long id,
-                                           @RequestHeader("Authorization") String authHeader) {
+                                                   @RequestHeader("Authorization") String authHeader) {
         if (authService.isScrumMaster(authHeader)) {
             try {
                 technologyService.deleteTechnology(id);
