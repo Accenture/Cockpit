@@ -67,9 +67,11 @@ export default function Technology() {
         urlImage.startsWith('https://'))
     );
   }
-  const onTagsChange = (event, values) => {
-    setValue(values);
-  };
+  async function onTagsChange(event, values) {
+    const newTechno = values.filter((option) => value.indexOf(option) === -1);
+    await MvpService.assignTechnology(newTechno[0].id, mvpInfo.id);
+    dispatch(getOneMvp(mvpId));
+  }
   return (
     <div>
       <Paper className={classes.paper}>
@@ -78,6 +80,7 @@ export default function Technology() {
           multiple
           options={allTechnologies}
           getOptionLabel={(option) => option.name}
+          getOptionSelected={(option, techno) => option.name === techno.name}
           value={value}
           onChange={onTagsChange}
           renderInput={(params) => (
