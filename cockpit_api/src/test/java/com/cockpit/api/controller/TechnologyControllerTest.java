@@ -1,6 +1,7 @@
 package com.cockpit.api.controller;
 
 import com.cockpit.api.model.dao.Mvp;
+import com.cockpit.api.model.dao.Technology;
 import com.cockpit.api.model.dto.TechnologyDTO;
 import com.cockpit.api.service.AuthService;
 import com.cockpit.api.service.TechnologyService;
@@ -28,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ContextConfiguration(classes = {TechnologyController.class})
 @WebMvcTest
 public class TechnologyControllerTest {
+    private ModelMapper modelMapper = new ModelMapper();
 
     @Autowired
     private MockMvc mockMvc;
@@ -56,6 +58,32 @@ public class TechnologyControllerTest {
                         .header("Authorization", "Bearer token")
                         .content(new ObjectMapper().writeValueAsString(mockTechnology))
                         .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+
+        MockHttpServletResponse response = result.getResponse();
+
+        // then
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+    }
+
+    @Test
+    public void whenAssignTechnologyThenReturn200() throws Exception {
+        Mvp mockMvp = new Mvp();
+        mockMvp.setId(1l);
+        Technology mockTechnology = new Technology();
+        mockTechnology.setId(1L);
+        mockTechnology.setName("JAVA");
+        mockTechnology.setUrl("https://www.tc-web.it/wp-content/uploads/2019/12/java.jpg");
+
+        // given
+        Mockito.when(technologyService.assignTechnology(mockTechnology.getId(), mockMvp.getId())).thenReturn(modelMapper.map(mockTechnology, TechnologyDTO.class));
+        Mockito.when(authService.isScrumMaster(Mockito.any())).thenReturn(true);
+
+        // when
+        MvcResult result = mockMvc
+                .perform(MockMvcRequestBuilders.put("/api/v1/technology/{id}/assign/{technoId}", mockMvp.getId(), mockTechnology.getId())
+                        .header("Authorization", "Bearer token")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andReturn();
 
