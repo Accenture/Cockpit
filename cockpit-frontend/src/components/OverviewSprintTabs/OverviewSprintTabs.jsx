@@ -135,6 +135,7 @@ export default function OverviewSprintTabs(props) {
                         </Typography>
                         <Typography
                           variant="body2"
+                          className={classes.preLine}
                           color="textSecondary"
                           gutterBottom
                         >
