@@ -216,6 +216,14 @@ function addTechnology(technology, id) {
     return e;
   }
 }
+function getAllTechnologies() {
+  try {
+    return API.get(`${technoUrl}/all`, headers);
+  } catch (e) {
+    console.log(`Error when getting all technologies: ${e}`);
+    return e;
+  }
+}
 const MvpService = {
   getAllMvp,
   createNewJiraProject,
@@ -240,6 +248,7 @@ const MvpService = {
   assignTeamMember,
   deleteTeam,
   addTechnology,
+  getAllTechnologies,
 };
 
 export default MvpService;
