@@ -26,4 +26,7 @@ export default makeStyles((theme) => ({
     backgroundColor: '#F5F5F9',
     textAlign: 'cetnter',
   },
+  preLine: {
+    whiteSpace: 'pre-line',
+  },
 }));

@@ -195,6 +195,8 @@ export default function Impediment(props) {
               <FormLabel className={classes.formLabel}>Explanation</FormLabel>
               <TextField
                 className={classes.textField}
+                multiline
+                rows={5}
                 required
                 fullWidth
                 variant="outlined"
