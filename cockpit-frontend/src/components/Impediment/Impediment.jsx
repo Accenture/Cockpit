@@ -200,9 +200,9 @@ export default function Impediment(props) {
                 required
                 fullWidth
                 variant="outlined"
-                placeholder="Enter Impediment Explanation"
+                placeholder="Enter Impediment Explanation (Maximum 300 characters)"
                 size="small"
-                inputProps={{ maxLength: 250 }}
+                inputProps={{ maxLength: 300 }}
                 onChange={(event) => setExplanation(event.target.value)}
                 value={explanation}
               />
