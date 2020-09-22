@@ -1,5 +1,7 @@
 package com.cockpit.api.model.dao;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
@@ -39,6 +41,7 @@ public class Mvp {
     private Team team;
 
     @ManyToMany(cascade=CascadeType.MERGE)
+    @JsonIgnore
     @JoinTable(name = "mvps_technologies",
             joinColumns = @JoinColumn(name = "id_mvp"),
             inverseJoinColumns = @JoinColumn(name = "id_technology")
