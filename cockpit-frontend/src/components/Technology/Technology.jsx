@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import FormLabel from '@material-ui/core/FormLabel';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { mvpSelector } from '../../redux/selector';
@@ -19,12 +20,25 @@ export default function Technology() {
   const [technoName, setTechnoName] = React.useState('');
   const [technoLogo, setTechnoLogo] = React.useState('');
   const [technologies, setTechnologies] = React.useState([]);
+  const [allTechnologies, setAllTechnologies] = React.useState([]);
   const mvpId = useParams().id;
   const mvpInfo = useSelector((state) => mvpSelector(state, mvpId));
+  const [value, setValue] = React.useState([]);
+
+  useEffect(() => {
+    async function getAllTechnologies() {
+      const result = await MvpService.getAllTechnologies();
+      setAllTechnologies(result.data);
+    }
+    getAllTechnologies();
+  }, []);
 
   useEffect(() => {
     setTechnologies(mvpInfo.technologies);
   }, [mvpInfo]);
+  useEffect(() => {
+    setValue(technologies);
+  }, [technologies]);
   function handleLogoChange(event) {
     setTechnoLogo(event.target.value);
   }
@@ -53,18 +67,28 @@ export default function Technology() {
         urlImage.startsWith('https://'))
     );
   }
+  const onTagsChange = (event, values) => {
+    setValue(values);
+  };
   return (
     <div>
       <Paper className={classes.paper}>
-        <div className={classes.technoList}>
-          {technologies.length > 0 &&
-            technologies.map((techno) => (
-              <div key={techno.id}>
-                <span>{techno.name}</span>
-                <br />
-              </div>
-            ))}
-        </div>
+        <Autocomplete
+          className={classes.technoList}
+          multiple
+          options={allTechnologies}
+          getOptionLabel={(option) => option.name}
+          value={value}
+          onChange={onTagsChange}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              variant="outlined"
+              label="Technology"
+              placeholder="name"
+            />
+          )}
+        />
         <Button
           onClick={() => setOpen(true)}
           variant="outlined"
