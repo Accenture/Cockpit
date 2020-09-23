@@ -2,6 +2,7 @@ package com.cockpit.api.service.jiragateway;
 
 import com.cockpit.api.exception.JiraException;
 import com.cockpit.api.model.dao.Jira;
+import com.cockpit.api.model.dao.Mvp;
 import com.cockpit.api.model.dao.Sprint;
 import com.cockpit.api.model.dto.jira.*;
 import com.cockpit.api.repository.JiraRepository;
@@ -24,8 +25,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = UpdateSprint.class)
@@ -80,6 +80,9 @@ public class UpdateSprintTest {
         ResponseEntity mockResponse = new ResponseEntity(mockSprintHeaders,HttpStatus.OK);
 
         Jira mockJira = new Jira();
+        Mvp mockMvp = new Mvp();
+        mockMvp.setSprintNumber(10);
+        mockJira.setMvp(mockMvp);
         mockJira.setId(1l);
         mockJira.setJiraProjectKey("TEST_KEY");
         mockJira.setBoardId(1);
