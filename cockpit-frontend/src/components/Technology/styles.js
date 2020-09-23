@@ -26,6 +26,6 @@ export default makeStyles((theme) => ({
     margin: 32,
   },
   technoList: {
-    margin: '32px',
+    padding: '32px',
   },
 }));
