@@ -232,6 +232,14 @@ function assignTechnology(technologyId, mvpId) {
     return e;
   }
 }
+function unassignTechnology(technologyId, mvpId) {
+  try {
+    return API.put(`${technoUrl}/${mvpId}/unassign/${technologyId}`, headers);
+  } catch (e) {
+    console.log(`Error when unassigning technology: ${e}`);
+    return e;
+  }
+}
 const MvpService = {
   getAllMvp,
   createNewJiraProject,
@@ -258,6 +266,7 @@ const MvpService = {
   addTechnology,
   getAllTechnologies,
   assignTechnology,
+  unassignTechnology,
 };
 
 export default MvpService;
