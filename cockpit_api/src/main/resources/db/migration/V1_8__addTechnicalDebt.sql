@@ -1,0 +1,2 @@
+ALTER TABLE mvp
+ADD COLUMN technical_debt VARCHAR(50);

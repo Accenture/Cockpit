@@ -1,4 +1,4 @@
-package com.cockpit.api.model.dto.jira;
+package com.cockpit.api.model.dto.sonarqube;
 
 import com.fasterxml.jackson.annotation.*;
 
@@ -7,24 +7,23 @@ import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "48x48",
+        "component",
 })
-public class AvatarUrls {
-
-    @JsonProperty("48x48")
-    private String bigAvatar;
+public class MetricResponse {
+    @JsonProperty("component")
+    private MetricComponent component;
 
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
 
-    @JsonProperty("48x48")
-    public String getBigAvatar() {
-        return bigAvatar;
+    @JsonProperty("component")
+    public MetricComponent getComponent() {
+        return component;
     }
 
-    @JsonProperty("48x48")
-    public void setBigAvatar(String bigAvatar) {
-        this.bigAvatar = bigAvatar;
+    @JsonProperty("component")
+    public void setComponent(MetricComponent component) {
+        this.component = component;
     }
 
     @JsonAnyGetter
