@@ -28,7 +28,7 @@ public class TechnologyService {
     public TechnologyDTO createNewTechnology(TechnologyDTO technologyDTO, Long mvpId) throws ResourceNotFoundException {
         Optional<Mvp> mvp = mvpRepository.findById(mvpId);
         if (!mvp.isPresent()) {
-            throw new ResourceNotFoundException("mvp not found");
+            throw new ResourceNotFoundException("Mvp can't be found");
         }
             mvp.get().getTechnologies().add(modelMapper.map(technologyDTO, Technology.class));
             mvpRepository.save(mvp.get());
@@ -42,7 +42,7 @@ public class TechnologyService {
         }
         Optional<Technology> technology = technologyRepository.findById(technoId);
         if (!technology.isPresent()) {
-            throw new ResourceNotFoundException("technology not found");
+            throw new ResourceNotFoundException("This technology can't be found");
         }
         mvp.get().getTechnologies().add(technology.get());
         mvpRepository.save(mvp.get());
