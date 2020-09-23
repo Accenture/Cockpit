@@ -39,7 +39,7 @@ public class TechnologyController {
     @PutMapping(
             value = "/api/v1/technology/{id}/assign/{technoId}"
     )
-    public ResponseEntity<Object> createTechnology(@PathVariable("id") Long id, @PathVariable("technoId") Long technoId,
+    public ResponseEntity<Object> assignTechnology(@PathVariable("id") Long id, @PathVariable("technoId") Long technoId,
                                                    @RequestHeader("Authorization") String authHeader) throws ResourceNotFoundException {
         if (authService.isScrumMaster(authHeader)) {
             TechnologyDTO newTechnology = technologyService.assignTechnology(technoId, id);
@@ -48,7 +48,19 @@ public class TechnologyController {
             return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
         }
     }
-
+    // UNASSIGN techno to MVP
+    @PutMapping(
+            value = "/api/v1/technology/{id}/unassign/{technoId}"
+    )
+    public ResponseEntity<Object> unassignTechnology(@PathVariable("id") Long id, @PathVariable("technoId") Long technoId,
+                                                   @RequestHeader("Authorization") String authHeader) throws ResourceNotFoundException {
+        if (authService.isScrumMaster(authHeader)) {
+            TechnologyDTO newTechnology = technologyService.unassignTechnology(technoId, id);
+            return ResponseEntity.ok(newTechnology);
+        } else {
+            return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
+        }
+    }
     // GET Technology BY ID
     @GetMapping(
             value = "/api/v1/technology/{id}"

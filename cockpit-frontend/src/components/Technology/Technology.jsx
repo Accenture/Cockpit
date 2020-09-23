@@ -69,7 +69,14 @@ export default function Technology() {
   }
   async function onTagsChange(event, values) {
     const newTechno = values.filter((option) => value.indexOf(option) === -1);
-    await MvpService.assignTechnology(newTechno[0].id, mvpInfo.id);
+    if (newTechno.length > 0) {
+      await MvpService.assignTechnology(newTechno[0].id, mvpInfo.id);
+    } else {
+      const deletedTechno = value.filter(
+        (option) => values.indexOf(option) === -1,
+      );
+      await MvpService.unassignTechnology(deletedTechno[0].id, mvpInfo.id);
+    }
     dispatch(getOneMvp(mvpId));
   }
   return (

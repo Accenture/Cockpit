@@ -49,7 +49,20 @@ public class TechnologyService {
 
         return modelMapper.map(technology, TechnologyDTO.class);
     }
+    public TechnologyDTO unassignTechnology(long technoId, Long mvpId) throws ResourceNotFoundException {
+        Optional<Mvp> mvp = mvpRepository.findById(mvpId);
+        if (!mvp.isPresent()) {
+            throw new ResourceNotFoundException("mvp not found");
+        }
+        Optional<Technology> technology = technologyRepository.findById(technoId);
+        if (!technology.isPresent()) {
+            throw new ResourceNotFoundException("technology not found");
+        }
+        mvp.get().getTechnologies().remove(technology.get());
+        mvpRepository.save(mvp.get());
 
+        return modelMapper.map(technology, TechnologyDTO.class);
+    }
     public TechnologyDTO findTechnologyById(Long id) throws ResourceNotFoundException {
         Optional<Technology> technologyRes = technologyRepository.findById(id);
         if (!technologyRes.isPresent()) {
