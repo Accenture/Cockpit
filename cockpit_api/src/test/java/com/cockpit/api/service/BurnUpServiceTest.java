@@ -76,7 +76,7 @@ public class BurnUpServiceTest {
         List<BurnUpChartDTO> burnUpCharList = burnUpChartService.getChartData(1l);
 
         // then
-        Assert.assertEquals(12, burnUpCharList.size());
+        Assert.assertEquals(8, burnUpCharList.size());
         Assert.assertEquals(2, (long) burnUpCharList.get(0).getUsClosed());
         Assert.assertEquals(4, (long) burnUpCharList.get(0).getExpectedUsClosed());
     }
