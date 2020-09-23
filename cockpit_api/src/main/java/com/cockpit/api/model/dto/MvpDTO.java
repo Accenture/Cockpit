@@ -25,6 +25,8 @@ public class MvpDTO {
 
     private String status;
 
+    private String technicalDebt;
+
     private Team team;
 
     private Set<Technology> technologies;
@@ -61,6 +63,14 @@ public class MvpDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void setTechnicalDebt(String technicalDebt) {
+        this.technicalDebt = technicalDebt;
+    }
+
+    public String getTechnicalDebt() {
+        return technicalDebt;
     }
 
     public void setTeam(Team team) { this.team = team; }

@@ -26,6 +26,11 @@ spring:
     urlSprintReport: ${JIRA_HOST_URL}/rest/greenhopper/1.0/rapid/charts/sprintreport?
     urlVerifyValidProjectKey: ${JIRA_HOST_URL}/rest/api/latest/project/
     urlUserInformation: ${JIRA_HOST_URL}/rest/api/3/user/search?query=
+  sonarqube:
+    authToken: ${SONAR_AUTH_TOKEN}
+    sonarUrl: ${SONAR_HOST_URL}
+    urlListProjects: ${SONAR_HOST_URL}/api/components/search?qualifiers=TRK&ps=100
+    urlTechnicalDebt: ${SONAR_HOST_URL}/api/measures/component?component=%s&metricKeys=sqale_index
   digitalpass:
     isEnabled: true
     userInfoEndpoint: ${DIGITAL_PASS_USER_INFO_ENDPOINT}

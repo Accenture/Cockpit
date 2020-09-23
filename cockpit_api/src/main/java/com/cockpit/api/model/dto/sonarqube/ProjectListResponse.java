@@ -1,30 +1,30 @@
-package com.cockpit.api.model.dto.jira;
+package com.cockpit.api.model.dto.sonarqube;
 
 import com.fasterxml.jackson.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
-        "48x48",
+        "components",
 })
-public class AvatarUrls {
-
-    @JsonProperty("48x48")
-    private String bigAvatar;
+public class ProjectListResponse {
+    @JsonProperty("components")
+    private List<ProjectComponent> components;
 
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<>();
 
-    @JsonProperty("48x48")
-    public String getBigAvatar() {
-        return bigAvatar;
+    @JsonProperty("components")
+    public List<ProjectComponent> getComponents() {
+        return components;
     }
 
-    @JsonProperty("48x48")
-    public void setBigAvatar(String bigAvatar) {
-        this.bigAvatar = bigAvatar;
+    @JsonProperty("components")
+    public void setComponents(List<ProjectComponent> components) {
+        this.components = components;
     }
 
     @JsonAnyGetter
