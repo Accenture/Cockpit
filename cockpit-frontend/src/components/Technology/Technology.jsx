@@ -173,57 +173,9 @@ export default function Technology() {
               </Grid>{' '}
               <Grid item xs={2} />
             </Grid>
-            <Grid item xs={8}>
-              <FormLabel className={classes.formLabel}>Logo</FormLabel>
-              <TextField
-                className={classes.textField}
-                required
-                fullWidth
-                variant="outlined"
-                name="logo"
-                size="small"
-                value={technoLogo || ''}
-                onChange={handleLogoChange}
-                placeholder="https://..."
-                error={!isImageUrlValid(technoLogo)}
-                helperText={
-                  isImageUrlValid(technoLogo)
-                    ? ''
-                    : 'Url starts with http(s)://'
-                }
-              />
-            </Grid>
-            <Grid item xs={4} />
-            <Grid item xs={2} />
-            <Grid item xs={3}>
-              <Button
-                onClick={closeForm}
-                variant="outlined"
-                color="primary"
-                className={classes.buttonSave}
-              >
-                cancel
-              </Button>
-            </Grid>
-            <Grid item xs={3}>
-              <Button
-                onClick={save}
-                disabled={
-                  technoName === '' ||
-                  technoLogo === '' ||
-                  !isImageUrlValid(technoLogo)
-                }
-                variant="contained"
-                color="primary"
-                className={classes.buttonSave}
-              >
-                add
-              </Button>
-            </Grid>{' '}
-            <Grid item xs={2} />
-          </Grid>
-        </form>
-      )}
-    </Paper>
+          </form>
+        )}
+      </Paper>
+    </div>
   );
 }
