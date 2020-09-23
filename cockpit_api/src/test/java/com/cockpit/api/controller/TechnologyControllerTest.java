@@ -92,4 +92,30 @@ public class TechnologyControllerTest {
         // then
         assertEquals(HttpStatus.OK.value(), response.getStatus());
     }
+
+    @Test
+    public void whenUnassignTechnologyThenReturn200() throws Exception {
+        Mvp mockMvp = new Mvp();
+        mockMvp.setId(1l);
+        Technology mockTechnology = new Technology();
+        mockTechnology.setId(1L);
+        mockTechnology.setName("JAVA");
+        mockTechnology.setUrl("https://www.tc-web.it/wp-content/uploads/2019/12/java.jpg");
+
+        // given
+        Mockito.when(technologyService.unassignTechnology(mockTechnology.getId(), mockMvp.getId())).thenReturn(modelMapper.map(mockTechnology, TechnologyDTO.class));
+        Mockito.when(authService.isScrumMaster(Mockito.any())).thenReturn(true);
+
+        // when
+        MvcResult result = mockMvc
+                .perform(MockMvcRequestBuilders.put("/api/v1/technology/{id}/unassign/{technoId}", mockMvp.getId(), mockTechnology.getId())
+                        .header("Authorization", "Bearer token")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+
+        MockHttpServletResponse response = result.getResponse();
+
+        // then
+        assertEquals(HttpStatus.OK.value(), response.getStatus());
+    }
 }
