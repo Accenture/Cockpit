@@ -1,2 +1,2 @@
 ALTER TABLE mvp
-ADD COLUMN technical_debt int;
+ADD COLUMN technical_debt INTEGER;
