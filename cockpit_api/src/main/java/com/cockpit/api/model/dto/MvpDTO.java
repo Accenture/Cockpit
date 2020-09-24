@@ -25,7 +25,7 @@ public class MvpDTO {
 
     private String status;
 
-    private String technicalDebt;
+    private int technicalDebt;
 
     private Team team;
 
@@ -65,11 +65,11 @@ public class MvpDTO {
         this.status = status;
     }
 
-    public void setTechnicalDebt(String technicalDebt) {
+    public void setTechnicalDebt(int technicalDebt) {
         this.technicalDebt = technicalDebt;
     }
 
-    public String getTechnicalDebt() {
+    public int getTechnicalDebt() {
         return technicalDebt;
     }
 
@@ -130,6 +130,5 @@ public class MvpDTO {
 	public void setSprintNumber(Integer sprintNumber) {
 		this.sprintNumber = sprintNumber;
 	}
-    
-    
+
 }

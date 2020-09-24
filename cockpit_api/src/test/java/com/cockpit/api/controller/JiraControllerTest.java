@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.cockpit.api.service.AuthService;
-import com.cockpit.api.service.jiragateway.JiraApiService;
+import com.cockpit.api.service.HttpService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -38,7 +38,7 @@ public class JiraControllerTest {
     @MockBean
     private JiraService jiraService;
     @MockBean
-    private JiraApiService jiraApiService;
+    private HttpService httpService;
     @MockBean
     private AuthService authService;
 

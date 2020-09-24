@@ -36,7 +36,7 @@ public class Mvp {
 
     private String status;
 
-    private String technicalDebt;
+    private int technicalDebt;
 
     @ManyToOne(cascade=CascadeType.MERGE)
     @JoinColumn(name = "id_team")
@@ -88,7 +88,7 @@ public class Mvp {
         this.status = status;
     }
 
-    public void setTechnicalDebt(String technicalDebt) {
+    public void setTechnicalDebt(int technicalDebt) {
         this.technicalDebt = technicalDebt;
     }
 
@@ -126,7 +126,7 @@ public class Mvp {
         return status;
     }
 
-    public String getTechnicalDebt() {
+    public int getTechnicalDebt() {
         return technicalDebt;
     }
 

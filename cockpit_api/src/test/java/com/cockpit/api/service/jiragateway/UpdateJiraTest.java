@@ -1,12 +1,13 @@
 package com.cockpit.api.service.jiragateway;
 
-import com.cockpit.api.exception.JiraException;
+import com.cockpit.api.exception.HttpException;
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dto.jira.Board;
 import com.cockpit.api.model.dto.jira.JiraBoard;
 import com.cockpit.api.model.dto.jira.Location;
 import com.cockpit.api.model.dto.jira.Project;
 import com.cockpit.api.repository.JiraRepository;
+import com.cockpit.api.service.HttpService;
 import com.cockpit.api.service.UserStoryService;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +34,7 @@ public class UpdateJiraTest {
     private UpdateJira updateJira;
 
     @MockBean
-    private JiraApiService jiraApiService;
+    private HttpService httpService;
 
     @MockBean
     private UserStoryService userStoryService;
@@ -49,13 +50,13 @@ public class UpdateJiraTest {
 
     @Before
     public void setUp() {
-        this.updateJira = new UpdateJira(jiraRepository, jiraApiService, userStoryService);
+        this.updateJira = new UpdateJira(jiraRepository, httpService, userStoryService);
         ReflectionTestUtils.setField(updateJira, "urlProjects", urlProjects);
         ReflectionTestUtils.setField(updateJira, "urlBoards", urlBoards);
     }
 
     @Test
-    public void whenUpdateJiraProjectIdThenProjectIdUpdated() throws JiraException {
+    public void whenUpdateJiraProjectIdThenProjectIdUpdated() throws HttpException {
 
         Project mockProject = new Project();
         mockProject.setId("100");
@@ -70,7 +71,7 @@ public class UpdateJiraTest {
         mockJiraList.add(mockJira);
 
         // given
-        Mockito.when(jiraApiService.callJira(urlProjects, Project[].class.getName())).thenReturn(mockResponse);
+        Mockito.when(httpService.httpCall(urlProjects, Project[].class.getName())).thenReturn(mockResponse);
         Mockito.when(jiraRepository.findAllByOrderById()).thenReturn(mockJiraList);
 
         // when
@@ -82,7 +83,7 @@ public class UpdateJiraTest {
     }
 
     @Test
-    public void whenUpdateJiraBoardIdThenBoardIdUpdated() throws JiraException {
+    public void whenUpdateJiraBoardIdThenBoardIdUpdated() throws HttpException {
         List<JiraBoard> boardList = new ArrayList<>();
         JiraBoard mockJiraBoard = new JiraBoard();
         Location mockLocation = new Location();
@@ -108,7 +109,7 @@ public class UpdateJiraTest {
         String url = String.format(urlBoards, maxResults, startAt);
 
         // given
-        Mockito.when(jiraApiService.callJira(url, Board.class.getName())).thenReturn(mockResponse);
+        Mockito.when(httpService.httpCall(url, Board.class.getName())).thenReturn(mockResponse);
         Mockito.when(jiraRepository.findByJiraProjectId(Mockito.anyInt())).thenReturn(mockJira);
 
         // when

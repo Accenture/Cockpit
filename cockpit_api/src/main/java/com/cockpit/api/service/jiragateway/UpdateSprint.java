@@ -1,12 +1,13 @@
 package com.cockpit.api.service.jiragateway;
 
-import com.cockpit.api.exception.JiraException;
+import com.cockpit.api.exception.HttpException;
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Sprint;
 import com.cockpit.api.model.dto.jira.*;
 import com.cockpit.api.repository.JiraRepository;
 import com.cockpit.api.repository.SprintRepository;
 import com.cockpit.api.repository.UserStoryRepository;
+import com.cockpit.api.service.HttpService;
 import com.cockpit.api.service.UserStoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +36,7 @@ public class UpdateSprint {
     private final SprintRepository sprintRepository;
     private final UserStoryRepository userStoryRepository;
     private final JiraRepository jiraRepository;
-    private final JiraApiService configurationJiraAPIs;
+    private final HttpService configurationJiraAPIs;
     final UserStoryService userStoryService;
 
     private static final String VAR_STORY = "Story";
@@ -43,7 +44,7 @@ public class UpdateSprint {
     @Autowired
     public UpdateSprint(JiraRepository jiraRepository, SprintRepository sprintRepository,
                         UserStoryRepository userStoryRepository,
-                        UserStoryService userStoryService, JiraApiService configurationJiraAPIs) {
+                        UserStoryService userStoryService, HttpService configurationJiraAPIs) {
         this.jiraRepository = jiraRepository;
         this.userStoryRepository = userStoryRepository;
         this.sprintRepository = sprintRepository;
@@ -109,7 +110,7 @@ public class UpdateSprint {
     }
 
     @Scheduled(initialDelay = 90 * ONE_SECOND, fixedDelay = ONE_HOUR)
-    public void updateSumForCompletedIssuesAndSumForNotCompletedIssuesInSprint() throws JiraException {
+    public void updateSumForCompletedIssuesAndSumForNotCompletedIssuesInSprint() throws HttpException {
         log.info("Sprint - Start update nb of completed/not completed for each sprint");
         List<Jira> jiraProjectList = jiraRepository.findAllByOrderById();
         for (Jira jira : jiraProjectList) {
@@ -134,8 +135,8 @@ public class UpdateSprint {
 
     }
 
-    public SprintReportContent getSprintReport(int jiraBoardId, int sprint) throws JiraException {
-        ResponseEntity<SprintReport> result = configurationJiraAPIs.callJira(
+    public SprintReportContent getSprintReport(int jiraBoardId, int sprint) throws HttpException {
+        ResponseEntity<SprintReport> result = configurationJiraAPIs.httpCall(
                 urlSprintReport + "rapidViewId=" + jiraBoardId + "&sprintId=" + sprint, SprintReport.class.getName());
         SprintReportContent sprintReportIssues = null;
         if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
@@ -144,8 +145,8 @@ public class UpdateSprint {
         return sprintReportIssues;
     }
 
-    public List<SprintJira> getSprintsFromJira(int boardId, String urlSprints) throws JiraException {
-        ResponseEntity<SprintHeaders> result = configurationJiraAPIs.callJira(
+    public List<SprintJira> getSprintsFromJira(int boardId, String urlSprints) throws HttpException {
+        ResponseEntity<SprintHeaders> result = configurationJiraAPIs.httpCall(
                 urlSprints + boardId + "/sprint", SprintHeaders.class.getName());
         List<SprintJira> newSprintsList = null;
         if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {

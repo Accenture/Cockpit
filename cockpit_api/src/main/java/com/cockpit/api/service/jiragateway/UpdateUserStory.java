@@ -1,6 +1,6 @@
 package com.cockpit.api.service.jiragateway;
 
-import com.cockpit.api.exception.JiraException;
+import com.cockpit.api.exception.HttpException;
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Sprint;
 import com.cockpit.api.model.dao.UserStory;
@@ -8,6 +8,7 @@ import com.cockpit.api.model.dto.jira.*;
 import com.cockpit.api.repository.JiraRepository;
 import com.cockpit.api.repository.SprintRepository;
 import com.cockpit.api.repository.UserStoryRepository;
+import com.cockpit.api.service.HttpService;
 import com.cockpit.api.service.UserStoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,18 +38,18 @@ public class UpdateUserStory {
     private final SprintRepository sprintRepository;
     private final JiraRepository jiraRepository;
     private final UserStoryRepository userStoryRepository;
-    final JiraApiService jiraApiService;
+    final HttpService httpService;
     final UserStoryService userStoryService;
 
     @Autowired
     public UpdateUserStory(JiraRepository jiraRepository, SprintRepository sprintRepository,
                            UserStoryRepository userStoryRepository, UserStoryService userStoryService,
-                           JiraApiService jiraApiService) {
+                           HttpService httpService) {
         this.jiraRepository = jiraRepository;
         this.sprintRepository = sprintRepository;
         this.userStoryRepository = userStoryRepository;
         this.userStoryService = userStoryService;
-        this.jiraApiService = jiraApiService;
+        this.httpService = httpService;
     }
 
     @Value("${spring.jira.urlIssues}")
@@ -88,7 +89,7 @@ public class UpdateUserStory {
         log.info("UserStory - End cleaning user stories");
     }
 
-    public void cleanUserStoriesNotLongerExists(String urlAllUserStories) throws JiraException {
+    public void cleanUserStoriesNotLongerExists(String urlAllUserStories) throws HttpException {
         List<Issue> issueList = new ArrayList<>();
         int maxResults = 100;
         int startAt = 0;
@@ -96,14 +97,14 @@ public class UpdateUserStory {
         int i = 1;
         while (totalValues >= startAt) {
             String url = String.format(urlAllUserStories, maxResults, startAt);
-            ResponseEntity<Issues> result = jiraApiService.callJira(url, Issues.class.getName());
+            ResponseEntity<Issues> result = httpService.httpCall(url, Issues.class.getName());
             if (result.getStatusCode().is2xxSuccessful()) {
                 totalValues = result.getBody().getTotal();
                 startAt = (maxResults * i);
                     issueList.addAll(result.getBody().getJiraIssues());
                 i++;
             } else {
-                throw new JiraException("Unable to get Issues From Jira");
+                throw new HttpException("Unable to get Issues From Jira");
             }
         }
         try {
@@ -129,11 +130,11 @@ public class UpdateUserStory {
 
     }
 
-    public List<UserStory> updateUserStoryInDBForBakclogFromJira(String jiraProjectKey, String urlIssues) throws JiraException {
+    public List<UserStory> updateUserStoryInDBForBakclogFromJira(String jiraProjectKey, String urlIssues) throws HttpException {
         String jqlBacklogUS = "project=" + jiraProjectKey + " AND Sprint=null AND issuetype=Story&expand=changelog";
 
         String urlBacklogUS = urlIssues + jqlBacklogUS;
-        ResponseEntity<Issues> resultBacklogUS = jiraApiService.callJira(urlBacklogUS, Issues.class.getName());
+        ResponseEntity<Issues> resultBacklogUS = httpService.httpCall(urlBacklogUS, Issues.class.getName());
 
         List<Issue> issueListBacklogUS = (resultBacklogUS.getBody().getJiraIssues());
         if (resultBacklogUS.getStatusCode().is2xxSuccessful()) {
@@ -142,13 +143,13 @@ public class UpdateUserStory {
         return stories;
     }
 
-    public List<UserStory> updateUserStoryInDBForASprintFromJira(Sprint sprint, String urlIssues) throws JiraException {
+    public List<UserStory> updateUserStoryInDBForASprintFromJira(Sprint sprint, String urlIssues) throws HttpException {
 
         String sprintId = String.valueOf(sprint.getJiraSprintId());
         String jqlSprintUS = "Sprint=" + sprintId + " AND issuetype=Story&expand=changelog";
         String urlSprintUS = urlIssues + jqlSprintUS;
 
-        ResponseEntity<Issues> resultSprintUS = jiraApiService.callJira(urlSprintUS, Issues.class.getName());
+        ResponseEntity<Issues> resultSprintUS = httpService.httpCall(urlSprintUS, Issues.class.getName());
         List<Issue> issueListSprintUS = (resultSprintUS.getBody().getJiraIssues());
         if (resultSprintUS.getStatusCode().is2xxSuccessful()) {
             return getUserStories(sprint, issueListSprintUS);

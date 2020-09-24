@@ -1,6 +1,6 @@
 package com.cockpit.api.service.jiragateway;
 
-import com.cockpit.api.exception.JiraException;
+import com.cockpit.api.exception.HttpException;
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Mvp;
 import com.cockpit.api.model.dao.Sprint;
@@ -8,6 +8,7 @@ import com.cockpit.api.model.dto.jira.*;
 import com.cockpit.api.repository.JiraRepository;
 import com.cockpit.api.repository.SprintRepository;
 import com.cockpit.api.repository.UserStoryRepository;
+import com.cockpit.api.service.HttpService;
 import com.cockpit.api.service.UserStoryService;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +35,7 @@ public class UpdateSprintTest {
     private UpdateSprint updateSprint;
 
     @MockBean
-    private JiraApiService jiraApiService;
+    private HttpService httpService;
 
     @MockBean
     private UserStoryService userStoryService;
@@ -61,13 +62,13 @@ public class UpdateSprintTest {
                 sprintRepository,
                 userStoryRepository,
                 userStoryService,
-                jiraApiService);
+                httpService);
         ReflectionTestUtils.setField(updateSprint, "urlSprints", urlSprints);
         ReflectionTestUtils.setField(updateSprint, "urlSprintReport", urlSprintReport);
     }
 
     @Test
-    public void whenUpdateSprintsThenSprintsUpdated() throws JiraException {
+    public void whenUpdateSprintsThenSprintsUpdated() throws HttpException {
         SprintJira mockSprintJira = new SprintJira();
         mockSprintJira.setId(10086);
         mockSprintJira.setState("active");
@@ -95,7 +96,7 @@ public class UpdateSprintTest {
         mockSprintList.add(mockSprint);
 
         // given
-        Mockito.when(jiraApiService.callJira(urlSprints + "1/sprint", SprintHeaders.class.getName())).thenReturn(mockResponse);
+        Mockito.when(httpService.httpCall(urlSprints + "1/sprint", SprintHeaders.class.getName())).thenReturn(mockResponse);
         Mockito.when(jiraRepository.findAllByOrderById()).thenReturn(mockJiraList);
         Mockito.when(sprintRepository.findByJiraOrderBySprintNumber(Mockito.any())).thenReturn(mockSprintList);
 
@@ -141,7 +142,7 @@ public class UpdateSprintTest {
     }
 
     @Test
-    public void whenUpdateSumForCompletedIssuesAndSumForNotCompletedIssuesInSprintThenSprintUpdated() throws JiraException {
+    public void whenUpdateSumForCompletedIssuesAndSumForNotCompletedIssuesInSprintThenSprintUpdated() throws HttpException {
         Jira mockJira = new Jira();
         mockJira.setId(1l);
         mockJira.setJiraProjectKey("TEST");
@@ -176,7 +177,7 @@ public class UpdateSprintTest {
         ResponseEntity mockResponse = new ResponseEntity(mockSprintReport,HttpStatus.OK);
 
         // given
-        Mockito.when(jiraApiService.callJira(urlSprintReport + "rapidViewId=1&sprintId=1", SprintReport.class.getName())).thenReturn(mockResponse);
+        Mockito.when(httpService.httpCall(urlSprintReport + "rapidViewId=1&sprintId=1", SprintReport.class.getName())).thenReturn(mockResponse);
         Mockito.when(jiraRepository.findAllByOrderById()).thenReturn(mockJiraList);
         Mockito.when(sprintRepository.findByJiraOrderBySprintNumber(Mockito.any())).thenReturn(mockSprintList);
         // when

@@ -1,9 +1,10 @@
 package com.cockpit.api.service.jiragateway;
 
-import com.cockpit.api.exception.JiraException;
+import com.cockpit.api.exception.HttpException;
 import com.cockpit.api.model.dao.TeamMember;
 import com.cockpit.api.model.dto.jira.User;
 import com.cockpit.api.repository.TeamMemberRepository;
+import com.cockpit.api.service.HttpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,24 +29,24 @@ import static javax.management.timer.Timer.ONE_SECOND;
 public class UpdateTeamMember {
     Logger log = LoggerFactory.getLogger(UpdateTeamMember.class);
     private final TeamMemberRepository teamMemberRepository;
-    private final JiraApiService jiraApiService;
+    private final HttpService httpService;
 
     @Autowired
-    public UpdateTeamMember(TeamMemberRepository teamMemberRepository, JiraApiService jiraApiService) {
+    public UpdateTeamMember(TeamMemberRepository teamMemberRepository, HttpService httpService) {
         this.teamMemberRepository = teamMemberRepository;
-        this.jiraApiService = jiraApiService;
+        this.httpService = httpService;
     }
 
     @Value("${spring.jira.urlUserInformation}")
     private String urlUserInformation;
 
     @Scheduled(initialDelay = 15 * ONE_SECOND, fixedDelay = ONE_HOUR)
-    public void updateTeamMembers() throws JiraException {
+    public void updateTeamMembers() throws HttpException {
         log.info("Team Member - Start update team members");
         List<TeamMember> teamMemberList = teamMemberRepository.findAllByOrderById();
         for (TeamMember teamMember : teamMemberList) {
             String url = urlUserInformation + teamMember.getEmail();
-            ResponseEntity<User[]> response = jiraApiService.callJira(url, User[].class.getName());
+            ResponseEntity<User[]> response = httpService.httpCall(url, User[].class.getName());
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
                 List<User> userList = Arrays.asList(response.getBody());
                 if (!userList.isEmpty()) {
