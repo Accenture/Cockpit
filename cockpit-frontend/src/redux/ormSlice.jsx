@@ -59,8 +59,8 @@ const ormSlice = createSlice({
 
     [deleteMvp.fulfilled]: withSession((session, action) => {
       // delete mvp from the state array
-      const mvp = action.payload;
-      session.Mvp.withId(mvp.id).delete();
+      const id = action.payload;
+      session.Mvp.withId(id).delete();
     }),
   },
 });

@@ -38,7 +38,7 @@ public class JiraController {
             value = "/api/v1/jira/create"
     )
     public ResponseEntity<Object> createJira(@RequestBody JiraDTO jiraDTO,
-                                     @RequestHeader("Authorization") String authHeader) {
+                                             @RequestHeader("Authorization") String authHeader) {
         if (authService.isScrumMaster(authHeader)) {
             String url = urlVerifyJiraKey + jiraDTO.getJiraProjectKey();
             try {
@@ -59,7 +59,7 @@ public class JiraController {
             value = "/api/v1/jira/{id}"
     )
     public ResponseEntity<Object> getJira(@PathVariable Long id,
-                                  @RequestHeader("Authorization") String authHeader) {
+                                          @RequestHeader("Authorization") String authHeader) {
         if (authService.isUserAuthorized(authHeader)) {
             try {
                 JiraDTO jiraDTO = jiraService.findJiraById(id);
@@ -77,7 +77,7 @@ public class JiraController {
             value = "/api/v1/jira/update"
     )
     public ResponseEntity<Object> updateJira(@RequestBody JiraDTO jiraDTO,
-                                     @RequestHeader("Authorization") String authHeader) {
+                                             @RequestHeader("Authorization") String authHeader) {
         if (authService.isScrumMaster(authHeader)) {
             try {
                 JiraDTO jiraUpdated = jiraService.updateJira(jiraDTO);
@@ -95,11 +95,11 @@ public class JiraController {
             value = "/api/v1/jira/delete/{id}"
     )
     public ResponseEntity<Object> deleteJira(@PathVariable Long id,
-                                     @RequestHeader("Authorization") String authHeader) {
+                                             @RequestHeader("Authorization") String authHeader) {
         if (authService.isScrumMaster(authHeader)) {
             try {
-                JiraDTO deletedJira =  jiraService.deleteJira(id);
-                return ResponseEntity.ok().body(deletedJira);
+                jiraService.deleteJira(id);
+                return ResponseEntity.ok().body(id);
             } catch (ResourceNotFoundException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
             }

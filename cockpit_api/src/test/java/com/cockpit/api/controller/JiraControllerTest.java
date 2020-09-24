@@ -2,6 +2,7 @@ package com.cockpit.api.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.cockpit.api.service.AuthService;
 import com.cockpit.api.service.jiragateway.JiraApiService;
 import org.junit.Test;
@@ -133,7 +134,8 @@ public class JiraControllerTest {
         JiraDTO jiraDto = modelMapper.map(mockJira, JiraDTO.class);
 
         // given
-        Mockito.when(jiraService.deleteJira(Mockito.any())).thenReturn(jiraDto);
+        Mockito.doNothing().when(jiraService).deleteJira(mockJira.getId());
+
         Mockito.when(authService.isScrumMaster(Mockito.any())).thenReturn(true);
 
         // when

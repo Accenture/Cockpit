@@ -41,7 +41,6 @@ public class Mvp {
     private Team team;
 
     @ManyToMany(cascade=CascadeType.MERGE)
-    @JsonIgnore
     @JoinTable(name = "mvps_technologies",
             joinColumns = @JoinColumn(name = "id_mvp"),
             inverseJoinColumns = @JoinColumn(name = "id_technology")
