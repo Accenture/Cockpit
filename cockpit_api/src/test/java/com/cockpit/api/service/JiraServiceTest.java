@@ -19,106 +19,105 @@ import java.util.Optional;
 
 @RunWith(SpringRunner.class)
 public class JiraServiceTest {
-	private ModelMapper modelMapper = new ModelMapper();
+    private ModelMapper modelMapper = new ModelMapper();
 
-	private JiraService jiraService;
-	
-	@MockBean 
-	JiraRepository jiraRepository;
-	
-	@Before
-	public void setUp() {
-		this.jiraService = new JiraService(jiraRepository);
-	}
-	
-	@Test
-	public void whenCreateJiraThenReturnCreatedJira() {
+    private JiraService jiraService;
 
-		Jira mockJira = new Jira();
-	
-		
-		JiraDTO jiraDto = modelMapper.map(mockJira, JiraDTO.class);
+    @MockBean
+    JiraRepository jiraRepository;
 
-		// given
-		Mockito.when(jiraRepository.save(Mockito.any(Jira.class))).thenReturn(mockJira);
+    @Before
+    public void setUp() {
+        this.jiraService = new JiraService(jiraRepository);
+    }
 
-		// when
-		JiraDTO createdJiraDto = jiraService.createNewJiraProject(jiraDto);
+    @Test
+    public void whenCreateJiraThenReturnCreatedJira() {
 
-		// then
-		Assert.assertNotNull(createdJiraDto);
+        Jira mockJira = new Jira();
 
-	}
 
-	@Test
-	public void whenGetJiraByIdThenReturnJira() throws ResourceNotFoundException {
-		Jira mockJira = new Jira();
-		mockJira.setId(1l);
-		mockJira.setJiraProjectKey("TEST");
+        JiraDTO jiraDto = modelMapper.map(mockJira, JiraDTO.class);
 
-		// given
-		Mockito.when(jiraRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(mockJira));
+        // given
+        Mockito.when(jiraRepository.save(Mockito.any(Jira.class))).thenReturn(mockJira);
 
-		// when
-		JiraDTO jira = jiraService.findJiraById(1l);
+        // when
+        JiraDTO createdJiraDto = jiraService.createNewJiraProject(jiraDto);
 
-		// then
-		Assert.assertEquals("TEST", jira.getJiraProjectKey());
-	}
+        // then
+        Assert.assertNotNull(createdJiraDto);
 
-	@Test
-	public void whenGetJiraByMvpThenReturnJira() throws ResourceNotFoundException {
-		Jira mockJira = new Jira();
-		Mvp mockMvp = new Mvp();
-		mockMvp.setName("TEST_MVP");
-		mockJira.setId(1l);
-		mockJira.setJiraProjectKey("TEST");
-		mockJira.setMvp(mockMvp);
+    }
 
-		// given
-		Mockito.when(jiraRepository.findByMvp(Mockito.any())).thenReturn(mockJira);
+    @Test
+    public void whenGetJiraByIdThenReturnJira() throws ResourceNotFoundException {
+        Jira mockJira = new Jira();
+        mockJira.setId(1l);
+        mockJira.setJiraProjectKey("TEST");
 
-		// when
-		Jira foundJira = jiraService.findByMvp(mockMvp);
+        // given
+        Mockito.when(jiraRepository.findById(Mockito.anyLong())).thenReturn(Optional.of(mockJira));
 
-		// then
-		Assert.assertEquals("TEST_MVP", foundJira.getMvp().getName());
-	}
+        // when
+        JiraDTO jira = jiraService.findJiraById(1l);
 
-	@Test
-	public void whenUpdateJiraThenReturnJiraIsUpdated() throws ResourceNotFoundException {
-		Jira mockJira = new Jira();
-		mockJira.setId(1l);
-		mockJira.setJiraProjectKey("HELLO");
-		JiraDTO mockJiraDto = modelMapper.map(mockJira, JiraDTO.class);
+        // then
+        Assert.assertEquals("TEST", jira.getJiraProjectKey());
+    }
 
-		// given
-		Mockito.when(jiraRepository.findByJiraProjectKey(Mockito.any())).thenReturn(mockJira);
-		Mockito.when(jiraRepository.save(Mockito.any())).thenReturn(mockJira);
+    @Test
+    public void whenGetJiraByMvpThenReturnJira() throws ResourceNotFoundException {
+        Jira mockJira = new Jira();
+        Mvp mockMvp = new Mvp();
+        mockMvp.setName("TEST_MVP");
+        mockJira.setId(1l);
+        mockJira.setJiraProjectKey("TEST");
+        mockJira.setMvp(mockMvp);
 
-		// when
-		JiraDTO jira = jiraService.updateJira(mockJiraDto);
+        // given
+        Mockito.when(jiraRepository.findByMvp(Mockito.any())).thenReturn(mockJira);
 
-		// then
-		Assert.assertEquals("HELLO", jira.getJiraProjectKey());
-	}
+        // when
+        Jira foundJira = jiraService.findByMvp(mockMvp);
 
-	@Test
-	public void whenDeleteJiraThenReturnDeletedJira() throws ResourceNotFoundException {
-		Jira mockJira = new Jira();
-		mockJira.setId(1l);
-		mockJira.setJiraProjectKey("DELETE_TEST");
-		JiraDTO mockJiraDto = modelMapper.map(mockJira, JiraDTO.class);
+        // then
+        Assert.assertEquals("TEST_MVP", foundJira.getMvp().getName());
+    }
 
-		// given
-		Mockito.when(jiraRepository.findById(Mockito.any())).thenReturn(Optional.of(mockJira));
+    @Test
+    public void whenUpdateJiraThenReturnJiraIsUpdated() throws ResourceNotFoundException {
+        Jira mockJira = new Jira();
+        mockJira.setId(1l);
+        mockJira.setJiraProjectKey("HELLO");
+        JiraDTO mockJiraDto = modelMapper.map(mockJira, JiraDTO.class);
 
-		// when
-		JiraDTO jira = jiraService.deleteJira(1l);
+        // given
+        Mockito.when(jiraRepository.findByJiraProjectKey(Mockito.any())).thenReturn(mockJira);
+        Mockito.when(jiraRepository.save(Mockito.any())).thenReturn(mockJira);
 
-		// then
-		Assert.assertEquals("DELETE_TEST", jira.getJiraProjectKey());
-	}
+        // when
+        JiraDTO jira = jiraService.updateJira(mockJiraDto);
+
+        // then
+        Assert.assertEquals("HELLO", jira.getJiraProjectKey());
+    }
+
+    @Test
+    public void whenDeleteJiraThenReturnDeletedJira() throws ResourceNotFoundException {
+        Jira mockJira = new Jira();
+        mockJira.setId(1l);
+        mockJira.setJiraProjectKey("DELETE_TEST");
+
+        // given
+        Mockito.when(jiraRepository.findById(Mockito.any())).thenReturn(Optional.of(mockJira));
+
+        // when
+        jiraService.deleteJira(1l);
+
+        // then
+        Mockito.verify(jiraRepository, Mockito.times(1)).delete(mockJira);
+    }
 
 
 }

@@ -89,6 +89,7 @@ export default function EditMvpSMForm() {
           mvpDescription: pitch,
           status,
           team: mvpInfo.team,
+          technologies: mvpInfo.technologies,
         },
       };
       await MvpService.updateJiraProject(newJira);

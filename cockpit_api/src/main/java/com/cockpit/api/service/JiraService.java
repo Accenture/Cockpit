@@ -16,13 +16,13 @@ public class JiraService {
     private final JiraRepository jiraRepository;
 
     private ModelMapper modelMapper = new ModelMapper();
-    
+
     @Autowired
     public JiraService(JiraRepository jiraRepository) {
         this.jiraRepository = jiraRepository;
     }
 
-    public JiraDTO createNewJiraProject(JiraDTO jiraDTO){
+    public JiraDTO createNewJiraProject(JiraDTO jiraDTO) {
         Jira jiraCreated = jiraRepository.save(modelMapper.map(jiraDTO, Jira.class));
         return modelMapper.map(jiraCreated, JiraDTO.class);
     }
@@ -44,16 +44,16 @@ public class JiraService {
         return modelMapper.map(jiraCreated, JiraDTO.class);
     }
 
-    public JiraDTO deleteJira(Long id) throws ResourceNotFoundException {
+    public void deleteJira(Long id) throws ResourceNotFoundException {
         Optional<Jira> jiraToDelete = jiraRepository.findById(id);
         if (!jiraToDelete.isPresent()) {
             throw new ResourceNotFoundException("Jira to delete not found");
         }
         jiraRepository.delete(jiraToDelete.get());
-        return modelMapper.map(jiraToDelete.get(), JiraDTO.class);
+
     }
-    Jira findByMvp(Mvp mvp)
-    {
-    	return jiraRepository.findByMvp(mvp);
+
+    Jira findByMvp(Mvp mvp) {
+        return jiraRepository.findByMvp(mvp);
     }
 }
