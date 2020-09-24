@@ -5,8 +5,9 @@ import static javax.management.timer.Timer.ONE_SECOND;
 
 import java.util.*;
 
-import com.cockpit.api.exception.JiraException;
+import com.cockpit.api.exception.HttpException;
 import com.cockpit.api.model.dto.jira.*;
+import com.cockpit.api.service.HttpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,14 +30,14 @@ public class UpdateJira {
     Logger log = LoggerFactory.getLogger(UpdateJira.class);
 
     private final JiraRepository jiraRepository;
-    private final JiraApiService jiraApiService;
+    private final HttpService httpService;
     final UserStoryService userStoryService;
 
     @Autowired
-    public UpdateJira(JiraRepository jiraRepository, JiraApiService jiraApiService,
+    public UpdateJira(JiraRepository jiraRepository, HttpService httpService,
                       UserStoryService userStoryService) {
         this.jiraRepository = jiraRepository;
-        this.jiraApiService = jiraApiService;
+        this.httpService = httpService;
         this.userStoryService = userStoryService;
     }
 
@@ -46,9 +47,9 @@ public class UpdateJira {
     private String urlBoards;
 
     @Scheduled(initialDelay = 5 * ONE_SECOND, fixedDelay = ONE_HOUR)
-    public void updateProjectIdInJira() throws JiraException {
+    public void updateProjectIdInJira() throws HttpException {
         log.info("Jira - Start update jira project id");
-        ResponseEntity<Project[]> response = jiraApiService.callJira(urlProjects, Project[].class.getName());
+        ResponseEntity<Project[]> response = httpService.httpCall(urlProjects, Project[].class.getName());
         List<Project> jiraProjectsList = Arrays.asList(response.getBody());
         List<Jira> jiraList = jiraRepository.findAllByOrderById();
         for (Jira jira : jiraList) {
@@ -75,7 +76,7 @@ public class UpdateJira {
         log.info("Jira - End update jira board id");
     }
 
-    public void updateBoardIdInJira(String urlBoards) throws JiraException {
+    public void updateBoardIdInJira(String urlBoards) throws HttpException {
         List<JiraBoard> foundJiraBoards = new ArrayList<>();
         List<JiraBoard> boardList;
 
@@ -86,7 +87,7 @@ public class UpdateJira {
 
         do {
             String url = String.format(urlBoards, maxResults, startAt);
-            ResponseEntity<Board> result = jiraApiService.callJira(url, Board.class.getName());
+            ResponseEntity<Board> result = httpService.httpCall(url, Board.class.getName());
 
             if (result.getStatusCode().is2xxSuccessful() && result.getBody() != null) {
                 maxResults = result.getBody().getMaxResults();
@@ -97,14 +98,14 @@ public class UpdateJira {
                 boardList = result.getBody().getValues();
                 updateBoardId(boardList);
             } else {
-                throw new JiraException("Failed to update board id for the jira");
+                throw new HttpException("Failed to update board id for the jira");
             }
             startAt = startAt + maxResults;
             foundJiraBoards.addAll(boardList);
         } while (numberOfBoardIdReceived < totalBoardId);
     }
 
-    private void updateBoardId(List<JiraBoard> boardList) throws JiraException {
+    private void updateBoardId(List<JiraBoard> boardList) throws HttpException {
         for (JiraBoard board : boardList) {
             try {
                 if (board.getLocation() != null && board.getLocation().getProjectId() != null) {
@@ -116,7 +117,7 @@ public class UpdateJira {
                 }
             } catch (Exception e) {
                 String message = "Jira - Unable to find Jira: " + board.getLocation().getProjectId();
-                throw new JiraException(message);
+                throw new HttpException(message);
             }
         }
     }

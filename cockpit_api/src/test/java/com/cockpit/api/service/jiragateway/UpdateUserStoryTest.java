@@ -1,6 +1,6 @@
 package com.cockpit.api.service.jiragateway;
 
-import com.cockpit.api.exception.JiraException;
+import com.cockpit.api.exception.HttpException;
 import com.cockpit.api.model.dao.Jira;
 import com.cockpit.api.model.dao.Sprint;
 import com.cockpit.api.model.dao.UserStory;
@@ -8,6 +8,7 @@ import com.cockpit.api.model.dto.jira.*;
 import com.cockpit.api.repository.JiraRepository;
 import com.cockpit.api.repository.SprintRepository;
 import com.cockpit.api.repository.UserStoryRepository;
+import com.cockpit.api.service.HttpService;
 import com.cockpit.api.service.UserStoryService;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,7 +34,7 @@ public class UpdateUserStoryTest {
     private UpdateUserStory updateUserStory;
 
     @MockBean
-    private JiraApiService jiraApiService;
+    private HttpService httpService;
 
     @MockBean
     private UserStoryService userStoryService;
@@ -60,13 +61,13 @@ public class UpdateUserStoryTest {
                 sprintRepository,
                 userStoryRepository,
                 userStoryService,
-                jiraApiService);
+                httpService);
         ReflectionTestUtils.setField(updateUserStory, "urlIssues", urlIssues);
         ReflectionTestUtils.setField(updateUserStory, "urlAllUserStories", urlAllUserStories);
     }
 
     @Test
-    public void whenUpdateUserStoriesThenUserStoriesUpdated() throws JiraException {
+    public void whenUpdateUserStoriesThenUserStoriesUpdated() throws HttpException {
         Issues mockIssues = new Issues();
         mockIssues.setTotal(1);
         Issue mockIssue = new Issue();
@@ -102,8 +103,8 @@ public class UpdateUserStoryTest {
         mockSprintList.add(mockSprint);
 
         // given
-        Mockito.when(jiraApiService.callJira(urlIssues + "Sprint=1 AND issuetype=Story&expand=changelog", Issues.class.getName())).thenReturn(mockResponse);
-        Mockito.when(jiraApiService.callJira(urlIssues + "project=TEST_KEY AND Sprint=null AND issuetype=Story&expand=changelog", Issues.class.getName())).thenReturn(mockResponse);
+        Mockito.when(httpService.httpCall(urlIssues + "Sprint=1 AND issuetype=Story&expand=changelog", Issues.class.getName())).thenReturn(mockResponse);
+        Mockito.when(httpService.httpCall(urlIssues + "project=TEST_KEY AND Sprint=null AND issuetype=Story&expand=changelog", Issues.class.getName())).thenReturn(mockResponse);
         Mockito.when(jiraRepository.findAllByOrderById()).thenReturn(mockJiraList);
         Mockito.when(sprintRepository.findAllByOrderById()).thenReturn(mockSprintList);
 
@@ -116,7 +117,7 @@ public class UpdateUserStoryTest {
     }
 
     @Test
-    public void whenClearUserStoriesThenUserStoriesCleaned() throws JiraException {
+    public void whenClearUserStoriesThenUserStoriesCleaned() throws HttpException {
         Issues mockIssues = new Issues();
         mockIssues.setTotal(1);
         Issue mockIssue = new Issue();
@@ -143,7 +144,7 @@ public class UpdateUserStoryTest {
         String testUrl = String.format(urlAllUserStories, maxResults, startAt);
 
         // given
-        Mockito.when(jiraApiService.callJira(testUrl, Issues.class.getName())).thenReturn(mockResponse);
+        Mockito.when(httpService.httpCall(testUrl, Issues.class.getName())).thenReturn(mockResponse);
 
         // when
         updateUserStory.cleaningUselessUSFromDB();

@@ -1,16 +1,10 @@
 package com.cockpit.api.service.jiragateway;
 
-import com.cockpit.api.exception.JiraException;
-import com.cockpit.api.model.dao.Jira;
-import com.cockpit.api.model.dao.Sprint;
+import com.cockpit.api.exception.HttpException;
 import com.cockpit.api.model.dao.TeamMember;
-import com.cockpit.api.model.dao.UserStory;
 import com.cockpit.api.model.dto.jira.*;
-import com.cockpit.api.repository.JiraRepository;
-import com.cockpit.api.repository.SprintRepository;
 import com.cockpit.api.repository.TeamMemberRepository;
-import com.cockpit.api.repository.UserStoryRepository;
-import com.cockpit.api.service.UserStoryService;
+import com.cockpit.api.service.HttpService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +29,7 @@ public class UpdateTeamMemberTest {
     private UpdateTeamMember updateTeamMember;
 
     @MockBean
-    private JiraApiService jiraApiService;
+    private HttpService httpService;
 
     @MockBean
     private TeamMemberRepository teamMemberRepository;
@@ -47,12 +41,12 @@ public class UpdateTeamMemberTest {
     public void setUp() {
         this.updateTeamMember = new UpdateTeamMember(
                 teamMemberRepository,
-                jiraApiService
+                httpService
         );
         ReflectionTestUtils.setField(updateTeamMember, "urlUserInformation", urlUserInformation); }
 
     @Test
-    public void whenUpdateTeamMemberThenTeamMemberUpdated() throws JiraException {
+    public void whenUpdateTeamMemberThenTeamMemberUpdated() throws HttpException {
 
         User mockUser = new User();
         AvatarUrls mockAvatarUrls = new AvatarUrls();
@@ -68,7 +62,7 @@ public class UpdateTeamMemberTest {
         List<TeamMember> mockTeamMemberList = new ArrayList<>();
         mockTeamMemberList.add(mockTeamMember);
         // given
-        Mockito.when(jiraApiService.callJira(urlUserInformation + "test@cockpit.com", User[].class.getName())).thenReturn(mockResponse);
+        Mockito.when(httpService.httpCall(urlUserInformation + "test@cockpit.com", User[].class.getName())).thenReturn(mockResponse);
         Mockito.when(teamMemberRepository.findAllByOrderById()).thenReturn(mockTeamMemberList);
 
         // when

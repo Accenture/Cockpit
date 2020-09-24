@@ -1,7 +1,8 @@
 package com.cockpit.api.service.jiragateway;
 
-import com.cockpit.api.exception.JiraException;
+import com.cockpit.api.exception.HttpException;
 import com.cockpit.api.model.dto.jira.Project;
+import com.cockpit.api.service.HttpService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,11 +17,11 @@ import org.springframework.test.util.ReflectionTestUtils;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = JiraApiService.class)
-public class JiraApiServiceTest {
+@SpringBootTest(classes = HttpService.class)
+public class HttpServiceTest {
 
     @Autowired
-    private JiraApiService jiraApiService;
+    private HttpService httpService;
 
     @Value("${spring.jira.username}")
     private String username;
@@ -30,18 +31,23 @@ public class JiraApiServiceTest {
     private String jiraUrl;
     @Value("${spring.jira.urlProjects}")
     private String urlProjects;
-
+    @Value("${spring.sonarqube.sonarUrl}")
+    private String sonarUrl;
+    @Value("${spring.sonarqube.sonarUserName}")
+    private String sonarUserName;
     @Before
     public void setUp() {
-        this.jiraApiService = new JiraApiService();
-        ReflectionTestUtils.setField(jiraApiService, "username", username);
-        ReflectionTestUtils.setField(jiraApiService, "token", token);
-        ReflectionTestUtils.setField(jiraApiService, "jiraUrl", jiraUrl);
+        this.httpService = new HttpService();
+        ReflectionTestUtils.setField(httpService, "jiraUsername", username);
+        ReflectionTestUtils.setField(httpService, "jiraToken", token);
+        ReflectionTestUtils.setField(httpService, "jiraUrl", jiraUrl);
+        ReflectionTestUtils.setField(httpService, "sonarUrl", sonarUrl);
+        ReflectionTestUtils.setField(httpService, "sonarUserName", sonarUserName);
     }
 
     @Test
-    public void whenCallingJiraUrlThenReturn200() throws JiraException {
-        ResponseEntity response = jiraApiService.callJira(urlProjects, Project[].class.getName());
+    public void whenCallingJiraUrlThenReturn200() throws HttpException {
+        ResponseEntity response = httpService.httpCall(urlProjects, Project[].class.getName());
         assertEquals(HttpStatus.OK.value(), response.getStatusCodeValue());
     }
 

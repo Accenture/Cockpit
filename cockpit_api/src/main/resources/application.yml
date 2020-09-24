@@ -27,7 +27,7 @@ spring:
     urlVerifyValidProjectKey: ${JIRA_HOST_URL}/rest/api/latest/project/
     urlUserInformation: ${JIRA_HOST_URL}/rest/api/3/user/search?query=
   sonarqube:
-    authToken: ${SONAR_AUTH_TOKEN}
+    userName: ${SONAR_USER_NAME}
     sonarUrl: ${SONAR_HOST_URL}
     urlListProjects: ${SONAR_HOST_URL}/api/components/search?qualifiers=TRK&ps=100
     urlTechnicalDebt: ${SONAR_HOST_URL}/api/measures/component?component=%s&metricKeys=sqale_index

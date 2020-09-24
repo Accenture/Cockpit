@@ -5,7 +5,7 @@ import com.cockpit.api.model.dto.JiraDTO;
 import com.cockpit.api.model.dto.jira.Project;
 import com.cockpit.api.service.AuthService;
 import com.cockpit.api.service.JiraService;
-import com.cockpit.api.service.jiragateway.JiraApiService;
+import com.cockpit.api.service.HttpService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +21,16 @@ public class JiraController {
 
     private final JiraService jiraService;
     private final AuthService authService;
-    private final JiraApiService jiraApiService;
+    private final HttpService httpService;
 
     @Value("${spring.jira.urlVerifyValidProjectKey}")
     private String urlVerifyJiraKey;
 
     @Autowired
-    public JiraController(JiraService jiraService, AuthService authService, JiraApiService jiraApiService) {
+    public JiraController(JiraService jiraService, AuthService authService, HttpService httpService) {
         this.jiraService = jiraService;
         this.authService = authService;
-        this.jiraApiService = jiraApiService;
+        this.httpService = httpService;
     }
 
     // CREATE new JIRA
@@ -42,7 +42,7 @@ public class JiraController {
         if (authService.isScrumMaster(authHeader)) {
             String url = urlVerifyJiraKey + jiraDTO.getJiraProjectKey();
             try {
-                jiraApiService.callJira(url, Project.class.getName());
+                httpService.httpCall(url, Project.class.getName());
                 JiraDTO newJira = jiraService.createNewJiraProject(jiraDTO);
                 return ResponseEntity.ok().body(newJira);
             } catch (Exception e) {
