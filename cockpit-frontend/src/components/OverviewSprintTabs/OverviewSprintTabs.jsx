@@ -83,6 +83,9 @@ export default function OverviewSprintTabs(props) {
     <div className={classes.root}>
       <TabPanel value={selectedTab} index="overview">
         <BurnUpChart />
+        <Typography variant="subtitle1" className={classes.dateStyle}>
+          Technical debts: {(mvp.technicalDebt / 60).toFixed(2)} hours
+        </Typography>
       </TabPanel>
       <TabPanel value={selectedTab} index="sprint">
         <FormControl size="small" className={classes.formControl}>
