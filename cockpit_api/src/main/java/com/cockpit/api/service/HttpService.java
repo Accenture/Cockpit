@@ -37,12 +37,12 @@ public class HttpService {
 
         try {
             if (url.startsWith(jiraUrl)) {
-                HttpHeaders headers = this.addAuthorizationToHeaders(jiraUsername, jiraToken);;
+                HttpHeaders headers = this.addAuthorizationToHeaders(jiraUsername, jiraToken);
                 HttpEntity<String> request = new HttpEntity<>(headers);
                 responseEntity = restTemplate.exchange(url, HttpMethod.GET, request, Class.forName(className));
             }
             if (url.startsWith(sonarUrl)) {
-                HttpHeaders headers = this.addAuthorizationToHeaders(sonarUserName, "");;
+                HttpHeaders headers = this.addAuthorizationToHeaders(sonarUserName, "");
                 HttpEntity<String> request = new HttpEntity<>(headers);
                 responseEntity = restTemplate.exchange(url, HttpMethod.GET, request, Class.forName(className));
             }
