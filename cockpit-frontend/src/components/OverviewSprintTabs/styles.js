@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
+import { darkGrey } from '../../common/scss/colorVarialble.scss';
 
 export default makeStyles((theme) => ({
   root: {
@@ -28,5 +29,16 @@ export default makeStyles((theme) => ({
   },
   preLine: {
     whiteSpace: 'pre-line',
+  },
+  title: {
+    marginTop: '8px',
+    fontSize: '18px',
+    color: darkGrey,
+    fontWeight: 'bold',
+    fontFamily: "'Helvetica Neue', 'Helvetica', 'Arial', sans-serif",
+  },
+  technicalDebt: {
+    fontSize: '16px',
+    marginTop: '8px',
   },
 }));
