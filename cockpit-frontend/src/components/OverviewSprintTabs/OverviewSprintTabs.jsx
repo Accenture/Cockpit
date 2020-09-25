@@ -83,11 +83,13 @@ export default function OverviewSprintTabs(props) {
     <div className={classes.root}>
       <TabPanel value={selectedTab} index="overview">
         <BurnUpChart />
-        {mvp.technicalDebt && (
-          <Typography variant="subtitle1" className={classes.dateStyle}>
-            Technical debts: {(mvp.technicalDebt / 60).toFixed(2)} hours
-          </Typography>
-        )}
+        <Typography className={classes.title}>Defects</Typography>
+        <Typography className={classes.technicalDebt}>
+          Technical debt:{' '}
+          {mvp.technicalDebt
+            ? `${(mvp.technicalDebt / 60).toFixed(2)} hours`
+            : 'not defined'}
+        </Typography>
       </TabPanel>
       <TabPanel value={selectedTab} index="sprint">
         <FormControl size="small" className={classes.formControl}>
