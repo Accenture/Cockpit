@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +30,7 @@ import static javax.management.timer.Timer.ONE_SECOND;
 @Configuration
 @EnableScheduling
 @Service
+@Transactional
 public class UpdateTechnicalDebt {
 
     Logger log = LoggerFactory.getLogger(UpdateTechnicalDebt.class);
@@ -106,7 +108,6 @@ public class UpdateTechnicalDebt {
         sonarKeyToJiraKey.put("AGPO", "MAP");
         sonarKeyToJiraKey.put("C2FE", "RCFEE");
         sonarKeyToJiraKey.put("DERO", "GDERO");
-        sonarKeyToJiraKey.put("SCEF", "ESCE");
         sonarKeyToJiraKey.put("TRAC", "MTT");
         sonarKeyToJiraKey.put("YETI", "YETI");
         sonarKeyToJiraKey.put("RTWP", "IAPE");

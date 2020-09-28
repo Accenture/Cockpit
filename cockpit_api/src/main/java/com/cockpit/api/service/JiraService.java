@@ -9,7 +9,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class JiraService {
@@ -33,6 +35,11 @@ public class JiraService {
             throw new ResourceNotFoundException("Jira not found");
         }
         return modelMapper.map(jiraRes.get(), JiraDTO.class);
+    }
+
+    public List<JiraDTO> findAllJiraProjects()  {
+        List<Jira> jiraList = jiraRepository.findAllByOrderById();
+        return jiraList.stream().map(jira -> modelMapper.map(jira, JiraDTO.class)).collect(Collectors.toList());
     }
 
     public JiraDTO updateJira(JiraDTO jiraDTO) throws ResourceNotFoundException {

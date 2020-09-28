@@ -2,6 +2,7 @@ package com.cockpit.api.controller;
 
 import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dto.JiraDTO;
+import com.cockpit.api.model.dto.MvpDTO;
 import com.cockpit.api.model.dto.jira.Project;
 import com.cockpit.api.service.AuthService;
 import com.cockpit.api.service.JiraService;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class JiraController {
@@ -67,6 +70,17 @@ public class JiraController {
             } catch (ResourceNotFoundException e) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
             }
+        } else {
+            return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    // GET ALL Jira
+    @GetMapping(value = "/api/v1/jira/all")
+    public ResponseEntity<Object> findAllJiraProjectss(@RequestHeader("Authorization") String authHeader) {
+        if (authService.isUserAuthorized(authHeader)) {
+            List<JiraDTO> jiraList = jiraService.findAllJiraProjects();
+            return ResponseEntity.ok(jiraList);
         } else {
             return ResponseEntity.ok(HttpStatus.UNAUTHORIZED);
         }
