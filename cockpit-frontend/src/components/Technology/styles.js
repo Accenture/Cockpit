@@ -28,4 +28,12 @@ export default makeStyles((theme) => ({
   technoList: {
     padding: '32px',
   },
+  imgStyle: {
+    height: 50,
+    padding: theme.spacing(0, 0, 0, 1),
+    marginTop: 20,
+  },
+  flexBox: {
+    display: 'flex',
+  },
 }));

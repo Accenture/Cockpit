@@ -109,7 +109,7 @@ export default function Technology() {
       {open && (
         <form>
           <Grid container className={classes.containerAdd}>
-            <Grid item xs={8}>
+            <Grid item xs={6}>
               <FormLabel className={classes.formLabel}>Name</FormLabel>
               <TextField
                 className={classes.textField}
@@ -124,24 +124,35 @@ export default function Technology() {
               />
             </Grid>
             <Grid item xs={8}>
-              <FormLabel className={classes.formLabel}>Logo</FormLabel>
-              <TextField
-                className={classes.textField}
-                required
-                fullWidth
-                variant="outlined"
-                name="logo"
-                size="small"
-                value={technoLogo || ''}
-                onChange={handleLogoChange}
-                placeholder="https://..."
-                error={!isImageUrlValid(technoLogo)}
-                helperText={
-                  isImageUrlValid(technoLogo)
-                    ? ''
-                    : 'Url starts with http(s)://'
-                }
-              />
+              <div style={{ display: 'flex' }}>
+                <div>
+                  <FormLabel className={classes.formLabel}>Logo</FormLabel>
+                  <TextField
+                    className={classes.textField}
+                    required
+                    fullWidth
+                    variant="outlined"
+                    name="logo"
+                    size="small"
+                    value={technoLogo || ''}
+                    onChange={handleLogoChange}
+                    placeholder="https://..."
+                    error={!isImageUrlValid(technoLogo)}
+                    helperText={
+                      isImageUrlValid(technoLogo)
+                        ? ''
+                        : 'Url starts with http(s)://'
+                    }
+                  />
+                </div>
+                {technoLogo && (
+                  <img
+                    className={classes.imgStyle}
+                    src={technoLogo}
+                    alt="img"
+                  />
+                )}
+              </div>
             </Grid>
             <Grid item xs={4} />
             <Grid item xs={2} />
