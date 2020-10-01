@@ -4,6 +4,7 @@ export default makeStyles((theme) => ({
   appBar: {
     height: 70,
     background: '#4a95cd',
+    position: 'relative',
   },
   logoButton: {
     paddingLeft: 30,
