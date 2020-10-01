@@ -13,6 +13,7 @@ import MvpCard from '../MvpCard/MvpCard';
 import { fetchAllMvps, deleteMvp } from '../../redux/ormSlice';
 import { mvpSelector } from '../../redux/selector';
 import { isScrumMasterState } from '../HomePage/HomePageSlice';
+import { selectFilterState } from '../MvpFilter/mvpEntityFilterSlice';
 
 // styles
 import useStyles from './styles';
@@ -21,6 +22,7 @@ export default function MvpCardList(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const isScrumMaster = useSelector(isScrumMasterState);
+  const selectedEntity = useSelector(selectFilterState);
   const [openDialog, setOpenDialog] = React.useState(false);
   const [selectedMvp, setSelectedMvp] = React.useState({});
 
@@ -29,9 +31,12 @@ export default function MvpCardList(props) {
   }, [dispatch]);
 
   // Filter Mvps with selected mvp status
-  const mvpList = useSelector((state) => mvpSelector(state)).filter(
+  let mvpList = useSelector((state) => mvpSelector(state)).filter(
     (mvp) => mvp.status === props.mvpState,
   );
+  if (selectedEntity !== 'ALL ENTITIES') {
+    mvpList = mvpList.filter((mvp) => mvp.entity === selectedEntity);
+  }
 
   function deleteJira(e, id) {
     e.stopPropagation();
