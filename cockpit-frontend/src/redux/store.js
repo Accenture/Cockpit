@@ -6,7 +6,8 @@ import {
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage/session';
-import mvnMenuReducer from '../components/MvpMenu/mvpMenuSlice';
+import mvpMenuReducer from '../components/MvpMenu/mvpMenuSlice';
+import mvpEntityFilterReducer from '../components/MvpFilter/mvpEntityFilterSlice';
 import ormReducer from './ormSlice';
 import headerReducer from '../components/Header/HeaderSlice';
 import smFormReducer from '../components/ScrumMasterForm/ScrumMasterFormSlice';
@@ -21,7 +22,8 @@ const persistConfig = {
 };
 
 const reducers = combineReducers({
-  mvpMenu: mvnMenuReducer,
+  mvpMenu: mvpMenuReducer,
+  mvpEntityFilter: mvpEntityFilterReducer,
   header: headerReducer,
   ScrumMasterForm: smFormReducer,
   orm: ormReducer,

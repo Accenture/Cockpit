@@ -6,6 +6,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 import { useDispatch, useSelector } from 'react-redux';
 import MvpMenu from '../MvpMenu/MvpMenu';
+import MvpEntityFilter from '../MvpFilter/MvpEntityFilter';
 import { showScrumMasterForm, showEditMvpSMForm } from './HeaderSlice';
 // styles
 import useStyles from './styles';
@@ -36,6 +37,7 @@ export default function Header() {
             Cockpit
           </IconButton>
           {isHomePage && <MvpMenu />}
+          {isHomePage && <MvpEntityFilter />}
           <div className={classes.growArea} />
           {isHomePage && isScrumMaster && (
             <Button
