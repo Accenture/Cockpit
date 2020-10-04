@@ -7,7 +7,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage/session';
 import mvpMenuReducer from '../components/MvpMenu/mvpMenuSlice';
-import mvpEntityFilterReducer from '../components/MvpFilter/mvpEntityFilterSlice';
+import mvpEntityFilterReducer from '../components/MvpEntityFilter/mvpEntityFilterSlice';
 import ormReducer from './ormSlice';
 import headerReducer from '../components/Header/HeaderSlice';
 import smFormReducer from '../components/ScrumMasterForm/ScrumMasterFormSlice';

@@ -28,7 +28,7 @@ export default function MvpEntiryFilter() {
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
   const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
+    setOpen((openPrev) => !openPrev);
   };
 
   const handleClose = (event) => {
@@ -39,13 +39,13 @@ export default function MvpEntiryFilter() {
   };
 
   // return focus to the button when we transitioned from !open -> open
-  const prevOpen = React.useRef(open);
+  const openPrev = React.useRef(open);
 
   React.useEffect(() => {
-    if (prevOpen.current === true && open === false) {
+    if (openPrev.current === true && open === false) {
       anchorRef.current.focus();
     }
-    prevOpen.current = open;
+    openPrev.current = open;
   }, [open]);
 
   return (

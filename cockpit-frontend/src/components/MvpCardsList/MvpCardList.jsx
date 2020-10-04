@@ -13,7 +13,7 @@ import MvpCard from '../MvpCard/MvpCard';
 import { fetchAllMvps, deleteMvp } from '../../redux/ormSlice';
 import { mvpSelector } from '../../redux/selector';
 import { isScrumMasterState } from '../HomePage/HomePageSlice';
-import { selectFilterState } from '../MvpFilter/mvpEntityFilterSlice';
+import { selectFilterState } from '../MvpEntityFilter/mvpEntityFilterSlice';
 
 // styles
 import useStyles from './styles';
@@ -85,7 +85,7 @@ export default function MvpCardList(props) {
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={(e) => deleteJira(e, selectedMvp.id)}
+            onClick={(e) => deleteJira(e, selectedMvp.jira.id)}
             color="primary"
           >
             Yes

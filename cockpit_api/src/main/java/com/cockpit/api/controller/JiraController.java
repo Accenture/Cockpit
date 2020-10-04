@@ -2,7 +2,6 @@ package com.cockpit.api.controller;
 
 import com.cockpit.api.exception.ResourceNotFoundException;
 import com.cockpit.api.model.dto.JiraDTO;
-import com.cockpit.api.model.dto.MvpDTO;
 import com.cockpit.api.model.dto.jira.Project;
 import com.cockpit.api.service.AuthService;
 import com.cockpit.api.service.JiraService;
