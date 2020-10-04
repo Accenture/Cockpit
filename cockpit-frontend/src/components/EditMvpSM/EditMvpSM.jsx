@@ -97,7 +97,7 @@ export default function EditMvpSMForm() {
       dispatch(closeEditMvpSMForm());
       dispatch(getOneMvp(mvpInfo.id));
       if (sprintNumber !== mvpInfo.sprintNumber) {
-        dispatch(fetchBurnUpData(mvpInfo.jira.id));
+        dispatch(fetchBurnUpData(mvpId));
       }
     }
   }

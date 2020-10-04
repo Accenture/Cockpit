@@ -25,8 +25,6 @@ export default function BurnUpChart() {
 
   const chartData = useSelector(burnUpChartState);
   const { id } = useParams();
-  const mvpInfo = useSelector((state) => mvpSelector(state, id));
-  const jiraId = mvpInfo.jira.id;
   const dispatch = useDispatch();
   const { scopeCommitment } = useSelector((state) => mvpSelector(state)).find(
     (mvp) => mvp.id.toString() === id,
@@ -51,8 +49,8 @@ export default function BurnUpChart() {
   const open = Boolean(anchorEl);
   useEffect(() => {
     dispatch(initState());
-    dispatch(fetchBurnUpData(jiraId));
-  }, [dispatch, jiraId]);
+    dispatch(fetchBurnUpData(id));
+  }, [dispatch, id]);
 
   const data = (canvas) => {
     // style for filled chart
