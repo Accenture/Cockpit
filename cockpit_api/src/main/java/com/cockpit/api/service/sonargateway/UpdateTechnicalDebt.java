@@ -124,7 +124,7 @@ public class UpdateTechnicalDebt {
                 for(String sonarProjectKey: keyMap.getValue()) {
                     String url = String.format(urlTechnicalDebt, sonarProjectKey);
                     ResponseEntity<MetricResponse> sonarMetric = httpService.httpCall(url, MetricResponse.class.getName());
-                    if (sonarMetric.getBody() != null && sonarMetric.getBody().getComponent() != null) {
+                    if (sonarMetric.getBody() != null && sonarMetric.getBody().getComponent() != null && !sonarMetric.getBody().getComponent().getMeasures().isEmpty()) {
                         int technicalDebtInMins = Integer.parseInt(sonarMetric.getBody().getComponent().getMeasures().get(0).getValue());
                         totalTechnicalDebtInMins = totalTechnicalDebtInMins + technicalDebtInMins;
                     }

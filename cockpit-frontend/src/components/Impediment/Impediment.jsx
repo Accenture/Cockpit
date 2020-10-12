@@ -49,8 +49,10 @@ export default function Impediment(props) {
     const sp = mvp.jira.sprints.find(
       (sprint) => sprint.sprintNumber === sprintNumber,
     );
-    setImpediments(sp.impediments);
-    setNumber(sp.impediments.length);
+    if (sp.impediments !== undefined) {
+      setImpediments(sp.impediments);
+      setNumber(sp.impediments.length);
+    }
   }, [mvp, sprintNumber]);
 
   function scrollToEndOfForm() {
