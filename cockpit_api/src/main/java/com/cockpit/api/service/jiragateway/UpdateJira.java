@@ -110,7 +110,7 @@ public class UpdateJira {
             try {
                 if (board.getLocation() != null && board.getLocation().getProjectId() != null) {
                     Jira foundJira = jiraRepository.findByJiraProjectId((board.getLocation().getProjectId()));
-                    if (foundJira != null && foundJira.getBoardId() != null) {
+                    if (foundJira != null && board.getId() != null) {
                         foundJira.setBoardId(board.getId());
                         jiraRepository.save(foundJira);
                     }
