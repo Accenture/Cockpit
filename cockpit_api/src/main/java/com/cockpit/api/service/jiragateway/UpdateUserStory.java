@@ -130,7 +130,7 @@ public class UpdateUserStory {
 
     }
 
-    public List<UserStory> updateUserStoryInDBForBakclogFromJira(String jiraProjectKey, String urlIssues) throws HttpException {
+    public void updateUserStoryInDBForBakclogFromJira(String jiraProjectKey, String urlIssues) throws HttpException {
         String jqlBacklogUS = "project=" + jiraProjectKey + " AND Sprint=null AND issuetype=Story&expand=changelog";
 
         String urlBacklogUS = urlIssues + jqlBacklogUS;
@@ -138,12 +138,11 @@ public class UpdateUserStory {
 
         List<Issue> issueListBacklogUS = (resultBacklogUS.getBody().getJiraIssues());
         if (resultBacklogUS.getStatusCode().is2xxSuccessful()) {
-            return getUserStories(null, issueListBacklogUS);
+            getUserStories(null, issueListBacklogUS);
         }
-        return stories;
     }
 
-    public List<UserStory> updateUserStoryInDBForASprintFromJira(Sprint sprint, String urlIssues) throws HttpException {
+    public void updateUserStoryInDBForASprintFromJira(Sprint sprint, String urlIssues) throws HttpException {
 
         String sprintId = String.valueOf(sprint.getJiraSprintId());
         String jqlSprintUS = "Sprint=" + sprintId + " AND issuetype=Story&expand=changelog";
@@ -152,20 +151,20 @@ public class UpdateUserStory {
         ResponseEntity<Issues> resultSprintUS = httpService.httpCall(urlSprintUS, Issues.class.getName());
         List<Issue> issueListSprintUS = (resultSprintUS.getBody().getJiraIssues());
         if (resultSprintUS.getStatusCode().is2xxSuccessful()) {
-            return getUserStories(sprint, issueListSprintUS);
+            getUserStories(sprint, issueListSprintUS);
         }
-        return stories;
     }
 
-    private List<UserStory> getUserStories(Sprint sprint, List<Issue> issueList) {
+    private void getUserStories(Sprint sprint, List<Issue> issueList) {
+        List<UserStory> storiesToBeUpdated = new ArrayList<>();
         for (Issue issue : Optional.ofNullable(issueList).orElse(Collections.emptyList())) {
             UserStory userStory;
             Optional<UserStory> optionalUserStory = userStoryRepository.findByJiraIssueId(Integer.parseInt(issue.getId()));
             userStory = optionalUserStory.orElseGet(UserStory::new);
             stories.add(setUserStory(userStory, sprint, issue));
-            userStoryRepository.save(userStory);
+            storiesToBeUpdated.add(userStory);
         }
-        return stories;
+        userStoryRepository.saveAll(storiesToBeUpdated);
     }
 
     private UserStory setUserStory(UserStory userStory, Sprint sprint, Issue issue) {

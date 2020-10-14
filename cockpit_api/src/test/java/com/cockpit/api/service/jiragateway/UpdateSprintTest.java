@@ -104,7 +104,7 @@ public class UpdateSprintTest {
         updateSprint.updateSprintsForEachProject();
 
         // then
-        verify(sprintRepository, atLeastOnce()).save(Mockito.any(Sprint.class));
+        verify(sprintRepository, atLeastOnce()).saveAll(Mockito.any());
 
     }
 
@@ -138,7 +138,7 @@ public class UpdateSprintTest {
         updateSprint.setTotalNbOfUserStoryForEachSprintOfEachProject();
 
         // then
-        verify(sprintRepository, atLeastOnce()).save(Mockito.any(Sprint.class));
+        verify(sprintRepository, atLeastOnce()).saveAll(Mockito.any());
     }
 
     @Test
@@ -184,6 +184,6 @@ public class UpdateSprintTest {
         updateSprint.updateSumForCompletedIssuesAndSumForNotCompletedIssuesInSprint();
 
         // then
-        verify(sprintRepository, atLeastOnce()).save(Mockito.any(Sprint.class));
+        verify(sprintRepository, atLeastOnce()).saveAll(Mockito.any());
     }
 }

@@ -78,7 +78,7 @@ public class UpdateJiraTest {
         updateJira.updateProjectIdInJira();
 
         // then
-        verify(jiraRepository, atLeastOnce()).save(mockJira);
+        verify(jiraRepository, atLeastOnce()).saveAll(mockJiraList);
 
     }
 

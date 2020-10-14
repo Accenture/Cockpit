@@ -89,6 +89,7 @@ public class UpdateSprint {
                         .countUserStoriesByJiraAndCreationDateBefore(jira,
                                 sprintList.get(0).getSprintStartDate());
             }
+            List<Sprint> updatedSprints = new ArrayList<>();
             for (Sprint sprint : sprintList) {
                 Date sprintStartDate = sprint.getSprintStartDate();
                 Date sprintEndDate = sprint.getSprintEndDate();
@@ -102,9 +103,10 @@ public class UpdateSprint {
                             .countUserStoriesByJiraAndCreationDateGreaterThanAndCreationDateLessThanEqual(jira, sprintStartDate, sprintEndDate);
                     totalNumberOfUserStoriesUntilCurrentSprint += nbUserStoriesCreatedDuringCurrentSprint;
                     sprint.setTotalNbUs(totalNumberOfUserStoriesUntilCurrentSprint);
-                    sprintRepository.save(sprint);
+                    updatedSprints.add(sprint);
                 }
             }
+            sprintRepository.saveAll(updatedSprints);
         }
         log.info("Sprint - End update TotalNbUserStory for each sprint");
     }
@@ -115,6 +117,7 @@ public class UpdateSprint {
         List<Jira> jiraProjectList = jiraRepository.findAllByOrderById();
         for (Jira jira : jiraProjectList) {
             List<Sprint> sprintList = sprintRepository.findByJiraOrderBySprintNumber(jira);
+            List<Sprint> updatedSprints = new ArrayList<>();
             for (Sprint sprint : sprintList) {
                 SprintReportContent sprintReportContent = getSprintReport
                         (jira.getBoardId(), sprint.getJiraSprintId());
@@ -124,12 +127,10 @@ public class UpdateSprint {
                 sprint.setNotCompletedUsNumber(nbNotCompletedUserStories);
                 sprint.setCompletedUsNumber(nbCompletedUserStories);
                 sprint.setPuntedUsNumber(nbPuntedUserStories);
-                try {
-                    sprintRepository.save(sprint);
-                } catch (Exception e) {
-                    log.error(e.getMessage());
-                }
+                updatedSprints.add(sprint);
             }
+            sprintRepository.saveAll(updatedSprints);
+
         }
         log.info("Sprint - End update nb of completed/not completed for each sprint");
 
@@ -158,6 +159,7 @@ public class UpdateSprint {
     public void updateSprintsInDB(List<SprintJira> sprintJiraList, Jira jira) {
         int sprintNumber = 1;
         List<Sprint> sprints = sprintRepository.findByJiraOrderBySprintNumber(jira);
+        List<Sprint> updatedSprints = new ArrayList<>();
         for (SprintJira sprintJira : Optional.ofNullable(sprintJiraList).orElse(Collections.emptyList())) {
             Sprint sprintExist = new Sprint();
             Optional<Sprint> foundSprint = sprints.stream().filter(
@@ -167,9 +169,10 @@ public class UpdateSprint {
             if (foundSprint.isPresent()) {
                 sprintExist = foundSprint.get();
             }
-            sprintRepository.save(setNewSprint(sprintExist, sprintJira, jira, sprintNumber));
+            updatedSprints.add(setNewSprint(sprintExist, sprintJira, jira, sprintNumber));
             sprintNumber++;
         }
+        sprintRepository.saveAll(updatedSprints);
         getSprintsToRemove(sprintJiraList, sprints);
         cleanNotExistingSprintsFromJira(sprintsToRemove);
     }

@@ -69,7 +69,7 @@ public class UpdateTeamMemberTest {
         updateTeamMember.updateTeamMembers();
 
         // then
-        verify(teamMemberRepository, atLeastOnce()).save(Mockito.any(TeamMember.class));
+        verify(teamMemberRepository, atLeastOnce()).saveAll(Mockito.any());
 
     }
 }

@@ -52,16 +52,18 @@ public class UpdateJira {
         ResponseEntity<Project[]> response = httpService.httpCall(urlProjects, Project[].class.getName());
         List<Project> jiraProjectsList = Arrays.asList(response.getBody());
         List<Jira> jiraList = jiraRepository.findAllByOrderById();
+        List<Jira> updatedJiras = new ArrayList<>();
         for (Jira jira : jiraList) {
             if (jiraProjectsList.stream().anyMatch(projet -> projet.getKey().equals(jira.getJiraProjectKey()))) {
                 Optional<Project> jiraProjectToUpdate = jiraProjectsList.stream()
                         .filter(projet -> projet.getKey().equals(jira.getJiraProjectKey())).findFirst();
                 if (jiraProjectToUpdate.isPresent()) {
                     jira.setJiraProjectId(Integer.parseInt(jiraProjectToUpdate.get().getId()));
-                    jiraRepository.save(jira);
+                    updatedJiras.add(jira);
                 }
             }
         }
+        jiraRepository.saveAll(updatedJiras);
         log.info("Jira - End update jira project id");
     }
 

@@ -112,7 +112,7 @@ public class UpdateUserStoryTest {
         updateUserStory.updateUserStoryInDBFromJira();
 
         // then
-        verify(userStoryRepository, atLeastOnce()).save(Mockito.any(UserStory.class));
+        verify(userStoryRepository, atLeastOnce()).saveAll(Mockito.any());
 
     }
 

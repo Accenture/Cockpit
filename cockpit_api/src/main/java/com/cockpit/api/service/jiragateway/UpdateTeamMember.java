@@ -16,6 +16,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -44,6 +45,7 @@ public class UpdateTeamMember {
     public void updateTeamMembers() throws HttpException {
         log.info("Team Member - Start update team members");
         List<TeamMember> teamMemberList = teamMemberRepository.findAllByOrderById();
+        List<TeamMember> updatedTeamMembers = new ArrayList<>();
         for (TeamMember teamMember : teamMemberList) {
             String url = urlUserInformation + teamMember.getEmail();
             ResponseEntity<User[]> response = httpService.httpCall(url, User[].class.getName());
@@ -51,11 +53,11 @@ public class UpdateTeamMember {
                 List<User> userList = Arrays.asList(response.getBody());
                 if (!userList.isEmpty()) {
                     teamMember.setUrlTeamMemberAvatar(userList.get(0).getAvatarUrls().getBigAvatar());
-                    teamMemberRepository.save(teamMember);
+                    updatedTeamMembers.add(teamMember);
                 }
-
             }
         }
+        teamMemberRepository.saveAll(updatedTeamMembers);
         log.info("Team Member - End update team members");
 
     }
