@@ -21,9 +21,6 @@ export const mvpFilterSlice = createSlice({
     selectTDF: (state) => {
       state.value = 'TDF';
     },
-    selectSTELA: (state) => {
-      state.value = 'STELA';
-    },
     selectAllEntities: (state) => {
       state.value = 'ALL ENTITIES';
     },
@@ -36,7 +33,6 @@ export const {
   selectMS,
   selectGRP,
   selectTDF,
-  selectSTELA,
   selectAllEntities,
 } = mvpFilterSlice.actions;
 

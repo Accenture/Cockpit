@@ -14,7 +14,6 @@ import {
   selectMS,
   selectGRP,
   selectTDF,
-  selectSTELA,
   selectAllEntities,
   selectFilterState,
 } from './mvpEntityFilterSlice';
@@ -117,14 +116,6 @@ export default function MvpEntiryFilter() {
                     }}
                   >
                     TDF
-                  </MenuItem>
-                  <MenuItem
-                    onClick={() => {
-                      dispatch(selectSTELA());
-                      setOpen(false);
-                    }}
-                  >
-                    STELA
                   </MenuItem>
                   <MenuItem
                     onClick={() => {

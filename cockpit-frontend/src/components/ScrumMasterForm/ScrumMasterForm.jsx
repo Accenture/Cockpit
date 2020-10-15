@@ -203,7 +203,6 @@ export default function ScrumMasterForm() {
                 <MenuItem value="MS">MS</MenuItem>
                 <MenuItem value="GRP">GRP</MenuItem>
                 <MenuItem value="TDF">TDF</MenuItem>
-                <MenuItem value="STELA">STELA</MenuItem>
               </Select>
             </FormControl>
           </Grid>
