@@ -53,7 +53,7 @@ public class UpdateTechnicalDebt {
         this.httpService = httpService;
     }
 
-    @Scheduled(initialDelay = 20 * ONE_SECOND, fixedDelay = ONE_HOUR)
+    @Scheduled(initialDelay = 30 * ONE_SECOND, fixedDelay = ONE_HOUR)
     public void updateTechnicalDebtFromJira() {
         log.info("Sonar - Start update technical debt");
         try {

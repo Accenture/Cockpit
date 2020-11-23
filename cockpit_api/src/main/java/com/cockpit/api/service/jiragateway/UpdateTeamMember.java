@@ -20,8 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static javax.management.timer.Timer.ONE_HOUR;
-import static javax.management.timer.Timer.ONE_SECOND;
+import static javax.management.timer.Timer.*;
 
 @Configuration
 @EnableScheduling
@@ -41,7 +40,7 @@ public class UpdateTeamMember {
     @Value("${spring.jira.urlUserInformation}")
     private String urlUserInformation;
 
-    @Scheduled(initialDelay = 15 * ONE_SECOND, fixedDelay = ONE_HOUR)
+    @Scheduled(initialDelay = 3 * ONE_MINUTE, fixedDelay = ONE_HOUR)
     public void updateTeamMembers() throws HttpException {
         log.info("Team Member - Start update team members");
         List<TeamMember> teamMemberList = teamMemberRepository.findAllByOrderById();

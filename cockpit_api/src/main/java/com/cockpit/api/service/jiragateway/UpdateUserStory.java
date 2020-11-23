@@ -57,7 +57,7 @@ public class UpdateUserStory {
     @Value("${spring.jira.urlAllUserStories}")
     private String urlAllUserStories;
 
-    @Scheduled(initialDelay = 15 * ONE_SECOND, fixedDelay = ONE_HOUR)
+    @Scheduled(initialDelay = 5 * ONE_MINUTE, fixedDelay = ONE_HOUR)
     public void updateUserStoryInDBFromJira() {
         log.info("UserStory - Start update user stories");
         try {
@@ -77,7 +77,7 @@ public class UpdateUserStory {
         log.info("UserStory - End update user stories");
     }
 
-    @Scheduled(initialDelay = 60 * ONE_SECOND, fixedDelay = ONE_HOUR)
+    @Scheduled(initialDelay = 10 * ONE_MINUTE, fixedDelay = ONE_HOUR)
     public void cleaningUselessUSFromDB() {
         log.info("UserStory - Start cleaning user stories");
         try {

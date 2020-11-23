@@ -67,7 +67,7 @@ public class UpdateJira {
         log.info("Jira - End update jira project id");
     }
 
-    @Scheduled(initialDelay = 5 * ONE_SECOND, fixedDelay = ONE_HOUR)
+    @Scheduled(initialDelay = 20 * ONE_SECOND, fixedDelay = ONE_HOUR)
     public void updateBoardIdInJira() {
         log.info("Jira - Start update jira board id");
         try {

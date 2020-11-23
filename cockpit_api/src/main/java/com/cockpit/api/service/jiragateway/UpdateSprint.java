@@ -58,7 +58,7 @@ public class UpdateSprint {
     @Value("${spring.jira.urlSprintReport}")
     private String urlSprintReport;
 
-    @Scheduled(initialDelay = 10 * ONE_SECOND, fixedDelay = ONE_HOUR)
+    @Scheduled(initialDelay = 2 * ONE_MINUTE, fixedDelay = ONE_HOUR)
     public void updateSprintsForEachProject() {
         log.info("Sprint - Start update sprints");
         try {
@@ -77,7 +77,7 @@ public class UpdateSprint {
         log.info("Sprint - End update sprints");
     }
 
-    @Scheduled(initialDelay = 90 * ONE_SECOND, fixedDelay = ONE_HOUR)
+    @Scheduled(initialDelay = 15 * ONE_MINUTE, fixedDelay = ONE_HOUR)
     public void setTotalNbOfUserStoryForEachSprintOfEachProject() {
         log.info("Sprint - Start update TotalNbUserStory for each sprint");
         List<Jira> jiraProjectList = jiraRepository.findAllByOrderById();
@@ -111,7 +111,7 @@ public class UpdateSprint {
         log.info("Sprint - End update TotalNbUserStory for each sprint");
     }
 
-    @Scheduled(initialDelay = 90 * ONE_SECOND, fixedDelay = ONE_HOUR)
+    @Scheduled(initialDelay = 20 * ONE_MINUTE, fixedDelay = ONE_HOUR)
     public void updateSumForCompletedIssuesAndSumForNotCompletedIssuesInSprint() throws HttpException {
         log.info("Sprint - Start update nb of completed/not completed for each sprint");
         List<Jira> jiraProjectList = jiraRepository.findAllByOrderById();
